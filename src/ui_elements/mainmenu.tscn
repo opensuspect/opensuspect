@@ -259,9 +259,9 @@ max_length = 20
 placeholder_text = "Player Name"
 
 [node name="JoinGameStarter" type="Button" parent="JoinGameMenu/Menupoints"]
-margin_left = 400.0
+margin_left = 417.0
 margin_top = 182.0
-margin_right = 599.0
+margin_right = 583.0
 margin_bottom = 226.0
 size_flags_horizontal = 4
 size_flags_vertical = 2
