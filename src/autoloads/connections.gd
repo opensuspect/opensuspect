@@ -31,12 +31,15 @@ func getMyName() -> String:
 
 # -------------- Client side code --------------
 
-func joinGame(serverIP: int, portNumber: int, playerName: String) -> void:
+func joinGame(serverName: String, portNumber: int, playerName: String) -> void:
 	var peer = NetworkedMultiplayerENet.new()
-	peer.create_client(serverIP, portNumber)
+	peer.create_client(serverName, portNumber)
+	var id: int = peer.get_unique_id()
+	myName = playerName
+	listConnections[id] = myName
 
 func connectedOK() -> void:
-	
+	rpc_id(1, "receiveNewPlayerData", myName)
 	assert(false, "Not implemented yet")
 
 func connectedFail() -> void:
@@ -44,15 +47,28 @@ func connectedFail() -> void:
 	
 func disconnectedFromServer() -> void:
 	assert(false, "Not implemented yet")
+	
+puppet func receiveBulkPlayerData(connections: Dictionary) -> void:
+	listConnections = connections
+
+puppet func receivePlayerData(id: int, name: String) -> void:
+	if id != get_tree().get_network_unique_id():
+		listConnections[id] = name
 
 # -------------- Server side code --------------
 
 func createServer(portNumber: int, playerName: String) -> void:
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(portNumber, MAX_PLAYERS)
-	
+	listConnections[1] = playerName
+
+func receiveNewPlayerData(playerName: String) -> void:
+	var senderId = get_tree().get_rpc_sender_id()
+	listConnections[senderId] = playerName
+	rpc_id(senderId, "receiveBulkPlayerData", listConnections)
+
 func connectedNewPlayer() -> void:
-	assert(false, "Not implemented yet")
+	pass
 	
 func disconnectedPlayer() -> void:
 	assert(false, "Not implemented yet")
