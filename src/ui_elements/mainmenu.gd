@@ -43,10 +43,20 @@ func hide_Menus() -> void:
 
 # --Backend--
 func _on_CreateGameStarter_pressed() -> void:
-	assert(false, "Game start not implemented yet")
+	var portField: LineEdit = $CreateGameMenu/Menupoints/PortContainer/PortInput
+	var nameField: LineEdit = $CreateGameMenu/Menupoints/NameContainer/NameInput
+	var port: int = int(portField.text)
+	var name: String = nameField.text
+	Connections.createServer(port, name)
 
 func _on_JoinGameStarter_pressed() -> void:
-	assert(false, "Join Game not implemented yet")
+	var portField: LineEdit = $JoinGameMenu/Menupoints/PortContainer/PortInput
+	var ipField: LineEdit = $JoinGameMenu/Menupoints/HostNameContainer/HostNameInput
+	var nameField: LineEdit = $JoinGameMenu/Menupoints/NameContainer/NameInput
+	var port: int = int(portField.text)
+	var host: String = ipField.text
+	var name: String = nameField.text
+	Connections.joinGame(host, port, name)
 
 func _on_DedicatedStarter_pressed() -> void:
 	assert(false, "Dedicated server not implemented yet")
