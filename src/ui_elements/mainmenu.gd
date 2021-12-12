@@ -9,34 +9,40 @@ onready var main_menu: MarginContainer = $MainMenu
 func _ready():
 	pass # Replace with function body.
 
+func _on_BackButton_pressed() -> void:
+	set_Visible_Menu("main_menu")
 
+func _on_GameCreateButton_pressed() -> void:
+	set_Visible_Menu("create_game")
 
-func _on_AppQuitButton_pressed():
+func _on_GameJoinButton_pressed() -> void:
+	set_Visible_Menu("join_game")
+	
+func _on_ServerStartButton_pressed() -> void:
+	set_Visible_Menu("create_server")
+
+func _on_AppQuitButton_pressed() -> void:
 	get_tree().quit()
 
-func _on_ServerStartButton_pressed():
-	dedicated_menu.visible = true
-	main_menu.visible = false
+func set_Visible_Menu(menu) -> void:
+	hide_Menus()
+	match menu:
+		"main_menu": main_menu.visible = true
+		"create_game": create_game_menu.visible = true
+		"join_game": join_menu.visible = true
+		"create_server": dedicated_menu.visible = true
 
-func _on_GameJoinButton_pressed():
-	join_menu.visible = true
+func hide_Menus() -> void:
 	main_menu.visible = false
-
-func _on_GameCreateButton_pressed():
-	create_game_menu.visible = true
-	main_menu.visible = false
-
-func _on_BackButton_pressed():
-	main_menu.visible = true
-	dedicated_menu.visible = false
-	join_menu.visible = false
 	create_game_menu.visible = false
+	join_menu.visible = false
+	dedicated_menu.visible = false
 
-func _on_CreateGameStarter_pressed():
+func _on_CreateGameStarter_pressed() -> void:
 	assert(false, "Game start not implemented yet")
 
-func _on_JoinGameStarter_pressed():
+func _on_JoinGameStarter_pressed() -> void:
 	assert(false, "Join Game not implemented yet")
 
-func _on_DedicatedStarter_pressed():
+func _on_DedicatedStarter_pressed() -> void:
 	assert(false, "Dedicated server not implemented yet")
