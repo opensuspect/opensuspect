@@ -10,27 +10,34 @@ func _ready():
 	pass # Replace with function body.
 
 
+func _on_BackButton_pressed():
+	set_Visible_Menu("main_menu")
+
+func _on_GameCreateButton_pressed():
+	set_Visible_Menu("create_game")
+
+func _on_GameJoinButton_pressed():
+	set_Visible_Menu("join_game")
+	
+func _on_ServerStartButton_pressed():
+	set_Visible_Menu("create_server")
 
 func _on_AppQuitButton_pressed():
 	get_tree().quit()
 
-func _on_ServerStartButton_pressed():
-	dedicated_menu.visible = true
-	main_menu.visible = false
+func set_Visible_Menu(menu):
+	hide_Menus()
+	match menu:
+		"main_menu": main_menu.visible = true
+		"create_game": create_game_menu.visible = true
+		"join_game": join_menu.visible = true
+		"create_server": dedicated_menu.visible = true
 
-func _on_GameJoinButton_pressed():
-	join_menu.visible = true
+func hide_Menus():
 	main_menu.visible = false
-
-func _on_GameCreateButton_pressed():
-	create_game_menu.visible = true
-	main_menu.visible = false
-
-func _on_BackButton_pressed():
-	main_menu.visible = true
-	dedicated_menu.visible = false
-	join_menu.visible = false
 	create_game_menu.visible = false
+	join_menu.visible = false
+	dedicated_menu.visible = false
 
 func _on_CreateGameStarter_pressed():
 	assert(false, "Game start not implemented yet")
