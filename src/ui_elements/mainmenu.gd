@@ -7,7 +7,7 @@ onready var main_menu: MarginContainer = $MainMenu
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	set_Visible_Menu("main_menu")
 
 func _on_BackButton_pressed() -> void:
 	set_Visible_Menu("main_menu")
