@@ -1,15 +1,15 @@
 extends Control
 
-onready var create_game_menu: MarginContainer = $CreateGameMenu
-onready var join_menu: MarginContainer = $JoinGameMenu
-onready var dedicated_menu: MarginContainer = $DedicatedMenu
-onready var main_menu: MarginContainer = $MainMenu
+onready var create_game_menu: Control = $CreateGame
+onready var join_menu: Control = $JoinGame
+onready var dedicated_menu: Control = $Server
+onready var main_menu: Control = $Menu
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_Visible_Menu("main_menu")
-
-func _on_BackButton_pressed() -> void:
+	
+func _on_Back_pressed():
 	set_Visible_Menu("main_menu")
 
 func _on_GameCreateButton_pressed() -> void:
@@ -38,11 +38,11 @@ func hide_Menus() -> void:
 	join_menu.visible = false
 	dedicated_menu.visible = false
 
-func _on_CreateGameStarter_pressed() -> void:
+func _on_Create_pressed() -> void:
 	assert(false, "Game start not implemented yet")
 
-func _on_JoinGameStarter_pressed() -> void:
-	assert(false, "Join Game not implemented yet")
+func _on_Join_pressed() -> void:
+	assert(false, "Game start not implemented yet")
 
-func _on_DedicatedStarter_pressed() -> void:
-	assert(false, "Dedicated server not implemented yet")
+func _on_Host_pressed() -> void:
+	assert(false, "Game start not implemented yet")
