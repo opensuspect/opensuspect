@@ -3,10 +3,10 @@ extends Control
 # --Variables--
 enum MenuType {MAIN, CREATE, JOIN, SERVER}
 
-onready var create_game_menu: Control = $CreateGame
-onready var join_menu: Control = $JoinGame
-onready var dedicated_menu: Control = $Server
 onready var main_menu: Control = $Menu
+onready var create_menu: Control = $Create
+onready var join_menu: Control = $Join
+onready var server_menu: Control = $Server
 
 # --Interface--
 func _ready():
@@ -31,15 +31,15 @@ func set_Visible_Menu(menu) -> void:
 	hide_Menus()
 	match menu:
 		MenuType.MAIN: main_menu.visible = true
-		MenuType.CREATE: create_game_menu.visible = true
+		MenuType.CREATE: create_menu.visible = true
 		MenuType.JOIN: join_menu.visible = true
-		MenuType.SERVER: dedicated_menu.visible = true
+		MenuType.SERVER: server_menu.visible = true
 
 func hide_Menus() -> void:
 	main_menu.visible = false
-	create_game_menu.visible = false
+	create_menu.visible = false
 	join_menu.visible = false
-	dedicated_menu.visible = false
+	server_menu.visible = false
 
 # --Backend--
 func _on_Create_pressed() -> void:
@@ -48,5 +48,5 @@ func _on_Create_pressed() -> void:
 func _on_Join_pressed() -> void:
 	assert(false, "Game start not implemented yet")
 
-func _on_Host_pressed() -> void:
+func _on_Server_pressed():
 	assert(false, "Game start not implemented yet")

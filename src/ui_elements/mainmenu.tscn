@@ -83,7 +83,7 @@ size_flags_vertical = 2
 theme = ExtResource( 2 )
 text = "QUIT"
 
-[node name="CreateGame" type="Control" parent="."]
+[node name="Create" type="Control" parent="."]
 visible = false
 margin_left = 720.0
 margin_top = 275.0
@@ -93,27 +93,27 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Name" type="Control" parent="CreateGame"]
+[node name="Name" type="Control" parent="Create"]
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="CreateGame/Name"]
+[node name="Label" type="Label" parent="Create/Name"]
 margin_right = 40.0
 margin_bottom = 14.0
 theme = ExtResource( 2 )
 text = "Name:"
 
-[node name="TextEdit" type="LineEdit" parent="CreateGame/Name"]
+[node name="TextEdit" type="LineEdit" parent="Create/Name"]
 margin_left = 104.0
 margin_right = 424.0
 margin_bottom = 40.0
 theme = ExtResource( 2 )
 placeholder_text = "Player Name"
 
-[node name="Port" type="Control" parent="CreateGame"]
+[node name="Port" type="Control" parent="Create"]
 margin_top = 51.0
 margin_right = 40.0
 margin_bottom = 91.0
@@ -121,7 +121,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="CreateGame/Port"]
+[node name="Label" type="Label" parent="Create/Port"]
 margin_right = 40.0
 margin_bottom = 14.0
 theme = ExtResource( 2 )
@@ -130,14 +130,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextEdit" type="LineEdit" parent="CreateGame/Port"]
+[node name="TextEdit" type="LineEdit" parent="Create/Port"]
 margin_left = 104.0
 margin_right = 228.0
 margin_bottom = 40.0
 theme = ExtResource( 2 )
 text = "46690"
 
-[node name="Create" type="Button" parent="CreateGame"]
+[node name="Create" type="Button" parent="Create"]
 margin_left = 128.0
 margin_top = 108.0
 margin_right = 327.0
@@ -148,7 +148,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Back" type="Button" parent="CreateGame"]
+[node name="Back" type="Button" parent="Create"]
 margin_left = 128.0
 margin_top = 164.0
 margin_right = 327.0
@@ -159,7 +159,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="JoinGame" type="Control" parent="."]
+[node name="Join" type="Control" parent="."]
 visible = false
 margin_left = 720.0
 margin_top = 275.0
@@ -169,20 +169,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Name" type="Control" parent="JoinGame"]
+[node name="Name" type="Control" parent="Join"]
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="JoinGame/Name"]
+[node name="Label" type="Label" parent="Join/Name"]
 margin_right = 40.0
 margin_bottom = 14.0
 theme = ExtResource( 2 )
 text = "Name:"
 
-[node name="TextEdit" type="LineEdit" parent="JoinGame/Name"]
+[node name="TextEdit" type="LineEdit" parent="Join/Name"]
 margin_left = 104.0
 margin_right = 424.0
 margin_bottom = 40.0
@@ -192,7 +192,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Address" type="Control" parent="JoinGame"]
+[node name="Address" type="Control" parent="Join"]
 margin_top = 52.0
 margin_right = 40.0
 margin_bottom = 92.0
@@ -200,7 +200,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="JoinGame/Address"]
+[node name="Label" type="Label" parent="Join/Address"]
 margin_left = -36.0
 margin_right = 92.0
 margin_bottom = 38.0
@@ -210,14 +210,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextEdit" type="LineEdit" parent="JoinGame/Address"]
+[node name="TextEdit" type="LineEdit" parent="Join/Address"]
 margin_left = 104.0
 margin_right = 424.0
 margin_bottom = 40.0
 theme = ExtResource( 2 )
 placeholder_text = "127.0.0.1:46690"
 
-[node name="Join" type="Button" parent="JoinGame"]
+[node name="Join" type="Button" parent="Join"]
 margin_left = 128.0
 margin_top = 108.0
 margin_right = 327.0
@@ -228,7 +228,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Back" type="Button" parent="JoinGame"]
+[node name="Back" type="Button" parent="Join"]
 margin_left = 128.0
 margin_top = 164.0
 margin_right = 327.0
@@ -296,7 +296,7 @@ margin_bottom = 40.0
 theme = ExtResource( 2 )
 text = "46690"
 
-[node name="Create" type="Button" parent="Server"]
+[node name="Server" type="Button" parent="Server"]
 margin_left = 128.0
 margin_top = 108.0
 margin_right = 327.0
@@ -322,9 +322,9 @@ __meta__ = {
 [connection signal="pressed" from="Menu/Menupoints/GameJoinButton" to="." method="_on_GameJoinButton_pressed"]
 [connection signal="pressed" from="Menu/Menupoints/ServerStartButton" to="." method="_on_ServerStartButton_pressed"]
 [connection signal="pressed" from="Menu/Menupoints/AppQuitButton" to="." method="_on_AppQuitButton_pressed"]
-[connection signal="pressed" from="CreateGame/Create" to="." method="_on_Create_pressed"]
-[connection signal="pressed" from="CreateGame/Back" to="." method="_on_Back_pressed"]
-[connection signal="pressed" from="JoinGame/Join" to="." method="_on_Join_pressed"]
-[connection signal="pressed" from="JoinGame/Back" to="." method="_on_Back_pressed"]
-[connection signal="pressed" from="Server/Create" to="." method="_on_Create_pressed"]
+[connection signal="pressed" from="Create/Create" to="." method="_on_Create_pressed"]
+[connection signal="pressed" from="Create/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="Join/Join" to="." method="_on_Join_pressed"]
+[connection signal="pressed" from="Join/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="Server/Server" to="." method="_on_Server_pressed"]
 [connection signal="pressed" from="Server/Back" to="." method="_on_Back_pressed"]
