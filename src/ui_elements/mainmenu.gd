@@ -1,4 +1,6 @@
 extends Control
+
+# --Variables--
 enum MenuType {MAIN, CREATE, JOIN, SERVER}
 
 onready var create_game_menu: MarginContainer = $CreateGameMenu
@@ -6,7 +8,7 @@ onready var join_menu: MarginContainer = $JoinGameMenu
 onready var dedicated_menu: MarginContainer = $DedicatedMenu
 onready var main_menu: MarginContainer = $MainMenu
 
-# Called when the node enters the scene tree for the first time.
+# --Interface--
 func _ready():
 	set_Visible_Menu(MenuType.MAIN)
 
@@ -39,6 +41,7 @@ func hide_Menus() -> void:
 	join_menu.visible = false
 	dedicated_menu.visible = false
 
+# --Backend--
 func _on_CreateGameStarter_pressed() -> void:
 	assert(false, "Game start not implemented yet")
 
