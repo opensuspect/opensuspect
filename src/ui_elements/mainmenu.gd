@@ -1,5 +1,9 @@
 extends Control
 
+# --Variables--
+
+enum MenuType {MAIN, CREATE, JOIN, SERVER}
+
 onready var create_game_menu: Control = $CreateGame
 onready var join_menu: Control = $JoinGame
 onready var dedicated_menu: Control = $Server
@@ -38,6 +42,7 @@ func hide_Menus() -> void:
 	join_menu.visible = false
 	dedicated_menu.visible = false
 
+# --Backend--
 func _on_Create_pressed() -> void:
 	assert(false, "Game start not implemented yet")
 
