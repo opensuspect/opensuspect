@@ -1,7 +1,6 @@
 extends Control
 
 # --Variables--
-
 enum MenuType {MAIN, CREATE, JOIN, SERVER}
 
 onready var create_game_menu: Control = $CreateGame
@@ -11,10 +10,10 @@ onready var main_menu: Control = $Menu
 
 # --Interface--
 func _ready():
-	set_Visible_Menu("main_menu")
+	set_Visible_Menu(MenuType.MAIN)
 	
 func _on_Back_pressed():
-	set_Visible_Menu("main_menu")
+	set_Visible_Menu(MenuType.MAIN)
 
 func _on_GameCreateButton_pressed() -> void:
 	set_Visible_Menu(MenuType.CREATE)
