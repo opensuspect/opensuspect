@@ -1,0 +1,125 @@
+[gd_resource type="Theme" load_steps=13 format=2]
+
+[ext_resource path="res://ui_elements/assets/fonts/LibreFranklin-Bold.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://ui_elements/assets/fonts/LibreFranklin-Regular.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=2]
+size = 64
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.298039, 0.298039, 0.298039, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.901961, 0.886275, 0.866667, 1 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.2, 0.2, 0.2, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.858824, 0.160784, 0.129412, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.2, 0.2, 0.2, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.858824, 0.160784, 0.129412, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.2, 0.2, 0.2, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.901961, 0.886275, 0.866667, 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.0470588, 0.0431373, 0.0431373, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.858824, 0.160784, 0.129412, 1 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 64
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 64
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=9]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.2, 0.2, 0.2, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.901961, 0.886275, 0.866667, 1 )
+
+[sub_resource type="StyleBoxFlat" id=10]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.298039, 0.298039, 0.298039, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.901961, 0.886275, 0.866667, 1 )
+
+[resource]
+Button/colors/font_color = Color( 0.901961, 0.886275, 0.866667, 1 )
+Button/colors/font_color_disabled = Color( 0.901961, 0.886275, 0.866667, 0.372549 )
+Button/colors/font_color_focus = Color( 0.901961, 0.886275, 0.866667, 1 )
+Button/colors/font_color_hover = Color( 0.858824, 0.160784, 0.129412, 1 )
+Button/colors/font_color_pressed = Color( 0.901961, 0.886275, 0.866667, 1 )
+Button/fonts/font = SubResource( 2 )
+Button/styles/disabled = SubResource( 5 )
+Button/styles/focus = SubResource( 7 )
+Button/styles/hover = SubResource( 4 )
+Button/styles/normal = SubResource( 3 )
+Button/styles/pressed = SubResource( 6 )
+HBoxContainer/constants/separation = 16
+Label/colors/font_color = Color( 0.901961, 0.886275, 0.866667, 1 )
+Label/colors/font_color_shadow = Color( 0, 0, 0, 1 )
+Label/colors/font_outline_modulate = Color( 0.901961, 0.886275, 0.866667, 1 )
+Label/constants/shadow_offset_x = 4
+Label/constants/shadow_offset_y = 4
+Label/fonts/font = SubResource( 1 )
+LineEdit/fonts/font = SubResource( 8 )
+LineEdit/styles/focus = SubResource( 9 )
+LineEdit/styles/normal = SubResource( 9 )
+LineEdit/styles/read_only = SubResource( 10 )
+VBoxContainer/constants/separation = 16

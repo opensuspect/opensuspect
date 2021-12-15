@@ -3,7 +3,7 @@ extends Control
 # --Variables--
 enum MenuType {MAIN, CREATE, JOIN, SERVER}
 
-onready var main_menu: Control = $Menu
+onready var main_menu: Control = $MainMenu
 onready var create_menu: Control = $Create
 onready var join_menu: Control = $Join
 onready var server_menu: Control = $Server

@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://bootsplash.png" type="Texture" id=1]
-[ext_resource path="res://ui_elements/main_theme.tres" type="Theme" id=2]
+[ext_resource path="res://ui_elements/suspect_ui.tres" type="Theme" id=1]
 [ext_resource path="res://ui_elements/mainmenu.gd" type="Script" id=3]
+[ext_resource path="res://ui_elements/assets/images/background.png" type="Texture" id=4]
+[ext_resource path="res://ui_elements/assets/images/logo.svg" type="Texture" id=5]
+[ext_resource path="res://ui_elements/assets/images/player_placeholder.png" type="Texture" id=6]
 
 [node name="MainMenu" type="Control"]
 anchor_left = 0.5
@@ -19,312 +21,285 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 960, 540 )
-scale = Vector2( 1.15, 1.15 )
-texture = ExtResource( 1 )
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 2143, 1078 )
+texture = ExtResource( 4 )
 
-[node name="Menu" type="MarginContainer" parent="."]
+[node name="CenterLogo" type="CenterContainer" parent="."]
+anchor_right = 1.0
+margin_bottom = 286.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Logo" type="TextureRect" parent="CenterLogo"]
+margin_left = 562.0
+margin_top = 83.0
+margin_right = 1358.0
+margin_bottom = 203.0
+texture = ExtResource( 5 )
+
+[node name="MainMenu" type="HBoxContainer" parent="."]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -500.0
-margin_top = -250.0
-margin_right = 500.0
-margin_bottom = 50.0
+margin_left = -451.5
+margin_top = -268.5
+margin_right = 451.5
+margin_bottom = 268.5
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Menupoints" type="VBoxContainer" parent="Menu"]
-margin_right = 1000.0
-margin_bottom = 300.0
+[node name="CenterPlayer" type="CenterContainer" parent="MainMenu"]
+margin_right = 372.0
+margin_bottom = 537.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Player" type="TextureRect" parent="MainMenu/CenterPlayer"]
+margin_right = 372.0
+margin_bottom = 537.0
+texture = ExtResource( 6 )
+
+[node name="PositionMenu" type="MarginContainer" parent="MainMenu"]
+margin_left = 376.0
+margin_right = 903.0
+margin_bottom = 537.0
+size_flags_horizontal = 3
+
+[node name="Menu" type="VBoxContainer" parent="MainMenu/PositionMenu"]
+margin_top = 111.0
+margin_right = 527.0
+margin_bottom = 425.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme = ExtResource( 1 )
 alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="GameCreateButton" type="Button" parent="Menu/Menupoints"]
-margin_left = 400.0
-margin_right = 599.0
-margin_bottom = 44.0
-size_flags_horizontal = 4
+[node name="GameJoinButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
+margin_right = 527.0
+margin_bottom = 94.0
 size_flags_vertical = 2
-theme = ExtResource( 2 )
-text = "Create Game"
-
-[node name="GameJoinButton" type="Button" parent="Menu/Menupoints"]
-margin_left = 417.0
-margin_top = 76.0
-margin_right = 583.0
-margin_bottom = 120.0
-size_flags_horizontal = 4
-size_flags_vertical = 2
-theme = ExtResource( 2 )
+theme = ExtResource( 1 )
 text = "Join Game"
 
-[node name="ServerStartButton" type="Button" parent="Menu/Menupoints"]
-margin_left = 331.0
-margin_top = 152.0
-margin_right = 668.0
-margin_bottom = 196.0
-size_flags_horizontal = 4
+[node name="GameCreateButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
+margin_top = 110.0
+margin_right = 527.0
+margin_bottom = 204.0
 size_flags_vertical = 2
-theme = ExtResource( 2 )
-text = "Start Dedicated Server"
-
-[node name="AppQuitButton" type="Button" parent="Menu/Menupoints"]
-margin_left = 458.0
-margin_top = 228.0
-margin_right = 542.0
-margin_bottom = 272.0
-size_flags_horizontal = 4
-size_flags_vertical = 2
-theme = ExtResource( 2 )
-text = "QUIT"
-
-[node name="Create" type="Control" parent="."]
-visible = false
-margin_left = 720.0
-margin_top = 275.0
-margin_right = 1162.0
-margin_bottom = 605.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Name" type="Control" parent="Create"]
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Create/Name"]
-margin_right = 40.0
-margin_bottom = 14.0
-theme = ExtResource( 2 )
-text = "Name:"
-
-[node name="TextEdit" type="LineEdit" parent="Create/Name"]
-margin_left = 104.0
-margin_right = 424.0
-margin_bottom = 40.0
-theme = ExtResource( 2 )
-placeholder_text = "Player Name"
-
-[node name="Port" type="Control" parent="Create"]
-margin_top = 51.0
-margin_right = 40.0
-margin_bottom = 91.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Create/Port"]
-margin_right = 40.0
-margin_bottom = 14.0
-theme = ExtResource( 2 )
-text = "Port:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextEdit" type="LineEdit" parent="Create/Port"]
-margin_left = 104.0
-margin_right = 228.0
-margin_bottom = 40.0
-theme = ExtResource( 2 )
-text = "46690"
-
-[node name="Create" type="Button" parent="Create"]
-margin_left = 128.0
-margin_top = 108.0
-margin_right = 327.0
-margin_bottom = 152.0
-theme = ExtResource( 2 )
+theme = ExtResource( 1 )
 text = "Create Game"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Back" type="Button" parent="Create"]
-margin_left = 128.0
-margin_top = 164.0
-margin_right = 327.0
-margin_bottom = 208.0
-theme = ExtResource( 2 )
-text = "Back"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Join" type="Control" parent="."]
-visible = false
-margin_left = 720.0
-margin_top = 275.0
-margin_right = 1162.0
-margin_bottom = 605.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Name" type="Control" parent="Join"]
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Join/Name"]
-margin_right = 40.0
-margin_bottom = 14.0
-theme = ExtResource( 2 )
-text = "Name:"
-
-[node name="TextEdit" type="LineEdit" parent="Join/Name"]
-margin_left = 104.0
-margin_right = 424.0
-margin_bottom = 40.0
-theme = ExtResource( 2 )
-placeholder_text = "Player Name"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Address" type="Control" parent="Join"]
-margin_top = 52.0
-margin_right = 40.0
-margin_bottom = 92.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Join/Address"]
-margin_left = -36.0
-margin_right = 92.0
-margin_bottom = 38.0
-theme = ExtResource( 2 )
-text = "Address:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextEdit" type="LineEdit" parent="Join/Address"]
-margin_left = 104.0
-margin_right = 424.0
-margin_bottom = 40.0
-theme = ExtResource( 2 )
-placeholder_text = "127.0.0.1:46690"
-
-[node name="Join" type="Button" parent="Join"]
-margin_left = 128.0
-margin_top = 108.0
-margin_right = 327.0
-margin_bottom = 152.0
-theme = ExtResource( 2 )
-text = "Join Game"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Back" type="Button" parent="Join"]
-margin_left = 128.0
-margin_top = 164.0
-margin_right = 327.0
-margin_bottom = 208.0
-theme = ExtResource( 2 )
-text = "Back"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Server" type="Control" parent="."]
-visible = false
-margin_left = 720.0
-margin_top = 275.0
-margin_right = 1162.0
-margin_bottom = 605.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Name" type="Control" parent="Server"]
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Server/Name"]
-margin_right = 40.0
-margin_bottom = 14.0
-theme = ExtResource( 2 )
-text = "Name:"
-
-[node name="TextEdit" type="LineEdit" parent="Server/Name"]
-margin_left = 104.0
-margin_right = 424.0
-margin_bottom = 40.0
-theme = ExtResource( 2 )
-placeholder_text = "Server Name"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Port" type="Control" parent="Server"]
-margin_top = 51.0
-margin_right = 40.0
-margin_bottom = 91.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Server/Port"]
-margin_right = 40.0
-margin_bottom = 14.0
-theme = ExtResource( 2 )
-text = "Port:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextEdit" type="LineEdit" parent="Server/Port"]
-margin_left = 104.0
-margin_right = 228.0
-margin_bottom = 40.0
-theme = ExtResource( 2 )
-text = "46690"
-
-[node name="Server" type="Button" parent="Server"]
-margin_left = 128.0
-margin_top = 108.0
-margin_right = 327.0
-margin_bottom = 152.0
-theme = ExtResource( 2 )
+[node name="ServerStartButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
+margin_top = 220.0
+margin_right = 527.0
+margin_bottom = 314.0
+size_flags_vertical = 2
+theme = ExtResource( 1 )
 text = "Host Server"
+
+[node name="Join" type="VBoxContainer" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -263.5
+margin_top = -204.0
+margin_right = 263.5
+margin_bottom = 204.0
+theme = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Back" type="Button" parent="Server"]
-margin_left = 128.0
-margin_top = 164.0
-margin_right = 327.0
-margin_bottom = 208.0
-theme = ExtResource( 2 )
+[node name="Label" type="Label" parent="Join"]
+margin_right = 527.0
+margin_bottom = 78.0
+theme = ExtResource( 1 )
+text = "Join a Game"
+align = 1
+
+[node name="Name" type="LineEdit" parent="Join"]
+margin_top = 94.0
+margin_right = 527.0
+margin_bottom = 188.0
+theme = ExtResource( 1 )
+placeholder_text = "Player Name"
+
+[node name="Address" type="LineEdit" parent="Join"]
+margin_top = 204.0
+margin_right = 527.0
+margin_bottom = 298.0
+theme = ExtResource( 1 )
+placeholder_text = "Server Address"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Join"]
+margin_top = 314.0
+margin_right = 527.0
+margin_bottom = 408.0
+
+[node name="Join" type="Button" parent="Join/HBoxContainer"]
+margin_right = 255.0
+margin_bottom = 94.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+text = "Join"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="Button" parent="Join/HBoxContainer"]
+margin_left = 271.0
+margin_right = 527.0
+margin_bottom = 94.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
 text = "Back"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="Menu/Menupoints/GameCreateButton" to="." method="_on_GameCreateButton_pressed"]
-[connection signal="pressed" from="Menu/Menupoints/GameJoinButton" to="." method="_on_GameJoinButton_pressed"]
-[connection signal="pressed" from="Menu/Menupoints/ServerStartButton" to="." method="_on_ServerStartButton_pressed"]
-[connection signal="pressed" from="Menu/Menupoints/AppQuitButton" to="." method="_on_AppQuitButton_pressed"]
-[connection signal="pressed" from="Create/Create" to="." method="_on_Create_pressed"]
-[connection signal="pressed" from="Create/Back" to="." method="_on_Back_pressed"]
-[connection signal="pressed" from="Join/Join" to="." method="_on_Join_pressed"]
-[connection signal="pressed" from="Join/Back" to="." method="_on_Back_pressed"]
-[connection signal="pressed" from="Server/Server" to="." method="_on_Server_pressed"]
-[connection signal="pressed" from="Server/Back" to="." method="_on_Back_pressed"]
+[node name="Create" type="VBoxContainer" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -263.5
+margin_top = -204.0
+margin_right = 263.5
+margin_bottom = 204.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Create"]
+margin_right = 527.0
+margin_bottom = 78.0
+theme = ExtResource( 1 )
+text = "Create a Game"
+align = 1
+
+[node name="Name" type="LineEdit" parent="Create"]
+margin_top = 94.0
+margin_right = 527.0
+margin_bottom = 188.0
+theme = ExtResource( 1 )
+placeholder_text = "Player Name"
+
+[node name="Port" type="LineEdit" parent="Create"]
+margin_top = 204.0
+margin_right = 527.0
+margin_bottom = 298.0
+theme = ExtResource( 1 )
+text = "46690"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Create"]
+margin_top = 314.0
+margin_right = 527.0
+margin_bottom = 408.0
+
+[node name="Create" type="Button" parent="Create/HBoxContainer"]
+margin_right = 255.0
+margin_bottom = 94.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+text = "Create"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="Button" parent="Create/HBoxContainer"]
+margin_left = 271.0
+margin_right = 527.0
+margin_bottom = 94.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Server" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -263.5
+margin_top = -204.0
+margin_right = 263.5
+margin_bottom = 204.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Server"]
+margin_right = 527.0
+margin_bottom = 78.0
+theme = ExtResource( 1 )
+text = "Host a Server"
+align = 1
+
+[node name="Name" type="LineEdit" parent="Server"]
+margin_top = 94.0
+margin_right = 527.0
+margin_bottom = 188.0
+theme = ExtResource( 1 )
+placeholder_text = "Server Name"
+
+[node name="Port" type="LineEdit" parent="Server"]
+margin_top = 204.0
+margin_right = 527.0
+margin_bottom = 298.0
+theme = ExtResource( 1 )
+text = "46690"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Server"]
+margin_top = 314.0
+margin_right = 527.0
+margin_bottom = 408.0
+
+[node name="Server" type="Button" parent="Server/HBoxContainer"]
+margin_right = 255.0
+margin_bottom = 94.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+text = "Host"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="Button" parent="Server/HBoxContainer"]
+margin_left = 271.0
+margin_right = 527.0
+margin_bottom = 94.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="MainMenu/PositionMenu/Menu/GameJoinButton" to="." method="_on_GameJoinButton_pressed"]
+[connection signal="pressed" from="MainMenu/PositionMenu/Menu/GameCreateButton" to="." method="_on_GameCreateButton_pressed"]
+[connection signal="pressed" from="MainMenu/PositionMenu/Menu/ServerStartButton" to="." method="_on_ServerStartButton_pressed"]
+[connection signal="pressed" from="Join/HBoxContainer/Join" to="." method="_on_Join_pressed"]
+[connection signal="pressed" from="Join/HBoxContainer/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="Create/HBoxContainer/Create" to="." method="_on_Create_pressed"]
+[connection signal="pressed" from="Create/HBoxContainer/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="Server/HBoxContainer/Server" to="." method="_on_Server_pressed"]
+[connection signal="pressed" from="Server/HBoxContainer/Back" to="." method="_on_Back_pressed"]
