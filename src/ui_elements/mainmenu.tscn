@@ -33,10 +33,10 @@ __meta__ = {
 }
 
 [node name="Logo" type="TextureRect" parent="CenterLogo"]
-margin_left = 562.0
-margin_top = 83.0
-margin_right = 1358.0
-margin_bottom = 203.0
+margin_left = 588.0
+margin_top = 81.0
+margin_right = 1331.0
+margin_bottom = 204.0
 texture = ExtResource( 5 )
 
 [node name="MainMenu" type="HBoxContainer" parent="."]
@@ -73,9 +73,9 @@ margin_bottom = 537.0
 size_flags_horizontal = 3
 
 [node name="Menu" type="VBoxContainer" parent="MainMenu/PositionMenu"]
-margin_top = 111.0
+margin_top = 126.0
 margin_right = 527.0
-margin_bottom = 425.0
+margin_bottom = 410.0
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -125,33 +125,33 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="Join"]
 margin_right = 527.0
-margin_bottom = 78.0
+margin_bottom = 84.0
 theme = ExtResource( 1 )
 text = "Join a Game"
 align = 1
 
 [node name="Name" type="LineEdit" parent="Join"]
-margin_top = 94.0
+margin_top = 100.0
 margin_right = 527.0
-margin_bottom = 188.0
+margin_bottom = 200.0
 theme = ExtResource( 1 )
 placeholder_text = "Player Name"
 
 [node name="Address" type="LineEdit" parent="Join"]
-margin_top = 204.0
+margin_top = 216.0
 margin_right = 527.0
-margin_bottom = 298.0
+margin_bottom = 316.0
 theme = ExtResource( 1 )
 placeholder_text = "Server Address"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Join"]
-margin_top = 314.0
+margin_top = 332.0
 margin_right = 527.0
-margin_bottom = 408.0
+margin_bottom = 416.0
 
 [node name="Join" type="Button" parent="Join/HBoxContainer"]
 margin_right = 255.0
-margin_bottom = 94.0
+margin_bottom = 84.0
 size_flags_horizontal = 3
 theme = ExtResource( 1 )
 text = "Join"
@@ -162,7 +162,7 @@ __meta__ = {
 [node name="Back" type="Button" parent="Join/HBoxContainer"]
 margin_left = 271.0
 margin_right = 527.0
-margin_bottom = 94.0
+margin_bottom = 84.0
 size_flags_horizontal = 3
 theme = ExtResource( 1 )
 text = "Back"
@@ -301,7 +301,7 @@ margin_left = 14.0
 margin_top = -51.0
 margin_right = 626.0
 margin_bottom = 27.0
-rect_scale = Vector2( 0.5, 0.5 )
+rect_scale = Vector2( 0.6, 0.6 )
 theme = ExtResource( 1 )
 text = "OpenSuspect Pre-Alpha"
 __meta__ = {
