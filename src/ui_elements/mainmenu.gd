@@ -55,7 +55,9 @@ func hide_Menus() -> void:
 # --Backend--
 func join_Event(menu):
 	match menu:
-		MenuType.MAIN: pass
+		MenuType.MAIN:
+			menu = MenuType.JOIN
+			set_Visible_Menu(menu)
 		MenuType.JOIN: assert(false, "Game start not implemented yet")
 		MenuType.CREATE: assert(false, "Game start not implemented yet")
 		MenuType.SERVER: assert(false, "Game start not implemented yet")
