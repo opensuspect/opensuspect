@@ -4,5 +4,5 @@
 font_path = "res://ui_elements/assets/fonts/PTSansNarrow-Regular.ttf"
 
 [resource]
-size = 64
+size = 56
 font_data = SubResource( 1 )

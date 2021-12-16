@@ -72,9 +72,9 @@ margin_bottom = 537.0
 size_flags_horizontal = 3
 
 [node name="Menu" type="VBoxContainer" parent="MainMenu/PositionMenu"]
-margin_top = 76.0
+margin_top = 81.0
 margin_right = 527.0
-margin_bottom = 460.0
+margin_bottom = 455.0
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -87,31 +87,31 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="MainMenu/PositionMenu/Menu"]
 margin_right = 527.0
-margin_bottom = 84.0
+margin_bottom = 74.0
 theme = ExtResource( 1 )
 text = "Main Menu"
 align = 1
 
 [node name="GameJoinButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
-margin_top = 100.0
+margin_top = 90.0
 margin_right = 527.0
-margin_bottom = 184.0
+margin_bottom = 174.0
 size_flags_vertical = 2
 theme = ExtResource( 1 )
 text = "Join Game"
 
 [node name="GameCreateButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
-margin_top = 200.0
+margin_top = 190.0
 margin_right = 527.0
-margin_bottom = 284.0
+margin_bottom = 274.0
 size_flags_vertical = 2
 theme = ExtResource( 1 )
 text = "Create Game"
 
 [node name="ServerStartButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
-margin_top = 300.0
+margin_top = 290.0
 margin_right = 527.0
-margin_bottom = 384.0
+margin_bottom = 374.0
 size_flags_vertical = 2
 theme = ExtResource( 1 )
 text = "Host Server"
