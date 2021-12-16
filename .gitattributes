@@ -1,0 +1,1 @@
+*.png[[:space:]]*.ttf[[:space:]]*.svg filter=lfs diff=lfs merge=lfs -text
