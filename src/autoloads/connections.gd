@@ -14,8 +14,6 @@ var listConnections = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	get_tree().connect("network_peer_connected", self, "connectedNewPlayer")
-	get_tree().connect("network_peer_disconnected", self, "disconnectedPlayer")
 	get_tree().connect("connected_to_server", self, "connectedOK")
 	get_tree().connect("connection_failed", self, "connectedFail")
 	get_tree().connect("server_disconnected", self, "disconnectedFromServer")
@@ -34,13 +32,14 @@ func getMyName() -> String:
 func joinGame(serverName: String, portNumber: int, playerName: String) -> void:
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_client(serverName, portNumber)
-	var id: int = peer.get_unique_id()
+	get_tree().network_peer = peer
+	var id: int = get_tree().get_network_peer().get_unique_id()
 	myName = playerName
+	print_debug("Client_id is ", id)
 	listConnections[id] = myName
 
 func connectedOK() -> void:
 	rpc_id(1, "receiveNewPlayerData", myName)
-	assert(false, "Not implemented yet")
 
 func connectedFail() -> void:
 	assert(false, "Not implemented yet")
@@ -50,26 +49,33 @@ func disconnectedFromServer() -> void:
 	
 puppet func receiveBulkPlayerData(connections: Dictionary) -> void:
 	listConnections = connections
+	print_debug(listConnections)
 
 puppet func receivePlayerData(id: int, name: String) -> void:
 	if id != get_tree().get_network_unique_id():
 		listConnections[id] = name
+	print_debug(listConnections)
 
 # -------------- Server side code --------------
 
 func createServer(portNumber: int, playerName: String) -> void:
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(portNumber, MAX_PLAYERS)
+	get_tree().network_peer = peer
+	get_tree().connect("network_peer_connected", self, "connectedNewPlayer")
+	get_tree().connect("network_peer_disconnected", self, "disconnectedPlayer")
 	listConnections[1] = playerName
 
-func receiveNewPlayerData(playerName: String) -> void:
+master func receiveNewPlayerData(newPlayerName: String) -> void:
 	var senderId = get_tree().get_rpc_sender_id()
-	listConnections[senderId] = playerName
+	listConnections[senderId] = newPlayerName
+	print_debug(listConnections)
 	rpc_id(senderId, "receiveBulkPlayerData", listConnections)
+	rpc("receivePlayerData", senderId, newPlayerName)
 
-func connectedNewPlayer() -> void:
+func connectedNewPlayer(id: int) -> void:
 	pass
 	
-func disconnectedPlayer() -> void:
+func disconnectedPlayer(id: int) -> void:
 	assert(false, "Not implemented yet")
 
