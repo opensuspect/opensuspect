@@ -53,30 +53,47 @@ func hide_Menus() -> void:
 	server_menu.visible = false
 
 # --Backend--
-func _on_CreateGameStarter_pressed() -> void:
-	var portField: LineEdit = $CreateGameMenu/Menupoints/PortContainer/PortInput
-	var nameField: LineEdit = $CreateGameMenu/Menupoints/NameContainer/NameInput
+func joinGame() -> void:
+	var nameField: LineEdit = $Join/Name
+	var serverField: LineEdit = $Join/Address
+	var port: int = 46690
+	var host: String = serverField.text
+	var name: String = nameField.text
+	var cut_pos: int = host.find(":")
+	if cut_pos != -1:
+		port = int(host.right(cut_pos))
+		host = host.left(cut_pos)
+	print_debug("port: ", port, ", host: ", host)
+	if host == "" or name == "":
+		return
+	Connections.joinGame(host, port, name)
+
+func createGame() -> void:
+	var nameField: LineEdit = $Create/Name
+	var portField: LineEdit = $Create/Port
 	var port: int = int(portField.text)
 	var name: String = nameField.text
+	if name == "":
+		return
 	Connections.createServer(port, name)
 
-func _on_JoinGameStarter_pressed() -> void:
-	var portField: LineEdit = $JoinGameMenu/Menupoints/PortContainer/PortInput
-	var ipField: LineEdit = $JoinGameMenu/Menupoints/HostNameContainer/HostNameInput
-	var nameField: LineEdit = $JoinGameMenu/Menupoints/NameContainer/NameInput
+func createDedicated() -> void:
+	var nameField: LineEdit = $Create/Name
+	var portField: LineEdit = $Create/Port
 	var port: int = int(portField.text)
-	var host: String = ipField.text
 	var name: String = nameField.text
-	Connections.joinGame(host, port, name)
+	if name == "":
+		return
+	Connections.createDedicated(port, name)
 
 func join_Event(menu):
 	match menu:
 		MenuType.MAIN:
 			menu = MenuType.JOIN
 			set_Visible_Menu(menu)
-		MenuType.JOIN: assert(false, "Game start not implemented yet")
-		MenuType.CREATE: assert(false, "Game start not implemented yet")
-		MenuType.SERVER: assert(false, "Game start not implemented yet")
+		MenuType.JOIN: joinGame()
+		MenuType.CREATE: createGame()
+		MenuType.SERVER: createDedicated()
 
 func _on_Join_pressed() -> void:
 	join_Event(menu)

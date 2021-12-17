@@ -39,9 +39,11 @@ func joinGame(serverName: String, portNumber: int, playerName: String) -> void:
 	listConnections[id] = myName
 
 func connectedOK() -> void:
+	print_debug("Connected")
 	rpc_id(1, "receiveNewPlayerData", myName)
 
 func connectedFail() -> void:
+	print_debug("Connection failed")
 	assert(false, "Not implemented yet")
 	
 func disconnectedFromServer() -> void:
@@ -65,6 +67,9 @@ func createServer(portNumber: int, playerName: String) -> void:
 	get_tree().connect("network_peer_connected", self, "connectedNewPlayer")
 	get_tree().connect("network_peer_disconnected", self, "disconnectedPlayer")
 	listConnections[1] = playerName
+
+func createDedicated(portNumber: int, serverName: String) -> void:
+	assert(false, "Dedicated server not implemented yet")
 
 master func receiveNewPlayerData(newPlayerName: String) -> void:
 	var senderId = get_tree().get_rpc_sender_id()
