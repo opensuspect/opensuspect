@@ -13,40 +13,40 @@ onready var server_menu: Control = $Server
 # --Interface--
 func _ready():
 	menu = MenuType.MAIN
-	set_Visible_Menu(menu)
+	setVisibleMenu(menu)
 
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
-		join_Event(menu)
+		joinEvent(menu)
 
 func _on_Back_pressed():
 	menu = MenuType.MAIN
-	set_Visible_Menu(menu)
+	setVisibleMenu(menu)
 
 func _on_GameJoinButton_pressed() -> void:
 	menu = MenuType.JOIN
-	set_Visible_Menu(menu)
+	setVisibleMenu(menu)
 
 func _on_GameCreateButton_pressed() -> void:
 	menu = MenuType.CREATE
-	set_Visible_Menu(menu)
+	setVisibleMenu(menu)
 
 func _on_ServerStartButton_pressed() -> void:
 	menu = MenuType.SERVER
-	set_Visible_Menu(menu)
+	setVisibleMenu(menu)
 
 func _on_AppQuitButton_pressed() -> void:
 	get_tree().quit()
 
-func set_Visible_Menu(menu) -> void:
-	hide_Menus()
+func setVisibleMenu(menu) -> void:
+	hideMenus()
 	match menu:
 		MenuType.MAIN: main_menu.visible = true
 		MenuType.JOIN: join_menu.visible = true
 		MenuType.CREATE: create_menu.visible = true
 		MenuType.SERVER: server_menu.visible = true
 
-func hide_Menus() -> void:
+func hideMenus() -> void:
 	main_menu.visible = false
 	join_menu.visible = false
 	create_menu.visible = false
@@ -86,20 +86,20 @@ func createDedicated() -> void:
 		return
 	Connections.createDedicated(port, name)
 
-func join_Event(menu):
+func joinEvent(menu) -> void:
 	match menu:
 		MenuType.MAIN:
 			menu = MenuType.JOIN
-			set_Visible_Menu(menu)
+			setVisibleMenu(menu)
 		MenuType.JOIN: joinGame()
 		MenuType.CREATE: createGame()
 		MenuType.SERVER: createDedicated()
 
 func _on_Join_pressed() -> void:
-	join_Event(menu)
+	joinEvent(menu)
 	
 func _on_Create_pressed() -> void:
-	join_Event(menu)
+	joinEvent(menu)
 
-func _on_Server_pressed():
-	join_Event(menu)
+func _on_Server_pressed() -> void:
+	joinEvent(menu)
