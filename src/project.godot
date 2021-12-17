@@ -19,6 +19,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Connections="*res://autoloads/connections.gd"
+TransitionHandler="*res://autoloads/transition_handler.gd"
 
 [display]
 

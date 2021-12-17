@@ -78,8 +78,8 @@ func createGame() -> void:
 	Connections.createServer(port, name)
 
 func createDedicated() -> void:
-	var nameField: LineEdit = $Create/Name
-	var portField: LineEdit = $Create/Port
+	var nameField: LineEdit = $Server/Name
+	var portField: LineEdit = $Server/Port
 	var port: int = int(portField.text)
 	var name: String = nameField.text
 	if name == "":
