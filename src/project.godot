@@ -11,8 +11,21 @@ config_version=4
 [application]
 
 config/name="OpenSuspect"
+config/description="Free software implementation of a social deduction game."
+run/main_scene="res://ui_elements/mainmenu.tscn"
 boot_splash/image="res://bootsplash.png"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=1920
+window/size/height=1080
+window/size/test_width=1280
+window/size/test_height=720
+window/dpi/allow_hidpi=true
+window/energy_saving/keep_screen_on=false
+window/stretch/mode="2d"
+window/stretch/aspect="expand"
 
 [physics]
 

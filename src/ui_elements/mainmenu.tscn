@@ -1,0 +1,327 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://ui_elements/suspect_ui.tres" type="Theme" id=1]
+[ext_resource path="res://ui_elements/mainmenu.gd" type="Script" id=3]
+[ext_resource path="res://ui_elements/assets/images/background.png" type="Texture" id=4]
+[ext_resource path="res://ui_elements/assets/images/logo.svg" type="Texture" id=5]
+[ext_resource path="res://ui_elements/assets/images/player_placeholder.png" type="Texture" id=6]
+
+[node name="MainMenu" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -960.0
+margin_top = -540.0
+margin_right = 960.0
+margin_bottom = 540.0
+grow_horizontal = 0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 1052, 526 )
+texture = ExtResource( 4 )
+
+[node name="CenterLogo" type="CenterContainer" parent="."]
+anchor_right = 1.0
+margin_bottom = 286.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Logo" type="TextureRect" parent="CenterLogo"]
+margin_left = 588.0
+margin_top = 81.0
+margin_right = 1331.0
+margin_bottom = 204.0
+texture = ExtResource( 5 )
+
+[node name="MainMenu" type="HBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -451.5
+margin_top = -268.5
+margin_right = 451.5
+margin_bottom = 268.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterPlayer" type="CenterContainer" parent="MainMenu"]
+margin_right = 372.0
+margin_bottom = 537.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Player" type="TextureRect" parent="MainMenu/CenterPlayer"]
+margin_right = 372.0
+margin_bottom = 537.0
+texture = ExtResource( 6 )
+
+[node name="PositionMenu" type="MarginContainer" parent="MainMenu"]
+margin_left = 376.0
+margin_right = 903.0
+margin_bottom = 537.0
+size_flags_horizontal = 3
+
+[node name="Menu" type="VBoxContainer" parent="MainMenu/PositionMenu"]
+margin_top = 81.0
+margin_right = 527.0
+margin_bottom = 455.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme = ExtResource( 1 )
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="MainMenu/PositionMenu/Menu"]
+margin_right = 527.0
+margin_bottom = 74.0
+theme = ExtResource( 1 )
+text = "Main Menu"
+align = 1
+
+[node name="GameJoinButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
+margin_top = 90.0
+margin_right = 527.0
+margin_bottom = 174.0
+size_flags_vertical = 2
+theme = ExtResource( 1 )
+text = "Join Game"
+
+[node name="GameCreateButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
+margin_top = 190.0
+margin_right = 527.0
+margin_bottom = 274.0
+size_flags_vertical = 2
+theme = ExtResource( 1 )
+text = "Create Game"
+
+[node name="ServerStartButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
+margin_top = 290.0
+margin_right = 527.0
+margin_bottom = 374.0
+size_flags_vertical = 2
+theme = ExtResource( 1 )
+text = "Host Server"
+
+[node name="Join" type="VBoxContainer" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -263.5
+margin_top = -204.0
+margin_right = 263.5
+margin_bottom = 204.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Join"]
+margin_right = 527.0
+margin_bottom = 84.0
+theme = ExtResource( 1 )
+text = "Join a Game"
+align = 1
+
+[node name="Name" type="LineEdit" parent="Join"]
+margin_top = 100.0
+margin_right = 527.0
+margin_bottom = 200.0
+theme = ExtResource( 1 )
+placeholder_text = "Player Name"
+
+[node name="Address" type="LineEdit" parent="Join"]
+margin_top = 216.0
+margin_right = 527.0
+margin_bottom = 316.0
+theme = ExtResource( 1 )
+placeholder_text = "Server Address"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Join"]
+margin_top = 332.0
+margin_right = 527.0
+margin_bottom = 416.0
+
+[node name="Join" type="Button" parent="Join/HBoxContainer"]
+margin_right = 255.0
+margin_bottom = 84.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+text = "Join"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="Button" parent="Join/HBoxContainer"]
+margin_left = 271.0
+margin_right = 527.0
+margin_bottom = 84.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Create" type="VBoxContainer" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -263.5
+margin_top = -204.0
+margin_right = 263.5
+margin_bottom = 204.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Create"]
+margin_right = 527.0
+margin_bottom = 78.0
+theme = ExtResource( 1 )
+text = "Create a Game"
+align = 1
+
+[node name="Name" type="LineEdit" parent="Create"]
+margin_top = 94.0
+margin_right = 527.0
+margin_bottom = 188.0
+theme = ExtResource( 1 )
+placeholder_text = "Player Name"
+
+[node name="Port" type="LineEdit" parent="Create"]
+margin_top = 204.0
+margin_right = 527.0
+margin_bottom = 298.0
+theme = ExtResource( 1 )
+text = "46690"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Create"]
+margin_top = 314.0
+margin_right = 527.0
+margin_bottom = 408.0
+
+[node name="Create" type="Button" parent="Create/HBoxContainer"]
+margin_right = 255.0
+margin_bottom = 94.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+text = "Create"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="Button" parent="Create/HBoxContainer"]
+margin_left = 271.0
+margin_right = 527.0
+margin_bottom = 94.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Server" type="VBoxContainer" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -263.5
+margin_top = -204.0
+margin_right = 263.5
+margin_bottom = 204.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Server"]
+margin_right = 527.0
+margin_bottom = 78.0
+theme = ExtResource( 1 )
+text = "Host a Server"
+align = 1
+
+[node name="Name" type="LineEdit" parent="Server"]
+margin_top = 94.0
+margin_right = 527.0
+margin_bottom = 188.0
+theme = ExtResource( 1 )
+placeholder_text = "Server Name"
+
+[node name="Port" type="LineEdit" parent="Server"]
+margin_top = 204.0
+margin_right = 527.0
+margin_bottom = 298.0
+theme = ExtResource( 1 )
+text = "46690"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Server"]
+margin_top = 314.0
+margin_right = 527.0
+margin_bottom = 408.0
+
+[node name="Server" type="Button" parent="Server/HBoxContainer"]
+margin_right = 255.0
+margin_bottom = 94.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+text = "Host"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="Button" parent="Server/HBoxContainer"]
+margin_left = 271.0
+margin_right = 527.0
+margin_bottom = 94.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Info" type="Label" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 14.0
+margin_top = -51.0
+margin_right = 626.0
+margin_bottom = 27.0
+rect_scale = Vector2( 0.6, 0.6 )
+theme = ExtResource( 1 )
+text = "OpenSuspect Pre-Alpha"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="MainMenu/PositionMenu/Menu/GameJoinButton" to="." method="_on_GameJoinButton_pressed"]
+[connection signal="pressed" from="MainMenu/PositionMenu/Menu/GameCreateButton" to="." method="_on_GameCreateButton_pressed"]
+[connection signal="pressed" from="MainMenu/PositionMenu/Menu/ServerStartButton" to="." method="_on_ServerStartButton_pressed"]
+[connection signal="pressed" from="Join/HBoxContainer/Join" to="." method="_on_Join_pressed"]
+[connection signal="pressed" from="Join/HBoxContainer/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="Create/HBoxContainer/Create" to="." method="_on_Create_pressed"]
+[connection signal="pressed" from="Create/HBoxContainer/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="Server/HBoxContainer/Server" to="." method="_on_Server_pressed"]
+[connection signal="pressed" from="Server/HBoxContainer/Back" to="." method="_on_Back_pressed"]
