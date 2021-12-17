@@ -1,28 +1,39 @@
 extends Control
 
 # --Variables--
-enum MenuType {MAIN, CREATE, JOIN, SERVER}
+enum MenuType {MAIN, JOIN, CREATE, SERVER}
 
-onready var create_game_menu: MarginContainer = $CreateGameMenu
-onready var join_menu: MarginContainer = $JoinGameMenu
-onready var dedicated_menu: MarginContainer = $DedicatedMenu
-onready var main_menu: MarginContainer = $MainMenu
+var menu
+
+onready var main_menu: Control = $MainMenu
+onready var join_menu: Control = $Join
+onready var create_menu: Control = $Create
+onready var server_menu: Control = $Server
 
 # --Interface--
 func _ready():
-	set_Visible_Menu(MenuType.MAIN)
+	menu = MenuType.MAIN
+	set_Visible_Menu(menu)
 
-func _on_BackButton_pressed() -> void:
-	set_Visible_Menu(MenuType.MAIN)
+func _input(event):
+	if event.is_action_pressed("ui_accept"):
+		join_Event(menu)
 
-func _on_GameCreateButton_pressed() -> void:
-	set_Visible_Menu(MenuType.CREATE)
+func _on_Back_pressed():
+	menu = MenuType.MAIN
+	set_Visible_Menu(menu)
 
 func _on_GameJoinButton_pressed() -> void:
-	set_Visible_Menu(MenuType.JOIN)
-	
+	menu = MenuType.JOIN
+	set_Visible_Menu(menu)
+
+func _on_GameCreateButton_pressed() -> void:
+	menu = MenuType.CREATE
+	set_Visible_Menu(menu)
+
 func _on_ServerStartButton_pressed() -> void:
-	set_Visible_Menu(MenuType.SERVER)
+	menu = MenuType.SERVER
+	set_Visible_Menu(menu)
 
 func _on_AppQuitButton_pressed() -> void:
 	get_tree().quit()
@@ -31,15 +42,15 @@ func set_Visible_Menu(menu) -> void:
 	hide_Menus()
 	match menu:
 		MenuType.MAIN: main_menu.visible = true
-		MenuType.CREATE: create_game_menu.visible = true
 		MenuType.JOIN: join_menu.visible = true
-		MenuType.SERVER: dedicated_menu.visible = true
+		MenuType.CREATE: create_menu.visible = true
+		MenuType.SERVER: server_menu.visible = true
 
 func hide_Menus() -> void:
 	main_menu.visible = false
-	create_game_menu.visible = false
 	join_menu.visible = false
-	dedicated_menu.visible = false
+	create_menu.visible = false
+	server_menu.visible = false
 
 # --Backend--
 func _on_CreateGameStarter_pressed() -> void:
@@ -58,5 +69,20 @@ func _on_JoinGameStarter_pressed() -> void:
 	var name: String = nameField.text
 	Connections.joinGame(host, port, name)
 
-func _on_DedicatedStarter_pressed() -> void:
-	assert(false, "Dedicated server not implemented yet")
+func join_Event(menu):
+	match menu:
+		MenuType.MAIN:
+			menu = MenuType.JOIN
+			set_Visible_Menu(menu)
+		MenuType.JOIN: assert(false, "Game start not implemented yet")
+		MenuType.CREATE: assert(false, "Game start not implemented yet")
+		MenuType.SERVER: assert(false, "Game start not implemented yet")
+
+func _on_Join_pressed() -> void:
+	join_Event(menu)
+	
+func _on_Create_pressed() -> void:
+	join_Event(menu)
+
+func _on_Server_pressed():
+	join_Event(menu)
