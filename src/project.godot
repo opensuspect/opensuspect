@@ -16,6 +16,13 @@ run/main_scene="res://ui_elements/mainmenu.tscn"
 boot_splash/image="res://bootsplash.png"
 config/icon="res://icon.png"
 
+[autoload]
+
+AppearanceManager="*res://autoloads/appearancemanager.gd"
+SaveLoadHandler="*res://autoloads/saveloadhandler.gd"
+Helpers="*res://autoloads/helpers.gd"
+Resources="*res://autoloads/resources.gd"
+
 [display]
 
 window/size/width=1920
