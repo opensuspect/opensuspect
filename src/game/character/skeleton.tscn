@@ -2159,7 +2159,7 @@ states/resurrect/node = SubResource( 12 )
 states/resurrect/position = Vector2( 322, 522 )
 transitions = [ "idle_move_blend", "death", SubResource( 13 ), "death", "resurrect", SubResource( 14 ), "resurrect", "idle_move_blend", SubResource( 15 ) ]
 start_node = "idle_move_blend"
-graph_offset = Vector2( -311, 172 )
+graph_offset = Vector2( -311, 206.208 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=17]
 

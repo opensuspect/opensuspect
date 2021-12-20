@@ -30,7 +30,39 @@ func list(directories: Dictionary, types: PoolStringArray) -> Dictionary:
 		resources[folder] = _filesToDictionary(folder, files, directories[folder], types)
 	return(resources) # Return the dictionary of namespaced resources
 
+# Returns the path of a specified resource
+func getPath(resource: String, namespace: String, directories: Dictionary, types: PoolStringArray) -> String:
+	var resources: Dictionary = list(directories, types) # Create the directory listing
+	var wantedResource = _formatString(resource) # Format the string for optimal matching
+	var output = "" # Set a blank output
+	for file in resources[namespace].keys(): # Iterate through each file in the specified namespace
+		if file == wantedResource: # Match the file name with the wanted resource
+			output = resources[namespace][file] # Set output to the path of the file
+	return(output)
+
+# Returns a random resource from a given namespace
+func getRandom(directories: Dictionary, types: PoolStringArray, namespace: String) -> Dictionary:
+	var resources: Dictionary = list(directories, types)
+	var dir = resources[namespace]
+	var keys = dir.keys()
+	var maxInt = keys.size()
+	var randInt = randi() % maxInt
+	var chosenKey = keys[randInt]
+	var output: Dictionary = {}
+	output[namespace] = {}
+	output[namespace][chosenKey] = dir[chosenKey]
+	return(output)
+
+func getRandomOfEach(directories: Dictionary, types: PoolStringArray) -> Dictionary:
+	var output: Dictionary = {}
+	for key in directories.keys():
+		var value = getRandom(directories, types, key).values()[0]
+		output[key] = value
+	return(output)
+
 # --Private Functions--
+func _ready():
+	randomize()
 
 # Lists all files in a path, that have the correct file extensions
 func _listFilesInDirectory(path: String, types: PoolStringArray) -> Array:
@@ -57,8 +89,8 @@ func _filesToDictionary(namespace: String, files: PoolStringArray, path: String,
 			if file.ends_with(type): # Checks if the file has the extension
 				resource = file.trim_suffix(type) # If it does, remove the extension, and set this as "resource"
 		resource = _formatString(resource) # Format the resource string for use in game
-		path = path + "/" + file # Create the full file path to the resource
-		output[resource] = path # Set the path in the resources dictionary
+		var fullPath = path + "/" + file # Create the full file path to the resource
+		output[resource] = fullPath # Set the path in the resources dictionary
 	return(output) # Return the output dictionary
 
 # Formats a string to remove any special characters

@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://ui_elements/suspect_ui.tres" type="Theme" id=1]
+[ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
+[ext_resource path="res://game/character/menu_player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui_elements/mainmenu.gd" type="Script" id=3]
 [ext_resource path="res://ui_elements/assets/images/background.png" type="Texture" id=4]
 [ext_resource path="res://ui_elements/assets/images/logo.svg" type="Texture" id=5]
-[ext_resource path="res://ui_elements/assets/images/player_placeholder.png" type="Texture" id=6]
+[ext_resource path="res://ui_elements/randomise.gd" type="Script" id=6]
+[ext_resource path="res://ui_elements/assets/themes/hidden.tres" type="Theme" id=7]
 
 [node name="MainMenu" type="Control"]
 anchor_left = 0.5
@@ -60,10 +62,16 @@ grow_vertical = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="Player" type="TextureRect" parent="MainMenu/CenterPlayer"]
+[node name="Player" type="Button" parent="MainMenu/CenterPlayer"]
 margin_right = 372.0
 margin_bottom = 537.0
-texture = ExtResource( 6 )
+rect_min_size = Vector2( 372, 537 )
+size_flags_vertical = 3
+theme = ExtResource( 7 )
+script = ExtResource( 6 )
+
+[node name="menu_player" parent="MainMenu/CenterPlayer/Player" instance=ExtResource( 2 )]
+position = Vector2( 128.5, 203.5 )
 
 [node name="PositionMenu" type="MarginContainer" parent="MainMenu"]
 margin_left = 376.0
@@ -316,6 +324,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[connection signal="pressed" from="MainMenu/CenterPlayer/Player" to="MainMenu/CenterPlayer/Player" method="_on_Player_pressed"]
 [connection signal="pressed" from="MainMenu/PositionMenu/Menu/GameJoinButton" to="." method="_on_GameJoinButton_pressed"]
 [connection signal="pressed" from="MainMenu/PositionMenu/Menu/GameCreateButton" to="." method="_on_GameCreateButton_pressed"]
 [connection signal="pressed" from="MainMenu/PositionMenu/Menu/ServerStartButton" to="." method="_on_ServerStartButton_pressed"]

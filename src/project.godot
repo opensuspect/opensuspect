@@ -18,9 +18,6 @@ config/icon="res://icon.png"
 
 [autoload]
 
-AppearanceManager="*res://autoloads/appearancemanager.gd"
-SaveLoadHandler="*res://autoloads/saveloadhandler.gd"
-Helpers="*res://autoloads/helpers.gd"
 Resources="*res://autoloads/resources.gd"
 
 [display]

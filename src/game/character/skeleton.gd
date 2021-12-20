@@ -1,55 +1,58 @@
 extends Node2D
 
-# This dictionary contains the names of the nodes that will need to load the sprites
-var player_sprite_names: Dictionary = {
-	"Clothes": [
-		"LeftArm",
-		"LeftLeg",
-		"Pants",
-		"RightLeg",
-		"Skeleton/Spine/Clothes",
-		"RightArm"
-	],
-	"Body": ["Body"],
-	"Facial Hair": ["Skeleton/Spine/FacialHair"],
-	"Face Wear": ["Skeleton/Spine/FaceWear"],
-	"Hat/Hair": ["Skeleton/Spine/HatHair"],
-	"Mouth": ["Skeleton/Spine/Mouth"],
+onready var Resources = get_node("/root/Resources")
+
+var part_list: Dictionary = {
+	"Body": "res://game/character/assets/textures/body",
+	"Clothes": "res://game/character/assets/textures/clothes",
+	"Face Wear": "res://game/character/assets/textures/face_wear",
+	"Facial Hair": "res://game/character/assets/textures/facial_hair",
+	"Hat/Hair": "res://game/character/assets/textures/hat_hair",
+	"Mouth": "res://game/character/assets/textures/mouth",
+	"Left Arm": "res://game/character/assets/textures/left_arm",
+	"Left Leg": "res://game/character/assets/textures/left_leg",
+	"Right Arm": "res://game/character/assets/textures/right_arm",
+	"Right Leg": "res://game/character/assets/textures/right_leg",
+	"Pants": "res://game/character/assets/textures/pants",
 }
-# This will contain the reference to the node instances showing the sprites
-var sprite_nodes: Dictionary = {}
-# The shader names
-var custom_color_shaders: Dictionary = {
-	"Skin Color": "skin_color", "Hair Color": "hair_color", "Facial Hair Color": "fhair_color"
-	}
+
+var nodeStructure: Dictionary = {
+	"Body": "Body",
+	"Clothes": "Skeleton/Spine/Clothes",
+	"Face Wear": "Skeleton/Spine/FaceWear",
+	"Facial Hair": "Skeleton/Spine/FacialHair",
+	"Hat/Hair": "Skeleton/Spine/HatHair",
+	"Mouth": "Skeleton/Spine/Mouth",
+	"Left Arm": "LeftArm",
+	"Left Leg": "LeftLeg",
+	"Right Arm": "RightArm",
+	"Right Leg": "RightLeg",
+	"Pants": "Pants",
+}
+
+var extensions: Array = [".png"]
 
 func _ready():
-	var sprites: Array
-	
-	# Assign the nodes of the character to the variables for easy access
-	for part in player_sprite_names.keys():
-		sprites = []
-		for sprite_name in player_sprite_names[part]:
-			sprites.append(self.get_node(sprite_name))
-		sprite_nodes[part] = sprites
+	randomizePlayer()
 
-func applyCustomization(customizationData):
-	#----------
-	# Receives the customization data, and applies it to the current instance.
-	#----------
-	if customizationData.empty():
-		print_debug("Empty customization data received")
-		return
-	var color_for_shader: Color
-	var file_paths: Array
-	for shader_name in custom_color_shaders.keys():
-		color_for_shader = Color(
-			customizationData[shader_name]["r"],
-			customizationData[shader_name]["g"],
-			customizationData[shader_name]["b"])
-		self.material.set_shader_param(custom_color_shaders[shader_name], color_for_shader)
-	for part in sprite_nodes.keys():
-		file_paths = AppearanceManager.getFilePaths(part, customizationData[part])
-		for sprite_num in len(sprite_nodes[part]):
-			# TODO: only run this if the texture has to be changed
-			sprite_nodes[part][sprite_num].texture = load(file_paths[sprite_num])
+func randomizePlayer():
+	var configuration = randomConfig()
+	_applyConfiguration(configuration)
+
+func randomConfig():
+	var configuration = Resources.getRandomOfEach(part_list, extensions)
+	var clothing = ["Left Leg", "Right Leg", "Left Arm", "Right Arm", "Pants"]
+	var clothesType = configuration["Clothes"].keys()[0]
+	for namespace in clothing:
+		var path = Resources.getPath(clothesType, namespace, part_list, extensions)
+		if not path.empty():
+			configuration[namespace][clothesType] = path
+	return(configuration)
+
+func _applyConfiguration(configuration):
+	for resource in configuration.keys():
+		for path in configuration[resource].keys():
+			var nodePath = nodeStructure[resource]
+			var resourcePath = configuration[resource][path]
+			var node = self.get_node(nodePath)
+			node.texture = load(resourcePath)
