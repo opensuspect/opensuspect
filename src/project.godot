@@ -26,6 +26,10 @@ run/main_scene="res://ui_elements/mainmenu.tscn"
 boot_splash/image="res://bootsplash.png"
 config/icon="res://icon.png"
 
+[autoload]
+
+Players="*res://autoloads/players.gd"
+
 [display]
 
 window/size/width=1920

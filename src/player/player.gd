@@ -4,9 +4,11 @@ extends KinematicBody2D
 
 # --Public Variables--
 
-# network id corresponding to this player node
-var network_id: int
+# network id corresponding to this player
+var networkId: int
 
+# the name of this player
+var playerName: String
 
 # --Private Variables--
 
@@ -15,8 +17,14 @@ var _playerResource: PlayerResource
 
 
 
-
 # --Public Functions--
+
+# get tasks assigned to this player node
+func getTasks() -> Dictionary:
+	return _playerResource.getTasks()
+
+func getOutfit() -> Dictionary:
+	return _playerResource.getOutfit()
 
 # get the player node that corresponds to this PlayerResource
 func getPlayerResource() -> PlayerResource:

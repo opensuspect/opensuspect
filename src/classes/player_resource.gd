@@ -8,19 +8,36 @@ class_name PlayerResource
 
 # --Public Variables--
 
-# network id corresponding to this PlayerResource
-var network_id: int
+# network id corresponding to this player
+var networkId: int
 
+# the name of this player
+var playerName: String
 
 # --Private Variables--
 
 # the player node corresponding to this PlayerResource
 var _playerNode: Node
 
+# the dictionary (?) that stores the tasks assigned to this PlayerResource
+# this is a placeholder, not sure what this will look like because the
+#	task system has not been implemented yet
+var _tasks: Dictionary
 
-
+# the dictionary (?) that stores outfit information
+# this is a placeholder, not sure what this will look like because the
+# 	outfit system has not been implemented yet
+var _outfit: Dictionary
 
 # --Public Functions--
+
+# get tasks assigned to this PlayerResource
+func getTasks() -> Dictionary:
+	return _tasks
+
+# get the outfit information of this player
+func getOutfit() -> Dictionary:
+	return _outfit
 
 # get the player node that corresponds to this PlayerResource
 func getPlayerNode() -> Node:
