@@ -10,12 +10,12 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Resource",
-"class": "PlayerResource",
+"class": "CharacterResource",
 "language": "GDScript",
-"path": "res://classes/player_resource.gd"
+"path": "res://resource_classes/character_resource.gd"
 } ]
 _global_script_class_icons={
-"PlayerResource": ""
+"CharacterResource": ""
 }
 
 [application]
@@ -28,7 +28,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Players="*res://autoloads/players.gd"
+Characters="*res://autoloads/characters.gd"
 
 [display]
 
