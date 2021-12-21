@@ -2,6 +2,18 @@ extends Node
 
 # this autoload manages character nodes and character resources
 
+## HOW TO USE CHARACTER MANAGER
+## Example: creating a character
+## network id to use when creating a character (12345 is just an example id and
+## most likely not what you will be using)
+#	var networkId: int = 12345
+#
+## have the character manager create a character using that network id
+#	Characters.createCharacter(networkId)
+#	 > returns a CharacterResource corresponding to the character that was just
+#		created
+
+
 # --Public Variables--
 
 # path to character scene
@@ -38,27 +50,11 @@ func createCharacter(networkId: int) -> CharacterResource:
 	characterResource.setCharacterNode(characterNode)
 	
 	# register character node and resource
-	registerCharacterNode(networkId, characterNode)
-	registerCharacterResource(networkId, characterResource)
+	_registerCharacterNode(networkId, characterNode)
+	_registerCharacterResource(networkId, characterResource)
 	
 	#return character resource
 	return characterResource
-
-# add a character node to the characterNodes dictionary
-func registerCharacterNode(id: int, characterNode: Node):
-	# if there is already a character node for this network id
-	if id in _characterNodes:
-		# throw an error
-		printerr("Registering a character node that already exists, network id: ", id)
-	_characterNodes[id] = characterNode
-
-# add a character resource to the characterResources dictionary
-func registerCharacterResource(id: int, characterResource: CharacterResource):
-	# if there is already a character node for this network id
-	if id in _characterNodes:
-		# throw an error
-		printerr("Registering a character node that already exists, network id: ", id)
-	_characterResources[id] = characterResource
 
 # get character node for the input network id
 func getCharacterNode(id: int) -> Node:
@@ -109,3 +105,19 @@ func _createCharacterResource(networkId: int = -1) -> CharacterResource:
 	characterResource.networkId = networkId
 	# here is where we would set its player name, but that is not implemented yet
 	return characterResource
+
+# add a character node to the characterNodes dictionary
+func _registerCharacterNode(id: int, characterNode: Node):
+	# if there is already a character node for this network id
+	if id in _characterNodes:
+		# throw an error
+		printerr("Registering a character node that already exists, network id: ", id)
+	_characterNodes[id] = characterNode
+
+# add a character resource to the characterResources dictionary
+func _registerCharacterResource(id: int, characterResource: CharacterResource):
+	# if there is already a character node for this network id
+	if id in _characterNodes:
+		# throw an error
+		printerr("Registering a character node that already exists, network id: ", id)
+	_characterResources[id] = characterResource
