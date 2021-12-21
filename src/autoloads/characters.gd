@@ -4,8 +4,13 @@ extends Node
 
 # --Public Variables--
 
+# path to character scene
+const CHARACTER_SCENE_PATH: String = "res://character/character.tscn"
+var characterScene: PackedScene = preload(CHARACTER_SCENE_PATH)
 
 # --Private Variables--
+
+
 
 # _characterNodes and _characterResources are private variables because only this 
 # 	script should be editing them
@@ -19,6 +24,25 @@ var _characterNodes: Dictionary = {}
 var _characterResources: Dictionary = {}
 
 # --Public Functions--
+
+# create a new character for the given network id
+# returns the character resource because I think it would be more useful than
+# 	the character node - TheSecondReal0
+func createCharacter(networkId: int) -> CharacterResource:
+	# create character node and resource
+	var characterNode: Node = _createCharacterNode(networkId)
+	var characterResource: CharacterResource = _createCharacterResource(networkId)
+	
+	# assign character nodes and resources to each other
+	characterNode.setCharacterResource(characterResource)
+	characterResource.setCharacterNode(characterNode)
+	
+	# register character node and resource
+	registerCharacterNode(networkId, characterNode)
+	registerCharacterResource(networkId, characterResource)
+	
+	#return character resource
+	return characterResource
 
 # add a character node to the characterNodes dictionary
 func registerCharacterNode(id: int, characterNode: Node):
@@ -68,3 +92,20 @@ func getCharacterResources() -> Dictionary:
 
 # --Private Functions--
 
+# create a character node, this function is used when creating a new character
+func _createCharacterNode(networkId: int = -1) -> Node:
+	# instance character scene
+	var characterNode: Node = characterScene.instance()
+	# set its network id
+	characterNode.networkId = networkId
+	# here is where we would set its player name, but that is not implemented yet
+	return characterNode
+
+# create a character resource, this function is used when creating a new character
+func _createCharacterResource(networkId: int = -1) -> CharacterResource:
+	# instance a new CharacterResource object
+	var characterResource: CharacterResource = CharacterResource.new()
+	# set its network id
+	characterResource.networkId = networkId
+	# here is where we would set its player name, but that is not implemented yet
+	return characterResource
