@@ -1,5 +1,6 @@
 extends Node2D
 
+# --Variables--
 onready var Resources = get_node("/root/Resources")
 
 var part_list: Dictionary = {
@@ -32,21 +33,24 @@ var nodeStructure: Dictionary = {
 
 var extensions: Array = [".png"]
 
+# --Public Functions--
 func _ready():
 	randomizePlayer()
 
 func randomizePlayer():
-	var configuration = randomConfig()
+	var configuration = _randomConfig()
 	_applyConfiguration(configuration)
 
-func randomConfig():
+# --Private Functions--
+func _randomConfig():
 	var configuration = Resources.getRandomOfEach(part_list, extensions)
-	var clothing = ["Left Leg", "Right Leg", "Left Arm", "Right Arm", "Pants"]
-	var clothesType = configuration["Clothes"].keys()[0]
+	var clothing = {"Clothes": ["Left Arm", "Right Arm"], "Pants": ["Left Leg", "Right Leg"]}
 	for namespace in clothing:
-		var path = Resources.getPath(clothesType, namespace, part_list, extensions)
-		if not path.empty():
-			configuration[namespace][clothesType] = path
+		var clothesType = configuration[namespace].keys()[0]
+		for child in clothing[namespace]:
+			var path = Resources.getPath(clothesType, child, part_list, extensions)
+			if not path.empty():
+				configuration[child][clothesType] = path
 	return(configuration)
 
 func _applyConfiguration(configuration):
