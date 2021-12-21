@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Resource",
+"class": "PlayerResource",
+"language": "GDScript",
+"path": "res://classes/player_resource.gd"
+} ]
+_global_script_class_icons={
+"PlayerResource": ""
+}
+
 [application]
 
 config/name="OpenSuspect"
