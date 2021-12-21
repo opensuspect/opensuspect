@@ -2,10 +2,7 @@ extends Node2D
 
 onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	 load_map()
 
-func load_map() -> void:
-	var mapToLoad: Node = TransitionHandler.mapToLoad
+func load_map(mapPath: String) -> void:
+	var mapToLoad: Node = ResourceLoader.load(mapPath).instance()
 	add_child_below_node(mapNode, mapToLoad)

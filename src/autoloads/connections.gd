@@ -60,9 +60,9 @@ puppet func receiveBulkPlayerData(connections: Dictionary) -> void:
 	listConnections = connections
 	print_debug("Connected clients: ", listConnections)
 
-puppet func setServerName(serverName: String) -> void:
-	self.serverName = serverName
-	print_debug("Server name: ")
+puppet func setServerName(serverNewName: String) -> void:
+	serverName = serverNewName
+	print_debug("Server name: ", serverName)
 
 puppet func receivePlayerData(id: int, name: String) -> void:
 	if id != get_tree().get_network_unique_id():
