@@ -17,7 +17,7 @@ extends Node
 # --Public Variables--
 
 # path to character scene
-const CHARACTER_SCENE_PATH: String = "res://character/character.tscn"
+const CHARACTER_SCENE_PATH: String = "res://game/character/character.tscn"
 var characterScene: PackedScene = preload(CHARACTER_SCENE_PATH)
 
 # --Private Variables--

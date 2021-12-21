@@ -17,7 +17,7 @@ func enterLobby() -> void:
 	root.add_child(gameScene)
 	currentScene = gameScene
 	get_tree().set_current_scene(currentScene)
-	gameScene.load_map("res://game/maps/lobby/lobby.tscn")
+	gameScene.loadMap("res://game/maps/lobby/lobby.tscn")
 
 func startGame() -> void:
 	assert(false, "Not implemented yet")
