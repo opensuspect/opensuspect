@@ -1,6 +1,6 @@
 extends Button
 
-
+onready var Appearance = get_node("/root/Appearance")
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -17,4 +17,5 @@ func _ready():
 
 
 func _on_Player_pressed():
-	$menu_player/Skeleton.randomizePlayer()
+	Appearance.randomizeConfig()
+	$menu_player/Skeleton.applyConfig()

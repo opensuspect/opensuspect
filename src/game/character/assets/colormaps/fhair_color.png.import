@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/skin_palette.png-834833709ae5a62df40e815abbee48d8.stex"
+path="res://.import/fhair_color.png-6f6d3dc9e35faf233ca6e9a7df39cde8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/character/assets/textures/skin_palette.png"
-dest_files=[ "res://.import/skin_palette.png-834833709ae5a62df40e815abbee48d8.stex" ]
+source_file="res://game/character/assets/colormaps/fhair_color.png"
+dest_files=[ "res://.import/fhair_color.png-6f6d3dc9e35faf233ca6e9a7df39cde8.stex" ]
 
 [params]
 
