@@ -107,7 +107,7 @@ func _createCharacterResource(networkId: int = -1) -> CharacterResource:
 	return characterResource
 
 # add a character node to the characterNodes dictionary
-func _registerCharacterNode(id: int, characterNode: Node):
+func _registerCharacterNode(id: int, characterNode: Node) -> void:
 	# if there is already a character node for this network id
 	if id in _characterNodes:
 		# throw an error
@@ -116,7 +116,7 @@ func _registerCharacterNode(id: int, characterNode: Node):
 	_characterNodes[id] = characterNode
 
 # add a character resource to the characterResources dictionary
-func _registerCharacterResource(id: int, characterResource: CharacterResource):
+func _registerCharacterResource(id: int, characterResource: CharacterResource) -> void:
 	# if there is already a character node for this network id
 	if id in _characterResources:
 		# throw an error
