@@ -67,7 +67,6 @@ func getPosition() -> Vector2:
 
 # set the position of the character
 func setPosition(newPos: Vector2) -> void:
-	# assert false because setting position (teleporting) is not implemented yet
 	position = newPos
 
 # get the global position of the character
@@ -76,9 +75,32 @@ func getGlobalPosition() -> Vector2:
 
 # set the global position of the character
 func setGlobalPosition(newPos: Vector2) -> void:
-	# assert false because setting position (teleporting) is not implemented yet
-	assert(false, "Not implemented yet")
 	global_position = newPos
+
+# get the movement vector by looking at which keys are pressed
+func getMovementVector(normalized: bool = true) -> Vector2:
+	var vector: Vector2 = Vector2()
+	# get the movement vector using the move_left, move_right, move_up, 
+	# 	and move_down keys found in the input map
+	vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	if normalized:
+		vector = vector.normalized()
+	return vector
 
 # --Private Functions--
 
+func _process(_delta: float) -> void:
+	var amountMoved: Vector2 = _move(_delta)
+
+# move the character based on which keys are pressed and return a vector
+# 	describing the movement that occurred
+func _move(_delta: float) -> Vector2:
+	# get the movement vector given which keys are pressed (not normalized)
+	var movementVec: Vector2 = getMovementVector(false)
+	# multiply the movement vec by speed
+	movementVec *= _characterResource.getSpeed()
+	# move_and_slide() returns the actual motion that happened, store it
+	# 	in amountMoved
+	var amountMoved: Vector2 = move_and_slide(movementVec)
+	# return the actual movement that happened
+	return amountMoved
