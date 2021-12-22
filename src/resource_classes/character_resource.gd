@@ -108,7 +108,6 @@ func getPosition() -> Vector2:
 # set the position of the character
 func setPosition(newPos: Vector2):
 	# assert false because setting position (teleporting) is not implemented yet
-	assert(false)
 	_characterNode.setPosition(newPos)
 
 # get the global position of the character
