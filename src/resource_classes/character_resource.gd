@@ -38,19 +38,19 @@ var _outfit: Dictionary
 # function called when character is spawned
 func spawn():
 	# assert false because spawning isn't implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 
 # PLACEHOLDER function for killing characters
 func kill():
 	# assert false because killing is not implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 
 # function called to reset the character resource to default settings
 # 	probably going to be used mostly between rounds when roles and stuff are
 # 	changing
 func reset():
 	# assert false because resetting is not implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 
 # get the character node that corresponds to this CharacterResource
 func getCharacterNode() -> Node:
@@ -61,44 +61,45 @@ func setCharacterNode(newCharacterNode: Node):
 	# if there is already a character node assigned to this resource
 	if _characterNode != null:
 		printerr("Assigning a new character node to a CharacterResource that already has one")
+		assert(false, "Should be unreachable")
 	_characterNode = newCharacterNode
 
 # get the role of this character
 # string is PLACEHOLDER
 func getRole() -> String:
 	# assert false because roles aren't implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 	return _role
 
 # set the role of this character
 # string return type is PLACEHOLDER
 func setRole(newRole: String):
 	# assert false because roles aren't implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 	_role = newRole
 
 # get tasks assigned to this CharacterResource
 func getTasks() -> Dictionary:
 	# assert false because tasks aren't implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 	return _tasks
 
 # set tasks assigned to this CharacterResource
 func setTasks(newTasks: Dictionary):
 	# assert false because tasks aren't implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 	_tasks = newTasks
 
 # get the outfit information of this character
 func getOutfit() -> Dictionary:
 	# assert false because outfits aren't implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 	return _outfit
 
 # set the outfit information of this character
 func setOutfit(newOutfit: Dictionary):
 	# assert false because outfits aren't implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 	_outfit = newOutfit
 
 # get the position of the character
@@ -117,7 +118,7 @@ func getGlobalPosition() -> Vector2:
 # set the global position of the character
 func setGlobalPosition(newPos: Vector2):
 	# assert false because setting position (teleporting) is not implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 	_characterNode.setPosition(newPos)
 
 # --Private Functions--

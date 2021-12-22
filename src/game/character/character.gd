@@ -22,19 +22,19 @@ var _characterResource: CharacterResource
 # function called when character is spawned
 func spawn():
 	# assert false because spawning isn't implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 
 # PLACEHOLDER function for killing characters
 func kill():
 	# assert false because killing isn't implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 
 # function called to reset the character resource to default settings
 # 	probably going to be used mostly between rounds when roles and stuff are
 # 	changing
 func reset():
 	# assert false because resetting is not implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 
 # get the character node that corresponds to this CharacterResource
 func getCharacterResource() -> CharacterResource:
@@ -45,6 +45,7 @@ func setCharacterResource(newCharacterResource: CharacterResource):
 	# if there is already a character node assigned to this resource
 	if _characterResource != null:
 		printerr("Assigning a new CharacterResource to a character node that already has one")
+		assert(false, "Should be unreachable")
 	_characterResource = newCharacterResource
 
 # get the role of this character
@@ -76,7 +77,7 @@ func getGlobalPosition() -> Vector2:
 # set the global position of the character
 func setGlobalPosition(newPos: Vector2):
 	# assert false because setting position (teleporting) is not implemented yet
-	assert(false)
+	assert(false, "Not implemented yet")
 	global_position = newPos
 
 # --Private Functions--

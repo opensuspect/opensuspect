@@ -41,7 +41,7 @@ func joinGame(serverName: String, portNumber: int, playerName: String) -> void:
 	var id: int = get_tree().get_network_peer().get_unique_id()
 	myName = playerName
 	connectionType = connectionTypes.CLIENT
-	print_debug("Client_id is ", id)
+	#print_debug("Client_id is ", id)
 	listConnections[id] = myName
 
 func connectedOK() -> void:
@@ -58,21 +58,21 @@ func disconnectedFromServer() -> void:
 
 puppet func receiveBulkPlayerData(connections: Dictionary) -> void:
 	listConnections = connections
-	print_debug("Connected clients: ", listConnections)
+	#print_debug("Connected clients: ", listConnections)
 	var gameScene: Node = TransitionHandler.gameScene
 	for player in listConnections:
 		gameScene.addCharacter(player)
 
 puppet func setServerName(serverNewName: String) -> void:
 	serverName = serverNewName
-	print_debug("Server name: ", serverName)
+	#print_debug("Server name: ", serverName)
 
 puppet func receivePlayerData(id: int, name: String) -> void:
 	if id != get_tree().get_network_unique_id():
 		listConnections[id] = name
 		var gameScene: Node = TransitionHandler.gameScene
 		gameScene.addCharacter(id)
-	print_debug("Connected clients: ", listConnections)
+	#print_debug("Connected clients: ", listConnections)
 
 # -------------- Server side code --------------
 
@@ -103,7 +103,7 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 master func receiveNewPlayerData(newPlayerName: String) -> void:
 	var senderId = get_tree().get_rpc_sender_id()
 	listConnections[senderId] = newPlayerName
-	print_debug(listConnections)
+	#print_debug(listConnections)
 	rpc_id(senderId, "setServerName", serverName)
 	rpc_id(senderId, "receiveBulkPlayerData", listConnections)
 	rpc("receivePlayerData", senderId, newPlayerName)
