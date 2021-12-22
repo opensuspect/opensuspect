@@ -1,0 +1,117 @@
+digraph join {
+	subgraph cluster_mainmenu {
+		label="mainmenu.gd"; labeljust="l";
+		node [shape=box]; joinEvent; joinGame; createGame; createDedicated;
+		node [shape=diamond]; {node [label="match menu"] match_menu};
+	}
+
+	subgraph cluster_0 {
+		label="Client 1"; labeljust="l";
+		subgraph cluster_0c {
+			label="connections.gd"; labeljust="l";
+			connections_joinGame[
+				label="<f0> joinGame"
+				shape=record
+			];
+			connections_connectedOK[
+				label="<f0> connectedOK | <f1> | <f2>"
+				shape=record
+			];
+			connections_setServerName [
+				label="<f0> setServerName"
+				shape=record
+			];
+			connections_receiveBulkPlayerData [
+				label="<f0> receiveBulkPlayerData "
+				shape=record
+			];
+		}
+		subgraph cluster_0t {
+			label="transition_handler.gd"; labeljust="l";
+			node [shape=box]; {node [label="enterLobby"] client_enterLobby};
+		}
+		subgraph cluster_0g {
+			label="game.gd"; labeljust="l";
+			client_loadMap [
+				label="loadMap"
+				shape="record"
+			];
+			client_addCharacter [
+				label="<f0> addCharacter | <f1> | <f2> | <f3> Puts the character on the scene | <f4> "
+				shape="record"
+			];
+		}
+		subgraph cluster_0char {
+			label="characters.gd"; labeljust="l";
+			client_characters_createCharacter [
+				label="<f0> createCharacter | <f1> instances character_resource.gd \n newCharacterResource"
+				shape="record"
+			];
+		}
+		subgraph cluster_0charRes {
+			label="character_resource.gd \n newCharacterResource"; labeljust="l";
+			client_characterRes_getCharacterNode [
+				label="getCharacterNode"
+				shape="record"
+			];
+			client_characterRes_setPosition [
+				label="set_Position"
+				shape="record"
+			];
+		}
+	}
+	subgraph cluster_1 {
+		label="Server"; labeljust="l";
+		subgraph cluster_1c {
+			label="connections.gd"; labeljust="l";
+			connections_receiveNewPlayerData [
+				label="<f0> receiveNewPlayerData | <f1> | <f2>| <f3> | <f4>"
+				shape=record
+			];
+		}
+		subgraph cluster_1g {
+			label="game.gd"; labeljust="l";
+			server_addCharacter [
+				label="addCharacter"
+				shape="record"
+			];
+		}
+	}
+	subgraph cluster_2 {
+		label="Client 2"; labeljust="l";
+		subgraph cluster_2c {
+			label="connections.gd"; labeljust="l";
+			connections_receivePlayerData [
+				label="<f0> receivePlayerData "
+				shape=record
+			];
+		}
+		subgraph cluster_2g {
+			label="game.gd"; labeljust="l";
+			client2_addCharacter [
+				label="addCharacter"
+				shape="record"
+			];
+		}
+	}
+	start [shape=Mdiamond];
+	start -> joinEvent;
+	joinEvent -> match_menu;
+	match_menu -> joinGame;
+	match_menu -> createGame;
+	match_menu -> createDedicated;
+	joinGame -> connections_joinGame;
+	connections_connectedOK:f1 -> connections_receiveNewPlayerData:f0 [color=darkgreen];
+	connections_connectedOK:f2 -> client_enterLobby;
+	client_enterLobby -> client_loadMap;
+	connections_receiveNewPlayerData:f1 -> connections_setServerName [color=blue];
+	connections_receiveNewPlayerData:f2 -> connections_receiveBulkPlayerData [color=blue];
+	connections_receiveNewPlayerData:f3 -> connections_receivePlayerData [color=red];
+	connections_receiveNewPlayerData:f4 -> server_addCharacter;
+	connections_receiveBulkPlayerData -> client_addCharacter:f0;
+	client_addCharacter:f1 -> client_characters_createCharacter:f0;
+	client_addCharacter:f2 -> client_characterRes_getCharacterNode;
+	client_addCharacter:f4 -> client_characterRes_setPosition;
+	connections_receivePlayerData -> client2_addCharacter;
+}
+
