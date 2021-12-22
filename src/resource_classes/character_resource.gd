@@ -57,7 +57,7 @@ func getCharacterNode() -> Node:
 	return _characterNode
 
 # set the character node that corresponds to this CharacterResource
-func setCharacterNode(newCharacterNode: Node):
+func setCharacterNode(newCharacterNode: Node) -> void:
 	# if there is already a character node assigned to this resource
 	if _characterNode != null:
 		printerr("Assigning a new character node to a CharacterResource that already has one")
@@ -73,7 +73,7 @@ func getRole() -> String:
 
 # set the role of this character
 # string return type is PLACEHOLDER
-func setRole(newRole: String):
+func setRole(newRole: String) -> void:
 	# assert false because roles aren't implemented yet
 	assert(false, "Not implemented yet")
 	_role = newRole
@@ -107,7 +107,7 @@ func getPosition() -> Vector2:
 	return _characterNode.getPosition()
 
 # set the position of the character
-func setPosition(newPos: Vector2):
+func setPosition(newPos: Vector2) -> void:
 	# assert false because setting position (teleporting) is not implemented yet
 	_characterNode.setPosition(newPos)
 

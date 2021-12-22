@@ -3,7 +3,7 @@ extends Control
 # --Variables--
 enum MenuType {MAIN, JOIN, CREATE, SERVER}
 
-var menu
+var menu: int
 
 onready var main_menu: Control = $MainMenu
 onready var join_menu: Control = $Join
@@ -11,15 +11,15 @@ onready var create_menu: Control = $Create
 onready var server_menu: Control = $Server
 
 # --Interface--
-func _ready():
+func _ready() -> void:
 	menu = MenuType.MAIN
 	setVisibleMenu(menu)
 
-func _input(event):
+func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		joinEvent(menu)
 
-func _on_Back_pressed():
+func _on_Back_pressed() -> void:
 	menu = MenuType.MAIN
 	setVisibleMenu(menu)
 
@@ -86,7 +86,7 @@ func createDedicated() -> void:
 		return
 	Connections.createDedicated(port, name)
 
-func joinEvent(menu) -> void:
+func joinEvent(menu: int) -> void:
 	match menu:
 		MenuType.MAIN:
 			menu = MenuType.JOIN

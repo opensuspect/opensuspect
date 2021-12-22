@@ -10,12 +10,12 @@ enum connectionTypes {
 var connectionType: int = connectionTypes.LOCAL setget toss, getConnectionType
 var myName: String = "" setget toss, getMyName
 var serverName: String = "" setget toss, getServerName
-const MAX_PLAYERS = 20
-var listConnections = {}
+const MAX_PLAYERS: int = 20
+var listConnections: Dictionary = {}
 
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	get_tree().connect("connected_to_server", self, "connectedOK")
 	get_tree().connect("connection_failed", self, "connectedFail")
 	get_tree().connect("server_disconnected", self, "disconnectedFromServer")
@@ -35,7 +35,7 @@ func getServerName() -> String:
 # -------------- Client side code --------------
 
 func joinGame(serverName: String, portNumber: int, playerName: String) -> void:
-	var peer = NetworkedMultiplayerENet.new()
+	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
 	peer.create_client(serverName, portNumber)
 	get_tree().network_peer = peer
 	var id: int = get_tree().get_network_peer().get_unique_id()
@@ -77,7 +77,7 @@ puppet func receivePlayerData(id: int, name: String) -> void:
 # -------------- Server side code --------------
 
 func createGame(portNumber: int, playerName: String) -> void:
-	var peer = NetworkedMultiplayerENet.new()
+	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
 	peer.create_server(portNumber, MAX_PLAYERS)
 	get_tree().network_peer = peer
 	get_tree().connect("network_peer_connected", self, "connectedNewPlayer")
@@ -90,7 +90,7 @@ func createGame(portNumber: int, playerName: String) -> void:
 	gameScene.addCharacter(1)
 
 func createDedicated(portNumber: int, srvName: String) -> void:
-	var peer = NetworkedMultiplayerENet.new()
+	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
 	peer.create_server(portNumber, MAX_PLAYERS)
 	get_tree().network_peer = peer
 	get_tree().connect("network_peer_connected", self, "connectedNewPlayer")
@@ -101,7 +101,7 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 
 # Once the newly joined player sent us their data, that's when we send them all the data
 master func receiveNewPlayerData(newPlayerName: String) -> void:
-	var senderId = get_tree().get_rpc_sender_id()
+	var senderId: int = get_tree().get_rpc_sender_id()
 	listConnections[senderId] = newPlayerName
 	#print_debug(listConnections)
 	rpc_id(senderId, "setServerName", serverName)

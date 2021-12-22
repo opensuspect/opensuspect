@@ -41,7 +41,7 @@ func getCharacterResource() -> CharacterResource:
 	return _characterResource
 
 # set the character node that corresponds to this CharacterResource
-func setCharacterResource(newCharacterResource: CharacterResource):
+func setCharacterResource(newCharacterResource: CharacterResource) -> void:
 	# if there is already a character node assigned to this resource
 	if _characterResource != null:
 		printerr("Assigning a new CharacterResource to a character node that already has one")
@@ -66,7 +66,7 @@ func getPosition() -> Vector2:
 	return position
 
 # set the position of the character
-func setPosition(newPos: Vector2):
+func setPosition(newPos: Vector2) -> void:
 	# assert false because setting position (teleporting) is not implemented yet
 	position = newPos
 
@@ -75,7 +75,7 @@ func getGlobalPosition() -> Vector2:
 	return global_position
 
 # set the global position of the character
-func setGlobalPosition(newPos: Vector2):
+func setGlobalPosition(newPos: Vector2) -> void:
 	# assert false because setting position (teleporting) is not implemented yet
 	assert(false, "Not implemented yet")
 	global_position = newPos
