@@ -63,7 +63,7 @@ func getCharacterNode(id: int) -> Node:
 		# throw an error
 		printerr("Trying to get a nonexistant character node with network id ", id)
 		# crash the game (if running in debug mode) to assist with debugging
-		assert(false)
+		assert(false, "Should be unreachable")
 		# if running in release mode, return null
 		return null
 	return _characterNodes[id]
@@ -75,7 +75,7 @@ func getCharacterResource(id: int) -> CharacterResource:
 		# throw an error
 		printerr("Trying to get a nonexistant character resource with network id ", id)
 		# crash the game (if running in debug mode) to assist with debugging
-		assert(false)
+		assert(false, "Should be unreachable")
 		# if running in release mode, return null
 		return null
 	return _characterResources[id]
@@ -112,12 +112,14 @@ func _registerCharacterNode(id: int, characterNode: Node):
 	if id in _characterNodes:
 		# throw an error
 		printerr("Registering a character node that already exists, network id: ", id)
+		assert(false, "Should be unreachable")
 	_characterNodes[id] = characterNode
 
 # add a character resource to the characterResources dictionary
 func _registerCharacterResource(id: int, characterResource: CharacterResource):
 	# if there is already a character node for this network id
-	if id in _characterNodes:
+	if id in _characterResources:
 		# throw an error
-		printerr("Registering a character node that already exists, network id: ", id)
+		printerr("Registering a character resource that already exists, network id: ", id)
+		assert(false, "Should be unreachable")
 	_characterResources[id] = characterResource

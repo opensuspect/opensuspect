@@ -10,10 +10,11 @@ func loadMap(mapPath: String) -> void:
 	var mapToLoad: Node = ResourceLoader.load(mapPath).instance()
 	add_child_below_node(mapNode, mapToLoad)
 
-func addCharacter() -> void:
-	var newCharacter: KinematicBody2D = characterTemplate.instance()
+func addCharacter(networkID) -> void:
+	var newCharacterResource: CharacterResource = Characters.createCharacter(networkID)
+	var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()
 	var position: Vector2
 	position.x = rng.randi_range(100, 500)
 	position.y = rng.randi_range(100, 500)
 	add_child_below_node(characterNode, newCharacter)
-	newCharacter.setPosition(position)
+	newCharacterResource.setPosition(position)

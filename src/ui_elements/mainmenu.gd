@@ -75,7 +75,7 @@ func createGame() -> void:
 	var name: String = nameField.text
 	if name == "":
 		return
-	Connections.createServer(port, name)
+	Connections.createGame(port, name)
 
 func createDedicated() -> void:
 	var nameField: LineEdit = $Server/Name
