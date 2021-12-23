@@ -1,13 +1,13 @@
 extends Node
 
-enum connectionTypes {
+enum ConnectionTypes {
 	LOCAL,				# Local only game, tutorial
 	DEDICATED_SERVER,	# Server only, no local client
 	CLIENT_SERVER,		# Server with a local player
 	CLIENT				# Client only, remote server
 }
 
-var connectionType: int = connectionTypes.LOCAL setget toss, getConnectionType
+var connectionType: int = ConnectionTypes.LOCAL setget toss, getConnectionType
 var myName: String = "" setget toss, getMyName
 var serverName: String = "" setget toss, getServerName
 const MAX_PLAYERS: int = 20
@@ -40,7 +40,7 @@ func joinGame(serverName: String, portNumber: int, playerName: String) -> void:
 	get_tree().network_peer = peer
 	var id: int = get_tree().get_network_peer().get_unique_id()
 	myName = playerName
-	connectionType = connectionTypes.CLIENT
+	connectionType = ConnectionTypes.CLIENT
 	#print_debug("Client_id is ", id)
 	listConnections[id] = myName
 
@@ -82,7 +82,7 @@ func createGame(portNumber: int, playerName: String) -> void:
 	get_tree().network_peer = peer
 	get_tree().connect("network_peer_connected", self, "connectedNewPlayer")
 	get_tree().connect("network_peer_disconnected", self, "disconnectedPlayer")
-	connectionType = connectionTypes.CLIENT_SERVER
+	connectionType = ConnectionTypes.CLIENT_SERVER
 	listConnections[1] = playerName
 	serverName = playerName + "'s Server"
 	TransitionHandler.enterLobby()
@@ -95,7 +95,7 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	get_tree().network_peer = peer
 	get_tree().connect("network_peer_connected", self, "connectedNewPlayer")
 	get_tree().connect("network_peer_disconnected", self, "disconnectedPlayer")
-	connectionType = connectionTypes.DEDICATED_SERVER
+	connectionType = ConnectionTypes.DEDICATED_SERVER
 	serverName = srvName
 	TransitionHandler.enterLobby()
 
