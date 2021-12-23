@@ -114,6 +114,14 @@ func getSpeed() -> float:
 func setSpeed(value: float) -> void:
 	_speed = value
 
+# get the direction the character is looking
+func getLookDirection() -> int:
+	return _characterNode.getLookDirection()
+
+# set the direction the character is looking
+func setLookDirection(newLookDirection: int) -> void:
+	_characterNode.setLookDirection(newLookDirection)
+
 # get the position of the character
 func getPosition() -> Vector2:
 	return _characterNode.getPosition()

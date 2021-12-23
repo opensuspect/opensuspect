@@ -10,6 +10,9 @@ var networkId: int
 # the name of this character
 var characterName: String
 
+enum LookDirections {LEFT, RIGHT, UP, DOWN}
+var lookDirection = LookDirections.RIGHT
+
 # --Private Variables--
 
 # the CharacterResource corresponding to this character node
@@ -87,6 +90,30 @@ func getMovementVector(normalized: bool = true) -> Vector2:
 		vector = vector.normalized()
 	return vector
 
+# get the direction the character is looking
+func getLookDirection() -> int:
+	return lookDirection
+
+# set the direction the character is looking
+func setLookDirection(newLookDirection: int) -> void:
+	lookDirection = newLookDirection
+	# very placeholder code just to display the look direction by
+	# 	changing where the placeholder triangle is pointing
+	# this should eventually be moved into a separate script that handles
+	# 	animations and stuff
+	# the angle to set the rotation of the triangle to
+	var angle: int
+	match lookDirection:
+		LookDirections.LEFT:
+			angle = 270
+		LookDirections.RIGHT:
+			angle = 90
+		LookDirections.UP:
+			angle = 0
+		LookDirections.DOWN:
+			angle = 180
+	$Polygon2D.rotation_degrees = angle
+
 # --Private Functions--
 
 func _process(_delta: float) -> void:
@@ -97,6 +124,21 @@ func _process(_delta: float) -> void:
 func _move(_delta: float) -> Vector2:
 	# get the movement vector given which keys are pressed (not normalized)
 	var movementVec: Vector2 = getMovementVector(false)
+	
+	# set lookDirection to match the movementVec
+	# this prioritizes looking left and right over up and down (like in
+	# 	among us and other games)
+	# using the look direction setter here to make it easier to react to
+	# 	a changing look direction
+	if movementVec.y < 0:
+		setLookDirection(LookDirections.UP)
+	if movementVec.y > 0:
+		setLookDirection(LookDirections.DOWN)
+	if movementVec.x < 0:
+		setLookDirection(LookDirections.LEFT)
+	if movementVec.x > 0:
+		setLookDirection(LookDirections.RIGHT)
+	
 	# multiply the movement vec by speed
 	movementVec *= _characterResource.getSpeed()
 	# move_and_slide() returns the actual motion that happened, store it
