@@ -117,7 +117,10 @@ func setLookDirection(newLookDirection: int) -> void:
 # --Private Functions--
 
 func _process(_delta: float) -> void:
-	var amountMoved: Vector2 = _move(_delta)
+	var amountMoved: Vector2
+	# if this character belongs to this client
+	if networkId == get_tree().get_network_unique_id():
+		amountMoved = _move(_delta)
 
 # move the character based on which keys are pressed and return a vector
 # 	describing the movement that occurred
