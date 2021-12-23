@@ -11,7 +11,7 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
-polygon = PoolVector2Array( 0, 0, -100, 100, 100, 100 )
+polygon = PoolVector2Array( 0, -50, -100, 50, 100, 50 )
 
 [node name="Name" type="Label" parent="."]
 margin_right = 40.0
