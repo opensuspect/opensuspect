@@ -5,10 +5,10 @@ enum MenuType {MAIN, JOIN, CREATE, SERVER}
 
 var menu: int
 
-onready var main_menu: Control = $MainMenu
-onready var join_menu: Control = $Join
-onready var create_menu: Control = $Create
-onready var server_menu: Control = $Server
+onready var mainMenu: Control = $MainMenu
+onready var joinMenu: Control = $Join
+onready var createMenu: Control = $Create
+onready var serverMenu: Control = $Server
 
 # --Interface--
 func _ready() -> void:
@@ -41,16 +41,16 @@ func _on_AppQuitButton_pressed() -> void:
 func setVisibleMenu(menu) -> void:
 	hideMenus()
 	match menu:
-		MenuType.MAIN: main_menu.visible = true
-		MenuType.JOIN: join_menu.visible = true
-		MenuType.CREATE: create_menu.visible = true
-		MenuType.SERVER: server_menu.visible = true
+		MenuType.MAIN: mainMenu.visible = true
+		MenuType.JOIN: joinMenu.visible = true
+		MenuType.CREATE: createMenu.visible = true
+		MenuType.SERVER: serverMenu.visible = true
 
 func hideMenus() -> void:
-	main_menu.visible = false
-	join_menu.visible = false
-	create_menu.visible = false
-	server_menu.visible = false
+	mainMenu.visible = false
+	joinMenu.visible = false
+	createMenu.visible = false
+	serverMenu.visible = false
 
 # --Backend--
 func joinGame() -> void:
