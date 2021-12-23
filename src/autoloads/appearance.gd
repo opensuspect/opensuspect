@@ -33,7 +33,7 @@ var colorMapDir: Dictionary = {
 onready var colorShaders = Resources.list(colorMapDir, extensions)
 
 # Define which parts should be grouped under a parent part, and thus inherit the parent's clothing type
-var groupClothing = {"Clothes": ["Left Arm", "Right Arm"], "Pants": ["Left Leg", "Right Leg"]}
+var groupClothing = {"Clothes": ["Left Arm", "Right Arm", "Pants", "Left Leg", "Right Leg"]}
 
 # Color co-ordinates constant
 const COLOR_XY = 500
