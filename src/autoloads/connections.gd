@@ -32,6 +32,24 @@ func getMyName() -> String:
 func getServerName() -> String:
 	return serverName
 
+func isServer() -> bool:
+	return isDedicatedServer() or isClientServer()
+
+func isLocal() -> bool:
+	return isConnectionType(connectionTypes.LOCAL)
+
+func isDedicatedServer() -> bool:
+	return isConnectionType(connectionTypes.DEDICATED_SERVER)
+
+func isClientServer() -> bool:
+	return isConnectionType(connectionTypes.CLIENT_SERVER)
+
+func isClient() -> bool:
+	return isConnectionType(connectionTypes.CLIENT)
+
+func isConnectionType(type: int) -> bool:
+	return connectionType == type
+
 # -------------- Client side code --------------
 
 func joinGame(serverName: String, portNumber: int, playerName: String) -> void:
