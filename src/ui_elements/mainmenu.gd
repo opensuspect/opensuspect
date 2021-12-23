@@ -38,9 +38,9 @@ func _on_ServerStartButton_pressed() -> void:
 func _on_AppQuitButton_pressed() -> void:
 	get_tree().quit()
 
-func setVisibleMenu(menu) -> void:
+func setVisibleMenu(menuType: int) -> void:
 	hideMenus()
-	match menu:
+	match menuType:
 		MenuType.MAIN: mainMenu.visible = true
 		MenuType.JOIN: joinMenu.visible = true
 		MenuType.CREATE: createMenu.visible = true
