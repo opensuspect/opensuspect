@@ -39,7 +39,7 @@ var groupClothing = {"Clothes": ["Left Arm", "Right Arm"], "Pants": ["Left Leg",
 const COLOR_XY = 500
 
 # --Public Functions--
-func applyConfig(outfit: Dictionary, colors: Dictionary) -> void:
+func setConfig(outfit: Dictionary, colors: Dictionary) -> void:
 	currentOutfit = outfit
 	currentColors = colors
 

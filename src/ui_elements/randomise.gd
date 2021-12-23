@@ -1,21 +1,13 @@
 extends Button
 
 onready var Appearance = get_node("/root/Appearance")
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
+	_randomizeConfig()
 
 func _on_Player_pressed():
+	_randomizeConfig()
+
+func _randomizeConfig():
 	Appearance.randomizeConfig()
 	$menu_player/Skeleton.applyConfig()
