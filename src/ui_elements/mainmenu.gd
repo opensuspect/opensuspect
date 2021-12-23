@@ -58,15 +58,15 @@ func joinGame() -> void:
 	var serverField: LineEdit = $Join/Address
 	var port: int = 46690
 	var host: String = serverField.text
-	var name: String = nameField.text
+	var playerName: String = nameField.text
 	var cut_pos: int = host.find(":")
 	if cut_pos != -1:
 		port = int(host.right(cut_pos))
 		host = host.left(cut_pos)
 	print_debug("port: ", port, ", host: ", host)
-	if host == "" or name == "":
+	if host == "" or playerName == "":
 		return
-	Connections.joinGame(host, port, name)
+	Connections.joinGame(host, port, playerName)
 
 func createGame() -> void:
 	var nameField: LineEdit = $Create/Name
