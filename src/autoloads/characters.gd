@@ -90,7 +90,7 @@ func getCharacterResources() -> Dictionary:
 
 # create a character node, this function is used when creating a new character
 func _createCharacterNode(networkId: int = -1) -> Node:
-	# instance character scene
+	## instance character scene
 	var characterNode: Node = characterScene.instance()
 	# set its network id
 	characterNode.networkId = networkId
@@ -99,7 +99,7 @@ func _createCharacterNode(networkId: int = -1) -> Node:
 
 # create a character resource, this function is used when creating a new character
 func _createCharacterResource(networkId: int = -1) -> CharacterResource:
-	# instance a new CharacterResource object
+	## instance a new CharacterResource object
 	var characterResource: CharacterResource = CharacterResource.new()
 	# set its network id
 	characterResource.networkId = networkId
@@ -113,6 +113,7 @@ func _registerCharacterNode(id: int, characterNode: Node) -> void:
 		# throw an error
 		printerr("Registering a character node that already exists, network id: ", id)
 		assert(false, "Should be unreachable")
+	## Register character node for id
 	_characterNodes[id] = characterNode
 
 # add a character resource to the characterResources dictionary
@@ -122,4 +123,5 @@ func _registerCharacterResource(id: int, characterResource: CharacterResource) -
 		# throw an error
 		printerr("Registering a character resource that already exists, network id: ", id)
 		assert(false, "Should be unreachable")
+	## Register character resource for id
 	_characterResources[id] = characterResource

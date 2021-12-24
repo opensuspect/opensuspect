@@ -270,15 +270,15 @@ description is possible by using multiple lines *above* the code.
 ````
 func addCharacter(networkId: int) -> void:
     ## Create character resource
-	var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)
+    var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)
     ## Create character node
-	var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()
+    var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()
     ## Randomize position
-	var characterPosition: Vector2
-	characterPosition.x = rng.randi_range(100, 500)
-	characterPosition.y = rng.randi_range(100, 500)
-	add_child_below_node(characterNode, newCharacter) ## Add node to scene
-	newCharacterResource.setPosition(characterPosition) ## Apply position
+    var characterPosition: Vector2
+    characterPosition.x = rng.randi_range(100, 500)
+    characterPosition.y = rng.randi_range(100, 500)
+    add_child_below_node(characterNode, newCharacter) ## Add node to scene
+    newCharacterResource.setPosition(characterPosition) ## Apply position
 ````
 
 ## 3.3. Avoid vague comments
