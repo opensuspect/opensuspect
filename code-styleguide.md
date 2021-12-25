@@ -79,7 +79,7 @@ prone.
 ````
 ### Good
 ````
-    func doesSomething(a: float, b:int) -> float:
+    func doesSomething(a: float, b: int) -> float:
         var counter: int = 0
         var result: float = a
         while counter < 5:
@@ -98,7 +98,7 @@ not yet implemented.
 ### Good
 ````
     funct doSomething():
-        assert(False, "Not implemented yet")
+        assert(false, "Not implemented yet")
     
     funct getData():
         assert(len(data) > 0, "The data should be saved first before trying to access it")
@@ -113,7 +113,7 @@ not yet implemented.
             3:
                 jump()
             _:
-                assert(False, "Unreachable")
+                assert(false, "Unreachable")
 ````
 
 
@@ -128,11 +128,11 @@ Apply the principle of "least knowledge".
 https://en.wikipedia.org/wiki/Law_of_Demeter
 ### Bad
 ````
-    Players[i].player.inventory += item
+    players[i].player.inventory += item
 ````
 ### Good
 ````
-    Players[current].AddInventoryItem(item)
+    players[current].addInventoryItem(item)
 ````
 
 ## 2.6. Avoid excessive elif
@@ -141,11 +141,11 @@ Use match instead whenever possible.
 ````
 if (a ==1):
    doSomething()
-elif (a == 2)
+elif (a == 2):
   doSomethingElse()
-elif (a ==3)
+elif (a ==3):
   doYetAnotherThing()
-else
+else:
   doDefaultThing()
 ````
 ### Good
@@ -198,7 +198,7 @@ colors[4] = "purple"
 ## 2.9. Break long functions up
 ### Bad
 ````
-func doSomethingComplex:
+func doSomethingComplex():
   # Setup
   [ 30 lines of code ]
   # Process
@@ -208,7 +208,7 @@ func doSomethingComplex:
 ````
 ### Good
 ````
-func doSomethingComplex:
+func doSomethingComplex():
   var values = setup()
   process(values)
   cleanup()
