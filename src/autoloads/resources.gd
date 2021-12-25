@@ -13,11 +13,19 @@ extends Node
 #
 ## Pass the two variables into the list function:
 #	Resources.list(dirs, file_types)
-#	> {Folder 1:{Test 1:test_1.png, Test 2:test_2.svg}, Folder 2:{Test 3:test_3.svg}}
+#	> {Folder 1:{test_1:res://.../test_1.png, test_2:res://.../test_2.svg}, Folder 2:{test_3:res://.../test_3.svg}}
 #
 ## Select only resources in "Folder 1":
 #	Resources.list(dirs, file_types)["Folder 1"]
-#	> {Test 1:test_1.png, Test 2:test_2.svg}
+#	> {test_1:res://.../test_1.png, test_2:res://.../test_2.svg}
+#
+## Get a random file from "Folder 1":
+# Resources.getRandom("Folder 1", dirs, file_types)
+# > {test_2:res://.../test_2.png}
+#
+## Get a random file for each folder
+# Resources.getRandomOfEach(dirs, file_types)
+# > {Folder 1:{test_2:res://.../test_2.png}, Folder 2:{test_3:res://.../test_3.png}}
 
 # --Public Functions--
 
@@ -41,24 +49,25 @@ func getPath(resource: String, namespace: String, directories: Dictionary, types
 	return(output)
 
 # Returns a random resource from a given namespace
-func getRandom(directories: Dictionary, types: PoolStringArray, namespace: String) -> Dictionary:
-	var resources: Dictionary = list(directories, types)
-	var dir = resources[namespace]
-	var keys = dir.keys()
-	var maxInt = keys.size()
-	var randInt = randi() % maxInt
-	var chosenKey = keys[randInt]
+func getRandom(namespace: String, directories: Dictionary, types: PoolStringArray) -> Dictionary:
+	var resources: Dictionary = list(directories, types) # Get a list of resources
+	var dir = resources[namespace] # Get the required directory from the given namespace
+	var files = dir.keys() # Get an array of the files in the directory
+	var maxInt = files.size() # Get the size of the array
+	var randInt = randi() % maxInt # Select a number between 0 and the size of maxInt
+	var chosenFile = files[randInt] # Set the chosen file to the file in the array at the random position
 	var output: Dictionary = {}
-	output[namespace] = {}
-	output[namespace][chosenKey] = dir[chosenKey]
-	return(output)
+	output[chosenFile] = dir[chosenFile] # Set the output variable
+	return(output) # Return the output variable
 
+# Return a random file for each directory listed
 func getRandomOfEach(directories: Dictionary, types: PoolStringArray) -> Dictionary:
 	var output: Dictionary = {}
-	for key in directories.keys():
-		var value = getRandom(directories, types, key).values()[0]
-		output[key] = value
-	return(output)
+	for namespace in directories.keys(): # Iterate over the directories
+		var random = getRandom(namespace, directories, types) # Get a random file for the directory
+		output[namespace] = {}
+		output[namespace] = random # Set the file for this directory to be the random file
+	return(output) # Return the dictionary of random files
 
 # --Private Functions--
 func _ready():

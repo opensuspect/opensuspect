@@ -1,22 +1,22 @@
 extends Node2D
 
-# --Variables--
-onready var Resources = get_node("/root/Resources")
+# --Private Variables--
 
-var part_list: Dictionary = {
-	"Body": "res://game/character/assets/textures/body",
-	"Clothes": "res://game/character/assets/textures/clothes",
-	"Face Wear": "res://game/character/assets/textures/face_wear",
-	"Facial Hair": "res://game/character/assets/textures/facial_hair",
-	"Hat/Hair": "res://game/character/assets/textures/hat_hair",
-	"Mouth": "res://game/character/assets/textures/mouth",
-	"Left Arm": "res://game/character/assets/textures/left_arm",
-	"Left Leg": "res://game/character/assets/textures/left_leg",
-	"Right Arm": "res://game/character/assets/textures/right_arm",
-	"Right Leg": "res://game/character/assets/textures/right_leg",
-	"Pants": "res://game/character/assets/textures/pants",
+onready var Resources = get_node("/root/Resources")
+onready var Appearance = get_node("/root/Appearance")
+
+# Set the accepted file extensions to ".png"
+var extensions: Array = [".png"]
+
+# Directory of color maps. File names within should match shader names.
+var colorMapDir: Dictionary = {
+	"Color Maps": "res://game/character/assets/colormaps"
 }
 
+# Set the list of colormaps from the color map directory
+onready var colorShaders = Resources.list(colorMapDir, extensions)
+
+# Dictionary mapping each asset to a node path
 var nodeStructure: Dictionary = {
 	"Body": "Body",
 	"Clothes": "Skeleton/Spine/Clothes",
@@ -31,32 +31,29 @@ var nodeStructure: Dictionary = {
 	"Pants": "Pants",
 }
 
-var extensions: Array = [".png"]
-
 # --Public Functions--
-func _ready():
-	randomizePlayer()
 
-func randomizePlayer():
-	var configuration = _randomConfig()
-	_applyConfiguration(configuration)
+# Apply config from appearance's variables
+func applyConfig() -> void:
+	_applyOutfit(Appearance.currentOutfit)
+	_applyColors(Appearance.currentColors)
 
 # --Private Functions--
-func _randomConfig():
-	var configuration = Resources.getRandomOfEach(part_list, extensions)
-	var clothing = {"Clothes": ["Left Arm", "Right Arm"], "Pants": ["Left Leg", "Right Leg"]}
-	for namespace in clothing:
-		var clothesType = configuration[namespace].keys()[0]
-		for child in clothing[namespace]:
-			var path = Resources.getPath(clothesType, child, part_list, extensions)
-			if not path.empty():
-				configuration[child][clothesType] = path
-	return(configuration)
 
-func _applyConfiguration(configuration):
-	for resource in configuration.keys():
-		for path in configuration[resource].keys():
-			var nodePath = nodeStructure[resource]
-			var resourcePath = configuration[resource][path]
-			var node = self.get_node(nodePath)
-			node.texture = load(resourcePath)
+# Applies the outfit to the skeleton
+func _applyOutfit(outfit: Dictionary) -> void:
+	for part in outfit.keys(): # Iterate over each resource
+		for path in outfit[part].keys(): # Iterate over each path
+			var nodePath = nodeStructure[part] # Get the path to the node needing to be set
+			var resourcePath = outfit[part][path] # Get the file path to the resource
+			var node = self.get_node(nodePath) # Get the actual node object
+			node.texture = load(resourcePath) # Set the texture of the node
+
+# Applies the colors to the shaders
+func _applyColors(colors) -> void:
+	for shader in colorShaders["Color Maps"].keys(): # Iterate over each shader
+		var colorsForShader = Color( # Sets the correct colors for the shader
+		colors[shader]["Red"],
+		colors[shader]["Green"],
+		colors[shader]["Blue"])
+		self.material.set_shader_param(shader, colorsForShader) # Applies the colors to the given shader
