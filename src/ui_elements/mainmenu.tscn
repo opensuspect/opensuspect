@@ -1,9 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
 [ext_resource path="res://game/character/menu_player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui_elements/mainmenu.gd" type="Script" id=3]
-[ext_resource path="res://ui_elements/assets/images/background.png" type="Texture" id=4]
 [ext_resource path="res://ui_elements/assets/images/logo.svg" type="Texture" id=5]
 [ext_resource path="res://ui_elements/randomise.gd" type="Script" id=6]
 [ext_resource path="res://ui_elements/assets/themes/hidden.tres" type="Theme" id=7]
@@ -23,10 +22,6 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Background" type="Sprite" parent="."]
-position = Vector2( 1052, 526 )
-texture = ExtResource( 4 )
 
 [node name="CenterLogo" type="CenterContainer" parent="."]
 anchor_right = 1.0
