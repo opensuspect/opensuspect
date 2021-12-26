@@ -63,15 +63,17 @@ func getOutfit() -> Dictionary:
 
 # get the position of the character
 func getPosition() -> Vector2:
+	## Return position
 	return position
 
 # set the position of the character
 func setPosition(newPos: Vector2) -> void:
-	# assert false because setting position (teleporting) is not implemented yet
+	## Set new position
 	position = newPos
 
 # get the global position of the character
 func getGlobalPosition() -> Vector2:
+	## Return global position
 	return global_position
 
 # set the global position of the character
