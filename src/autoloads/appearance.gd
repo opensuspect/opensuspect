@@ -10,10 +10,10 @@ var currentColors: Dictionary
 var directories: Dictionary = {
 	"Body": "res://game/character/assets/textures/body",
 	"Clothes": "res://game/character/assets/textures/clothes",
+	"Mouth": "res://game/character/assets/textures/mouth",
 	"Face Wear": "res://game/character/assets/textures/face_wear",
 	"Facial Hair": "res://game/character/assets/textures/facial_hair",
 	"Hat/Hair": "res://game/character/assets/textures/hat_hair",
-	"Mouth": "res://game/character/assets/textures/mouth",
 	"Left Arm": "res://game/character/assets/textures/left_arm",
 	"Left Leg": "res://game/character/assets/textures/left_leg",
 	"Right Arm": "res://game/character/assets/textures/right_arm",
@@ -24,6 +24,7 @@ var directories: Dictionary = {
 # Set the accepted file extensions to ".png"
 var extensions: Array = [".png"]
 
+# --Private Variables--
 # Directory of color maps. File names within should match shader names.
 var colorMapDir: Dictionary = {
 	"Color Maps": "res://game/character/assets/colormaps"
