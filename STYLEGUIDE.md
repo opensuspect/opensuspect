@@ -3,14 +3,14 @@
 The function / variable / class names should hint at their role.
 ### Bad
 ````
-    func computerTime(d):
+    func computeTime(d: int):
 ````
 ### Good
 ````
-    func computeTime(daysElapsed):
+    func computeTime(daysElapsed: int):
 ````
 ## 1.2. Consistency
-Look at how others named things in the code, and foolow that.
+Look at how others named things in the code, and follow that.
 
 Be mindful of naming conventions, i.e.:
 
@@ -47,12 +47,12 @@ are in CamelCase with first letter capitalized.
 ### Bad
 ````
     directoryCrawler.gd
-    crawl_directory(path_name)
+    crawl_directory(path_name: String)
 ````
 ### Good
 ````
     directory_crawler.gd
-    crawlDirectory(pathName)
+    crawlDirectory(pathName: String)
 ````
 # 2. Code organization
 ## 2.1. Separate the back end and front end
@@ -198,7 +198,7 @@ colors[4] = "purple"
 ## 2.9. Break long functions up
 ### Bad
 ````
-func doSomethingComplex():
+func doSomethingComplex() -> void:
   # Setup
   [ 30 lines of code ]
   # Process
@@ -208,7 +208,7 @@ func doSomethingComplex():
 ````
 ### Good
 ````
-func doSomethingComplex():
+func doSomethingComplex() -> void:
   var values = setup()
   process(values)
   cleanup()
@@ -237,13 +237,13 @@ charting script.
 
 ### Bad
 ````
-    func receiveClientData():
+    func receiveClientData() -> void:
         [ ... ]
     
-    func notifyServer():
+    func notifyServer() -> void:
         [ ... ]
        
-    func recieveClientNotification():
+    func recieveClientNotification() -> void:
         [...]
 ````
 
@@ -251,14 +251,14 @@ charting script.
 
 ````
 # -- Client functions --
-    func notifyServer():
+    func notifyServer() -> void:
         [ ... ]
 
 # -- Server functions --
-    func receiveClientData():
+    func receiveClientData() -> void:
         [ ... ]
 
-    func recieveClientNotification():
+    func recieveClientNotification() -> void:
         [...]
 ````
 ## 3.2. Describe what your function does
