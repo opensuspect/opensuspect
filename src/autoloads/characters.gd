@@ -22,8 +22,6 @@ var characterScene: PackedScene = preload(CHARACTER_SCENE_PATH)
 
 # --Private Variables--
 
-
-
 # _characterNodes and _characterResources are private variables because only this 
 # 	script should be editing them
 
@@ -34,6 +32,9 @@ var _characterNodes: Dictionary = {}
 # stores character resources keyed by network id
 # {<network id>: <character resource>}
 var _characterResources: Dictionary = {}
+
+var _positionSyncsPerSecond: int = 30
+var _timeSincePositionSync: float = 0.0
 
 # --Public Functions--
 
@@ -80,6 +81,12 @@ func getCharacterResource(id: int) -> CharacterResource:
 		return null
 	return _characterResources[id]
 
+func getMyCharacterNode() -> Node:
+	return _characterNodes[get_tree().get_network_unique_id()]
+
+func getMyCharacterResource() -> CharacterResource:
+	return _characterResources[get_tree().get_network_unique_id()]
+
 func getCharacterNodes() -> Dictionary:
 	return _characterNodes
 
@@ -123,3 +130,52 @@ func _registerCharacterResource(id: int, characterResource: CharacterResource) -
 		printerr("Registering a character resource that already exists, network id: ", id)
 		assert(false, "Should be unreachable")
 	_characterResources[id] = characterResource
+
+
+
+# -----------MOVEMENT SYNCING-----------
+
+# --Universal Functions--
+
+func _process(delta: float) -> void:
+	_timeSincePositionSync += delta
+	# if it is not yet time for another position sync
+	if _timeSincePositionSync < 1.0 / _positionSyncsPerSecond:
+		return
+	# reset position sync timer
+	_timeSincePositionSync = 0.0
+	# if this is a server and a client (aka network authority but also has
+	# 	its own character)
+	if Connections.isClientServer():
+		# send the position of the server's character to all other clients
+		rpc("_updateCharacterPosition", 1, getMyCharacterResource().getPosition())
+	# otherwise, if this is just a normal client
+	elif Connections.isClient():
+		_sendMyCharacterPosToServer()
+
+# update a character's position
+# puppetsync keyword means that when this function is used in an rpc call
+# 	it will be run on both server and client
+puppetsync func _updateCharacterPosition(networkId: int, characterPos: Vector2) -> void:
+	#print("updating position of ", networkId, " to ", characterPos)
+	# if this position is for this client's character
+	if networkId == get_tree().get_network_unique_id():
+		# don't update its position
+		return
+	getCharacterResource(networkId).setPosition(characterPos)
+
+# --Server Functions--
+
+# receive a client's position
+# master keyword means that this function will only be run on the server when RPCed
+master func _receiveCharacterPosFromClient(newPos: Vector2) -> void:
+	var sender: int = get_tree().get_rpc_sender_id()
+	_updateCharacterPosition(sender, newPos)
+
+# --Client Functions
+
+# send the position if this client's character to the server
+func _sendMyCharacterPosToServer() -> void:
+	#print("sending my position to server")
+	var myPosition: Vector2 = getMyCharacterResource().getPosition()
+	rpc_id(1, "_receiveCharacterPosFromClient", myPosition)

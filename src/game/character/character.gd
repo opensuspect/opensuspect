@@ -70,6 +70,8 @@ func getPosition() -> Vector2:
 
 # set the position of the character
 func setPosition(newPos: Vector2) -> void:
+	# update look direction based on the movement that occurred
+	setLookDirection(_getLookDirFromVec(newPos - position))
 	position = newPos
 
 # get the global position of the character
@@ -78,6 +80,8 @@ func getGlobalPosition() -> Vector2:
 
 # set the global position of the character
 func setGlobalPosition(newPos: Vector2) -> void:
+	# update look direction based on the movement that occurred
+	setLookDirection(_getLookDirFromVec(newPos - global_position))
 	global_position = newPos
 
 # get the movement vector by looking at which keys are pressed
@@ -127,20 +131,10 @@ func _process(_delta: float) -> void:
 func _move(_delta: float) -> Vector2:
 	# get the movement vector given which keys are pressed (not normalized)
 	var movementVec: Vector2 = getMovementVector(false)
-	
 	# set lookDirection to match the movementVec
-	# this prioritizes looking left and right over up and down (like in
-	# 	among us and other games)
 	# using the look direction setter here to make it easier to react to
 	# 	a changing look direction
-	if movementVec.y < 0:
-		setLookDirection(LookDirections.UP)
-	if movementVec.y > 0:
-		setLookDirection(LookDirections.DOWN)
-	if movementVec.x < 0:
-		setLookDirection(LookDirections.LEFT)
-	if movementVec.x > 0:
-		setLookDirection(LookDirections.RIGHT)
+	setLookDirection(_getLookDirFromVec(movementVec))
 	
 	# multiply the movement vec by speed
 	movementVec *= _characterResource.getSpeed()
@@ -149,3 +143,17 @@ func _move(_delta: float) -> Vector2:
 	var amountMoved: Vector2 = move_and_slide(movementVec)
 	# return the actual movement that happened
 	return amountMoved
+
+func _getLookDirFromVec(vec: Vector2) -> int:
+	# this prioritizes looking left and right over up and down (like in
+	# 	among us and other games)
+	var lookDirection: int = LookDirections.RIGHT
+	if vec.y < 0:
+		lookDirection = LookDirections.UP
+	if vec.y > 0:
+		lookDirection = LookDirections.DOWN
+	if vec.x < 0:
+		lookDirection = LookDirections.LEFT
+	if vec.x > 0:
+		lookDirection = LookDirections.RIGHT
+	return lookDirection
