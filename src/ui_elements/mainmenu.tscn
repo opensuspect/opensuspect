@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
 [ext_resource path="res://game/character/menu_player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui_elements/mainmenu.gd" type="Script" id=3]
 [ext_resource path="res://ui_elements/assets/images/logo.svg" type="Texture" id=5]
-[ext_resource path="res://ui_elements/randomise.gd" type="Script" id=6]
 [ext_resource path="res://ui_elements/assets/themes/hidden.tres" type="Theme" id=7]
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui_small.tres" type="Theme" id=8]
 
@@ -64,9 +63,8 @@ margin_bottom = 537.0
 rect_min_size = Vector2( 372, 537 )
 size_flags_vertical = 3
 theme = ExtResource( 7 )
-script = ExtResource( 6 )
 
-[node name="menu_player" parent="MainMenu/CenterPlayer/Player" instance=ExtResource( 2 )]
+[node name="MenuPlayer" parent="MainMenu/CenterPlayer/Player" instance=ExtResource( 2 )]
 position = Vector2( 128.5, 203.5 )
 
 [node name="PositionMenu" type="MarginContainer" parent="MainMenu"]
@@ -319,7 +317,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="MainMenu/CenterPlayer/Player" to="MainMenu/CenterPlayer/Player" method="_on_Player_pressed"]
+[connection signal="pressed" from="MainMenu/CenterPlayer/Player" to="." method="_on_Player_pressed"]
 [connection signal="pressed" from="MainMenu/PositionMenu/Menu/GameJoinButton" to="." method="_on_GameJoinButton_pressed"]
 [connection signal="pressed" from="MainMenu/PositionMenu/Menu/GameCreateButton" to="." method="_on_GameCreateButton_pressed"]
 [connection signal="pressed" from="MainMenu/PositionMenu/Menu/ServerStartButton" to="." method="_on_ServerStartButton_pressed"]
