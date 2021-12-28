@@ -1,0 +1,24 @@
+# movement on the client's side
+client1_character__process:f1 -> client1_character__move:begin;
+client1_character__move:f0 -> client1_character_getMovementVector:begin;
+client1_character__move:f1 -> client1_character_setLookDirection:begin;
+# client sends its character data
+client1_characters__process:f5 -> client1_characters__sendMyCharacterPosToServer:begin;
+client1_characters__sendMyCharacterPosToServer:f0 -> server_characters__receiveCharacterPosFromClient:begin [color=blue];
+server_characters__receiveCharacterPosFromClient:f0 -> server_characters__updateCharacterPosition:begin;
+server_characters__updateCharacterPosition:f0 -> server_character_resource_setPosition:begin;
+server_character_resource_setPosition:f0 -> server_character_setPosition:begin;
+server_character_setPosition:f1 -> server_character__getLookDirFromVec:begin;
+server_character_setPosition:f1 -> server_character_setLookDirection:begin;
+# server sends character data
+server_characters__process:f3 -> client1_characters__updateAllCharacterPositions:begin [color=red];
+server_characters__process:f3 -> client2_characters__updateAllCharacterPositions:begin [color=red];
+client1_characters__updateAllCharacterPositions:f1 -> client1_character_resource_setPosition:begin;
+client2_characters__updateAllCharacterPositions:f1 -> client2_character_resource_setPosition:begin;
+# everyone sets character position
+client1_character_resource_setPosition:f0 -> client1_character_setPosition:begin;
+client1_character_setPosition:f1 -> client1_character__getLookDirFromVec:begin;
+client1_character_setPosition:f1 -> client1_character_setLookDirection:begin;
+client2_character_resource_setPosition:f0 -> client2_character_setPosition:begin;
+client2_character_setPosition:f1 -> client2_character__getLookDirFromVec:begin;
+client2_character_setPosition:f1 -> client2_character_setLookDirection:begin;

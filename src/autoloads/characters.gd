@@ -42,19 +42,19 @@ var _timeSincePositionSync: float = 0.0
 # returns the character resource because I think it would be more useful than
 # 	the character node - TheSecondReal0
 func createCharacter(networkId: int) -> CharacterResource:
-	# create character node and resource
+	## Create character node and resource
 	var characterNode: Node = _createCharacterNode(networkId)
 	var characterResource: CharacterResource = _createCharacterResource(networkId)
 	
-	# assign character nodes and resources to each other
+	## assign character nodes and resources to each other
 	characterNode.setCharacterResource(characterResource)
 	characterResource.setCharacterNode(characterNode)
 	
-	# register character node and resource
+	## register character node and resource
 	_registerCharacterNode(networkId, characterNode)
 	_registerCharacterResource(networkId, characterResource)
 	
-	#return character resource
+	## return character resource
 	return characterResource
 
 # get character node for the input network id
@@ -141,30 +141,34 @@ func _registerCharacterResource(id: int, characterResource: CharacterResource) -
 
 func _process(delta: float) -> void:
 	_timeSincePositionSync += delta
-	# if it is not yet time for another position sync
+	## Only proceed if enough time passed
 	if _timeSincePositionSync < 1.0 / _positionSyncsPerSecond:
 		return
-	# reset position sync timer
+	## Reset position sync timer
 	_timeSincePositionSync = 0.0
-	# if this is a server and a client (aka network authority but also has
-	# 	its own character)
+	## If client server
 	if Connections.isClientServer():
-		# send the position of the server's character to all other clients
-		rpc("_updateCharacterPosition", 1, getMyCharacterResource().getPosition())
-	# otherwise, if this is just a normal client
+		## Broadcast all character positions
+		var positions: Dictionary = {}
+		for characterId in _characterResources:
+			positions[characterId] = _characterResources[characterId].getPosition()
+		rpc("_updateAllCharacterPositions", positions)
+	## If client
 	elif Connections.isClient():
+		## Send own character position to server
 		_sendMyCharacterPosToServer()
 
-# update a character's position
-# puppetsync keyword means that when this function is used in an rpc call
-# 	it will be run on both server and client
-puppetsync func _updateCharacterPosition(networkId: int, characterPos: Vector2) -> void:
-	#print("updating position of ", networkId, " to ", characterPos)
-	# if this position is for this client's character
-	if networkId == get_tree().get_network_unique_id():
-		# don't update its position
-		return
-	getCharacterResource(networkId).setPosition(characterPos)
+# puppet keyword means that when this function is used in an rpc call
+# 	it will only be run on client
+puppet func _updateAllCharacterPositions(positions: Dictionary) -> void:
+	## Loop through all characters
+	for characterId in positions:
+		# if this position is for this client's character
+		if characterId == get_tree().get_network_unique_id():
+			# don't update its position
+			continue
+		## Set the position for the character
+		getCharacterResource(characterId).setPosition(positions[characterId])
 
 # --Server Functions--
 
@@ -172,12 +176,24 @@ puppetsync func _updateCharacterPosition(networkId: int, characterPos: Vector2) 
 # master keyword means that this function will only be run on the server when RPCed
 master func _receiveCharacterPosFromClient(newPos: Vector2) -> void:
 	var sender: int = get_tree().get_rpc_sender_id()
+	## Set character position
 	_updateCharacterPosition(sender, newPos)
+
+# update a character's position
+func _updateCharacterPosition(networkId: int, characterPos: Vector2) -> void:
+	#print("updating position of ", networkId, " to ", characterPos)
+	# if this position is for this client's character
+	if networkId == get_tree().get_network_unique_id():
+		# don't update its position
+		return
+	## Set the position for character
+	getCharacterResource(networkId).setPosition(characterPos)
 
 # --Client Functions
 
 # send the position if this client's character to the server
 func _sendMyCharacterPosToServer() -> void:
 	#print("sending my position to server")
+	## Send own character position to server
 	var myPosition: Vector2 = getMyCharacterResource().getPosition()
 	rpc_id(1, "_receiveCharacterPosFromClient", myPosition)

@@ -71,8 +71,10 @@ func getPosition() -> Vector2:
 
 # set the position of the character
 func setPosition(newPos: Vector2) -> void:
-	# update look direction based on the movement that occurred
-	setLookDirection(_getLookDirFromVec(newPos - position))
+	## If movement occured
+	if newPos != position:
+		## Update look direction based on movement
+		setLookDirection(_getLookDirFromVec(newPos - position))
 	## Set new position
 	position = newPos
 
@@ -83,7 +85,7 @@ func getGlobalPosition() -> Vector2:
 
 # set the global position of the character
 func setGlobalPosition(newPos: Vector2) -> void:
-	# update look direction based on the movement that occurred
+	## update look direction based on movement
 	setLookDirection(_getLookDirFromVec(newPos - global_position))
 	global_position = newPos
 
@@ -125,24 +127,27 @@ func setLookDirection(newLookDirection: int) -> void:
 
 func _process(_delta: float) -> void:
 	var amountMoved: Vector2
-	# if this character belongs to this client
+	## If this character belongs to this client
 	if networkId == get_tree().get_network_unique_id():
+		## Move character
 		amountMoved = _move(_delta)
 
 # move the character based on which keys are pressed and return a vector
 # 	describing the movement that occurred
 func _move(_delta: float) -> Vector2:
-	# get the movement vector given which keys are pressed (not normalized)
+	## Get movement vector based on keypress (not normalized)
 	var movementVec: Vector2 = getMovementVector(false)
 	# set lookDirection to match the movementVec
 	# using the look direction setter here to make it easier to react to
 	# 	a changing look direction
+	## Sets look direction
 	setLookDirection(_getLookDirFromVec(movementVec))
 	
 	# multiply the movement vec by speed
 	movementVec *= _characterResource.getSpeed()
 	# move_and_slide() returns the actual motion that happened, store it
 	# 	in amountMoved
+	## Calculate and execute actual motion
 	var amountMoved: Vector2 = move_and_slide(movementVec)
 	# return the actual movement that happened
 	return amountMoved
@@ -150,13 +155,15 @@ func _move(_delta: float) -> Vector2:
 func _getLookDirFromVec(vec: Vector2) -> int:
 	# this prioritizes looking left and right over up and down (like in
 	# 	among us and other games)
-	var lookDirection: int = LookDirections.RIGHT
+	if vec.x == 0 and vec.y == 0:
+		return lookDirection
+	var newlookDirection: int = LookDirections.RIGHT
 	if vec.y < 0:
-		lookDirection = LookDirections.UP
+		newlookDirection = LookDirections.UP
 	if vec.y > 0:
-		lookDirection = LookDirections.DOWN
+		newlookDirection = LookDirections.DOWN
 	if vec.x < 0:
-		lookDirection = LookDirections.LEFT
+		newlookDirection = LookDirections.LEFT
 	if vec.x > 0:
-		lookDirection = LookDirections.RIGHT
-	return lookDirection
+		newlookDirection = LookDirections.RIGHT
+	return newlookDirection

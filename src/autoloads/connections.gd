@@ -36,16 +36,16 @@ func isServer() -> bool:
 	return isDedicatedServer() or isClientServer()
 
 func isLocal() -> bool:
-	return isConnectionType(connectionTypes.LOCAL)
+	return isConnectionType(ConnectionTypes.LOCAL)
 
 func isDedicatedServer() -> bool:
-	return isConnectionType(connectionTypes.DEDICATED_SERVER)
+	return isConnectionType(ConnectionTypes.DEDICATED_SERVER)
 
 func isClientServer() -> bool:
-	return isConnectionType(connectionTypes.CLIENT_SERVER)
+	return isConnectionType(ConnectionTypes.CLIENT_SERVER)
 
 func isClient() -> bool:
-	return isConnectionType(connectionTypes.CLIENT)
+	return isConnectionType(ConnectionTypes.CLIENT)
 
 func isConnectionType(type: int) -> bool:
 	return connectionType == type
