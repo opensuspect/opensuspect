@@ -146,10 +146,8 @@ func _process(delta: float) -> void:
 		return
 	## Reset position sync timer
 	_timeSincePositionSync = 0.0
-	if not get_tree().get_network_unique_id() in _characterResources:
-		return
-	## If client server
-	if Connections.isClientServer():
+	## If server
+	if Connections.isClientServer() or Connections.isDedicatedServer():
 		## Broadcast all character positions
 		var positions: Dictionary = {}
 		for characterId in _characterResources:
@@ -157,6 +155,8 @@ func _process(delta: float) -> void:
 		rpc("_updateAllCharacterPositions", positions)
 	## If client
 	elif Connections.isClient():
+		if not get_tree().get_network_unique_id() in _characterResources:
+			return
 		## Send own character position to server
 		_sendMyCharacterPosToServer()
 

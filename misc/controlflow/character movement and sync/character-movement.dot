@@ -39,7 +39,7 @@ digraph controlflow {
         subgraph cluster_client1_characters {
             label="characters.gd"; labeljust="l";
             client1_characters__process [
-                label="<begin>_process | {<f0> Only proceed if enough time passed } | <f1> Reset position sync timer  | {<f2> If client server  | <f3> Broadcast all character positions } | {<f4> If client  | <f5> Send own character position to server }"
+                label="<begin>_process | {<f0> Only proceed if enough time passed } | <f1> Reset position sync timer  | {<f2> If server  | <f3> Broadcast all character positions } | {<f4> If client  | <f5> Send own character position to server }"
                 shape="record"
             ]
             client1_characters__updateAllCharacterPositions [
@@ -80,7 +80,7 @@ digraph controlflow {
         subgraph cluster_server_characters {
             label="characters.gd"; labeljust="l";
             server_characters__process [
-                label="<begin>_process | {<f0> Only proceed if enough time passed } | <f1> Reset position sync timer  | {<f2> If client server  | <f3> Broadcast all character positions } | {<f4> If client  | <f5> Send own character position to server }"
+                label="<begin>_process | {<f0> Only proceed if enough time passed } | <f1> Reset position sync timer  | {<f2> If server  | <f3> Broadcast all character positions } | {<f4> If client  | <f5> Send own character position to server }"
                 shape="record"
             ]
             server_characters__receiveCharacterPosFromClient [
