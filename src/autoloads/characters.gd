@@ -146,6 +146,8 @@ func _process(delta: float) -> void:
 		return
 	## Reset position sync timer
 	_timeSincePositionSync = 0.0
+	if not get_tree().get_network_unique_id() in _characterResources:
+		return
 	## If client server
 	if Connections.isClientServer():
 		## Broadcast all character positions
