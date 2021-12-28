@@ -170,7 +170,10 @@ puppetsync func _updateCharacterPosition(networkId: int, characterPos: Vector2) 
 # master keyword means that this function will only be run on the server when RPCed
 master func _receiveCharacterPosFromClient(newPos: Vector2) -> void:
 	var sender: int = get_tree().get_rpc_sender_id()
-	_updateCharacterPosition(sender, newPos)
+	# update character position across all clients + server
+	# this also calls it serverside because _updateCharacterPosition() is puppetsync
+	# 	instead of puppet
+	rpc("_updateCharacterPosition", sender, newPos)
 
 # --Client Functions
 

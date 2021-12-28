@@ -28,6 +28,8 @@ config/icon="res://icon.png"
 
 [autoload]
 
+Resources="*res://autoloads/resources.gd"
+Appearance="*res://autoloads/appearance.gd"
 Characters="*res://autoloads/characters.gd"
 Connections="*res://autoloads/connections.gd"
 TransitionHandler="*res://autoloads/transition_handler.gd"
