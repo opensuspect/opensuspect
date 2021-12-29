@@ -124,10 +124,12 @@ func setLookDirection(newLookDirection: int) -> void:
 
 # get the position of the character
 func getPosition() -> Vector2:
+	## Get node position
 	return _characterNode.getPosition()
 
 # set the position of the character
 func setPosition(newPos: Vector2) -> void:
+	## Set node position
 	_characterNode.setPosition(newPos)
 
 # get the global position of the character

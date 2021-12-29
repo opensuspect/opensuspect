@@ -1,0 +1,155 @@
+digraph controlflow {
+    rankdir="LR";
+    subgraph cluster_client1 {
+        label="Client 1"; labeljust="l";
+        subgraph cluster_client1_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            client1_character_resource_setPosition [
+                label="<begin>setPosition | <f0> Set node position "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_character {
+            label="character.gd"; labeljust="l";
+            client1_character_setPosition [
+                label="<begin>setPosition | {<f0> If movement occured  | <f1> Update look direction based on movement } | <f2> Set new position "
+                shape="record"
+            ]
+            client1_character_getMovementVector [
+                label="<begin>getMovementVector"
+                shape="record"
+            ]
+            client1_character_setLookDirection [
+                label="<begin>setLookDirection"
+                shape="record"
+            ]
+            client1_character__process [
+                label="<begin>_process | {<f0> If this character belongs to this client  | <f1> Move character }"
+                shape="record"
+            ]
+            client1_character__move [
+                label="<begin>_move | <f0> Get movement vector based on keypress (not normalized)  | <f1> Sets look direction  | <f2> Calculate and execute actual motion "
+                shape="record"
+            ]
+            client1_character__getLookDirFromVec [
+                label="<begin>_getLookDirFromVec"
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_characters {
+            label="characters.gd"; labeljust="l";
+            client1_characters__process [
+                label="<begin>_process | {<f0> Only proceed if enough time passed } | <f1> Reset position sync timer  | {<f2> If server  | <f3> Broadcast all character positions } | {<f4> If client  | <f5> Send own character position to server }"
+                shape="record"
+            ]
+            client1_characters__updateAllCharacterPositions [
+                label="<begin>_updateAllCharacterPositions | {<f0> Loop through all characters  | <f1> Set the position for the character }"
+                shape="record"
+            ]
+            client1_characters__sendMyCharacterPosToServer [
+                label="<begin>_sendMyCharacterPosToServer | <f0> Send own character position to server "
+                shape="record"
+            ]
+        }
+
+    }
+    subgraph cluster_server {
+        label="Server"; labeljust="l";
+        subgraph cluster_server_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            server_character_resource_setPosition [
+                label="<begin>setPosition | <f0> Set node position "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_character {
+            label="character.gd"; labeljust="l";
+            server_character_setPosition [
+                label="<begin>setPosition | {<f0> If movement occured  | <f1> Update look direction based on movement } | <f2> Set new position "
+                shape="record"
+            ]
+            server_character_setLookDirection [
+                label="<begin>setLookDirection"
+                shape="record"
+            ]
+            server_character__getLookDirFromVec [
+                label="<begin>_getLookDirFromVec"
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_characters {
+            label="characters.gd"; labeljust="l";
+            server_characters__process [
+                label="<begin>_process | {<f0> Only proceed if enough time passed } | <f1> Reset position sync timer  | {<f2> If server  | <f3> Broadcast all character positions } | {<f4> If client  | <f5> Send own character position to server }"
+                shape="record"
+            ]
+            server_characters__receiveCharacterPosFromClient [
+                label="<begin>_receiveCharacterPosFromClient | <f0> Set character position "
+                shape="record"
+            ]
+            server_characters__updateCharacterPosition [
+                label="<begin>_updateCharacterPosition | <f0> Set the position for character "
+                shape="record"
+            ]
+        }
+
+    }
+    subgraph cluster_client2 {
+        label="Client 2"; labeljust="l";
+        subgraph cluster_client2_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            client2_character_resource_setPosition [
+                label="<begin>setPosition | <f0> Set node position "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_character {
+            label="character.gd"; labeljust="l";
+            client2_character_setPosition [
+                label="<begin>setPosition | {<f0> If movement occured  | <f1> Update look direction based on movement } | <f2> Set new position "
+                shape="record"
+            ]
+            client2_character_setLookDirection [
+                label="<begin>setLookDirection"
+                shape="record"
+            ]
+            client2_character__getLookDirFromVec [
+                label="<begin>_getLookDirFromVec"
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_characters {
+            label="characters.gd"; labeljust="l";
+            client2_characters__updateAllCharacterPositions [
+                label="<begin>_updateAllCharacterPositions | {<f0> Loop through all characters  | <f1> Set the position for the character }"
+                shape="record"
+            ]
+        }
+
+    }
+
+    # movement on the client's side
+    client1_character__process:f1 -> client1_character__move:begin;
+    client1_character__move:f0 -> client1_character_getMovementVector:begin;
+    client1_character__move:f1 -> client1_character_setLookDirection:begin;
+    # client sends its character data
+    client1_characters__process:f5 -> client1_characters__sendMyCharacterPosToServer:begin;
+    client1_characters__sendMyCharacterPosToServer:f0 -> server_characters__receiveCharacterPosFromClient:begin [color=blue];
+    server_characters__receiveCharacterPosFromClient:f0 -> server_characters__updateCharacterPosition:begin;
+    server_characters__updateCharacterPosition:f0 -> server_character_resource_setPosition:begin;
+    server_character_resource_setPosition:f0 -> server_character_setPosition:begin;
+    server_character_setPosition:f1 -> server_character__getLookDirFromVec:begin;
+    server_character_setPosition:f1 -> server_character_setLookDirection:begin;
+    # server sends character data
+    server_characters__process:f3 -> client1_characters__updateAllCharacterPositions:begin [color=red];
+    server_characters__process:f3 -> client2_characters__updateAllCharacterPositions:begin [color=red];
+    client1_characters__updateAllCharacterPositions:f1 -> client1_character_resource_setPosition:begin;
+    client2_characters__updateAllCharacterPositions:f1 -> client2_character_resource_setPosition:begin;
+    # everyone sets character position
+    client1_character_resource_setPosition:f0 -> client1_character_setPosition:begin;
+    client1_character_setPosition:f1 -> client1_character__getLookDirFromVec:begin;
+    client1_character_setPosition:f1 -> client1_character_setLookDirection:begin;
+    client2_character_resource_setPosition:f0 -> client2_character_setPosition:begin;
+    client2_character_setPosition:f1 -> client2_character__getLookDirFromVec:begin;
+    client2_character_setPosition:f1 -> client2_character_setLookDirection:begin;
+}
