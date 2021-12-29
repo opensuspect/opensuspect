@@ -177,6 +177,7 @@ Button/styles/pressed = SubResource( 6 )
 HBoxContainer/constants/separation = 16
 ItemList/colors/font_color = Color( 0.901961, 0.886275, 0.866667, 1 )
 ItemList/colors/font_color_selected = Color( 0.858824, 0.160784, 0.129412, 1 )
+ItemList/colors/guide_color = Color( 0, 0, 0, 0 )
 ItemList/fonts/font = ExtResource( 3 )
 ItemList/styles/bg = SubResource( 16 )
 ItemList/styles/selected = SubResource( 17 )
