@@ -10,8 +10,14 @@ onready var join_menu: Control = $Join
 onready var create_menu: Control = $Create
 onready var server_menu: Control = $Server
 
+onready var player = $MainMenu/CenterPlayer/Player/MenuPlayer/Skeleton
+
+signal menuAppearance
+
 # --Interface--
 func _ready() -> void:
+	Appearance.randomizeConfig()
+	player.applyConfig()
 	menu = MenuType.MAIN
 	setVisibleMenu(menu)
 
@@ -103,3 +109,6 @@ func _on_Create_pressed() -> void:
 
 func _on_Server_pressed() -> void:
 	joinEvent(menu)
+
+func _on_Player_pressed():
+	emit_signal("menuAppearance")

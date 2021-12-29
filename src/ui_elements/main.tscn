@@ -21,3 +21,6 @@ texture = ExtResource( 1 )
 
 [node name="AppearanceEditor" parent="." instance=ExtResource( 3 )]
 visible = false
+
+[connection signal="menuAppearance" from="MainMenu" to="." method="_on_MainMenu_menuAppearance"]
+[connection signal="menuBack" from="AppearanceEditor" to="." method="_on_AppearanceEditor_menuBack"]

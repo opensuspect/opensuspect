@@ -3,8 +3,10 @@ extends Node
 onready var Resources = get_node("/root/Resources")
 onready var Appearance = get_node("/root/Appearance")
 
-onready var tabs = $Menu/HBoxContainer/TabContainer
-onready var player = $Menu/HBoxContainer/VBoxContainer/Player/menu_player/Skeleton
+onready var tabs = $MenuMargin/HBoxContainer/TabBox/TabContainer
+onready var player = $MenuMargin/HBoxContainer/PlayerBox/Player/MenuPlayer/Skeleton
+
+signal menuBack
 
 var currentTab: int
 var selectedItem: int
@@ -85,3 +87,6 @@ func _on_item_selected(item):
 func _on_Random_pressed():
 	Appearance.randomizeConfig()
 	player.applyConfig()
+
+func _on_Back_pressed():
+	emit_signal("menuBack")
