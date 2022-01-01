@@ -33,6 +33,9 @@ var _tasks: Dictionary
 # 	outfit system has not been implemented yet
 var _outfit: Dictionary
 
+# the speed at which the character moves/how many pixels it can move every frame
+var _speed: float = 150
+
 # --Public Functions--
 
 # function called when character is spawned
@@ -102,6 +105,23 @@ func setOutfit(newOutfit: Dictionary):
 	assert(false, "Not implemented yet")
 	_outfit = newOutfit
 
+# get the speed of this character
+func getSpeed() -> float:
+	return _speed
+
+# not sure we would really want to just overwrite speed but I'm putting this
+# 	here for constincency
+func setSpeed(value: float) -> void:
+	_speed = value
+
+# get the direction the character is looking
+func getLookDirection() -> int:
+	return _characterNode.getLookDirection()
+
+# set the direction the character is looking
+func setLookDirection(newLookDirection: int) -> void:
+	_characterNode.setLookDirection(newLookDirection)
+
 # get the position of the character
 func getPosition() -> Vector2:
 	## Get node position
@@ -118,8 +138,6 @@ func getGlobalPosition() -> Vector2:
 
 # set the global position of the character
 func setGlobalPosition(newPos: Vector2):
-	# assert false because setting position (teleporting) is not implemented yet
-	assert(false, "Not implemented yet")
 	_characterNode.setPosition(newPos)
 
 # --Private Functions--
