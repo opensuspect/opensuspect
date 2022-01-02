@@ -120,6 +120,7 @@ func createGame(portNumber: int, playerName: String) -> void:
 	## Add a character to the map
 	var gameScene: Node = TransitionHandler.gameScene
 	gameScene.addCharacter(1)
+	gameScene.showStartButton()
 
 func createDedicated(portNumber: int, srvName: String) -> void:
 	## Initialize Godot networking
@@ -133,6 +134,8 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	serverName = srvName
 	## Enter the Lobby
 	TransitionHandler.enterLobby()
+	var gameScene: Node = TransitionHandler.gameScene
+	gameScene.showStartButton()
 
 # Once the newly joined player sent us their data, that's when we send them all the data
 master func receiveNewPlayerData(newPlayerName: String) -> void:
