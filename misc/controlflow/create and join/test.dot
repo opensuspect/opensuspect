@@ -1,0 +1,1224 @@
+digraph controlflow {
+    rankdir="LR";
+    subgraph cluster_client1 {
+        label="Client 1"; labeljust="l";
+        subgraph cluster_client1_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            client1_character_resource_spawn [
+                label="<begin>spawn"
+                shape="record"
+            ]
+            client1_character_resource_kill [
+                label="<begin>kill"
+                shape="record"
+            ]
+            client1_character_resource_reset [
+                label="<begin>reset"
+                shape="record"
+            ]
+            client1_character_resource_getCharacterNode [
+                label="<begin>getCharacterNode | <f0> return _characterNode "
+                shape="record"
+            ]
+            client1_character_resource_setCharacterNode [
+                label="<begin>setCharacterNode | {<f0> if there is already a character node assigned to this resource } | <f1> _characterNode = newCharacterNode "
+                shape="record"
+            ]
+            client1_character_resource_getRole [
+                label="<begin>getRole | <f0> return _role "
+                shape="record"
+            ]
+            client1_character_resource_setRole [
+                label="<begin>setRole | <f0> _role = newRole "
+                shape="record"
+            ]
+            client1_character_resource_getTasks [
+                label="<begin>getTasks | <f0> return _tasks "
+                shape="record"
+            ]
+            client1_character_resource_setTasks [
+                label="<begin>setTasks | <f0> _tasks = newTasks "
+                shape="record"
+            ]
+            client1_character_resource_getOutfit [
+                label="<begin>getOutfit | <f0> return _outfit "
+                shape="record"
+            ]
+            client1_character_resource_setOutfit [
+                label="<begin>setOutfit | <f0> _outfit = newOutfit "
+                shape="record"
+            ]
+            client1_character_resource_getSpeed [
+                label="<begin>getSpeed | <f0> return _speed "
+                shape="record"
+            ]
+            client1_character_resource_setSpeed [
+                label="<begin>setSpeed | <f0> _speed = value "
+                shape="record"
+            ]
+            client1_character_resource_getLookDirection [
+                label="<begin>getLookDirection | <f0> return _characterNode.getLookDirection() "
+                shape="record"
+            ]
+            client1_character_resource_setLookDirection [
+                label="<begin>setLookDirection | <f0> _characterNode.setLookDirection(newLookDirection) "
+                shape="record"
+            ]
+            client1_character_resource_getPosition [
+                label="<begin>getPosition | <f0> return _characterNode.getPosition() "
+                shape="record"
+            ]
+            client1_character_resource_setPosition [
+                label="<begin>setPosition | <f0> _characterNode.setPosition(newPos) "
+                shape="record"
+            ]
+            client1_character_resource_getGlobalPosition [
+                label="<begin>getGlobalPosition | <f0> return _characterNode.getGlobalPosition() "
+                shape="record"
+            ]
+            client1_character_resource_setGlobalPosition [
+                label="<begin>setGlobalPosition | <f0> _characterNode.setPosition(newPos) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_game {
+            label="game.gd"; labeljust="l";
+            client1_game_loadMap [
+                label="<begin>loadMap | {<f0> for child in mapNode.get_children():  | <f1> child.queue_free() } | {<f2> for child in characterNode.get_children():  | <f3> child.queue_free() } | <f4> var mapToLoad: Node = ResourceLoader.load(mapPath).instance()  | <f5> mapNode.add_child(mapToLoad) "
+                shape="record"
+            ]
+            client1_game_addCharacter [
+                label="<begin>addCharacter | <f0> var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)  | <f1> var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()  | <f2> var characterPosition: Vector2  | <f3> characterPosition.x = rng.randi_range(100, 500)  | <f4> characterPosition.y = rng.randi_range(100, 500)  | <f5> characterNode.add_child(newCharacter)  | <f6> newCharacterResource.setPosition(characterPosition) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_character {
+            label="character.gd"; labeljust="l";
+            client1_character_spawn [
+                label="<begin>spawn"
+                shape="record"
+            ]
+            client1_character_kill [
+                label="<begin>kill"
+                shape="record"
+            ]
+            client1_character_reset [
+                label="<begin>reset"
+                shape="record"
+            ]
+            client1_character_getCharacterResource [
+                label="<begin>getCharacterResource | <f0> return _characterResource "
+                shape="record"
+            ]
+            client1_character_setCharacterResource [
+                label="<begin>setCharacterResource | {<f0> if there is already a character node assigned to this resource } | <f1> _characterResource = newCharacterResource "
+                shape="record"
+            ]
+            client1_character_getRole [
+                label="<begin>getRole | <f0> return _characterResource.getRole() "
+                shape="record"
+            ]
+            client1_character_getTasks [
+                label="<begin>getTasks | <f0> return _characterResource.getTasks() "
+                shape="record"
+            ]
+            client1_character_getOutfit [
+                label="<begin>getOutfit | <f0> return _characterResource.getOutfit() "
+                shape="record"
+            ]
+            client1_character_getPosition [
+                label="<begin>getPosition | <f0> return position "
+                shape="record"
+            ]
+            client1_character_setPosition [
+                label="<begin>setPosition | {<f0> if newPos != position:  | <f1> setLookDirection(_getLookDirFromVec(newPos - position)) } | <f2> position = newPos "
+                shape="record"
+            ]
+            client1_character_getGlobalPosition [
+                label="<begin>getGlobalPosition | <f0> return global_position "
+                shape="record"
+            ]
+            client1_character_setGlobalPosition [
+                label="<begin>setGlobalPosition | <f0> setLookDirection(_getLookDirFromVec(newPos - global_position))  | <f1> global_position = newPos "
+                shape="record"
+            ]
+            client1_character_getMovementVector [
+                label="<begin>getMovementVector | <f0> var vector: Vector2 = Vector2()  | <f1> get the movement vector using the move_left, move_right, move_up,\nand move_down keys found in the input map  | {<f2> if normalized:  | <f3> vector = vector.normalized() } | <f4> return vector "
+                shape="record"
+            ]
+            client1_character_getLookDirection [
+                label="<begin>getLookDirection | <f0> return lookDirection "
+                shape="record"
+            ]
+            client1_character_setLookDirection [
+                label="<begin>setLookDirection | <f0> lookDirection = newLookDirection  | <f1> very placeholder code just to display the look direction by\nchanging where the placeholder triangle is pointing\nthis should eventually be moved into a separate script that handles\nanimations and stuff\nthe angle to set the rotation of the triangle to  | {<f2> match lookDirection:  | {<f3> LookDirections.LEFT:  | <f4> angle = 270 } | {<f5> LookDirections.RIGHT:  | <f6> angle = 90 } | {<f7> LookDirections.UP:  | <f8> angle = 0 } | {<f9> LookDirections.DOWN:  | <f10> angle = 180 }} | <f11> $Polygon2D.rotation_degrees = angle "
+                shape="record"
+            ]
+            client1_character__process [
+                label="<begin>_process | <f0> var amountMoved: Vector2  | {<f1> if networkId == get_tree().get_network_unique_id():  | <f2> amountMoved = _move(_delta) }"
+                shape="record"
+            ]
+            client1_character__move [
+                label="<begin>_move | <f0> var movementVec: Vector2 = getMovementVector(false)  | <f1> set lookDirection to match the movementVec\nusing the look direction setter here to make it easier to react to\na changing look direction  | <f2> multiply the movement vec by speed  | <f3> move_and_slide() returns the actual motion that happened, store it\nin amountMoved  | <f4> return the actual movement that happened "
+                shape="record"
+            ]
+            client1_character__getLookDirFromVec [
+                label="<begin>_getLookDirFromVec | {<f0> this prioritizes looking left and right over up and down (like in\namong us and other games)  | <f1> return lookDirection } | <f2> var newlookDirection: int = LookDirections.RIGHT  | {<f3> if vec.y \< 0:  | <f4> newlookDirection = LookDirections.UP } | {<f5> if vec.y \> 0:  | <f6> newlookDirection = LookDirections.DOWN } | {<f7> if vec.x \< 0:  | <f8> newlookDirection = LookDirections.LEFT } | {<f9> if vec.x \> 0:  | <f10> newlookDirection = LookDirections.RIGHT } | <f11> return newlookDirection "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_transition_handler {
+            label="transition_handler.gd"; labeljust="l";
+            client1_transition_handler__ready [
+                label="<begin>_ready | <f0> var root: Node = get_tree().get_root()  | <f1> var game: Resource = ResourceLoader.load(\"res://game/game.tscn\")  | <f2> mainMenuScene = root.get_child(root.get_child_count() - 1)  | <f3> currentScene = mainMenuScene  | <f4> gameScene = game.instance() "
+                shape="record"
+            ]
+            client1_transition_handler_enterLobby [
+                label="<begin>enterLobby | <f0> var root: Node = get_tree().get_root()  | <f1> root.remove_child(currentScene)  | <f2> root.add_child(gameScene)  | <f3> currentScene = gameScene  | <f4> get_tree().set_current_scene(currentScene)  | <f5> gameScene.loadMap(\"res://game/maps/lobby/lobby.tscn\") "
+                shape="record"
+            ]
+            client1_transition_handler_startGame [
+                label="<begin>startGame | <f0> gameScene.loadMap(\"res://game/maps/chemlab/chemlab.tscn\") "
+                shape="record"
+            ]
+            client1_transition_handler_returnLobby [
+                label="<begin>returnLobby | <f0> gameScene.loadMap(\"res://game/maps/lobby/lobby.tscn\") "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_connections {
+            label="connections.gd"; labeljust="l";
+            client1_connections__ready [
+                label="<begin>_ready | <f0> get_tree().connect(\"connected_to_server\", self, \"connectedOK\")  | <f1> get_tree().connect(\"connection_failed\", self, \"connectedFail\")  | <f2> get_tree().connect(\"server_disconnected\", self, \"disconnectedFromServer\") "
+                shape="record"
+            ]
+            client1_connections_toss [
+                label="<begin>toss | <f0> pass "
+                shape="record"
+            ]
+            client1_connections_getConnectionType [
+                label="<begin>getConnectionType | <f0> return connectionType "
+                shape="record"
+            ]
+            client1_connections_getMyName [
+                label="<begin>getMyName | <f0> return myName "
+                shape="record"
+            ]
+            client1_connections_getServerName [
+                label="<begin>getServerName | <f0> return serverName "
+                shape="record"
+            ]
+            client1_connections_isServer [
+                label="<begin>isServer | <f0> return isDedicatedServer() or isClientServer() "
+                shape="record"
+            ]
+            client1_connections_isLocal [
+                label="<begin>isLocal | <f0> return isConnectionType(ConnectionTypes.LOCAL) "
+                shape="record"
+            ]
+            client1_connections_isDedicatedServer [
+                label="<begin>isDedicatedServer | <f0> return isConnectionType(ConnectionTypes.DEDICATED_SERVER) "
+                shape="record"
+            ]
+            client1_connections_isClientServer [
+                label="<begin>isClientServer | <f0> return isConnectionType(ConnectionTypes.CLIENT_SERVER) "
+                shape="record"
+            ]
+            client1_connections_isClient [
+                label="<begin>isClient | <f0> return isConnectionType(ConnectionTypes.CLIENT) "
+                shape="record"
+            ]
+            client1_connections_isConnectionType [
+                label="<begin>isConnectionType | <f0> return connectionType == type "
+                shape="record"
+            ]
+            client1_connections_joinGame [
+                label="<begin>joinGame | <f0> var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()  | <f1> peer.create_client(serverName, portNumber)  | <f2> get_tree().network_peer = peer  | <f3> var id: int = get_tree().get_network_peer().get_unique_id()  | <f4> connectionType = ConnectionTypes.CLIENT  | <f5> myName = playerName  | <f6> listConnections[id] = myName "
+                shape="record"
+            ]
+            client1_connections_connectedOK [
+                label="<begin>connectedOK | <f0> rpc_id(1, \"receiveNewPlayerData\", myName)  | <f1> TransitionHandler.enterLobby() "
+                shape="record"
+            ]
+            client1_connections_connectedFail [
+                label="<begin>connectedFail"
+                shape="record"
+            ]
+            client1_connections_disconnectedFromServer [
+                label="<begin>disconnectedFromServer"
+                shape="record"
+            ]
+            client1_connections_receiveBulkPlayerData [
+                label="<begin>receiveBulkPlayerData | <f0> listConnections = connections  | <f1> var gameScene: Node = TransitionHandler.gameScene  | {<f2> for player in listConnections:  | <f3> gameScene.addCharacter(player) }"
+                shape="record"
+            ]
+            client1_connections_setServerName [
+                label="<begin>setServerName | <f0> serverName = serverNewName "
+                shape="record"
+            ]
+            client1_connections_receivePlayerData [
+                label="<begin>receivePlayerData | {<f0> if id != get_tree().get_network_unique_id():  | <f1> listConnections[id] = name  | <f2> var gameScene: Node = TransitionHandler.gameScene  | <f3> gameScene.addCharacter(id) }"
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_resources {
+            label="resources.gd"; labeljust="l";
+            client1_resources_list [
+                label="<begin>list | <f0> var resources: Dictionary = \{\}  | {<f1> Iterate over each folder specified, by their namespace (key)  | <f2> List files in each folder  | <f3> Add each file to the output dictionary } | <f4> Return the dictionary of namespaced resources "
+                shape="record"
+            ]
+            client1_resources__listFilesInDirectory [
+                label="<begin>_listFilesInDirectory | <f0> Defunes the array to be returned  | <f1> Makes a new directory object  | <f2> Opens the directory given in \"path\"  | <f3> List files in the directory from the beginning  | {<f4> while true:  | <f5> Gets the next file in the list  | {<f6> If the file is \"\", means the end of the directory has been found  | <f7> Stops the loop after the end of the directory has been found } | {<f8> else:  | {<f9> Iterates over each specified file extension  | {<f10> Checks if the file has the extension  | <f11> If it does, add it to the files array }}}} | <f12> Return the files array "
+                shape="record"
+            ]
+            client1_resources__filesToDictionary [
+                label="<begin>_filesToDictionary | <f0> Defines the dictionary to output the files  | <f1> Defines the resource string  | {<f2> for file in files:  | {<f3> Iterates over each specified file extension  | {<f4> Checks if the file has the extension  | <f5> If it does, remove the extension, and set this as \"resource\" }} | <f6> Format the resource string for use in game  | <f7> Create the full file path to the resource  | <f8> Set the path in the resources dictionary } | <f9> Return the output dictionary "
+                shape="record"
+            ]
+            client1_resources__formatString [
+                label="<begin>_formatString | <f0> Create a new RegEx object  | <f1> Select any special characters  | {<f2> Iterate over the instances of the regex in the input string  | <f3> Replace all special characters with underscores } | <f4> Return the string (capitalize it later if it is to be used in game) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_characters {
+            label="characters.gd"; labeljust="l";
+            client1_characters_createCharacter [
+                label="<begin>createCharacter | <f0> var characterNode: Node = _createCharacterNode(networkId)  | <f1> var characterResource: CharacterResource = _createCharacterResource(networkId)  | <f2> characterNode.setCharacterResource(characterResource)  | <f3> characterResource.setCharacterNode(characterNode)  | <f4> _registerCharacterNode(networkId, characterNode)  | <f5> _registerCharacterResource(networkId, characterResource)  | <f6> return characterResource "
+                shape="record"
+            ]
+            client1_characters_getCharacterNode [
+                label="<begin>getCharacterNode | {<f0> if there is no character node corresponding to this network id  | <f1> if running in release mode, return null } | <f2> return _characterNodes[id] "
+                shape="record"
+            ]
+            client1_characters_getCharacterResource [
+                label="<begin>getCharacterResource | {<f0> if there is no character node corresponding to this network id  | <f1> if running in release mode, return null } | <f2> return _characterResources[id] "
+                shape="record"
+            ]
+            client1_characters_getMyCharacterNode [
+                label="<begin>getMyCharacterNode | <f0> return _characterNodes[get_tree().get_network_unique_id()] "
+                shape="record"
+            ]
+            client1_characters_getMyCharacterResource [
+                label="<begin>getMyCharacterResource | <f0> return _characterResources[get_tree().get_network_unique_id()] "
+                shape="record"
+            ]
+            client1_characters_getCharacterNodes [
+                label="<begin>getCharacterNodes | <f0> return _characterNodes "
+                shape="record"
+            ]
+            client1_characters_getCharacterResources [
+                label="<begin>getCharacterResources | <f0> return _characterResources "
+                shape="record"
+            ]
+            client1_characters__createCharacterNode [
+                label="<begin>_createCharacterNode | <f0> var characterNode: Node = characterScene.instance()  | <f1> set its network id  | <f2> here is where we would set its player name, but that is not implemented yet "
+                shape="record"
+            ]
+            client1_characters__createCharacterResource [
+                label="<begin>_createCharacterResource | <f0> var characterResource: CharacterResource = CharacterResource.new()  | <f1> set its network id  | <f2> here is where we would set its player name, but that is not implemented yet "
+                shape="record"
+            ]
+            client1_characters__registerCharacterNode [
+                label="<begin>_registerCharacterNode | {<f0> if there is already a character node for this network id } | <f1> _characterNodes[id] = characterNode "
+                shape="record"
+            ]
+            client1_characters__registerCharacterResource [
+                label="<begin>_registerCharacterResource | {<f0> if there is already a character node for this network id } | <f1> _characterResources[id] = characterResource "
+                shape="record"
+            ]
+            client1_characters__process [
+                label="<begin>_process | <f0> _timeSincePositionSync += delta  | {<f1> if _timeSincePositionSync \< 1.0 / _positionSyncsPerSecond:  | <f2> return } | <f3> _timeSincePositionSync = 0.0  | {<f4> if Connections.isClientServer() or Connections.isDedicatedServer():  | <f5> var positions: Dictionary = \{\}  | {<f6> for characterId in _characterResources:  | <f7> positions[characterId] = _characterResources[characterId].getPosition() } | <f8> rpc(\"_updateAllCharacterPositions\", positions) } | {<f9> elif Connections.isClient():  | {<f10> if not get_tree().get_network_unique_id() in _characterResources:  | <f11> return } | <f12> _sendMyCharacterPosToServer() }"
+                shape="record"
+            ]
+            client1_characters__updateAllCharacterPositions [
+                label="<begin>_updateAllCharacterPositions | {<f0> for characterId in positions:  | {<f1> if this position is for this client\'s character  | <f2> don\'t update its position } | <f3> getCharacterResource(characterId).setPosition(positions[characterId]) }"
+                shape="record"
+            ]
+            client1_characters__sendMyCharacterPosToServer [
+                label="<begin>_sendMyCharacterPosToServer | <f0> var myPosition: Vector2 = getMyCharacterResource().getPosition()  | <f1> rpc_id(1, \"_receiveCharacterPosFromClient\", myPosition) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_mainmenu {
+            label="mainmenu.gd"; labeljust="l";
+            client1_mainmenu__ready [
+                label="<begin>_ready | <f0> menu = MenuType.MAIN  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            client1_mainmenu__input [
+                label="<begin>_input | {<f0> if event.is_action_pressed(\"ui_accept\"):  | <f1> joinEvent(menu) }"
+                shape="record"
+            ]
+            client1_mainmenu__on_Back_pressed [
+                label="<begin>_on_Back_pressed | <f0> menu = MenuType.MAIN  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            client1_mainmenu__on_GameJoinButton_pressed [
+                label="<begin>_on_GameJoinButton_pressed | <f0> menu = MenuType.JOIN  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            client1_mainmenu__on_GameCreateButton_pressed [
+                label="<begin>_on_GameCreateButton_pressed | <f0> menu = MenuType.CREATE  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            client1_mainmenu__on_ServerStartButton_pressed [
+                label="<begin>_on_ServerStartButton_pressed | <f0> menu = MenuType.SERVER  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            client1_mainmenu__on_AppQuitButton_pressed [
+                label="<begin>_on_AppQuitButton_pressed | <f0> get_tree().quit() "
+                shape="record"
+            ]
+            client1_mainmenu_setVisibleMenu [
+                label="<begin>setVisibleMenu | <f0> hideMenus()  | {<f1> match menuType:  | <f2> MenuType.MAIN: mainMenu.visible = true  | <f3> MenuType.JOIN: joinMenu.visible = true  | <f4> MenuType.CREATE: createMenu.visible = true  | <f5> MenuType.SERVER: serverMenu.visible = true }"
+                shape="record"
+            ]
+            client1_mainmenu_hideMenus [
+                label="<begin>hideMenus | <f0> mainMenu.visible = false  | <f1> joinMenu.visible = false  | <f2> createMenu.visible = false  | <f3> serverMenu.visible = false "
+                shape="record"
+            ]
+            client1_mainmenu_joinGame [
+                label="<begin>joinGame | <f0> var nameField: LineEdit = $Join/Name  | <f1> var serverField: LineEdit = $Join/Address  | <f2> var port: int = 46690  | <f3> var host: String = serverField.text  | <f4> var playerName: String = nameField.text  | <f5> var cut_pos: int = host.find(\":\")  | {<f6> if cut_pos != -1:  | <f7> port = int(host.right(cut_pos))  | <f8> host = host.left(cut_pos) } | {<f9> if host == \"\" or playerName == \"\":  | <f10> return } | <f11> Connections.joinGame(host, port, playerName) "
+                shape="record"
+            ]
+            client1_mainmenu_createGame [
+                label="<begin>createGame | <f0> var nameField: LineEdit = $Create/Name  | <f1> var portField: LineEdit = $Create/Port  | <f2> var port: int = int(portField.text)  | <f3> var name: String = nameField.text  | {<f4> if name == \"\":  | <f5> return } | <f6> Connections.createGame(port, name) "
+                shape="record"
+            ]
+            client1_mainmenu_createDedicated [
+                label="<begin>createDedicated | <f0> var nameField: LineEdit = $Server/Name  | <f1> var portField: LineEdit = $Server/Port  | <f2> var port: int = int(portField.text)  | <f3> var name: String = nameField.text  | {<f4> if name == \"\":  | <f5> return } | <f6> Connections.createDedicated(port, name) "
+                shape="record"
+            ]
+            client1_mainmenu_joinEvent [
+                label="<begin>joinEvent | {<f0> match menu:  | {<f1> MenuType.MAIN:  | <f2> menu = MenuType.JOIN  | <f3> setVisibleMenu(menu) } | <f4> MenuType.JOIN: joinGame()  | <f5> MenuType.CREATE: createGame()  | <f6> MenuType.SERVER: createDedicated() }"
+                shape="record"
+            ]
+            client1_mainmenu__on_Join_pressed [
+                label="<begin>_on_Join_pressed | <f0> joinEvent(menu) "
+                shape="record"
+            ]
+            client1_mainmenu__on_Create_pressed [
+                label="<begin>_on_Create_pressed | <f0> joinEvent(menu) "
+                shape="record"
+            ]
+            client1_mainmenu__on_Server_pressed [
+                label="<begin>_on_Server_pressed | <f0> joinEvent(menu) "
+                shape="record"
+            ]
+        }
+
+    }
+    subgraph cluster_server {
+        label="Server"; labeljust="l";
+        subgraph cluster_server_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            server_character_resource_spawn [
+                label="<begin>spawn"
+                shape="record"
+            ]
+            server_character_resource_kill [
+                label="<begin>kill"
+                shape="record"
+            ]
+            server_character_resource_reset [
+                label="<begin>reset"
+                shape="record"
+            ]
+            server_character_resource_getCharacterNode [
+                label="<begin>getCharacterNode | <f0> return _characterNode "
+                shape="record"
+            ]
+            server_character_resource_setCharacterNode [
+                label="<begin>setCharacterNode | {<f0> if there is already a character node assigned to this resource } | <f1> _characterNode = newCharacterNode "
+                shape="record"
+            ]
+            server_character_resource_getRole [
+                label="<begin>getRole | <f0> return _role "
+                shape="record"
+            ]
+            server_character_resource_setRole [
+                label="<begin>setRole | <f0> _role = newRole "
+                shape="record"
+            ]
+            server_character_resource_getTasks [
+                label="<begin>getTasks | <f0> return _tasks "
+                shape="record"
+            ]
+            server_character_resource_setTasks [
+                label="<begin>setTasks | <f0> _tasks = newTasks "
+                shape="record"
+            ]
+            server_character_resource_getOutfit [
+                label="<begin>getOutfit | <f0> return _outfit "
+                shape="record"
+            ]
+            server_character_resource_setOutfit [
+                label="<begin>setOutfit | <f0> _outfit = newOutfit "
+                shape="record"
+            ]
+            server_character_resource_getSpeed [
+                label="<begin>getSpeed | <f0> return _speed "
+                shape="record"
+            ]
+            server_character_resource_setSpeed [
+                label="<begin>setSpeed | <f0> _speed = value "
+                shape="record"
+            ]
+            server_character_resource_getLookDirection [
+                label="<begin>getLookDirection | <f0> return _characterNode.getLookDirection() "
+                shape="record"
+            ]
+            server_character_resource_setLookDirection [
+                label="<begin>setLookDirection | <f0> _characterNode.setLookDirection(newLookDirection) "
+                shape="record"
+            ]
+            server_character_resource_getPosition [
+                label="<begin>getPosition | <f0> return _characterNode.getPosition() "
+                shape="record"
+            ]
+            server_character_resource_setPosition [
+                label="<begin>setPosition | <f0> _characterNode.setPosition(newPos) "
+                shape="record"
+            ]
+            server_character_resource_getGlobalPosition [
+                label="<begin>getGlobalPosition | <f0> return _characterNode.getGlobalPosition() "
+                shape="record"
+            ]
+            server_character_resource_setGlobalPosition [
+                label="<begin>setGlobalPosition | <f0> _characterNode.setPosition(newPos) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_game {
+            label="game.gd"; labeljust="l";
+            server_game_loadMap [
+                label="<begin>loadMap | {<f0> for child in mapNode.get_children():  | <f1> child.queue_free() } | {<f2> for child in characterNode.get_children():  | <f3> child.queue_free() } | <f4> var mapToLoad: Node = ResourceLoader.load(mapPath).instance()  | <f5> mapNode.add_child(mapToLoad) "
+                shape="record"
+            ]
+            server_game_addCharacter [
+                label="<begin>addCharacter | <f0> var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)  | <f1> var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()  | <f2> var characterPosition: Vector2  | <f3> characterPosition.x = rng.randi_range(100, 500)  | <f4> characterPosition.y = rng.randi_range(100, 500)  | <f5> characterNode.add_child(newCharacter)  | <f6> newCharacterResource.setPosition(characterPosition) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_character {
+            label="character.gd"; labeljust="l";
+            server_character_spawn [
+                label="<begin>spawn"
+                shape="record"
+            ]
+            server_character_kill [
+                label="<begin>kill"
+                shape="record"
+            ]
+            server_character_reset [
+                label="<begin>reset"
+                shape="record"
+            ]
+            server_character_getCharacterResource [
+                label="<begin>getCharacterResource | <f0> return _characterResource "
+                shape="record"
+            ]
+            server_character_setCharacterResource [
+                label="<begin>setCharacterResource | {<f0> if there is already a character node assigned to this resource } | <f1> _characterResource = newCharacterResource "
+                shape="record"
+            ]
+            server_character_getRole [
+                label="<begin>getRole | <f0> return _characterResource.getRole() "
+                shape="record"
+            ]
+            server_character_getTasks [
+                label="<begin>getTasks | <f0> return _characterResource.getTasks() "
+                shape="record"
+            ]
+            server_character_getOutfit [
+                label="<begin>getOutfit | <f0> return _characterResource.getOutfit() "
+                shape="record"
+            ]
+            server_character_getPosition [
+                label="<begin>getPosition | <f0> return position "
+                shape="record"
+            ]
+            server_character_setPosition [
+                label="<begin>setPosition | {<f0> if newPos != position:  | <f1> setLookDirection(_getLookDirFromVec(newPos - position)) } | <f2> position = newPos "
+                shape="record"
+            ]
+            server_character_getGlobalPosition [
+                label="<begin>getGlobalPosition | <f0> return global_position "
+                shape="record"
+            ]
+            server_character_setGlobalPosition [
+                label="<begin>setGlobalPosition | <f0> setLookDirection(_getLookDirFromVec(newPos - global_position))  | <f1> global_position = newPos "
+                shape="record"
+            ]
+            server_character_getMovementVector [
+                label="<begin>getMovementVector | <f0> var vector: Vector2 = Vector2()  | <f1> get the movement vector using the move_left, move_right, move_up,\nand move_down keys found in the input map  | {<f2> if normalized:  | <f3> vector = vector.normalized() } | <f4> return vector "
+                shape="record"
+            ]
+            server_character_getLookDirection [
+                label="<begin>getLookDirection | <f0> return lookDirection "
+                shape="record"
+            ]
+            server_character_setLookDirection [
+                label="<begin>setLookDirection | <f0> lookDirection = newLookDirection  | <f1> very placeholder code just to display the look direction by\nchanging where the placeholder triangle is pointing\nthis should eventually be moved into a separate script that handles\nanimations and stuff\nthe angle to set the rotation of the triangle to  | {<f2> match lookDirection:  | {<f3> LookDirections.LEFT:  | <f4> angle = 270 } | {<f5> LookDirections.RIGHT:  | <f6> angle = 90 } | {<f7> LookDirections.UP:  | <f8> angle = 0 } | {<f9> LookDirections.DOWN:  | <f10> angle = 180 }} | <f11> $Polygon2D.rotation_degrees = angle "
+                shape="record"
+            ]
+            server_character__process [
+                label="<begin>_process | <f0> var amountMoved: Vector2  | {<f1> if networkId == get_tree().get_network_unique_id():  | <f2> amountMoved = _move(_delta) }"
+                shape="record"
+            ]
+            server_character__move [
+                label="<begin>_move | <f0> var movementVec: Vector2 = getMovementVector(false)  | <f1> set lookDirection to match the movementVec\nusing the look direction setter here to make it easier to react to\na changing look direction  | <f2> multiply the movement vec by speed  | <f3> move_and_slide() returns the actual motion that happened, store it\nin amountMoved  | <f4> return the actual movement that happened "
+                shape="record"
+            ]
+            server_character__getLookDirFromVec [
+                label="<begin>_getLookDirFromVec | {<f0> this prioritizes looking left and right over up and down (like in\namong us and other games)  | <f1> return lookDirection } | <f2> var newlookDirection: int = LookDirections.RIGHT  | {<f3> if vec.y \< 0:  | <f4> newlookDirection = LookDirections.UP } | {<f5> if vec.y \> 0:  | <f6> newlookDirection = LookDirections.DOWN } | {<f7> if vec.x \< 0:  | <f8> newlookDirection = LookDirections.LEFT } | {<f9> if vec.x \> 0:  | <f10> newlookDirection = LookDirections.RIGHT } | <f11> return newlookDirection "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_transition_handler {
+            label="transition_handler.gd"; labeljust="l";
+            server_transition_handler__ready [
+                label="<begin>_ready | <f0> var root: Node = get_tree().get_root()  | <f1> var game: Resource = ResourceLoader.load(\"res://game/game.tscn\")  | <f2> mainMenuScene = root.get_child(root.get_child_count() - 1)  | <f3> currentScene = mainMenuScene  | <f4> gameScene = game.instance() "
+                shape="record"
+            ]
+            server_transition_handler_enterLobby [
+                label="<begin>enterLobby | <f0> var root: Node = get_tree().get_root()  | <f1> root.remove_child(currentScene)  | <f2> root.add_child(gameScene)  | <f3> currentScene = gameScene  | <f4> get_tree().set_current_scene(currentScene)  | <f5> gameScene.loadMap(\"res://game/maps/lobby/lobby.tscn\") "
+                shape="record"
+            ]
+            server_transition_handler_startGame [
+                label="<begin>startGame | <f0> gameScene.loadMap(\"res://game/maps/chemlab/chemlab.tscn\") "
+                shape="record"
+            ]
+            server_transition_handler_returnLobby [
+                label="<begin>returnLobby | <f0> gameScene.loadMap(\"res://game/maps/lobby/lobby.tscn\") "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_connections {
+            label="connections.gd"; labeljust="l";
+            server_connections__ready [
+                label="<begin>_ready | <f0> get_tree().connect(\"connected_to_server\", self, \"connectedOK\")  | <f1> get_tree().connect(\"connection_failed\", self, \"connectedFail\")  | <f2> get_tree().connect(\"server_disconnected\", self, \"disconnectedFromServer\") "
+                shape="record"
+            ]
+            server_connections_toss [
+                label="<begin>toss | <f0> pass "
+                shape="record"
+            ]
+            server_connections_getConnectionType [
+                label="<begin>getConnectionType | <f0> return connectionType "
+                shape="record"
+            ]
+            server_connections_getMyName [
+                label="<begin>getMyName | <f0> return myName "
+                shape="record"
+            ]
+            server_connections_getServerName [
+                label="<begin>getServerName | <f0> return serverName "
+                shape="record"
+            ]
+            server_connections_isServer [
+                label="<begin>isServer | <f0> return isDedicatedServer() or isClientServer() "
+                shape="record"
+            ]
+            server_connections_isLocal [
+                label="<begin>isLocal | <f0> return isConnectionType(ConnectionTypes.LOCAL) "
+                shape="record"
+            ]
+            server_connections_isDedicatedServer [
+                label="<begin>isDedicatedServer | <f0> return isConnectionType(ConnectionTypes.DEDICATED_SERVER) "
+                shape="record"
+            ]
+            server_connections_isClientServer [
+                label="<begin>isClientServer | <f0> return isConnectionType(ConnectionTypes.CLIENT_SERVER) "
+                shape="record"
+            ]
+            server_connections_isClient [
+                label="<begin>isClient | <f0> return isConnectionType(ConnectionTypes.CLIENT) "
+                shape="record"
+            ]
+            server_connections_isConnectionType [
+                label="<begin>isConnectionType | <f0> return connectionType == type "
+                shape="record"
+            ]
+            server_connections_createGame [
+                label="<begin>createGame | <f0> var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()  | <f1> peer.create_server(portNumber, MAX_PLAYERS)  | <f2> get_tree().network_peer = peer  | <f3> get_tree().connect(\"network_peer_connected\", self, \"connectedNewPlayer\")  | <f4> get_tree().connect(\"network_peer_disconnected\", self, \"disconnectedPlayer\")  | <f5> connectionType = ConnectionTypes.CLIENT_SERVER  | <f6> listConnections[1] = playerName  | <f7> serverName = playerName + \"\'s Server\"  | <f8> TransitionHandler.enterLobby()  | <f9> var gameScene: Node = TransitionHandler.gameScene  | <f10> gameScene.addCharacter(1) "
+                shape="record"
+            ]
+            server_connections_createDedicated [
+                label="<begin>createDedicated | <f0> var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()  | <f1> peer.create_server(portNumber, MAX_PLAYERS)  | <f2> get_tree().network_peer = peer  | <f3> get_tree().connect(\"network_peer_connected\", self, \"connectedNewPlayer\")  | <f4> get_tree().connect(\"network_peer_disconnected\", self, \"disconnectedPlayer\")  | <f5> connectionType = ConnectionTypes.DEDICATED_SERVER  | <f6> serverName = srvName  | <f7> TransitionHandler.enterLobby() "
+                shape="record"
+            ]
+            server_connections_receiveNewPlayerData [
+                label="<begin>receiveNewPlayerData | <f0> var senderId: int = get_tree().get_rpc_sender_id()  | <f1> listConnections[senderId] = newPlayerName  | <f2> rpc_id(senderId, \"setServerName\", serverName)  | <f3> rpc_id(senderId, \"receiveBulkPlayerData\", listConnections)  | <f4> rpc(\"receivePlayerData\", senderId, newPlayerName)  | <f5> var gameScene: Node = TransitionHandler.gameScene  | <f6> gameScene.addCharacter(senderId) "
+                shape="record"
+            ]
+            server_connections_connectedNewPlayer [
+                label="<begin>connectedNewPlayer | <f0> pass "
+                shape="record"
+            ]
+            server_connections_disconnectedPlayer [
+                label="<begin>disconnectedPlayer"
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_resources {
+            label="resources.gd"; labeljust="l";
+            server_resources_list [
+                label="<begin>list | <f0> var resources: Dictionary = \{\}  | {<f1> Iterate over each folder specified, by their namespace (key)  | <f2> List files in each folder  | <f3> Add each file to the output dictionary } | <f4> Return the dictionary of namespaced resources "
+                shape="record"
+            ]
+            server_resources__listFilesInDirectory [
+                label="<begin>_listFilesInDirectory | <f0> Defunes the array to be returned  | <f1> Makes a new directory object  | <f2> Opens the directory given in \"path\"  | <f3> List files in the directory from the beginning  | {<f4> while true:  | <f5> Gets the next file in the list  | {<f6> If the file is \"\", means the end of the directory has been found  | <f7> Stops the loop after the end of the directory has been found } | {<f8> else:  | {<f9> Iterates over each specified file extension  | {<f10> Checks if the file has the extension  | <f11> If it does, add it to the files array }}}} | <f12> Return the files array "
+                shape="record"
+            ]
+            server_resources__filesToDictionary [
+                label="<begin>_filesToDictionary | <f0> Defines the dictionary to output the files  | <f1> Defines the resource string  | {<f2> for file in files:  | {<f3> Iterates over each specified file extension  | {<f4> Checks if the file has the extension  | <f5> If it does, remove the extension, and set this as \"resource\" }} | <f6> Format the resource string for use in game  | <f7> Create the full file path to the resource  | <f8> Set the path in the resources dictionary } | <f9> Return the output dictionary "
+                shape="record"
+            ]
+            server_resources__formatString [
+                label="<begin>_formatString | <f0> Create a new RegEx object  | <f1> Select any special characters  | {<f2> Iterate over the instances of the regex in the input string  | <f3> Replace all special characters with underscores } | <f4> Return the string (capitalize it later if it is to be used in game) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_characters {
+            label="characters.gd"; labeljust="l";
+            server_characters_createCharacter [
+                label="<begin>createCharacter | <f0> var characterNode: Node = _createCharacterNode(networkId)  | <f1> var characterResource: CharacterResource = _createCharacterResource(networkId)  | <f2> characterNode.setCharacterResource(characterResource)  | <f3> characterResource.setCharacterNode(characterNode)  | <f4> _registerCharacterNode(networkId, characterNode)  | <f5> _registerCharacterResource(networkId, characterResource)  | <f6> return characterResource "
+                shape="record"
+            ]
+            server_characters_getCharacterNode [
+                label="<begin>getCharacterNode | {<f0> if there is no character node corresponding to this network id  | <f1> if running in release mode, return null } | <f2> return _characterNodes[id] "
+                shape="record"
+            ]
+            server_characters_getCharacterResource [
+                label="<begin>getCharacterResource | {<f0> if there is no character node corresponding to this network id  | <f1> if running in release mode, return null } | <f2> return _characterResources[id] "
+                shape="record"
+            ]
+            server_characters_getMyCharacterNode [
+                label="<begin>getMyCharacterNode | <f0> return _characterNodes[get_tree().get_network_unique_id()] "
+                shape="record"
+            ]
+            server_characters_getMyCharacterResource [
+                label="<begin>getMyCharacterResource | <f0> return _characterResources[get_tree().get_network_unique_id()] "
+                shape="record"
+            ]
+            server_characters_getCharacterNodes [
+                label="<begin>getCharacterNodes | <f0> return _characterNodes "
+                shape="record"
+            ]
+            server_characters_getCharacterResources [
+                label="<begin>getCharacterResources | <f0> return _characterResources "
+                shape="record"
+            ]
+            server_characters__createCharacterNode [
+                label="<begin>_createCharacterNode | <f0> var characterNode: Node = characterScene.instance()  | <f1> set its network id  | <f2> here is where we would set its player name, but that is not implemented yet "
+                shape="record"
+            ]
+            server_characters__createCharacterResource [
+                label="<begin>_createCharacterResource | <f0> var characterResource: CharacterResource = CharacterResource.new()  | <f1> set its network id  | <f2> here is where we would set its player name, but that is not implemented yet "
+                shape="record"
+            ]
+            server_characters__registerCharacterNode [
+                label="<begin>_registerCharacterNode | {<f0> if there is already a character node for this network id } | <f1> _characterNodes[id] = characterNode "
+                shape="record"
+            ]
+            server_characters__registerCharacterResource [
+                label="<begin>_registerCharacterResource | {<f0> if there is already a character node for this network id } | <f1> _characterResources[id] = characterResource "
+                shape="record"
+            ]
+            server_characters__process [
+                label="<begin>_process | <f0> _timeSincePositionSync += delta  | {<f1> if _timeSincePositionSync \< 1.0 / _positionSyncsPerSecond:  | <f2> return } | <f3> _timeSincePositionSync = 0.0  | {<f4> if Connections.isClientServer() or Connections.isDedicatedServer():  | <f5> var positions: Dictionary = \{\}  | {<f6> for characterId in _characterResources:  | <f7> positions[characterId] = _characterResources[characterId].getPosition() } | <f8> rpc(\"_updateAllCharacterPositions\", positions) } | {<f9> elif Connections.isClient():  | {<f10> if not get_tree().get_network_unique_id() in _characterResources:  | <f11> return } | <f12> _sendMyCharacterPosToServer() }"
+                shape="record"
+            ]
+            server_characters__updateAllCharacterPositions [
+                label="<begin>_updateAllCharacterPositions | {<f0> for characterId in positions:  | {<f1> if this position is for this client\'s character  | <f2> don\'t update its position } | <f3> getCharacterResource(characterId).setPosition(positions[characterId]) }"
+                shape="record"
+            ]
+            server_characters__receiveCharacterPosFromClient [
+                label="<begin>_receiveCharacterPosFromClient | <f0> var sender: int = get_tree().get_rpc_sender_id()  | <f1> _updateCharacterPosition(sender, newPos) "
+                shape="record"
+            ]
+            server_characters__updateCharacterPosition [
+                label="<begin>_updateCharacterPosition | {<f0> if this position is for this client\'s character  | <f1> don\'t update its position } | <f2> getCharacterResource(networkId).setPosition(characterPos) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_mainmenu {
+            label="mainmenu.gd"; labeljust="l";
+            server_mainmenu__ready [
+                label="<begin>_ready | <f0> menu = MenuType.MAIN  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            server_mainmenu__input [
+                label="<begin>_input | {<f0> if event.is_action_pressed(\"ui_accept\"):  | <f1> joinEvent(menu) }"
+                shape="record"
+            ]
+            server_mainmenu__on_Back_pressed [
+                label="<begin>_on_Back_pressed | <f0> menu = MenuType.MAIN  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            server_mainmenu__on_GameJoinButton_pressed [
+                label="<begin>_on_GameJoinButton_pressed | <f0> menu = MenuType.JOIN  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            server_mainmenu__on_GameCreateButton_pressed [
+                label="<begin>_on_GameCreateButton_pressed | <f0> menu = MenuType.CREATE  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            server_mainmenu__on_ServerStartButton_pressed [
+                label="<begin>_on_ServerStartButton_pressed | <f0> menu = MenuType.SERVER  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            server_mainmenu__on_AppQuitButton_pressed [
+                label="<begin>_on_AppQuitButton_pressed | <f0> get_tree().quit() "
+                shape="record"
+            ]
+            server_mainmenu_setVisibleMenu [
+                label="<begin>setVisibleMenu | <f0> hideMenus()  | {<f1> match menuType:  | <f2> MenuType.MAIN: mainMenu.visible = true  | <f3> MenuType.JOIN: joinMenu.visible = true  | <f4> MenuType.CREATE: createMenu.visible = true  | <f5> MenuType.SERVER: serverMenu.visible = true }"
+                shape="record"
+            ]
+            server_mainmenu_hideMenus [
+                label="<begin>hideMenus | <f0> mainMenu.visible = false  | <f1> joinMenu.visible = false  | <f2> createMenu.visible = false  | <f3> serverMenu.visible = false "
+                shape="record"
+            ]
+            server_mainmenu_joinGame [
+                label="<begin>joinGame | <f0> var nameField: LineEdit = $Join/Name  | <f1> var serverField: LineEdit = $Join/Address  | <f2> var port: int = 46690  | <f3> var host: String = serverField.text  | <f4> var playerName: String = nameField.text  | <f5> var cut_pos: int = host.find(\":\")  | {<f6> if cut_pos != -1:  | <f7> port = int(host.right(cut_pos))  | <f8> host = host.left(cut_pos) } | {<f9> if host == \"\" or playerName == \"\":  | <f10> return } | <f11> Connections.joinGame(host, port, playerName) "
+                shape="record"
+            ]
+            server_mainmenu_createGame [
+                label="<begin>createGame | <f0> var nameField: LineEdit = $Create/Name  | <f1> var portField: LineEdit = $Create/Port  | <f2> var port: int = int(portField.text)  | <f3> var name: String = nameField.text  | {<f4> if name == \"\":  | <f5> return } | <f6> Connections.createGame(port, name) "
+                shape="record"
+            ]
+            server_mainmenu_createDedicated [
+                label="<begin>createDedicated | <f0> var nameField: LineEdit = $Server/Name  | <f1> var portField: LineEdit = $Server/Port  | <f2> var port: int = int(portField.text)  | <f3> var name: String = nameField.text  | {<f4> if name == \"\":  | <f5> return } | <f6> Connections.createDedicated(port, name) "
+                shape="record"
+            ]
+            server_mainmenu_joinEvent [
+                label="<begin>joinEvent | {<f0> match menu:  | {<f1> MenuType.MAIN:  | <f2> menu = MenuType.JOIN  | <f3> setVisibleMenu(menu) } | <f4> MenuType.JOIN: joinGame()  | <f5> MenuType.CREATE: createGame()  | <f6> MenuType.SERVER: createDedicated() }"
+                shape="record"
+            ]
+            server_mainmenu__on_Join_pressed [
+                label="<begin>_on_Join_pressed | <f0> joinEvent(menu) "
+                shape="record"
+            ]
+            server_mainmenu__on_Create_pressed [
+                label="<begin>_on_Create_pressed | <f0> joinEvent(menu) "
+                shape="record"
+            ]
+            server_mainmenu__on_Server_pressed [
+                label="<begin>_on_Server_pressed | <f0> joinEvent(menu) "
+                shape="record"
+            ]
+        }
+
+    }
+    subgraph cluster_client2 {
+        label="Client 2"; labeljust="l";
+        subgraph cluster_client2_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            client2_character_resource_spawn [
+                label="<begin>spawn"
+                shape="record"
+            ]
+            client2_character_resource_kill [
+                label="<begin>kill"
+                shape="record"
+            ]
+            client2_character_resource_reset [
+                label="<begin>reset"
+                shape="record"
+            ]
+            client2_character_resource_getCharacterNode [
+                label="<begin>getCharacterNode | <f0> return _characterNode "
+                shape="record"
+            ]
+            client2_character_resource_setCharacterNode [
+                label="<begin>setCharacterNode | {<f0> if there is already a character node assigned to this resource } | <f1> _characterNode = newCharacterNode "
+                shape="record"
+            ]
+            client2_character_resource_getRole [
+                label="<begin>getRole | <f0> return _role "
+                shape="record"
+            ]
+            client2_character_resource_setRole [
+                label="<begin>setRole | <f0> _role = newRole "
+                shape="record"
+            ]
+            client2_character_resource_getTasks [
+                label="<begin>getTasks | <f0> return _tasks "
+                shape="record"
+            ]
+            client2_character_resource_setTasks [
+                label="<begin>setTasks | <f0> _tasks = newTasks "
+                shape="record"
+            ]
+            client2_character_resource_getOutfit [
+                label="<begin>getOutfit | <f0> return _outfit "
+                shape="record"
+            ]
+            client2_character_resource_setOutfit [
+                label="<begin>setOutfit | <f0> _outfit = newOutfit "
+                shape="record"
+            ]
+            client2_character_resource_getSpeed [
+                label="<begin>getSpeed | <f0> return _speed "
+                shape="record"
+            ]
+            client2_character_resource_setSpeed [
+                label="<begin>setSpeed | <f0> _speed = value "
+                shape="record"
+            ]
+            client2_character_resource_getLookDirection [
+                label="<begin>getLookDirection | <f0> return _characterNode.getLookDirection() "
+                shape="record"
+            ]
+            client2_character_resource_setLookDirection [
+                label="<begin>setLookDirection | <f0> _characterNode.setLookDirection(newLookDirection) "
+                shape="record"
+            ]
+            client2_character_resource_getPosition [
+                label="<begin>getPosition | <f0> return _characterNode.getPosition() "
+                shape="record"
+            ]
+            client2_character_resource_setPosition [
+                label="<begin>setPosition | <f0> _characterNode.setPosition(newPos) "
+                shape="record"
+            ]
+            client2_character_resource_getGlobalPosition [
+                label="<begin>getGlobalPosition | <f0> return _characterNode.getGlobalPosition() "
+                shape="record"
+            ]
+            client2_character_resource_setGlobalPosition [
+                label="<begin>setGlobalPosition | <f0> _characterNode.setPosition(newPos) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_game {
+            label="game.gd"; labeljust="l";
+            client2_game_loadMap [
+                label="<begin>loadMap | {<f0> for child in mapNode.get_children():  | <f1> child.queue_free() } | {<f2> for child in characterNode.get_children():  | <f3> child.queue_free() } | <f4> var mapToLoad: Node = ResourceLoader.load(mapPath).instance()  | <f5> mapNode.add_child(mapToLoad) "
+                shape="record"
+            ]
+            client2_game_addCharacter [
+                label="<begin>addCharacter | <f0> var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)  | <f1> var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()  | <f2> var characterPosition: Vector2  | <f3> characterPosition.x = rng.randi_range(100, 500)  | <f4> characterPosition.y = rng.randi_range(100, 500)  | <f5> characterNode.add_child(newCharacter)  | <f6> newCharacterResource.setPosition(characterPosition) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_character {
+            label="character.gd"; labeljust="l";
+            client2_character_spawn [
+                label="<begin>spawn"
+                shape="record"
+            ]
+            client2_character_kill [
+                label="<begin>kill"
+                shape="record"
+            ]
+            client2_character_reset [
+                label="<begin>reset"
+                shape="record"
+            ]
+            client2_character_getCharacterResource [
+                label="<begin>getCharacterResource | <f0> return _characterResource "
+                shape="record"
+            ]
+            client2_character_setCharacterResource [
+                label="<begin>setCharacterResource | {<f0> if there is already a character node assigned to this resource } | <f1> _characterResource = newCharacterResource "
+                shape="record"
+            ]
+            client2_character_getRole [
+                label="<begin>getRole | <f0> return _characterResource.getRole() "
+                shape="record"
+            ]
+            client2_character_getTasks [
+                label="<begin>getTasks | <f0> return _characterResource.getTasks() "
+                shape="record"
+            ]
+            client2_character_getOutfit [
+                label="<begin>getOutfit | <f0> return _characterResource.getOutfit() "
+                shape="record"
+            ]
+            client2_character_getPosition [
+                label="<begin>getPosition | <f0> return position "
+                shape="record"
+            ]
+            client2_character_setPosition [
+                label="<begin>setPosition | {<f0> if newPos != position:  | <f1> setLookDirection(_getLookDirFromVec(newPos - position)) } | <f2> position = newPos "
+                shape="record"
+            ]
+            client2_character_getGlobalPosition [
+                label="<begin>getGlobalPosition | <f0> return global_position "
+                shape="record"
+            ]
+            client2_character_setGlobalPosition [
+                label="<begin>setGlobalPosition | <f0> setLookDirection(_getLookDirFromVec(newPos - global_position))  | <f1> global_position = newPos "
+                shape="record"
+            ]
+            client2_character_getMovementVector [
+                label="<begin>getMovementVector | <f0> var vector: Vector2 = Vector2()  | <f1> get the movement vector using the move_left, move_right, move_up,\nand move_down keys found in the input map  | {<f2> if normalized:  | <f3> vector = vector.normalized() } | <f4> return vector "
+                shape="record"
+            ]
+            client2_character_getLookDirection [
+                label="<begin>getLookDirection | <f0> return lookDirection "
+                shape="record"
+            ]
+            client2_character_setLookDirection [
+                label="<begin>setLookDirection | <f0> lookDirection = newLookDirection  | <f1> very placeholder code just to display the look direction by\nchanging where the placeholder triangle is pointing\nthis should eventually be moved into a separate script that handles\nanimations and stuff\nthe angle to set the rotation of the triangle to  | {<f2> match lookDirection:  | {<f3> LookDirections.LEFT:  | <f4> angle = 270 } | {<f5> LookDirections.RIGHT:  | <f6> angle = 90 } | {<f7> LookDirections.UP:  | <f8> angle = 0 } | {<f9> LookDirections.DOWN:  | <f10> angle = 180 }} | <f11> $Polygon2D.rotation_degrees = angle "
+                shape="record"
+            ]
+            client2_character__process [
+                label="<begin>_process | <f0> var amountMoved: Vector2  | {<f1> if networkId == get_tree().get_network_unique_id():  | <f2> amountMoved = _move(_delta) }"
+                shape="record"
+            ]
+            client2_character__move [
+                label="<begin>_move | <f0> var movementVec: Vector2 = getMovementVector(false)  | <f1> set lookDirection to match the movementVec\nusing the look direction setter here to make it easier to react to\na changing look direction  | <f2> multiply the movement vec by speed  | <f3> move_and_slide() returns the actual motion that happened, store it\nin amountMoved  | <f4> return the actual movement that happened "
+                shape="record"
+            ]
+            client2_character__getLookDirFromVec [
+                label="<begin>_getLookDirFromVec | {<f0> this prioritizes looking left and right over up and down (like in\namong us and other games)  | <f1> return lookDirection } | <f2> var newlookDirection: int = LookDirections.RIGHT  | {<f3> if vec.y \< 0:  | <f4> newlookDirection = LookDirections.UP } | {<f5> if vec.y \> 0:  | <f6> newlookDirection = LookDirections.DOWN } | {<f7> if vec.x \< 0:  | <f8> newlookDirection = LookDirections.LEFT } | {<f9> if vec.x \> 0:  | <f10> newlookDirection = LookDirections.RIGHT } | <f11> return newlookDirection "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_transition_handler {
+            label="transition_handler.gd"; labeljust="l";
+            client2_transition_handler__ready [
+                label="<begin>_ready | <f0> var root: Node = get_tree().get_root()  | <f1> var game: Resource = ResourceLoader.load(\"res://game/game.tscn\")  | <f2> mainMenuScene = root.get_child(root.get_child_count() - 1)  | <f3> currentScene = mainMenuScene  | <f4> gameScene = game.instance() "
+                shape="record"
+            ]
+            client2_transition_handler_enterLobby [
+                label="<begin>enterLobby | <f0> var root: Node = get_tree().get_root()  | <f1> root.remove_child(currentScene)  | <f2> root.add_child(gameScene)  | <f3> currentScene = gameScene  | <f4> get_tree().set_current_scene(currentScene)  | <f5> gameScene.loadMap(\"res://game/maps/lobby/lobby.tscn\") "
+                shape="record"
+            ]
+            client2_transition_handler_startGame [
+                label="<begin>startGame | <f0> gameScene.loadMap(\"res://game/maps/chemlab/chemlab.tscn\") "
+                shape="record"
+            ]
+            client2_transition_handler_returnLobby [
+                label="<begin>returnLobby | <f0> gameScene.loadMap(\"res://game/maps/lobby/lobby.tscn\") "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_connections {
+            label="connections.gd"; labeljust="l";
+            client2_connections__ready [
+                label="<begin>_ready | <f0> get_tree().connect(\"connected_to_server\", self, \"connectedOK\")  | <f1> get_tree().connect(\"connection_failed\", self, \"connectedFail\")  | <f2> get_tree().connect(\"server_disconnected\", self, \"disconnectedFromServer\") "
+                shape="record"
+            ]
+            client2_connections_toss [
+                label="<begin>toss | <f0> pass "
+                shape="record"
+            ]
+            client2_connections_getConnectionType [
+                label="<begin>getConnectionType | <f0> return connectionType "
+                shape="record"
+            ]
+            client2_connections_getMyName [
+                label="<begin>getMyName | <f0> return myName "
+                shape="record"
+            ]
+            client2_connections_getServerName [
+                label="<begin>getServerName | <f0> return serverName "
+                shape="record"
+            ]
+            client2_connections_isServer [
+                label="<begin>isServer | <f0> return isDedicatedServer() or isClientServer() "
+                shape="record"
+            ]
+            client2_connections_isLocal [
+                label="<begin>isLocal | <f0> return isConnectionType(ConnectionTypes.LOCAL) "
+                shape="record"
+            ]
+            client2_connections_isDedicatedServer [
+                label="<begin>isDedicatedServer | <f0> return isConnectionType(ConnectionTypes.DEDICATED_SERVER) "
+                shape="record"
+            ]
+            client2_connections_isClientServer [
+                label="<begin>isClientServer | <f0> return isConnectionType(ConnectionTypes.CLIENT_SERVER) "
+                shape="record"
+            ]
+            client2_connections_isClient [
+                label="<begin>isClient | <f0> return isConnectionType(ConnectionTypes.CLIENT) "
+                shape="record"
+            ]
+            client2_connections_isConnectionType [
+                label="<begin>isConnectionType | <f0> return connectionType == type "
+                shape="record"
+            ]
+            client2_connections_joinGame [
+                label="<begin>joinGame | <f0> var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()  | <f1> peer.create_client(serverName, portNumber)  | <f2> get_tree().network_peer = peer  | <f3> var id: int = get_tree().get_network_peer().get_unique_id()  | <f4> connectionType = ConnectionTypes.CLIENT  | <f5> myName = playerName  | <f6> listConnections[id] = myName "
+                shape="record"
+            ]
+            client2_connections_connectedOK [
+                label="<begin>connectedOK | <f0> rpc_id(1, \"receiveNewPlayerData\", myName)  | <f1> TransitionHandler.enterLobby() "
+                shape="record"
+            ]
+            client2_connections_connectedFail [
+                label="<begin>connectedFail"
+                shape="record"
+            ]
+            client2_connections_disconnectedFromServer [
+                label="<begin>disconnectedFromServer"
+                shape="record"
+            ]
+            client2_connections_receiveBulkPlayerData [
+                label="<begin>receiveBulkPlayerData | <f0> listConnections = connections  | <f1> var gameScene: Node = TransitionHandler.gameScene  | {<f2> for player in listConnections:  | <f3> gameScene.addCharacter(player) }"
+                shape="record"
+            ]
+            client2_connections_setServerName [
+                label="<begin>setServerName | <f0> serverName = serverNewName "
+                shape="record"
+            ]
+            client2_connections_receivePlayerData [
+                label="<begin>receivePlayerData | {<f0> if id != get_tree().get_network_unique_id():  | <f1> listConnections[id] = name  | <f2> var gameScene: Node = TransitionHandler.gameScene  | <f3> gameScene.addCharacter(id) }"
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_resources {
+            label="resources.gd"; labeljust="l";
+            client2_resources_list [
+                label="<begin>list | <f0> var resources: Dictionary = \{\}  | {<f1> Iterate over each folder specified, by their namespace (key)  | <f2> List files in each folder  | <f3> Add each file to the output dictionary } | <f4> Return the dictionary of namespaced resources "
+                shape="record"
+            ]
+            client2_resources__listFilesInDirectory [
+                label="<begin>_listFilesInDirectory | <f0> Defunes the array to be returned  | <f1> Makes a new directory object  | <f2> Opens the directory given in \"path\"  | <f3> List files in the directory from the beginning  | {<f4> while true:  | <f5> Gets the next file in the list  | {<f6> If the file is \"\", means the end of the directory has been found  | <f7> Stops the loop after the end of the directory has been found } | {<f8> else:  | {<f9> Iterates over each specified file extension  | {<f10> Checks if the file has the extension  | <f11> If it does, add it to the files array }}}} | <f12> Return the files array "
+                shape="record"
+            ]
+            client2_resources__filesToDictionary [
+                label="<begin>_filesToDictionary | <f0> Defines the dictionary to output the files  | <f1> Defines the resource string  | {<f2> for file in files:  | {<f3> Iterates over each specified file extension  | {<f4> Checks if the file has the extension  | <f5> If it does, remove the extension, and set this as \"resource\" }} | <f6> Format the resource string for use in game  | <f7> Create the full file path to the resource  | <f8> Set the path in the resources dictionary } | <f9> Return the output dictionary "
+                shape="record"
+            ]
+            client2_resources__formatString [
+                label="<begin>_formatString | <f0> Create a new RegEx object  | <f1> Select any special characters  | {<f2> Iterate over the instances of the regex in the input string  | <f3> Replace all special characters with underscores } | <f4> Return the string (capitalize it later if it is to be used in game) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_characters {
+            label="characters.gd"; labeljust="l";
+            client2_characters_createCharacter [
+                label="<begin>createCharacter | <f0> var characterNode: Node = _createCharacterNode(networkId)  | <f1> var characterResource: CharacterResource = _createCharacterResource(networkId)  | <f2> characterNode.setCharacterResource(characterResource)  | <f3> characterResource.setCharacterNode(characterNode)  | <f4> _registerCharacterNode(networkId, characterNode)  | <f5> _registerCharacterResource(networkId, characterResource)  | <f6> return characterResource "
+                shape="record"
+            ]
+            client2_characters_getCharacterNode [
+                label="<begin>getCharacterNode | {<f0> if there is no character node corresponding to this network id  | <f1> if running in release mode, return null } | <f2> return _characterNodes[id] "
+                shape="record"
+            ]
+            client2_characters_getCharacterResource [
+                label="<begin>getCharacterResource | {<f0> if there is no character node corresponding to this network id  | <f1> if running in release mode, return null } | <f2> return _characterResources[id] "
+                shape="record"
+            ]
+            client2_characters_getMyCharacterNode [
+                label="<begin>getMyCharacterNode | <f0> return _characterNodes[get_tree().get_network_unique_id()] "
+                shape="record"
+            ]
+            client2_characters_getMyCharacterResource [
+                label="<begin>getMyCharacterResource | <f0> return _characterResources[get_tree().get_network_unique_id()] "
+                shape="record"
+            ]
+            client2_characters_getCharacterNodes [
+                label="<begin>getCharacterNodes | <f0> return _characterNodes "
+                shape="record"
+            ]
+            client2_characters_getCharacterResources [
+                label="<begin>getCharacterResources | <f0> return _characterResources "
+                shape="record"
+            ]
+            client2_characters__createCharacterNode [
+                label="<begin>_createCharacterNode | <f0> var characterNode: Node = characterScene.instance()  | <f1> set its network id  | <f2> here is where we would set its player name, but that is not implemented yet "
+                shape="record"
+            ]
+            client2_characters__createCharacterResource [
+                label="<begin>_createCharacterResource | <f0> var characterResource: CharacterResource = CharacterResource.new()  | <f1> set its network id  | <f2> here is where we would set its player name, but that is not implemented yet "
+                shape="record"
+            ]
+            client2_characters__registerCharacterNode [
+                label="<begin>_registerCharacterNode | {<f0> if there is already a character node for this network id } | <f1> _characterNodes[id] = characterNode "
+                shape="record"
+            ]
+            client2_characters__registerCharacterResource [
+                label="<begin>_registerCharacterResource | {<f0> if there is already a character node for this network id } | <f1> _characterResources[id] = characterResource "
+                shape="record"
+            ]
+            client2_characters__process [
+                label="<begin>_process | <f0> _timeSincePositionSync += delta  | {<f1> if _timeSincePositionSync \< 1.0 / _positionSyncsPerSecond:  | <f2> return } | <f3> _timeSincePositionSync = 0.0  | {<f4> if Connections.isClientServer() or Connections.isDedicatedServer():  | <f5> var positions: Dictionary = \{\}  | {<f6> for characterId in _characterResources:  | <f7> positions[characterId] = _characterResources[characterId].getPosition() } | <f8> rpc(\"_updateAllCharacterPositions\", positions) } | {<f9> elif Connections.isClient():  | {<f10> if not get_tree().get_network_unique_id() in _characterResources:  | <f11> return } | <f12> _sendMyCharacterPosToServer() }"
+                shape="record"
+            ]
+            client2_characters__updateAllCharacterPositions [
+                label="<begin>_updateAllCharacterPositions | {<f0> for characterId in positions:  | {<f1> if this position is for this client\'s character  | <f2> don\'t update its position } | <f3> getCharacterResource(characterId).setPosition(positions[characterId]) }"
+                shape="record"
+            ]
+            client2_characters__sendMyCharacterPosToServer [
+                label="<begin>_sendMyCharacterPosToServer | <f0> var myPosition: Vector2 = getMyCharacterResource().getPosition()  | <f1> rpc_id(1, \"_receiveCharacterPosFromClient\", myPosition) "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_mainmenu {
+            label="mainmenu.gd"; labeljust="l";
+            client2_mainmenu__ready [
+                label="<begin>_ready | <f0> menu = MenuType.MAIN  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            client2_mainmenu__input [
+                label="<begin>_input | {<f0> if event.is_action_pressed(\"ui_accept\"):  | <f1> joinEvent(menu) }"
+                shape="record"
+            ]
+            client2_mainmenu__on_Back_pressed [
+                label="<begin>_on_Back_pressed | <f0> menu = MenuType.MAIN  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            client2_mainmenu__on_GameJoinButton_pressed [
+                label="<begin>_on_GameJoinButton_pressed | <f0> menu = MenuType.JOIN  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            client2_mainmenu__on_GameCreateButton_pressed [
+                label="<begin>_on_GameCreateButton_pressed | <f0> menu = MenuType.CREATE  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            client2_mainmenu__on_ServerStartButton_pressed [
+                label="<begin>_on_ServerStartButton_pressed | <f0> menu = MenuType.SERVER  | <f1> setVisibleMenu(menu) "
+                shape="record"
+            ]
+            client2_mainmenu__on_AppQuitButton_pressed [
+                label="<begin>_on_AppQuitButton_pressed | <f0> get_tree().quit() "
+                shape="record"
+            ]
+            client2_mainmenu_setVisibleMenu [
+                label="<begin>setVisibleMenu | <f0> hideMenus()  | {<f1> match menuType:  | <f2> MenuType.MAIN: mainMenu.visible = true  | <f3> MenuType.JOIN: joinMenu.visible = true  | <f4> MenuType.CREATE: createMenu.visible = true  | <f5> MenuType.SERVER: serverMenu.visible = true }"
+                shape="record"
+            ]
+            client2_mainmenu_hideMenus [
+                label="<begin>hideMenus | <f0> mainMenu.visible = false  | <f1> joinMenu.visible = false  | <f2> createMenu.visible = false  | <f3> serverMenu.visible = false "
+                shape="record"
+            ]
+            client2_mainmenu_joinGame [
+                label="<begin>joinGame | <f0> var nameField: LineEdit = $Join/Name  | <f1> var serverField: LineEdit = $Join/Address  | <f2> var port: int = 46690  | <f3> var host: String = serverField.text  | <f4> var playerName: String = nameField.text  | <f5> var cut_pos: int = host.find(\":\")  | {<f6> if cut_pos != -1:  | <f7> port = int(host.right(cut_pos))  | <f8> host = host.left(cut_pos) } | {<f9> if host == \"\" or playerName == \"\":  | <f10> return } | <f11> Connections.joinGame(host, port, playerName) "
+                shape="record"
+            ]
+            client2_mainmenu_createGame [
+                label="<begin>createGame | <f0> var nameField: LineEdit = $Create/Name  | <f1> var portField: LineEdit = $Create/Port  | <f2> var port: int = int(portField.text)  | <f3> var name: String = nameField.text  | {<f4> if name == \"\":  | <f5> return } | <f6> Connections.createGame(port, name) "
+                shape="record"
+            ]
+            client2_mainmenu_createDedicated [
+                label="<begin>createDedicated | <f0> var nameField: LineEdit = $Server/Name  | <f1> var portField: LineEdit = $Server/Port  | <f2> var port: int = int(portField.text)  | <f3> var name: String = nameField.text  | {<f4> if name == \"\":  | <f5> return } | <f6> Connections.createDedicated(port, name) "
+                shape="record"
+            ]
+            client2_mainmenu_joinEvent [
+                label="<begin>joinEvent | {<f0> match menu:  | {<f1> MenuType.MAIN:  | <f2> menu = MenuType.JOIN  | <f3> setVisibleMenu(menu) } | <f4> MenuType.JOIN: joinGame()  | <f5> MenuType.CREATE: createGame()  | <f6> MenuType.SERVER: createDedicated() }"
+                shape="record"
+            ]
+            client2_mainmenu__on_Join_pressed [
+                label="<begin>_on_Join_pressed | <f0> joinEvent(menu) "
+                shape="record"
+            ]
+            client2_mainmenu__on_Create_pressed [
+                label="<begin>_on_Create_pressed | <f0> joinEvent(menu) "
+                shape="record"
+            ]
+            client2_mainmenu__on_Server_pressed [
+                label="<begin>_on_Server_pressed | <f0> joinEvent(menu) "
+                shape="record"
+            ]
+        }
+
+    }
+
+}

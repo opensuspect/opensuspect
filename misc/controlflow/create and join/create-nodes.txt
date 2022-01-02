@@ -1,0 +1,14 @@
+server_mainmenu_joinEvent:f2 -> server_mainmenu_createGame:begin;
+server_mainmenu_createGame:f2 -> server_connections_createGame:begin;
+server_connections_createGame:f2 -> server_transition_handler_enterLobby:begin;
+server_transition_handler_enterLobby:f1 -> server_game_loadMap:begin;
+server_connections_createGame:f3 -> server_game_addCharacter:begin;
+server_game_addCharacter:f0 -> server_characters_createCharacter:begin;
+server_game_addCharacter:f1 -> server_character_resource_getCharacterNode:begin;
+server_game_addCharacter:f4 -> server_character_resource_setPosition:begin;
+server_characters_createCharacter:f0 -> server_characters__createCharacterNode:begin;
+server_characters_createCharacter:f0 -> server_characters__createCharacterResource:begin;
+server_characters_createCharacter:f1 -> server_character_setCharacterResource:begin;
+server_characters_createCharacter:f1 -> server_character_resource_setCharacterNode:begin;
+server_characters_createCharacter:f2 -> server_characters__registerCharacterNode:begin;
+server_characters_createCharacter:f2 -> server_characters__registerCharacterResource:begin;
