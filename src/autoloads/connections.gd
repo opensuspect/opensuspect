@@ -158,3 +158,5 @@ func connectedNewPlayer(id: int) -> void:
 func disconnectedPlayer(id: int) -> void:
 	assert(false, "Not implemented yet")
 
+func allowNewConnections(switch: bool) -> void:
+	get_tree().refuse_new_network_connections = not switch
