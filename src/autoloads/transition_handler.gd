@@ -25,8 +25,6 @@ func enterLobby() -> void:
 	gameScene.loadMap("res://game/maps/lobby/lobby.tscn")
 
 func startGame() -> void:
-	## Unload all characters
-	assert(false, "Not implemented yet")
 	## Load game map (laboratory)
 	gameScene.loadMap("res://game/maps/chemlab/chemlab.tscn")
 

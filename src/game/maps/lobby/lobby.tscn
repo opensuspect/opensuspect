@@ -5,3 +5,17 @@
 [node name="Polygon2D" type="Polygon2D" parent="."]
 color = Color( 0.121569, 0.4, 0.145098, 1 )
 polygon = PoolVector2Array( 500, 350, 500, 700, 1000, 700, 1000, 350 )
+
+[node name="SpawnPositions" type="Node2D" parent="."]
+
+[node name="1" type="Node2D" parent="SpawnPositions"]
+position = Vector2( 700, 300 )
+
+[node name="2" type="Node2D" parent="SpawnPositions"]
+position = Vector2( 900, 500 )
+
+[node name="3" type="Node2D" parent="SpawnPositions"]
+position = Vector2( 700, 700 )
+
+[node name="4" type="Node2D" parent="SpawnPositions"]
+position = Vector2( 500, 500 )
