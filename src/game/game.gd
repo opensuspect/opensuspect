@@ -5,6 +5,7 @@ var spawnCounter: int = 0 # A counter to take care of where characters spawn
 
 onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
+onready var gamestartButton: Button = $CanvasLayer/GameStart
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 func loadMap(mapPath: String) -> void:
@@ -38,8 +39,9 @@ func spawnAllCharacters() -> void:
 	## Reset spawn position counter
 	spawnCounter = 0
 	## Loop through all characters
-	for character in Characters.getCharacterResources():
-		spawnCharacer(character) ## Set spawn position
+	var allChars: Dictionary = Characters.getCharacterResources()
+	for character in allChars:
+		spawnCharacer(allChars[character]) ## Set spawn position
 
 func spawnCharacer(character: CharacterResource) -> void:
 	## Set character position
@@ -50,7 +52,18 @@ func spawnCharacer(character: CharacterResource) -> void:
 		spawnCounter = 0
 
 func showStartButton(buttonShow: bool = true) -> void:
-	$CanvasLayer/GameStart.visible = buttonShow
+	## Switch visibility of game start button
+	gamestartButton.visible = buttonShow
 
 func _on_GameStart_pressed() -> void:
-	assert(false, "Not implemented yet")
+	if not Connections.isServer():
+		assert(false, "Unreachable")
+	## Change the map
+	TransitionHandler.changeMap()
+	## Chanes the button text
+	if TransitionHandler.getCurrentState() == TransitionHandler.States.LOBBY:
+		gamestartButton.text = "Start game"
+	elif TransitionHandler.getCurrentState() == TransitionHandler.States.MAP:
+		gamestartButton.text = "Back to lobby"
+	else:
+		assert(false, "Unreachable")
