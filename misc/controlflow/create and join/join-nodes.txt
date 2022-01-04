@@ -10,7 +10,8 @@ server_connections_receiveNewPlayerData:f3 -> client2_connections_receivePlayerD
 server_connections_receiveNewPlayerData:f4 -> server_game_addCharacter:begin;
 server_game_addCharacter:f0 -> server_characters_createCharacter:begin;
 server_game_addCharacter:f1 -> server_character_resource_getCharacterNode:begin;
-server_game_addCharacter:f4 -> server_character_resource_setPosition:begin;
+server_game_addCharacter:f2 -> server_game_spawnCharacer:begin;
+server_game_spawnCharacer:f0 -> server_character_resource_setPosition:begin;
 server_characters_createCharacter:f0 -> server_characters__createCharacterNode:begin;
 server_characters_createCharacter:f0 -> server_characters__createCharacterResource:begin;
 server_characters_createCharacter:f1 -> server_character_setCharacterResource:begin;
@@ -21,7 +22,8 @@ server_characters_createCharacter:f2 -> server_characters__registerCharacterReso
 client1_connections_receiveBulkPlayerData:f2 -> client1_game_addCharacter:begin;
 client1_game_addCharacter:f0 -> client1_characters_createCharacter:begin;
 client1_game_addCharacter:f1 -> client1_character_resource_getCharacterNode:begin;
-client1_game_addCharacter:f4 -> client1_character_resource_setPosition:begin;
+client1_game_addCharacter:f2 -> client1_game_spawnCharacer:begin;
+client1_game_spawnCharacer:f0 -> client1_character_resource_setPosition:begin;
 client1_characters_createCharacter:f0 -> client1_characters__createCharacterNode:begin;
 client1_characters_createCharacter:f0 -> client1_characters__createCharacterResource:begin;
 client1_characters_createCharacter:f1 -> client1_character_setCharacterResource:begin;
@@ -29,10 +31,11 @@ client1_characters_createCharacter:f1 -> client1_character_resource_setCharacter
 client1_characters_createCharacter:f2 -> client1_characters__registerCharacterNode:begin;
 client1_characters_createCharacter:f2 -> client1_characters__registerCharacterResource:begin;
 # other client adds new character
-client2_connections_receiveBulkPlayerData:f2 -> client2_game_addCharacter:begin;
+client2_connections_receivePlayerData:f2 -> client2_game_addCharacter:begin;
 client2_game_addCharacter:f0 -> client2_characters_createCharacter:begin;
 client2_game_addCharacter:f1 -> client2_character_resource_getCharacterNode:begin;
-client2_game_addCharacter:f4 -> client2_character_resource_setPosition:begin;
+client2_game_addCharacter:f2 -> client2_game_spawnCharacer:begin;
+client2_game_spawnCharacer:f0 -> client2_character_resource_setPosition:begin;
 client2_characters_createCharacter:f0 -> client2_characters__createCharacterNode:begin;
 client2_characters_createCharacter:f0 -> client2_characters__createCharacterResource:begin;
 client2_characters_createCharacter:f1 -> client2_character_setCharacterResource:begin;
