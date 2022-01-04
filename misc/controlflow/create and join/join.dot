@@ -20,11 +20,15 @@ digraph controlflow {
         subgraph cluster_client1_game {
             label="game.gd"; labeljust="l";
             client1_game_loadMap [
-                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree "
+                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points "
                 shape="record"
             ]
             client1_game_addCharacter [
-                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Randomize position  | <f3> Add node to scene  | <f4> Apply position "
+                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
+                shape="record"
+            ]
+            client1_game_spawnCharacer [
+                label="<begin>spawnCharacer | <f0> Set character position  | <f1> Step spawn position counter "
                 shape="record"
             ]
         }
@@ -117,7 +121,11 @@ digraph controlflow {
         subgraph cluster_server_game {
             label="game.gd"; labeljust="l";
             server_game_addCharacter [
-                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Randomize position  | <f3> Add node to scene  | <f4> Apply position "
+                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
+                shape="record"
+            ]
+            server_game_spawnCharacer [
+                label="<begin>spawnCharacer | <f0> Set character position  | <f1> Step spawn position counter "
                 shape="record"
             ]
         }
@@ -180,7 +188,11 @@ digraph controlflow {
         subgraph cluster_client2_game {
             label="game.gd"; labeljust="l";
             client2_game_addCharacter [
-                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Randomize position  | <f3> Add node to scene  | <f4> Apply position "
+                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
+                shape="record"
+            ]
+            client2_game_spawnCharacer [
+                label="<begin>spawnCharacer | <f0> Set character position  | <f1> Step spawn position counter "
                 shape="record"
             ]
         }
@@ -193,10 +205,6 @@ digraph controlflow {
         }
         subgraph cluster_client2_connections {
             label="connections.gd"; labeljust="l";
-            client2_connections_receiveBulkPlayerData [
-                label="<begin>receiveBulkPlayerData | <f0> Save all received data  | {<f1> For all players  | <f2> Create a character }"
-                shape="record"
-            ]
             client2_connections_receivePlayerData [
                 label="<begin>receivePlayerData | {<f0> If the data is not own data  | <f1> Save the data  | <f2> Create a character }"
                 shape="record"
@@ -240,7 +248,8 @@ digraph controlflow {
     server_connections_receiveNewPlayerData:f4 -> server_game_addCharacter:begin;
     server_game_addCharacter:f0 -> server_characters_createCharacter:begin;
     server_game_addCharacter:f1 -> server_character_resource_getCharacterNode:begin;
-    server_game_addCharacter:f4 -> server_character_resource_setPosition:begin;
+    server_game_addCharacter:f2 -> server_game_spawnCharacer:begin;
+    server_game_spawnCharacer:f0 -> server_character_resource_setPosition:begin;
     server_characters_createCharacter:f0 -> server_characters__createCharacterNode:begin;
     server_characters_createCharacter:f0 -> server_characters__createCharacterResource:begin;
     server_characters_createCharacter:f1 -> server_character_setCharacterResource:begin;
@@ -251,7 +260,8 @@ digraph controlflow {
     client1_connections_receiveBulkPlayerData:f2 -> client1_game_addCharacter:begin;
     client1_game_addCharacter:f0 -> client1_characters_createCharacter:begin;
     client1_game_addCharacter:f1 -> client1_character_resource_getCharacterNode:begin;
-    client1_game_addCharacter:f4 -> client1_character_resource_setPosition:begin;
+    client1_game_addCharacter:f2 -> client1_game_spawnCharacer:begin;
+    client1_game_spawnCharacer:f0 -> client1_character_resource_setPosition:begin;
     client1_characters_createCharacter:f0 -> client1_characters__createCharacterNode:begin;
     client1_characters_createCharacter:f0 -> client1_characters__createCharacterResource:begin;
     client1_characters_createCharacter:f1 -> client1_character_setCharacterResource:begin;
@@ -259,10 +269,11 @@ digraph controlflow {
     client1_characters_createCharacter:f2 -> client1_characters__registerCharacterNode:begin;
     client1_characters_createCharacter:f2 -> client1_characters__registerCharacterResource:begin;
     # other client adds new character
-    client2_connections_receiveBulkPlayerData:f2 -> client2_game_addCharacter:begin;
+    client2_connections_receivePlayerData:f2 -> client2_game_addCharacter:begin;
     client2_game_addCharacter:f0 -> client2_characters_createCharacter:begin;
     client2_game_addCharacter:f1 -> client2_character_resource_getCharacterNode:begin;
-    client2_game_addCharacter:f4 -> client2_character_resource_setPosition:begin;
+    client2_game_addCharacter:f2 -> client2_game_spawnCharacer:begin;
+    client2_game_spawnCharacer:f0 -> client2_character_resource_setPosition:begin;
     client2_characters_createCharacter:f0 -> client2_characters__createCharacterNode:begin;
     client2_characters_createCharacter:f0 -> client2_characters__createCharacterResource:begin;
     client2_characters_createCharacter:f1 -> client2_character_setCharacterResource:begin;

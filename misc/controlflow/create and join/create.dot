@@ -24,11 +24,15 @@ digraph controlflow {
         subgraph cluster_server_game {
             label="game.gd"; labeljust="l";
             server_game_loadMap [
-                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree "
+                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points "
                 shape="record"
             ]
             server_game_addCharacter [
-                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Randomize position  | <f3> Add node to scene  | <f4> Apply position "
+                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
+                shape="record"
+            ]
+            server_game_spawnCharacer [
+                label="<begin>spawnCharacer | <f0> Set character position  | <f1> Step spawn position counter "
                 shape="record"
             ]
         }
@@ -98,14 +102,15 @@ digraph controlflow {
     server_mainmenu_createGame:f2 -> server_connections_createGame:begin;
     server_connections_createGame:f2 -> server_transition_handler_enterLobby:begin;
     server_transition_handler_enterLobby:f1 -> server_game_loadMap:begin;
+    server_game_spawnCharacer:f0 -> server_character_resource_setPosition:begin;
     server_connections_createGame:f3 -> server_game_addCharacter:begin;
     server_game_addCharacter:f0 -> server_characters_createCharacter:begin;
-    server_game_addCharacter:f1 -> server_character_resource_getCharacterNode:begin;
-    server_game_addCharacter:f4 -> server_character_resource_setPosition:begin;
     server_characters_createCharacter:f0 -> server_characters__createCharacterNode:begin;
     server_characters_createCharacter:f0 -> server_characters__createCharacterResource:begin;
     server_characters_createCharacter:f1 -> server_character_setCharacterResource:begin;
     server_characters_createCharacter:f1 -> server_character_resource_setCharacterNode:begin;
     server_characters_createCharacter:f2 -> server_characters__registerCharacterNode:begin;
     server_characters_createCharacter:f2 -> server_characters__registerCharacterResource:begin;
+    server_game_addCharacter:f1 -> server_character_resource_getCharacterNode:begin;
+    server_game_addCharacter:f2 -> server_game_spawnCharacer:begin;
 }

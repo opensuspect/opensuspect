@@ -9,7 +9,7 @@ digraph controlflow {
         subgraph cluster_server_game {
             label="game.gd"; labeljust="l";
             server_game_loadMap [
-                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree "
+                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points "
                 shape="record"
             ]
         }

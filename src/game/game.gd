@@ -38,8 +38,9 @@ func addCharacter(networkId: int) -> void:
 func spawnAllCharacters() -> void:
 	## Reset spawn position counter
 	spawnCounter = 0
-	## Loop through all characters
+	## Get all character resources
 	var allChars: Dictionary = Characters.getCharacterResources()
+	## Loop through all characters
 	for character in allChars:
 		spawnCharacer(allChars[character]) ## Set spawn position
 
