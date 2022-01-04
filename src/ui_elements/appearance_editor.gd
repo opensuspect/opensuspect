@@ -1,17 +1,19 @@
 extends Node
-
+# --Private Variables--
 onready var Resources = get_node("/root/Resources")
 onready var Appearance = get_node("/root/Appearance")
 
 onready var tabs = $MenuMargin/HBoxContainer/TabBox/TabContainer
-onready var player = $MenuMargin/HBoxContainer/PlayerBox/Player/MenuPlayer/Skeleton
+onready var character = $MenuMargin/HBoxContainer/PlayerBox/Player/MenuPlayer/Skeleton
 
+# Signal to trigger the main menu
 signal menuBack
 
-var currentTab: int
-var selectedItem: int
-var itemsList: Dictionary
+var currentTab: int # ID of selected tab
+var selectedItem: int # ID of selected item
+var itemsList: Dictionary # Dictionary of items, for selection lookup
 
+# Directories of icons
 var icons: Dictionary = {
 	"Body": "res://game/character/assets/icons/body",
 	"Clothes": "res://game/character/assets/icons/clothes",
@@ -21,72 +23,93 @@ var icons: Dictionary = {
 	"Hat/Hair": "res://game/character/assets/icons/hat_hair",
 }
 
-const LIST_COLUMNS = 0
-const LIST_ICON_SIZE = Vector2(256, 256)
+# --Configuration Variables--
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	player.applyConfig()
+# Item list config variables
+const LIST_COLUMNS = 0 # Max columns
+const LIST_SAME_WIDTH = true # Same column width
+const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
+
+# --Private Functions--
+
+func _ready() -> void:
+	character.applyConfig()
 	_generateTabs()
 
+# Generate the customization menu tabs
 func _generateTabs() -> void:
-	var files = Resources.list(Appearance.directories, Appearance.extensions)
-	for file in files.keys():
-		for namespace in Appearance.groupClothing:
-			if Appearance.groupClothing[namespace].has(file):
+	var files = Resources.list(Appearance.directories, Appearance.extensions) # Get file list
+	for resource in files.keys(): # Iterate over files
+		for namespace in Appearance.groupClothing: # Iterate over the clothing groups
+			# Check if resource is a child eg. Left Arm to Clothes
+			if Appearance.groupClothing[namespace].has(resource):
 				pass
 			else:
-				_addChild(files, file)
-	var colors = VBoxContainer.new()
-	colors.name = "Colors"
-	tabs.add_child(colors)
+				_addChildTab(files, resource) # Otherwise add the tab for this resource
+	var colors = VBoxContainer.new() # Add a color customization tab
+	colors.name = "Colors" # Set it's name to "Colors"
+	tabs.add_child(colors) # Add "Colors" as a child to tab container
 
-func _addChild(files, file):
-	var child = _createChild(file)
-	tabs.add_child(child)
-	itemsList[file] = []
-	for item in files[file]:
-		itemsList[file].append(item)
-		var texture = _getTexture(files, file, item)
-		child.add_icon_item(texture)
-		child.fixed_icon_size = LIST_ICON_SIZE
+# Add a child tab
+func _addChildTab(files, resource) -> void:
+	var child = _createChildTab(resource) # Create a new child tab
+	tabs.add_child(child) # Add the new tab
+	_populateChildTab(files, resource, child) # Populate the tab with items
 
-func _createChild(file):
-	var child = ItemList.new()
-	child.name = file.capitalize()
-	child.max_columns = LIST_COLUMNS
-	child.same_column_width = true
-	child.connect("item_selected", self, "_on_item_selected")
-	return(child)
+# Create a new child tab
+func _createChildTab(resource) -> ItemList:
+	var child = ItemList.new() # Create new item list
+	child.name = resource.capitalize() # Set the tab's name
+	child.max_columns = LIST_COLUMNS # Set the max columns
+	child.same_column_width = LIST_SAME_WIDTH # Set the same column width
+	child.connect("item_selected", self, "_on_item_selected") # Link up the item selection signal
+	return(child) # Return the newly configured child
 
+# Populate the child tab with items
+func _populateChildTab(files, resource, child) -> void:
+	itemsList[resource] = [] # Ready the items list
+	for item in files[resource]: # Iterate over the items
+		itemsList[resource].append(item) # Append item to the items list dictionary
+		var texture = _getTexture(files, resource, item) # Get the texture of the icon
+		child.add_icon_item(texture) # Add the icon item with the set texture
+		child.fixed_icon_size = ITEM_ICON_SIZE # Configure the icon size
+
+# Update the outfit
 func _updateOutfit() -> void:
-	var tab = tabs.get_child(currentTab)
-	var namespace = itemsList.keys()[currentTab]
-	var resource = itemsList[namespace][selectedItem]
-	Appearance.setOutfitPart(resource, namespace)
-	player.applyConfig()
+	var tab = tabs.get_child(currentTab) # Get the current tab
+	var namespace = itemsList.keys()[currentTab] # Get the namespace from the item list dictionary
+	var resource = itemsList[namespace][selectedItem] # Get the selected resource from the item list dictionary
+	Appearance.setOutfitPart(resource, namespace) # Set the outfit part to the correct resource
+	character.applyConfig() # Apply the config to the character
 
+# Get the texture to use for the item's icon
 func _getTexture(directories, namespace, resource) -> Texture:
-	var iconList = Resources.list(icons, Appearance.extensions)
-	var keys = iconList[namespace]
-	var texture_path: String
-	if keys.has(resource):
-		texture_path = iconList[namespace][resource]
+	var iconList = Resources.list(icons, Appearance.extensions) # Get a list of all icons
+	var icons = iconList[namespace] # Get the icons under the given namespace
+	var texturePath: String # Path to the texture
+	if icons.has(resource): # Check if the item has an icon
+		texturePath = iconList[namespace][resource] # Set the item's texture to the corresponding icon
 	else:
-		texture_path = directories[namespace][resource]
-	var texture = load(texture_path)
-	return(texture)
+		texturePath = directories[namespace][resource] # Otherwise just use the item's texture
+	var texture = load(texturePath) # Load the texture path as a texture
+	return(texture) # Return the new texture object
 
-func _on_tab_changed(tab):
+# --Signal Functions--
+
+# Sets the current tab when a tab is changed
+func _on_tab_changed(tab) -> void:
 	currentTab = tab
 
-func _on_item_selected(item):
+# Sets the current item when an item is selected
+func _on_item_selected(item) -> void:
 	selectedItem = item
-	_updateOutfit()
+	_updateOutfit() # Updates the outfit of the character
 
-func _on_Random_pressed():
-	Appearance.randomizeConfig()
-	player.applyConfig()
+# Handles randomization of the character
+func _on_Random_pressed() -> void:
+	Appearance.randomizeConfig() # Randomize the config of the character
+	character.applyConfig() # Apply the new config
 
-func _on_Back_pressed():
+# Switches back to the previous menu
+func _on_Back_pressed() -> void:
 	emit_signal("menuBack")
