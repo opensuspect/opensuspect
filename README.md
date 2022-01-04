@@ -28,7 +28,7 @@ The main aims of the game:
 For the management of the development, we have 3 milestones that we are tracking on GitHub, see the [Milestones](https://github.com/opensuspect/opensus/milestones) page for current progress.
 
 ### Goals for the alpha release
-* One (not finalized) game map, based on a fictionaly spy story from the 1960s cold war era,
+* One (not finalized) game map, based on a fictional spy story from the 1960s cold war era,
 * working lobby for players,
 * customizable characters,
 * multiplayer with server side authority for all crucial steps,
@@ -42,10 +42,10 @@ For the management of the development, we have 3 milestones that we are tracking
 * some miscellaneous map features.
 
 ### Goals for the beta release
-* Finalized game map, based on a fictionaly spy story from the 1960s cold war era,
+* Finalized game map, based on a fictional spy story from the 1960s cold war era,
 * sufficient number of tasks for diverse gameplay,
 * sufficient number of items for a diverse gameplay,
-* uinque misceallaneous map features,
+* unique misceallaneous map features,
 * all assets are in a coherent form that fit the game style,
 * the victory and loss conditions match the expectations for a social deduction game,
 * the number of game breaking bugs is minimal.
