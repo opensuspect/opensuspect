@@ -27,8 +27,8 @@ digraph controlflow {
                 label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
                 shape="record"
             ]
-            client1_game_spawnCharacer [
-                label="<begin>spawnCharacer | <f0> Set character position  | <f1> Step spawn position counter "
+            client1_game_spawnCharacter [
+                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
                 shape="record"
             ]
         }
@@ -57,7 +57,7 @@ digraph controlflow {
                 shape="record"
             ]
             client1_connections_receiveBulkPlayerData [
-                label="<begin>receiveBulkPlayerData | <f0> Save all received data  | {<f1> For all players  | <f2> Create a character }"
+                label="<begin>receiveBulkPlayerData | <f0> Save all received data  | {<f1> For all players  |  { <f2> Create a character  } }"
                 shape="record"
             ]
             client1_connections_setServerName [
@@ -91,11 +91,11 @@ digraph controlflow {
         subgraph cluster_client1_mainmenu {
             label="mainmenu.gd"; labeljust="l";
             client1_mainmenu_joinGame [
-                label="<begin>joinGame | <f0> Get data from UI  | {<f1> If port is given  | <f2> Custom port is used } | {<f3> Empty host or playername rejected } | <f4> Join a game "
+                label="<begin>joinGame | <f0> Get data from UI  | {<f1> If port is given  |  { <f2> Custom port is used  } } | {<f3> Empty host or playername rejected } | <f4> Join a game "
                 shape="record"
             ]
             client1_mainmenu_joinEvent [
-                label="<begin>joinEvent | {<f0> Checks menu  | <f1> Join game  | <f2> Create a game  | <f3> Dedicated server }"
+                label="<begin>joinEvent | {<f0> Checks menu  |  { <f1> Join game  | <f2> Create a game  | <f3> Dedicated server  } }"
                 shape="record"
             ]
         }
@@ -124,8 +124,8 @@ digraph controlflow {
                 label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
                 shape="record"
             ]
-            server_game_spawnCharacer [
-                label="<begin>spawnCharacer | <f0> Set character position  | <f1> Step spawn position counter "
+            server_game_spawnCharacter [
+                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
                 shape="record"
             ]
         }
@@ -191,8 +191,8 @@ digraph controlflow {
                 label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
                 shape="record"
             ]
-            client2_game_spawnCharacer [
-                label="<begin>spawnCharacer | <f0> Set character position  | <f1> Step spawn position counter "
+            client2_game_spawnCharacter [
+                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
                 shape="record"
             ]
         }
@@ -206,7 +206,7 @@ digraph controlflow {
         subgraph cluster_client2_connections {
             label="connections.gd"; labeljust="l";
             client2_connections_receivePlayerData [
-                label="<begin>receivePlayerData | {<f0> If the data is not own data  | <f1> Save the data  | <f2> Create a character }"
+                label="<begin>receivePlayerData | {<f0> If the data is not own data  |  { <f1> Save the data  | <f2> Create a character  } }"
                 shape="record"
             ]
         }
@@ -248,8 +248,8 @@ digraph controlflow {
     server_connections_receiveNewPlayerData:f4 -> server_game_addCharacter:begin;
     server_game_addCharacter:f0 -> server_characters_createCharacter:begin;
     server_game_addCharacter:f1 -> server_character_resource_getCharacterNode:begin;
-    server_game_addCharacter:f2 -> server_game_spawnCharacer:begin;
-    server_game_spawnCharacer:f0 -> server_character_resource_setPosition:begin;
+    server_game_addCharacter:f2 -> server_game_spawnCharacter:begin;
+    server_game_spawnCharacter:f0 -> server_character_resource_setPosition:begin;
     server_characters_createCharacter:f0 -> server_characters__createCharacterNode:begin;
     server_characters_createCharacter:f0 -> server_characters__createCharacterResource:begin;
     server_characters_createCharacter:f1 -> server_character_setCharacterResource:begin;
@@ -260,8 +260,8 @@ digraph controlflow {
     client1_connections_receiveBulkPlayerData:f2 -> client1_game_addCharacter:begin;
     client1_game_addCharacter:f0 -> client1_characters_createCharacter:begin;
     client1_game_addCharacter:f1 -> client1_character_resource_getCharacterNode:begin;
-    client1_game_addCharacter:f2 -> client1_game_spawnCharacer:begin;
-    client1_game_spawnCharacer:f0 -> client1_character_resource_setPosition:begin;
+    client1_game_addCharacter:f2 -> client1_game_spawnCharacter:begin;
+    client1_game_spawnCharacter:f0 -> client1_character_resource_setPosition:begin;
     client1_characters_createCharacter:f0 -> client1_characters__createCharacterNode:begin;
     client1_characters_createCharacter:f0 -> client1_characters__createCharacterResource:begin;
     client1_characters_createCharacter:f1 -> client1_character_setCharacterResource:begin;
@@ -272,8 +272,8 @@ digraph controlflow {
     client2_connections_receivePlayerData:f2 -> client2_game_addCharacter:begin;
     client2_game_addCharacter:f0 -> client2_characters_createCharacter:begin;
     client2_game_addCharacter:f1 -> client2_character_resource_getCharacterNode:begin;
-    client2_game_addCharacter:f2 -> client2_game_spawnCharacer:begin;
-    client2_game_spawnCharacer:f0 -> client2_character_resource_setPosition:begin;
+    client2_game_addCharacter:f2 -> client2_game_spawnCharacter:begin;
+    client2_game_spawnCharacter:f0 -> client2_character_resource_setPosition:begin;
     client2_characters_createCharacter:f0 -> client2_characters__createCharacterNode:begin;
     client2_characters_createCharacter:f0 -> client2_characters__createCharacterResource:begin;
     client2_characters_createCharacter:f1 -> client2_character_setCharacterResource:begin;
