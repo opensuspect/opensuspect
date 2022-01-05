@@ -1,0 +1,25 @@
+server_game__on_GameStart_pressed:f0 -> server_transition_handler_changeMap:begin;
+
+# Start game
+server_transition_handler_changeMap:f1 -> server_transition_handler_startGame:begin;
+server_transition_handler_changeMap:f1 -> client2_transition_handler_startGame:begin [color=red];
+
+# Return to lobby
+server_transition_handler_changeMap:f4 -> server_transition_handler_returnLobby:begin;
+server_transition_handler_changeMap:f4 -> client2_transition_handler_returnLobby:begin [color=red];
+
+# Local on server
+server_transition_handler_startGame:f0 -> server_game_loadMap:begin;
+server_transition_handler_returnLobby:f0 -> server_game_loadMap:begin;
+server_game_loadMap:f3 -> server_game_spawnAllCharacters:begin;
+server_game_spawnAllCharacters:f1 -> server_characters_getCharacterResources:begin;
+server_game_spawnAllCharacters:f3 -> server_game_spawnCharacter:begin;
+server_game_spawnCharacter:f1 -> server_character_resource_setPosition:begin;
+
+# On the clients
+client2_transition_handler_startGame:f0 -> client2_game_loadMap:begin;
+client2_transition_handler_returnLobby:f0 -> client2_game_loadMap:begin;
+client2_game_loadMap:f3 -> client2_game_spawnAllCharacters:begin;
+client2_game_spawnAllCharacters:f1 -> client2_characters_getCharacterResources:begin;
+client2_game_spawnAllCharacters:f3 -> client2_game_spawnCharacter:begin;
+client2_game_spawnCharacter:f1 -> client2_character_resource_setPosition:begin;
