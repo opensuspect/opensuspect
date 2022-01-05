@@ -34,7 +34,7 @@ digraph controlflow {
                 shape="record"
             ]
             server_mainmenu_joinEvent [
-                label="<begin>joinEvent | {<f0> Checks menu  | <f1> Join game  | <f2> Create a game  | <f3> Dedicated server }"
+                label="<begin>joinEvent | {<f0> Checks menu  |  { <f1> Join game  | <f2> Create a game  | <f3> Dedicated server  } }"
                 shape="record"
             ]
         }

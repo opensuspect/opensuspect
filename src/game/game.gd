@@ -29,7 +29,7 @@ func addCharacter(networkId: int) -> void:
 	## Get character node reference
 	var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()
 	## Spawn the character
-	spawnCharacer(newCharacterResource)
+	spawnCharacter(newCharacterResource)
 	characterNode.add_child(newCharacter) ## Add node to scene
 
 # These functions place the character on the map, but if it is a client, it will
@@ -42,9 +42,9 @@ func spawnAllCharacters() -> void:
 	var allChars: Dictionary = Characters.getCharacterResources()
 	## Loop through all characters
 	for character in allChars:
-		spawnCharacer(allChars[character]) ## Set spawn position
+		spawnCharacter(allChars[character]) ## Set spawn position
 
-func spawnCharacer(character: CharacterResource) -> void:
+func spawnCharacter(character: CharacterResource) -> void:
 	## Set character position
 	character.setPosition(spawnList[spawnCounter])
 	## Step spawn position counter
@@ -61,7 +61,7 @@ func _on_GameStart_pressed() -> void:
 		assert(false, "Unreachable")
 	## Change the map
 	TransitionHandler.changeMap()
-	## Chanes the button text
+	## Change button text
 	if TransitionHandler.getCurrentState() == TransitionHandler.States.LOBBY:
 		gamestartButton.text = "Start game"
 	elif TransitionHandler.getCurrentState() == TransitionHandler.States.MAP:
