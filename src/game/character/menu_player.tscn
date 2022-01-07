@@ -14,7 +14,7 @@ shader_param/fhair_mask_color = Color( 0, 1, 0, 1 )
 shader_param/fhair_color = Color( 0.368627, 0.298039, 0.298039, 1 )
 shader_param/tolerance = 0.1
 
-[node name="menu_player" type="Node2D"]
+[node name="MenuPlayer" type="Node2D"]
 
 [node name="Skeleton" parent="." instance=ExtResource( 2 )]
 material = SubResource( 1 )

@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Resource",
+"class": "CharacterResource",
+"language": "GDScript",
+"path": "res://resource_classes/character_resource.gd"
+} ]
+_global_script_class_icons={
+"CharacterResource": ""
+}
+
 [application]
 
 config/name="OpenSuspect"
@@ -20,6 +30,9 @@ config/icon="res://icon.png"
 
 Resources="*res://autoloads/resources.gd"
 Appearance="*res://autoloads/appearance.gd"
+Characters="*res://autoloads/characters.gd"
+Connections="*res://autoloads/connections.gd"
+TransitionHandler="*res://autoloads/transition_handler.gd"
 
 [display]
 

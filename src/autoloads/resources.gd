@@ -35,7 +35,7 @@ func list(directories: Dictionary, types: PoolStringArray) -> Dictionary:
 	for folder in directories.keys(): # Iterate over each folder specified, by their namespace (key)
 		var files = _listFilesInDirectory(directories[folder], types) # List files in each folder
 		# Add each file to the output dictionary
-		resources[folder] = _filesToDictionary(folder, files, directories[folder], types)
+		resources[folder] = _filesToDictionary(files, directories[folder], types)
 	return(resources) # Return the dictionary of namespaced resources
 
 # Returns the path of a specified resource
@@ -75,7 +75,7 @@ func _ready():
 
 # Lists all files in a path, that have the correct file extensions
 func _listFilesInDirectory(path: String, types: PoolStringArray) -> Array:
-	var files: Array # Defunes the array to be returned
+	var files: Array = [] # Defunes the array to be returned
 	var dir = Directory.new() # Makes a new directory object
 	dir.open(path) # Opens the directory given in "path"
 	dir.list_dir_begin() # List files in the directory from the beginning
@@ -90,7 +90,7 @@ func _listFilesInDirectory(path: String, types: PoolStringArray) -> Array:
 	return(files) # Return the files array
 
 # Creates a dictionary of the files in a directory
-func _filesToDictionary(namespace: String, files: PoolStringArray, path: String, types: PoolStringArray) -> Dictionary:
+func _filesToDictionary(files: PoolStringArray, path: String, types: PoolStringArray) -> Dictionary:
 	var output: Dictionary = {} # Defines the dictionary to output the files
 	var resource: String = "" # Defines the resource string 
 	for file in files:

@@ -5,25 +5,27 @@ onready var Resources = get_node("/root/Resources")
 # --Public Variables--
 var currentOutfit: Dictionary
 var currentColors: Dictionary
+var hasConfig: bool
 
 # Dictionary of asset folders
 var directories: Dictionary = {
 	"Body": "res://game/character/assets/textures/body",
 	"Clothes": "res://game/character/assets/textures/clothes",
+	"Mouth": "res://game/character/assets/textures/mouth",
 	"Face Wear": "res://game/character/assets/textures/face_wear",
 	"Facial Hair": "res://game/character/assets/textures/facial_hair",
 	"Hat/Hair": "res://game/character/assets/textures/hat_hair",
-	"Mouth": "res://game/character/assets/textures/mouth",
 	"Left Arm": "res://game/character/assets/textures/left_arm",
 	"Left Leg": "res://game/character/assets/textures/left_leg",
 	"Right Arm": "res://game/character/assets/textures/right_arm",
 	"Right Leg": "res://game/character/assets/textures/right_leg",
-	"Pants": "res://game/character/assets/textures/pants",
+	"Pants": "res://game/character/assets/textures/pants"
 }
 
 # Set the accepted file extensions to ".png"
 var extensions: Array = [".png"]
 
+# --Private Variables--
 # Directory of color maps. File names within should match shader names.
 var colorMapDir: Dictionary = {
 	"Color Maps": "res://game/character/assets/colormaps"
@@ -43,6 +45,14 @@ func setConfig(outfit: Dictionary, colors: Dictionary) -> void:
 	currentOutfit = outfit
 	currentColors = colors
 
+func setOutfitPart(resource: String, namespace: String) -> void:
+	var path = Resources.getPath(resource, namespace, directories, extensions)
+	var outfit = currentOutfit
+	outfit.erase(namespace)
+	outfit[namespace] = {resource: path}
+	var output = _groupOutfit(outfit)
+	setConfig(output, currentColors)
+
 func randomizeConfig() -> void:
 	currentOutfit = _randomOutfit()
 	currentColors = _randomColors()
@@ -52,8 +62,11 @@ func randomizeConfig() -> void:
 # Create a random outfit for the character
 func _randomOutfit() -> Dictionary:
 	var outfit = Resources.getRandomOfEach(directories, extensions) # Get a fully random outfit
-	# Group arms and legs by the type of clothes and pants respectively
-	# This is done because each set of pants have corresponding leg assets for example
+	return(_groupOutfit(outfit)) # Return the outfit
+
+# Group arms and legs by the type of clothes and pants respectively
+# This is done because each set of pants have corresponding leg assets for example
+func _groupOutfit(outfit: Dictionary) -> Dictionary:
 	for parentPart in groupClothing: # Iterate through clothing groups
 		var clothesType = outfit[parentPart].keys().front() # Get the parent clothing type
 		for childPart in groupClothing[parentPart]: # Iterate over the children parts
@@ -64,8 +77,9 @@ func _randomOutfit() -> Dictionary:
 				assert(false, "Please add " + clothesType + " to " + childPart)
 			else:
 				# Otherwise set the child part to the clothing type matching the parent's
-				outfit[childPart][clothesType] = path
-	return(outfit) # Return the outfit
+				outfit.erase(childPart)
+				outfit[childPart] = {clothesType: path}
+	return(outfit)
 
 func _randomColors() -> Dictionary:
 	var colors: Dictionary = {}
@@ -80,7 +94,7 @@ func _randomColors() -> Dictionary:
 	return(colors)
 
 # Returns the color from the given color map, at the given relative co-ordinates
-func _colorFromMapXY(colorMapPath, xRel, yRel) -> Color:
+func _colorFromMapXY(colorMapPath: String, xRel: int, yRel: int) -> Color:
 	var colorMap = load(colorMapPath).get_data() # Loads the color map from the given path, and gets it's data
 	var maxX = colorMap.get_width() # Get width of the color map
 	var maxY = colorMap.get_height() # Get height of the color map
