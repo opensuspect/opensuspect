@@ -5,6 +5,7 @@ onready var Resources = get_node("/root/Resources")
 # --Public Variables--
 var currentOutfit: Dictionary
 var currentColors: Dictionary
+var hasConfig: bool
 
 # Dictionary of asset folders
 var directories: Dictionary = {
@@ -93,7 +94,7 @@ func _randomColors() -> Dictionary:
 	return(colors)
 
 # Returns the color from the given color map, at the given relative co-ordinates
-func _colorFromMapXY(colorMapPath, xRel, yRel) -> Color:
+func _colorFromMapXY(colorMapPath: String, xRel: int, yRel: int) -> Color:
 	var colorMap = load(colorMapPath).get_data() # Loads the color map from the given path, and gets it's data
 	var maxX = colorMap.get_width() # Get width of the color map
 	var maxY = colorMap.get_height() # Get height of the color map

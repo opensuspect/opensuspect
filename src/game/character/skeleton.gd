@@ -50,7 +50,7 @@ func _applyOutfit(outfit: Dictionary) -> void:
 			node.texture = load(resourcePath) # Set the texture of the node
 
 # Applies the colors to the shaders
-func _applyColors(colors) -> void:
+func _applyColors(colors: Dictionary) -> void:
 	for shader in colorShaders["Color Maps"].keys(): # Iterate over each shader
 		var colorsForShader = Color( # Sets the correct colors for the shader
 		colors[shader]["Red"],

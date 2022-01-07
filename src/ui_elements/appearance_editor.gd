@@ -6,9 +6,6 @@ onready var Appearance = get_node("/root/Appearance")
 onready var tabs = $MenuMargin/HBoxContainer/TabBox/TabContainer
 onready var character = $MenuMargin/HBoxContainer/PlayerBox/Player/MenuPlayer/Skeleton
 
-# Signal to trigger the main menu
-signal menuBack
-
 var currentTab: int # ID of selected tab
 var selectedItem: int # ID of selected item
 var itemsList: Dictionary # Dictionary of items, for selection lookup
@@ -46,18 +43,20 @@ func _generateTabs() -> void:
 				pass
 			else:
 				_addChildTab(files, resource) # Otherwise add the tab for this resource
-	var colors = VBoxContainer.new() # Add a color customization tab
-	colors.name = "Colors" # Set it's name to "Colors"
+#	var colors = VBoxContainer.new() # Add a color customization tab
+	var colorScene = "res://ui_elements/colors.tscn"
+	var colors = load(colorScene).instance()
+#	colors.name = "Colors" # Set it's name to "Colors"
 	tabs.add_child(colors) # Add "Colors" as a child to tab container
 
 # Add a child tab
-func _addChildTab(files, resource) -> void:
+func _addChildTab(files: Dictionary, resource: String) -> void:
 	var child = _createChildTab(resource) # Create a new child tab
 	tabs.add_child(child) # Add the new tab
 	_populateChildTab(files, resource, child) # Populate the tab with items
 
 # Create a new child tab
-func _createChildTab(resource) -> ItemList:
+func _createChildTab(resource: String) -> ItemList:
 	var child = ItemList.new() # Create new item list
 	child.name = resource.capitalize() # Set the tab's name
 	child.max_columns = LIST_COLUMNS # Set the max columns
@@ -66,7 +65,7 @@ func _createChildTab(resource) -> ItemList:
 	return(child) # Return the newly configured child
 
 # Populate the child tab with items
-func _populateChildTab(files, resource, child) -> void:
+func _populateChildTab(files: Dictionary, resource: String, child: ItemList) -> void:
 	itemsList[resource] = [] # Ready the items list
 	for item in files[resource]: # Iterate over the items
 		itemsList[resource].append(item) # Append item to the items list dictionary
@@ -83,7 +82,7 @@ func _updateOutfit() -> void:
 	character.applyConfig() # Apply the config to the character
 
 # Get the texture to use for the item's icon
-func _getTexture(directories, namespace, resource) -> Texture:
+func _getTexture(directories: Dictionary, namespace: String, resource: String) -> Texture:
 	var iconList = Resources.list(icons, Appearance.extensions) # Get a list of all icons
 	var icons = iconList[namespace] # Get the icons under the given namespace
 	var texturePath: String # Path to the texture
@@ -97,11 +96,11 @@ func _getTexture(directories, namespace, resource) -> Texture:
 # --Signal Functions--
 
 # Sets the current tab when a tab is changed
-func _on_tab_changed(tab) -> void:
+func _on_tab_changed(tab: int) -> void:
 	currentTab = tab
 
 # Sets the current item when an item is selected
-func _on_item_selected(item) -> void:
+func _on_item_selected(item: int) -> void:
 	selectedItem = item
 	_updateOutfit() # Updates the outfit of the character
 
@@ -112,4 +111,6 @@ func _on_Random_pressed() -> void:
 
 # Switches back to the previous menu
 func _on_Back_pressed() -> void:
-	emit_signal("menuBack")
+	# Change this variable later to be able to be set by parent scene
+	var parentScene: String = "res://ui_elements/mainmenu.tscn"
+	get_tree().change_scene(parentScene)

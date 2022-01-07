@@ -12,14 +12,17 @@ onready var server_menu: Control = $Server
 
 onready var player = $MainMenu/CenterPlayer/Player/MenuPlayer/Skeleton
 
-signal menuAppearance
-
 # --Interface--
 func _ready() -> void:
-	Appearance.randomizeConfig()
+	_randomIfUnset()
 	player.applyConfig()
 	menu = MenuType.MAIN
 	setVisibleMenu(menu)
+
+func _randomIfUnset() -> void:
+	if not Appearance.hasConfig:
+		Appearance.randomizeConfig()
+		Appearance.hasConfig = true
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
@@ -111,4 +114,4 @@ func _on_Server_pressed() -> void:
 	joinEvent(menu)
 
 func _on_Player_pressed():
-	emit_signal("menuAppearance")
+	get_tree().change_scene("res://ui_elements/appearance_editor.tscn")
