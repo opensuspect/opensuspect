@@ -114,4 +114,5 @@ func _on_Server_pressed() -> void:
 	joinEvent(menu)
 
 func _on_Player_pressed():
-	get_tree().change_scene("res://ui_elements/appearance_editor.tscn")
+	## Open appearance editor
+	TransitionHandler.showAppearanceEd()
