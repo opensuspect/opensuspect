@@ -11,7 +11,8 @@ var networkId: int
 var characterName: String
 
 enum LookDirections {LEFT, RIGHT, UP, DOWN}
-var lookDirection = LookDirections.RIGHT
+var lookDirection: int = LookDirections.RIGHT
+onready var characterElements = $CharacterElements
 
 # --Private Variables--
 
@@ -111,17 +112,14 @@ func setLookDirection(newLookDirection: int) -> void:
 	# this should eventually be moved into a separate script that handles
 	# 	animations and stuff
 	# the angle to set the rotation of the triangle to
-	var angle: int
+	var xScale: int = 0
 	match lookDirection:
 		LookDirections.LEFT:
-			angle = 270
+			xScale = -1
 		LookDirections.RIGHT:
-			angle = 90
-		LookDirections.UP:
-			angle = 0
-		LookDirections.DOWN:
-			angle = 180
-	$Polygon2D.rotation_degrees = angle
+			xScale = 1
+	if characterElements != null and xScale != 0:
+		characterElements.scale.x = xScale
 
 # --Private Functions--
 
