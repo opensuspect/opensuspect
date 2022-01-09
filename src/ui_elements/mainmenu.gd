@@ -10,10 +10,19 @@ onready var joinMenu: Control = $Join
 onready var createMenu: Control = $Create
 onready var serverMenu: Control = $Server
 
+onready var player = $MainMenu/CenterPlayer/Player/MenuPlayer/Skeleton
+
 # --Interface--
 func _ready() -> void:
+	_randomIfUnset()
+	player.applyConfig()
 	menu = MenuType.MAIN
 	setVisibleMenu(menu)
+
+func _randomIfUnset() -> void:
+	if not Appearance.hasConfig:
+		Appearance.randomizeConfig()
+		Appearance.hasConfig = true
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
@@ -115,3 +124,7 @@ func _on_Create_pressed() -> void:
 
 func _on_Server_pressed() -> void:
 	joinEvent(menu)
+
+func _on_Player_pressed():
+	## Open appearance editor
+	TransitionHandler.showAppearanceEd()
