@@ -1,5 +1,3 @@
-![opensuspect](https://socialify.git.ci/opensuspect/opensuspect/image?description=1&font=Source%20Code%20Pro&forks=1&language=1&owner=1&pattern=Floating%20Cogs&pulls=1&stargazers=1&theme=Dark)
-![CI](https://github.com/opensuspect/opensuspect/workflows/CI/badge.svg?branch=main)
 # OpenSuspect
 
 *One amongst us is not like the rest*<br/>
@@ -27,23 +25,39 @@ The main aims of the game:
 * Chat integration and flexible chat rules to fit various needs
 * Free Software, Open Source, as all things should be
 
-### Our goals for the alpha release
-* At least one working map, based on a spy story from the 1960s cold war era,
-* working lobby for players to customize their characters,
-* multiplayer up to 15 players,
+For the management of the development, we have 3 milestones that we are tracking on GitHub, see the [Milestones](https://github.com/opensuspect/opensus/milestones) page for current progress.
+
+### Goals for the alpha release
+* One (not finalized) game map, based on a fictional spy story from the 1960s cold war era,
+* working lobby for players,
+* customizable characters,
+* multiplayer with server side authority for all crucial steps,
 * in game text chat,
 * role assignment,
 * tasks to perform for a clean victory of the "agent team",
 * sabotage system for a clean victory of the "infiltrator team",
 * kill system,
-* mechanics for meetings,
-* unique miscellaneous map features (e.g. intercom system, environmental kills),
-* meeting system and vote system.
+* items to carry and use,
+* meetings and "voting out" mechanics,
+* some miscellaneous map features.
 
-### Our plans for further releases
+### Goals for the beta release
+* Finalized game map, based on a fictional spy story from the 1960s cold war era,
+* sufficient number of tasks for diverse gameplay,
+* sufficient number of items for a diverse gameplay,
+* unique misceallaneous map features,
+* all assets are in a coherent form that fit the game style,
+* the victory and loss conditions match the expectations for a social deduction game,
+* the number of game breaking bugs is minimal.
+
+### Goals for the fully playable release
+* Two or more distinct maps with unique features, tasks and goals,
+* all assets look good, modern, and fit the game theme,
+* the game is balanced,
+* the software is practically bug-free, no serious immersion breaking events.
+
+### Other plans for the undefined future
 * Integrated voice chat with optional location-based chat,
-* multiple maps,
-* highly customizable characters
 * official server with match making.
 
 ### Implementation of our goals
