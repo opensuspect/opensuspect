@@ -36,7 +36,7 @@ func enterLobby() -> void:
 
 func showMainMenu() -> void:
 	## Refresh the look of the character in the main menu
-	mainMenuScene.player.applyConfig()
+	mainMenuScene.characterSkeleton.applyConfig()
 	## Switch to main menu scene
 	switchScene(mainMenuScene)
 

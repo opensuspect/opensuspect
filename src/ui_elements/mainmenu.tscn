@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
-[ext_resource path="res://game/character/menu_player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui_elements/menu_character.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui_elements/mainmenu.gd" type="Script" id=3]
 [ext_resource path="res://ui_elements/background.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui_elements/assets/images/logo.svg" type="Texture" id=5]
@@ -52,7 +52,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CenterPlayer" type="CenterContainer" parent="MainMenu"]
+[node name="CenterCharacter" type="CenterContainer" parent="MainMenu"]
 margin_right = 372.0
 margin_bottom = 537.0
 grow_horizontal = 2
@@ -60,16 +60,18 @@ grow_vertical = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="Player" type="Button" parent="MainMenu/CenterPlayer"]
+[node name="MenuCharacter" parent="MainMenu/CenterCharacter" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 372.0
+margin_bottom = 537.0
+
+[node name="Character" type="Button" parent="MainMenu/CenterCharacter/MenuCharacter"]
 margin_right = 372.0
 margin_bottom = 537.0
 rect_min_size = Vector2( 372, 537 )
 size_flags_vertical = 3
 theme = ExtResource( 7 )
-
-[node name="MenuPlayer" parent="MainMenu/CenterPlayer/Player" instance=ExtResource( 2 )]
-position = Vector2( 175, 250 )
-scale = Vector2( 0.5, 0.5 )
 
 [node name="PositionMenu" type="MarginContainer" parent="MainMenu"]
 margin_left = 376.0
@@ -321,7 +323,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="MainMenu/CenterPlayer/Player" to="." method="_on_Player_pressed"]
+[connection signal="mouse_entered" from="MainMenu/CenterCharacter/MenuCharacter/Character" to="." method="_on_Character_mouse_entered"]
+[connection signal="mouse_exited" from="MainMenu/CenterCharacter/MenuCharacter/Character" to="." method="_on_Character_mouse_exited"]
+[connection signal="pressed" from="MainMenu/CenterCharacter/MenuCharacter/Character" to="." method="_on_Player_pressed"]
 [connection signal="pressed" from="MainMenu/PositionMenu/Menu/GameJoinButton" to="." method="_on_GameJoinButton_pressed"]
 [connection signal="pressed" from="MainMenu/PositionMenu/Menu/GameCreateButton" to="." method="_on_GameCreateButton_pressed"]
 [connection signal="pressed" from="MainMenu/PositionMenu/Menu/ServerStartButton" to="." method="_on_ServerStartButton_pressed"]

@@ -10,12 +10,14 @@ onready var joinMenu: Control = $Join
 onready var createMenu: Control = $Create
 onready var serverMenu: Control = $Server
 
-onready var player = $MainMenu/CenterPlayer/Player/MenuPlayer/Skeleton
+onready var character = $MainMenu/CenterCharacter/MenuCharacter
+onready var characterSkeleton = $MainMenu/CenterCharacter/MenuCharacter/Viewport/Skeleton
 
 # --Interface--
 func _ready() -> void:
 	_randomIfUnset()
-	player.applyConfig()
+	character.setOutline(Color("#E6E2DD"))
+	characterSkeleton.applyConfig()
 	menu = MenuType.MAIN
 	setVisibleMenu(menu)
 
@@ -127,4 +129,11 @@ func _on_Server_pressed() -> void:
 
 func _on_Player_pressed():
 	## Open appearance editor
+	character.setOutline(Color.black)
 	TransitionHandler.showAppearanceEd()
+
+func _on_Character_mouse_entered():
+	character.setOutline(Color("#DB2921"))
+
+func _on_Character_mouse_exited():
+	character.setOutline(Color("#E6E2DD"))
