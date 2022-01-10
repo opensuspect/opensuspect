@@ -73,7 +73,7 @@ func removeCharacterNode(id: int) -> void:
 	# if there is no character node corresponding to this network id
 	if not id in _characterNodes:
 		# throw an error
-		printerr("Trying to get a nonexistant character resource with network id ", id)
+		printerr("Trying to get a nonexistant character node with network id ", id)
 		# crash the game (if running in debug mode) to assist with debugging
 		assert(false, "Should be unreachable")
 		# if running in release mode, return
