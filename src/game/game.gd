@@ -52,6 +52,14 @@ func spawnCharacter(character: CharacterResource) -> void:
 	if spawnCounter > len(spawnList):
 		spawnCounter = 0
 
+func removeCharacter(networkId: int) -> void:
+	#print_debug("game: removing character", networkId)
+	var characterNode = Characters.getCharacterNode(networkId)
+	characterNode.queue_free()
+	## remove the resource and the node
+	Characters.removeCharacterNode(networkId)
+	Characters.removeCharacterResource(networkId)
+
 func showStartButton(buttonShow: bool = true) -> void:
 	## Switch visibility of game start button
 	gamestartButton.visible = buttonShow

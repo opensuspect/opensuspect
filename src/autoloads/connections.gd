@@ -102,6 +102,12 @@ puppet func receivePlayerData(id: int, name: String) -> void:
 		gameScene.addCharacter(id)
 	#print_debug("Connected clients: ", listConnections)
 
+puppet func playerDisconnected(id: int) -> void:
+	#print_debug("connections puppet: removing character", id)
+	var gameScene: Node = TransitionHandler.gameScene
+	gameScene.removeCharacter(id)
+	listConnections.erase(id)
+
 # -------------- Server side code --------------
 
 func createGame(portNumber: int, playerName: String) -> void:
@@ -156,7 +162,12 @@ func connectedNewPlayer(id: int) -> void:
 	pass
 	
 func disconnectedPlayer(id: int) -> void:
-	assert(false, "Not implemented yet")
+	#print_debug("connections server: removing character", id)
+	rpc("playerDisconnected", id)
+	listConnections.erase(id)
+	
+	var gameScene: Node = TransitionHandler.gameScene
+	gameScene.removeCharacter(id)
 
 func allowNewConnections(switch: bool) -> void:
 	get_tree().refuse_new_network_connections = not switch

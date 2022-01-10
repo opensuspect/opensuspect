@@ -69,6 +69,17 @@ func getCharacterNode(id: int) -> Node:
 		return null
 	return _characterNodes[id]
 
+func removeCharacterNode(id: int) -> void:
+	# if there is no character node corresponding to this network id
+	if not id in _characterNodes:
+		# throw an error
+		printerr("Trying to get a nonexistant character resource with network id ", id)
+		# crash the game (if running in debug mode) to assist with debugging
+		assert(false, "Should be unreachable")
+		# if running in release mode, return
+		return
+	_characterNodes.erase(id)
+
 # get character resource for the input network id
 func getCharacterResource(id: int) -> CharacterResource:
 	# if there is no character node corresponding to this network id
@@ -80,6 +91,17 @@ func getCharacterResource(id: int) -> CharacterResource:
 		# if running in release mode, return null
 		return null
 	return _characterResources[id]
+	
+func removeCharacterResource(id: int) -> void:
+	# if there is no character node corresponding to this network id
+	if not id in _characterResources:
+		# throw an error
+		printerr("Trying to get a nonexistant character resource with network id ", id)
+		# crash the game (if running in debug mode) to assist with debugging
+		assert(false, "Should be unreachable")
+		# if running in release mode, return
+		return
+	_characterResources.erase(id)
 
 func getMyCharacterNode() -> Node:
 	return _characterNodes[get_tree().get_network_unique_id()]
