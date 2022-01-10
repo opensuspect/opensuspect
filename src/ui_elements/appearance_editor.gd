@@ -47,6 +47,7 @@ func _generateTabs() -> void:
 	var colorScene = "res://ui_elements/colors.tscn"
 	var colors = load(colorScene).instance()
 #	colors.name = "Colors" # Set it's name to "Colors"
+	colors.connect("setColor", self, "_on_color_selected")
 	tabs.add_child(colors) # Add "Colors" as a child to tab container
 
 # Add a child tab
@@ -103,6 +104,11 @@ func _on_tab_changed(tab: int) -> void:
 func _on_item_selected(item: int) -> void:
 	selectedItem = item
 	_updateOutfit() # Updates the outfit of the character
+
+# Sets the color when selected from the picker
+func _on_color_selected(color, shader):
+	Appearance.setColor(shader, color)
+	character.applyConfig()
 
 # Handles randomization of the character
 func _on_Random_pressed() -> void:

@@ -41,10 +41,13 @@ var groupClothing = {"Clothes": ["Left Arm", "Right Arm", "Pants", "Left Leg", "
 const COLOR_XY = 500
 
 # --Public Functions--
+
+# Set the outfit and color variables
 func setConfig(outfit: Dictionary, colors: Dictionary) -> void:
 	currentOutfit = outfit
 	currentColors = colors
 
+# Set one part of the outfit
 func setOutfitPart(resource: String, namespace: String) -> void:
 	var path = Resources.getPath(resource, namespace, directories, extensions)
 	var outfit = currentOutfit
@@ -53,9 +56,23 @@ func setOutfitPart(resource: String, namespace: String) -> void:
 	var output = _groupOutfit(outfit)
 	setConfig(output, currentColors)
 
+# Set the color of a shader
+func setColor(shader: String, color: Color):
+	var colors = currentColors
+	colors[shader] = _setColor(color)
+	setConfig(currentOutfit, colors)
+
+# Randomize configuration
 func randomizeConfig() -> void:
 	currentOutfit = _randomOutfit()
 	currentColors = _randomColors()
+
+# Get a color from a position on a color map, adjusting for scale
+func colorFromMapPos(path: String, position: Vector2, scale: Vector2) -> Color:
+	var xPos = position.x / scale.x
+	var yPos = position.y / scale.y
+	var color = _colorFromMapXY(path, xPos, yPos)
+	return(color)
 
 # --Private Functions--
 
@@ -84,14 +101,20 @@ func _groupOutfit(outfit: Dictionary) -> Dictionary:
 func _randomColors() -> Dictionary:
 	var colors: Dictionary = {}
 	for shader in colorShaders["Color Maps"]:
-		var randX = randi() % COLOR_XY
-		var randY = randi() % COLOR_XY
+		var randX = randi() % COLOR_XY # Random X Position
+		var randY = randi() % COLOR_XY # Random Y Position
+		# Get the color from the position
 		var randColor = _colorFromMapXY(colorShaders["Color Maps"][shader], randX, randY)
-		colors[shader] = {}
-		colors[shader]["Red"] = randColor.r
-		colors[shader]["Green"] = randColor.g
-		colors[shader]["Blue"] = randColor.b
+		colors[shader] = _setColor(randColor)
 	return(colors)
+
+# Creates a dictionary setting up the colors for the shader
+func _setColor(color: Color) -> Dictionary:
+	var rgb: Dictionary
+	rgb["Red"] = color.r
+	rgb["Green"] = color.g
+	rgb["Blue"] = color.b
+	return(rgb)
 
 # Returns the color from the given color map, at the given relative co-ordinates
 func _colorFromMapXY(colorMapPath: String, xRel: int, yRel: int) -> Color:
