@@ -11,13 +11,11 @@ onready var createMenu: Control = $Create
 onready var serverMenu: Control = $Server
 
 onready var character = $MainMenu/CenterCharacter/MenuCharacter
-onready var characterSkeleton = $MainMenu/CenterCharacter/MenuCharacter/Viewport/Skeleton
 
 # --Interface--
 func _ready() -> void:
 	_randomIfUnset()
 	character.setOutline(Color("#E6E2DD"))
-	characterSkeleton.applyConfig()
 	menu = MenuType.MAIN
 	setVisibleMenu(menu)
 

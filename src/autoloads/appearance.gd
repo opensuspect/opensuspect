@@ -2,6 +2,8 @@ extends Node
 
 onready var Resources = get_node("/root/Resources")
 
+signal applyConfig
+
 # --Public Variables--
 var currentOutfit: Dictionary
 var currentColors: Dictionary
@@ -42,10 +44,15 @@ const COLOR_XY = 500
 
 # --Public Functions--
 
+# Helper to apply the current outfit
+func applyConfig():
+	emit_signal("applyConfig")
+
 # Set the outfit and color variables
 func setConfig(outfit: Dictionary, colors: Dictionary) -> void:
 	currentOutfit = outfit
 	currentColors = colors
+	applyConfig()
 
 # Set one part of the outfit
 func setOutfitPart(resource: String, namespace: String) -> void:
@@ -64,8 +71,7 @@ func setColor(shader: String, color: Color):
 
 # Randomize configuration
 func randomizeConfig() -> void:
-	currentOutfit = _randomOutfit()
-	currentColors = _randomColors()
+	setConfig(_randomOutfit(), _randomColors())
 
 # Get a color from a position on a color map, adjusting for scale
 func colorFromMapPos(path: String, position: Vector2, scale: Vector2) -> Color:

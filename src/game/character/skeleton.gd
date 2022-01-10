@@ -40,6 +40,9 @@ func applyConfig() -> void:
 
 # --Private Functions--
 
+func _ready():
+	Appearance.connect("applyConfig", self, "applyConfig")
+
 # Applies the outfit to the skeleton
 func _applyOutfit(outfit: Dictionary) -> void:
 	for part in outfit.keys(): # Iterate over each resource

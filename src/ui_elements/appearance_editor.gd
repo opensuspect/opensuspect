@@ -5,7 +5,6 @@ onready var Appearance = get_node("/root/Appearance")
 
 onready var tabs = $MenuMargin/HBoxContainer/TabBox/TabContainer
 onready var character = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
-onready var characterSkeleton = character.get_node("Viewport/Skeleton")
 
 var currentTab: int # ID of selected tab
 var selectedItem: int # ID of selected item
@@ -34,7 +33,7 @@ const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 # --Private Functions--
 
 func _ready() -> void:
-	characterSkeleton.applyConfig()
+	Appearance.applyConfig()
 	_generateTabs()
 
 # Generate the customization menu tabs
@@ -84,7 +83,6 @@ func _updateOutfit() -> void:
 	var namespace = itemsList.keys()[currentTab] # Get the namespace from the item list dictionary
 	var resource = itemsList[namespace][selectedItem] # Get the selected resource from the item list dictionary
 	Appearance.setOutfitPart(resource, namespace) # Set the outfit part to the correct resource
-	characterSkeleton.applyConfig() # Apply the config to the character
 
 # Get the texture to use for the item's icon
 func _getTexture(directories: Dictionary, namespace: String, resource: String) -> Texture:
@@ -112,12 +110,10 @@ func _on_item_selected(item: int) -> void:
 # Sets the color when selected from the picker
 func _on_color_selected(color, shader):
 	Appearance.setColor(shader, color)
-	characterSkeleton.applyConfig()
 
 # Handles randomization of the character
 func _on_Random_pressed() -> void:
 	Appearance.randomizeConfig() # Randomize the config of the character
-	character.applyConfig() # Apply the new config
 
 # Switches back to the previous menu
 func _on_Back_pressed() -> void:
