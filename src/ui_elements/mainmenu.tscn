@@ -68,7 +68,8 @@ size_flags_vertical = 3
 theme = ExtResource( 7 )
 
 [node name="MenuPlayer" parent="MainMenu/CenterPlayer/Player" instance=ExtResource( 2 )]
-position = Vector2( 128.5, 203.5 )
+position = Vector2( 175, 250 )
+scale = Vector2( 0.5, 0.5 )
 
 [node name="PositionMenu" type="MarginContainer" parent="MainMenu"]
 margin_left = 376.0

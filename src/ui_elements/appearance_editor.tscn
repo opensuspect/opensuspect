@@ -46,8 +46,8 @@ margin_bottom = 828.0
 size_flags_vertical = 3
 
 [node name="MenuPlayer" parent="MenuMargin/HBoxContainer/PlayerBox/Player" instance=ExtResource( 1 )]
-position = Vector2( 120, 237 )
-scale = Vector2( 2, 2 )
+position = Vector2( 230, 375 )
+scale = Vector2( 0.8, 0.8 )
 
 [node name="ButtonMargin" type="MarginContainer" parent="MenuMargin/HBoxContainer/PlayerBox"]
 margin_top = 832.0

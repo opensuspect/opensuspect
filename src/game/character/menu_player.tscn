@@ -18,5 +18,4 @@ shader_param/tolerance = 0.1
 
 [node name="Skeleton" parent="." instance=ExtResource( 2 )]
 material = SubResource( 1 )
-position = Vector2( 63, 268 )
-scale = Vector2( 8, 8 )
+position = Vector2( -384, -512 )
