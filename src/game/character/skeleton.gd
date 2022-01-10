@@ -19,11 +19,11 @@ onready var colorShaders = Resources.list(colorMapDir, extensions)
 # Dictionary mapping each asset to a node path
 var nodeStructure: Dictionary = {
 	"Body": "Body",
-	"Clothes": "Skeleton/Spine/Clothes",
-	"Face Wear": "Skeleton/Spine/FaceWear",
-	"Facial Hair": "Skeleton/Spine/FacialHair",
-	"Hat/Hair": "Skeleton/Spine/HatHair",
-	"Mouth": "Skeleton/Spine/Mouth",
+	"Clothes": "Clothes",
+	"Face Wear": "FaceWear",
+	"Facial Hair": "FacialHair",
+	"Hat/Hair": "HatHair",
+	"Mouth": "Mouth",
 	"Left Arm": "LeftArm",
 	"Left Leg": "LeftLeg",
 	"Right Arm": "RightArm",

@@ -10,6 +10,9 @@ var currentTab: int # ID of selected tab
 var selectedItem: int # ID of selected item
 var itemsList: Dictionary # Dictionary of items, for selection lookup
 
+enum CallerScene {NOTHING, MAINMENU}
+var parentScene: int = CallerScene.NOTHING
+
 # Directories of icons
 var icons: Dictionary = {
 	"Body": "res://game/character/assets/icons/body",
@@ -117,6 +120,10 @@ func _on_Random_pressed() -> void:
 
 # Switches back to the previous menu
 func _on_Back_pressed() -> void:
-	# Change this variable later to be able to be set by parent scene
-	var parentScene: String = "res://ui_elements/mainmenu.tscn"
-	get_tree().change_scene(parentScene)
+	## Checks what is set as parent scene
+	match parentScene:
+		## If main menu
+		CallerScene.MAINMENU:
+			TransitionHandler.showMainMenu() ## Transition back to main menu
+		CallerScene.NOTHING:
+			assert(false, "Before showing the appearance editor, the caller scene should be set")

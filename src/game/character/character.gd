@@ -10,6 +10,9 @@ var networkId: int
 # the name of this character
 var characterName: String
 
+enum LookDirections {LEFT, RIGHT, UP, DOWN}
+var lookDirection = LookDirections.RIGHT
+
 # --Private Variables--
 
 # the CharacterResource corresponding to this character node
@@ -63,22 +66,104 @@ func getOutfit() -> Dictionary:
 
 # get the position of the character
 func getPosition() -> Vector2:
+	## Return position
 	return position
 
 # set the position of the character
 func setPosition(newPos: Vector2) -> void:
-	# assert false because setting position (teleporting) is not implemented yet
+	## If movement occured
+	if newPos != position:
+		## Update look direction based on movement
+		setLookDirection(_getLookDirFromVec(newPos - position))
+	## Set new position
 	position = newPos
 
 # get the global position of the character
 func getGlobalPosition() -> Vector2:
+	## Return global position
 	return global_position
 
 # set the global position of the character
 func setGlobalPosition(newPos: Vector2) -> void:
-	# assert false because setting position (teleporting) is not implemented yet
-	assert(false, "Not implemented yet")
+	## update look direction based on movement
+	setLookDirection(_getLookDirFromVec(newPos - global_position))
 	global_position = newPos
+
+# get the movement vector by looking at which keys are pressed
+func getMovementVector(normalized: bool = true) -> Vector2:
+	var vector: Vector2 = Vector2()
+	# get the movement vector using the move_left, move_right, move_up, 
+	# 	and move_down keys found in the input map
+	vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	if normalized:
+		vector = vector.normalized()
+	return vector
+
+# get the direction the character is looking
+func getLookDirection() -> int:
+	return lookDirection
+
+# set the direction the character is looking
+func setLookDirection(newLookDirection: int) -> void:
+	lookDirection = newLookDirection
+	# very placeholder code just to display the look direction by
+	# 	changing where the placeholder triangle is pointing
+	# this should eventually be moved into a separate script that handles
+	# 	animations and stuff
+	# the angle to set the rotation of the triangle to
+	var angle: int
+	match lookDirection:
+		LookDirections.LEFT:
+			angle = 270
+		LookDirections.RIGHT:
+			angle = 90
+		LookDirections.UP:
+			angle = 0
+		LookDirections.DOWN:
+			angle = 180
+	$Polygon2D.rotation_degrees = angle
 
 # --Private Functions--
 
+func _process(_delta: float) -> void:
+	var amountMoved: Vector2
+	## If this character belongs to this client
+	if networkId == get_tree().get_network_unique_id():
+		## Move character
+		amountMoved = _move(_delta)
+
+# move the character based on which keys are pressed and return a vector
+# 	describing the movement that occurred
+func _move(_delta: float) -> Vector2:
+	## Get movement vector based on keypress (not normalized)
+	var movementVec: Vector2 = getMovementVector(false)
+	# set lookDirection to match the movementVec
+	# using the look direction setter here to make it easier to react to
+	# 	a changing look direction
+	## Sets look direction
+	setLookDirection(_getLookDirFromVec(movementVec))
+	
+	# multiply the movement vec by speed
+	movementVec *= _characterResource.getSpeed()
+	# move_and_slide() returns the actual motion that happened, store it
+	# 	in amountMoved
+	## Calculate and execute actual motion
+	var amountMoved: Vector2 = move_and_slide(movementVec)
+	# return the actual movement that happened
+	return amountMoved
+
+func _getLookDirFromVec(vec: Vector2) -> int:
+	# this prioritizes looking left and right over up and down (like in
+	# 	among us and other games)
+	if vec.x == 0 and vec.y == 0:
+		return lookDirection
+	var newlookDirection: int = LookDirections.RIGHT
+	if vec.y < 0:
+		newlookDirection = LookDirections.UP
+	if vec.y > 0:
+		newlookDirection = LookDirections.DOWN
+	if vec.x < 0:
+		newlookDirection = LookDirections.LEFT
+	if vec.x > 0:
+		newlookDirection = LookDirections.RIGHT
+	return newlookDirection
