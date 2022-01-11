@@ -12,8 +12,8 @@ func _draw():
 
 # draw a circle on top of the color gradient to show what color is currently selected
 func _drawColorPointer():
-	var blackCircleRadius: float = 20.0
-	var colorCircleRadius: float = 15.0
+	var blackCircleRadius: float = 15.0
+	var colorCircleRadius: float = 10.0
 	var currentScale: Vector2 = scale
 	# counteract the scaling done to this node so the circle doesn't turn out stretchy
 	draw_set_transform(Vector2(0, 0), 0, Vector2(1 / scale.x, 1 / scale.y))
