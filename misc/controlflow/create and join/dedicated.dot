@@ -1,0 +1,52 @@
+digraph controlflow {
+    rankdir="LR";
+    subgraph cluster_client1 {
+        label="Client 1"; labeljust="l";
+
+    }
+    subgraph cluster_server {
+        label="Server"; labeljust="l";
+        subgraph cluster_server_game {
+            label="game.gd"; labeljust="l";
+            server_game_loadMap [
+                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_transition_handler {
+            label="transition_handler.gd"; labeljust="l";
+            server_transition_handler_enterLobby [
+                label="<begin>enterLobby | <f0> Switch to the game scene  | <f1> Load lobby map "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_connections {
+            label="connections.gd"; labeljust="l";
+            server_connections_createDedicated [
+                label="<begin>createDedicated | <f0> Initialize Godot networking  | <f1> Save data in globals  | <f2> Enter the Lobby "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_mainmenu {
+            label="mainmenu.gd"; labeljust="l";
+            server_mainmenu_createDedicated [
+                label="<begin>createDedicated | <f0> Get data from UI  | {<f1> Empty servername rejected } | <f2> Create a dedicated server "
+                shape="record"
+            ]
+            server_mainmenu_joinEvent [
+                label="<begin>joinEvent | {<f0> Checks menu  |  { <f1> Join game  | <f2> Create a game  | <f3> Dedicated server  } }"
+                shape="record"
+            ]
+        }
+
+    }
+    subgraph cluster_client2 {
+        label="Client 2"; labeljust="l";
+
+    }
+
+    server_mainmenu_joinEvent:f3 -> server_mainmenu_createDedicated:begin;
+    server_mainmenu_createDedicated:f2 -> server_connections_createDedicated:begin;
+    server_connections_createDedicated:f2 -> server_transition_handler_enterLobby:begin;
+    server_transition_handler_enterLobby:f1 -> server_game_loadMap:begin;
+}

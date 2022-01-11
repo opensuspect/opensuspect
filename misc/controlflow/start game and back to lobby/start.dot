@@ -1,0 +1,129 @@
+digraph controlflow {
+    rankdir="LR";
+    subgraph cluster_client1 {
+        label="Client 1"; labeljust="l";
+
+    }
+    subgraph cluster_server {
+        label="Server"; labeljust="l";
+        subgraph cluster_server_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            server_character_resource_setPosition [
+                label="<begin>setPosition | <f0> Set node position "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_game {
+            label="game.gd"; labeljust="l";
+            server_game_loadMap [
+                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points "
+                shape="record"
+            ]
+            server_game_spawnAllCharacters [
+                label="<begin>spawnAllCharacters | <f0> Reset spawn position counter  | <f1> Get all character resources  | {<f2> Loop through all characters  |  { <f3> Set spawn position  } }"
+                shape="record"
+            ]
+            server_game_spawnCharacter [
+                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
+                shape="record"
+            ]
+            server_game__on_GameStart_pressed [
+                label="<begin>_on_GameStart_pressed | <f0> Change the map  | {<f1> Change button text }"
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_transition_handler {
+            label="transition_handler.gd"; labeljust="l";
+            server_transition_handler_startGame [
+                label="<begin>startGame | <f0> Load game map (laboratory) "
+                shape="record"
+            ]
+            server_transition_handler_returnLobby [
+                label="<begin>returnLobby | <f0> Load lobby map "
+                shape="record"
+            ]
+            server_transition_handler_changeMap [
+                label="<begin>changeMap | {<f0> Are we in the lobby  |  { <f1> Start the game  | <f2> No new connections allowed  } } | {<f3> Are we in the game  |  { <f4> Return to the lobby  | <f5> New connections allowed  } }"
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_characters {
+            label="characters.gd"; labeljust="l";
+            server_characters_getCharacterResources [
+                label="<begin>getCharacterResources"
+                shape="record"
+            ]
+        }
+
+    }
+    subgraph cluster_client2 {
+        label="Client 2"; labeljust="l";
+        subgraph cluster_client2_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            client2_character_resource_setPosition [
+                label="<begin>setPosition | <f0> Set node position "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_game {
+            label="game.gd"; labeljust="l";
+            client2_game_loadMap [
+                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points "
+                shape="record"
+            ]
+            client2_game_spawnAllCharacters [
+                label="<begin>spawnAllCharacters | <f0> Reset spawn position counter  | <f1> Get all character resources  | {<f2> Loop through all characters  |  { <f3> Set spawn position  } }"
+                shape="record"
+            ]
+            client2_game_spawnCharacter [
+                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_transition_handler {
+            label="transition_handler.gd"; labeljust="l";
+            client2_transition_handler_startGame [
+                label="<begin>startGame | <f0> Load game map (laboratory) "
+                shape="record"
+            ]
+            client2_transition_handler_returnLobby [
+                label="<begin>returnLobby | <f0> Load lobby map "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_characters {
+            label="characters.gd"; labeljust="l";
+            client2_characters_getCharacterResources [
+                label="<begin>getCharacterResources"
+                shape="record"
+            ]
+        }
+
+    }
+
+    server_game__on_GameStart_pressed:f0 -> server_transition_handler_changeMap:begin;
+    
+    # Start game
+    server_transition_handler_changeMap:f1 -> server_transition_handler_startGame:begin;
+    server_transition_handler_changeMap:f1 -> client2_transition_handler_startGame:begin [color=red];
+    
+    # Return to lobby
+    server_transition_handler_changeMap:f4 -> server_transition_handler_returnLobby:begin;
+    server_transition_handler_changeMap:f4 -> client2_transition_handler_returnLobby:begin [color=red];
+    
+    # Local on server
+    server_transition_handler_startGame:f0 -> server_game_loadMap:begin;
+    server_transition_handler_returnLobby:f0 -> server_game_loadMap:begin;
+    server_game_loadMap:f3 -> server_game_spawnAllCharacters:begin;
+    server_game_spawnAllCharacters:f1 -> server_characters_getCharacterResources:begin;
+    server_game_spawnAllCharacters:f3 -> server_game_spawnCharacter:begin;
+    server_game_spawnCharacter:f1 -> server_character_resource_setPosition:begin;
+    
+    # On the clients
+    client2_transition_handler_startGame:f0 -> client2_game_loadMap:begin;
+    client2_transition_handler_returnLobby:f0 -> client2_game_loadMap:begin;
+    client2_game_loadMap:f3 -> client2_game_spawnAllCharacters:begin;
+    client2_game_spawnAllCharacters:f1 -> client2_characters_getCharacterResources:begin;
+    client2_game_spawnAllCharacters:f3 -> client2_game_spawnCharacter:begin;
+    client2_game_spawnCharacter:f1 -> client2_character_resource_setPosition:begin;
+}
