@@ -2,7 +2,7 @@ extends Node
 
 onready var Resources = get_node("/root/Resources")
 
-signal applyConfig
+signal applyConfig # Apply config for menu character
 
 # --Public Variables--
 var currentOutfit: Dictionary
