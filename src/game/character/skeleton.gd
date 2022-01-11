@@ -2,8 +2,6 @@ extends Node2D
 
 # --Private Variables--
 
-onready var Resources = get_node("/root/Resources")
-
 # Set the accepted file extensions to ".png"
 var extensions: Array = [".png"]
 

@@ -1,7 +1,5 @@
 extends Node
 
-onready var Resources = get_node("/root/Resources")
-
 signal applyConfig # Apply config for menu character
 
 # --Public Variables--
@@ -25,7 +23,7 @@ var directories: Dictionary = {
 }
 
 # Set the accepted file extensions to ".png"
-var extensions: Array = [".png"]
+var extensions: Array = ["png"]
 
 # --Private Variables--
 # Directory of color maps. File names within should match shader names.

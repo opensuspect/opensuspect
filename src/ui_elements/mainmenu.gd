@@ -127,7 +127,7 @@ func _on_Server_pressed() -> void:
 
 func _on_Player_pressed():
 	## Open appearance editor
-	character.setOutline(Color.black)
+	character.setOutline(Color("#E6E2DD"))
 	TransitionHandler.showAppearanceEd()
 
 func _on_Character_mouse_entered():

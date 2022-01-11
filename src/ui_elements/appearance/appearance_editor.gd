@@ -1,7 +1,5 @@
 extends Node
 # --Private Variables--
-onready var Resources = get_node("/root/Resources")
-onready var Appearance = get_node("/root/Appearance")
 
 onready var tabs = $MenuMargin/HBoxContainer/TabBox/TabContainer
 onready var character = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
@@ -47,7 +45,7 @@ func _generateTabs() -> void:
 			else:
 				_addChildTab(files, resource) # Otherwise add the tab for this resource
 #	var colors = VBoxContainer.new() # Add a color customization tab
-	var colorScene = "res://ui_elements/colors.tscn"
+	var colorScene = "res://ui_elements/appearance/colors.tscn"
 	var colors = load(colorScene).instance()
 #	colors.name = "Colors" # Set it's name to "Colors"
 	colors.connect("setColor", self, "_on_color_selected")
@@ -96,6 +94,11 @@ func _getTexture(directories: Dictionary, namespace: String, resource: String) -
 	var texture = load(texturePath) # Load the texture path as a texture
 	return(texture) # Return the new texture object
 
+func _closetMenuPopup():
+	var menu = $ClosetPopup
+	menu.rect_position = get_viewport().get_mouse_position()
+	menu.popup()
+
 # --Signal Functions--
 
 # Sets the current tab when a tab is changed
@@ -121,7 +124,21 @@ func _on_Back_pressed() -> void:
 	match parentScene:
 		## If main menu
 		CallerScene.MAINMENU:
-			character.setOutline(Color("#E6E2DD"))
 			TransitionHandler.showMainMenu() ## Transition back to main menu
 		CallerScene.NOTHING:
 			assert(false, "Before showing the appearance editor, the caller scene should be set")
+
+func _on_Character_mouse_entered():
+	character.setOutline(Color("#DB2921"))
+
+func _on_Character_mouse_exited():
+	character.setOutline(Color("#E6E2DD"))
+
+func _on_Character_pressed():
+	_closetMenuPopup()
+
+func _on_Save_pressed():
+	assert(false, "Implement save config scene")
+
+func _on_Closet_pressed():
+	get_tree().change_scene("res://ui_elements/appearance/closet.tscn")

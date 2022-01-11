@@ -18,6 +18,7 @@ margin_top = -540.0
 margin_right = 960.0
 margin_bottom = 540.0
 grow_horizontal = 0
+theme = ExtResource( 1 )
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -53,8 +54,8 @@ __meta__ = {
 }
 
 [node name="CenterCharacter" type="CenterContainer" parent="MainMenu"]
-margin_right = 372.0
-margin_bottom = 537.0
+margin_right = 412.0
+margin_bottom = 577.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 0
@@ -63,26 +64,29 @@ size_flags_vertical = 0
 [node name="MenuCharacter" parent="MainMenu/CenterCharacter" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 372.0
-margin_bottom = 537.0
+margin_right = 412.0
+margin_bottom = 577.0
 
 [node name="Character" type="Button" parent="MainMenu/CenterCharacter/MenuCharacter"]
-margin_right = 372.0
-margin_bottom = 537.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 392.0
+margin_bottom = 557.0
 rect_min_size = Vector2( 372, 537 )
 size_flags_vertical = 3
 theme = ExtResource( 7 )
 
 [node name="PositionMenu" type="MarginContainer" parent="MainMenu"]
-margin_left = 376.0
+margin_left = 428.0
 margin_right = 903.0
-margin_bottom = 537.0
+margin_bottom = 577.0
 size_flags_horizontal = 3
 
 [node name="Menu" type="VBoxContainer" parent="MainMenu/PositionMenu"]
-margin_top = 81.0
-margin_right = 527.0
-margin_bottom = 455.0
+margin_left = 20.0
+margin_top = 101.0
+margin_right = 455.0
+margin_bottom = 475.0
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -94,7 +98,7 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="MainMenu/PositionMenu/Menu"]
-margin_right = 527.0
+margin_right = 435.0
 margin_bottom = 74.0
 theme = ExtResource( 1 )
 text = "Main Menu"
@@ -102,7 +106,7 @@ align = 1
 
 [node name="GameJoinButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
 margin_top = 90.0
-margin_right = 527.0
+margin_right = 435.0
 margin_bottom = 174.0
 size_flags_vertical = 2
 theme = ExtResource( 1 )
@@ -110,7 +114,7 @@ text = "Join Game"
 
 [node name="GameCreateButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
 margin_top = 190.0
-margin_right = 527.0
+margin_right = 435.0
 margin_bottom = 274.0
 size_flags_vertical = 2
 theme = ExtResource( 1 )
@@ -118,7 +122,7 @@ text = "Create Game"
 
 [node name="ServerStartButton" type="Button" parent="MainMenu/PositionMenu/Menu"]
 margin_top = 290.0
-margin_right = 527.0
+margin_right = 435.0
 margin_bottom = 374.0
 size_flags_vertical = 2
 theme = ExtResource( 1 )
