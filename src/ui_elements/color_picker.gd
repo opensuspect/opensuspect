@@ -11,7 +11,7 @@ var windowDimensions: Vector2
 
 # --Private Functions--
 func _on_ColorPicker_gui_input(event):
-	if event.is_action("ui_press") and _checkValidPos(event.position):
+	if Input.is_action_pressed("ui_press") and _checkValidPos(event.position):
 		var selectedColor = Appearance.colorFromMapPos(colorMapPath, event.position, imageScale)
 		emit_signal("colorOnClick", selectedColor)
 
