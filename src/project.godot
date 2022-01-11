@@ -13,9 +13,21 @@ _global_script_classes=[ {
 "class": "CharacterResource",
 "language": "GDScript",
 "path": "res://resource_classes/character_resource.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "ItemNode",
+"language": "GDScript",
+"path": "res://game/items/item_node/item_node.gd"
+}, {
+"base": "Resource",
+"class": "ItemResource",
+"language": "GDScript",
+"path": "res://resource_classes/item_resource.gd"
 } ]
 _global_script_class_icons={
-"CharacterResource": ""
+"CharacterResource": "",
+"ItemNode": "",
+"ItemResource": ""
 }
 
 [application]

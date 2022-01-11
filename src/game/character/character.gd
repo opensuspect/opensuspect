@@ -1,5 +1,6 @@
 extends KinematicBody2D
 
+
 # this script acts as the frontend for the characters/controls the character node
 
 # --Public Variables--
