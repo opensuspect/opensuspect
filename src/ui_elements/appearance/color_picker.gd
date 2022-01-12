@@ -4,18 +4,20 @@ export var colorMapPath: String = "res://game/character/assets/colormaps/skin_co
 
 signal colorOnClick(color) # Send the color of the clicked position
 
-var imageScale: Vector2 # Scale of the image
 var windowDimensions: Vector2
-var pressing: bool
+var imageScale: Vector2 # Scale of the image
+var colorMapImage: StreamTexture
 
 # --Private Functions--
+
+func _ready():
+	colorMapImage = load(colorMapPath) # Load the image
+	set_default_cursor_shape(3) # Set to cross cursor
+	$ColorImage.texture = colorMapImage # Set the texture of the color map
 
 # Setup on draw
 func _draw():
 	windowDimensions = self.get_size() # Set dimensions of the window
-	var colorMapImage = load(colorMapPath) # Load the image
-	set_default_cursor_shape(3) # Set to cross cursor
-	$ColorImage.texture = colorMapImage # Set the texture of the color map
 	imageScale = _getImageScale(colorMapImage) # Set the image scale
 	_resizeColorImage() # Resize the image
 
