@@ -8,6 +8,9 @@ onready var items = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
 var configData: Dictionary
 var configList: Array
 
+var selectedOutfit: Dictionary
+var selectedColors: Dictionary
+
 const NAMESPACE = "appearance"
 
 # Item list config variables
@@ -33,31 +36,36 @@ func _listItems() -> void:
 		configData = GameData.read(NAMESPACE)
 		_populateItems()
 
-func _populateItems():
+func _populateItems() -> void:
 	for config in configData:
 		configList.append(config)
 		var texture = _getIconTexture(config)
 		items.add_icon_item(texture)
 
 func _getIconTexture(namespace) -> Texture:
-	var config = configData[namespace]
-	var outfit = config["Outfit"]
-	var colors = config["Colors"]
+	_selectConfig(namespace)
 	var iconInstance = iconCharacter.instance()
 	self.add_child(iconInstance)
 	iconInstance.hide()
-	iconInstance.applyConfig(outfit, colors)
+	iconInstance.applyConfig(selectedOutfit, selectedColors)
 	var texture = iconInstance.texture
 	return(texture)
+
+func _selectConfig(namespace: String) -> void:
+	var config = configData[namespace]
+	selectedOutfit = config["Outfit"]
+	selectedColors = config["Colors"]
 
 # --Signal Functions--
 
 func _on_Back_pressed() -> void:
 	get_tree().change_scene("res://ui_elements/appearance/appearance_editor.tscn")
 
-func _on_item_selected(index):
+func _on_Select_pressed() -> void:
+	Appearance.setConfig(selectedOutfit, selectedColors)
+	get_tree().change_scene("res://ui_elements/appearance/appearance_editor.tscn")
+
+func _on_item_selected(index) -> void:
 	var namespace = configList[index]
-	var config = configData[namespace]
-	var outfit = config["Outfit"]
-	var colors = config["Colors"]
-	character.setConfig(outfit, colors)
+	_selectConfig(namespace)
+	character.setConfig(selectedOutfit, selectedColors)

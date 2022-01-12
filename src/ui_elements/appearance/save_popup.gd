@@ -12,6 +12,7 @@ func saveConfig(configName):
 	_setupData()
 	_appendConfig(configName)
 	_saveData()
+	self.hide()
 
 # --Private Variables--
 
@@ -28,7 +29,6 @@ func _appendConfig(configName):
 
 func _saveData():
 	GameData.write(NAMESPACE, configData)
-
 
 func _on_Save_pressed():
 	saveConfig(inputName.text)
