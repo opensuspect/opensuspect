@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://ui_elements/menu_character.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=2]
 [ext_resource path="res://ui_elements/appearance/appearance_editor.gd" type="Script" id=3]
-[ext_resource path="res://ui_elements/background.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui_elements/assets/themes/hidden.tres" type="Theme" id=5]
 [ext_resource path="res://ui_elements/appearance/save_popup.gd" type="Script" id=6]
 
@@ -15,16 +14,6 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Background" parent="." instance=ExtResource( 4 )]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -960.0
-margin_top = -540.0
-margin_right = 960.0
-margin_bottom = 540.0
 
 [node name="MenuMargin" type="MarginContainer" parent="."]
 anchor_right = 1.0
@@ -53,7 +42,7 @@ size_flags_horizontal = 3
 
 [node name="CenterCharacter" type="CenterContainer" parent="MenuMargin/HBoxContainer/CharacterBox"]
 margin_right = 496.0
-margin_bottom = 776.0
+margin_bottom = 676.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -61,24 +50,22 @@ size_flags_vertical = 3
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 20.0
-margin_top = 68.0
+margin_top = 18.0
 margin_right = 476.0
-margin_bottom = 708.0
+margin_bottom = 658.0
 rect_min_size = Vector2( 456, 640 )
 custom_constants/margin_right = 0
 custom_constants/margin_top = 0
 custom_constants/margin_left = 0
 custom_constants/margin_bottom = 0
 
-[node name="Character" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter"]
+[node name="Random" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter"]
 margin_right = 456.0
 margin_bottom = 640.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
 theme = ExtResource( 5 )
 
 [node name="ButtonMargin" type="MarginContainer" parent="MenuMargin/HBoxContainer/CharacterBox"]
-margin_top = 792.0
+margin_top = 692.0
 margin_right = 496.0
 margin_bottom = 1016.0
 custom_constants/margin_right = 32
@@ -87,21 +74,40 @@ custom_constants/margin_right = 32
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 464.0
-margin_bottom = 204.0
+margin_bottom = 304.0
 size_flags_horizontal = 5
 size_flags_vertical = 4
 theme = ExtResource( 2 )
 
-[node name="Random" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
 margin_right = 444.0
 margin_bottom = 84.0
-theme = ExtResource( 2 )
-text = "Randomize"
 
-[node name="Back" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
+[node name="Save" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/HBoxContainer"]
+margin_right = 444.0
+margin_bottom = 84.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Save this outfit"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Closet" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
 margin_top = 100.0
 margin_right = 444.0
 margin_bottom = 184.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Open my Closet"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
+margin_top = 200.0
+margin_right = 444.0
+margin_bottom = 284.0
 theme = ExtResource( 2 )
 text = "Back"
 
@@ -140,52 +146,6 @@ visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 0.454902 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="MenuPopup" type="PopupPanel" parent="."]
-anchor_left = 0.144792
-anchor_top = 0.503704
-anchor_right = 0.367188
-anchor_bottom = 0.74537
-margin_left = -278.0
-margin_top = -544.0
-margin_right = -278.0
-margin_bottom = -613.0
-__meta__ = {
-"_edit_use_anchors_": true
-}
-
-[node name="MarginContainer" type="MarginContainer" parent="MenuPopup"]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 467.0
-margin_bottom = 232.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MenuPopup/MarginContainer"]
-margin_left = 20.0
-margin_top = 20.0
-margin_right = 439.0
-margin_bottom = 204.0
-
-[node name="Save" type="Button" parent="MenuPopup/MarginContainer/VBoxContainer"]
-margin_right = 419.0
-margin_bottom = 84.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Save this Config"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Closet" type="Button" parent="MenuPopup/MarginContainer/VBoxContainer"]
-margin_top = 100.0
-margin_right = 419.0
-margin_bottom = 184.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Open the Closet"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -274,14 +234,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="mouse_entered" from="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter/Character" to="." method="_on_Character_mouse_entered"]
-[connection signal="mouse_exited" from="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter/Character" to="." method="_on_Character_mouse_exited"]
-[connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter/Character" to="." method="_on_Character_pressed"]
-[connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Random" to="." method="_on_Random_pressed"]
+[connection signal="mouse_entered" from="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter/Random" to="." method="_on_Character_mouse_entered"]
+[connection signal="mouse_exited" from="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter/Random" to="." method="_on_Character_mouse_exited"]
+[connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter/Random" to="." method="_on_Random_pressed"]
+[connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/HBoxContainer/Save" to="." method="_on_Save_pressed"]
+[connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Closet" to="." method="_on_Closet_pressed"]
 [connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Back" to="." method="_on_Back_pressed"]
 [connection signal="tab_changed" from="MenuMargin/HBoxContainer/TabBox/TabContainer" to="." method="_on_tab_changed"]
-[connection signal="pressed" from="MenuPopup/MarginContainer/VBoxContainer/Save" to="." method="_on_Save_pressed"]
-[connection signal="pressed" from="MenuPopup/MarginContainer/VBoxContainer/Closet" to="." method="_on_Closet_pressed"]
 [connection signal="popup_hide" from="SavePopup" to="." method="_on_SavePopup_hide"]
 [connection signal="pressed" from="SavePopup/MarginContainer/HBoxContainer/Center/VBox/HBox/Save" to="SavePopup" method="_on_Save_pressed"]
 [connection signal="pressed" from="SavePopup/MarginContainer/HBoxContainer/Center/VBox/HBox/Cancel" to="." method="_on_Cancel_pressed"]

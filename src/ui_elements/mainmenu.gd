@@ -5,6 +5,8 @@ enum MenuType {MAIN, JOIN, CREATE, SERVER}
 
 var menu: int
 
+signal menuSwitch(menu)
+
 onready var mainMenu: Control = $MainMenu
 onready var joinMenu: Control = $Join
 onready var createMenu: Control = $Create
@@ -126,12 +128,16 @@ func _on_Server_pressed() -> void:
 	joinEvent(menu)
 
 func _on_Player_pressed():
-	## Open appearance editor
-	character.setOutline(Color("#E6E2DD"))
-	TransitionHandler.showAppearanceEd()
+	Appearance.randomizeConfig()
 
 func _on_Character_mouse_entered():
 	character.setOutline(Color("#DB2921"))
 
 func _on_Character_mouse_exited():
 	character.setOutline(Color("#E6E2DD"))
+
+func _on_Appearance_pressed():
+	emit_signal("menuSwitch", "appearance")
+	
+func _on_Settings_pressed():
+	emit_signal("menuSwitch", "settings")
