@@ -1,5 +1,63 @@
 extends Node
 
+## HOW TO USE ITEMS AUTOLOAD
+## Creating an item
+## Figure out the name of the item you want (for ex. "Wrench")
+# var itemName: String = "Wrench"
+## Create the item
+# var itemResource: ItemResource = Items.createItem(itemName)
+# var itemNode: Node = itemResource.getItemNode()
+## use this however you want, probably adding it to the map or using with a task
+
+## HOW THE ITEMS AUTOLOAD WORKS
+## ITEM TEMPLATES
+# All item templates are stored in a folder as .tres files
+# 	The folder path is stored in ITEM_TEMPLATE_FOLDER_PATH
+# When the game starts, all .tres files in that folder are loaded and saved
+# 	into the _itemTemplates dictionary, keyed by their itemName variable
+
+## EXAMPLE
+# for this example, we will use a theoretical .tres file to walk through the process
+# let's say the ItemTemplate resource is saved as wrench.tres
+# let's also say the resource looks something like this:
+
+#	wrench.tres
+#		itemTemplate = "Wrench"
+#		texture = <any texture resource>
+#		textureScale = Vector2(1, 1)
+
+# All resources stored in that folder are loaded using these steps:
+# 1. _instanceItemTemplates() is called in the declaration of _itemTemplates,
+#  		this function returns a dictionary containing all item template resources
+# 2. This function starts by using a helper function to instance all resource files
+#  		inside the item template folder
+# 3. The function then iterates through all of these resources
+# 	3a. Makes sure the loaded resource is actually an ItemTemplate, skips that
+# 		resource if it is not an ItemTemplate
+# 	3b. Gets the itemName from the ItemTemplate (itemTemplate.itemName)
+# 	3c. Stores the resource into a dictionary using this itemName as the key
+
+# so by the end of this, the dictionary looks like:
+# {"Wrench": <wrench ItemTemplate resource>}
+
+# if there were more item templates in that folder, they would also exist in this
+# 	dictionary, looking something like this:
+
+#  {"Wrench": <wrench ItemTemplate resource>,
+#	"Flask": <flask ItemTemplate resource,
+#	"Battery": <battery ItemTemplate resource}
+
+## Item templates are then used when Items.createItem() is called
+# For instance: the wrench item template is used when Items.createItem("Wrench") is called
+# The item template is then just used to configure a fresh ItemResource, which is
+# 	basically just telling it what name, texture, texture scale, etc. to use
+
+
+
+## DEVELOPER NOTES
+# We might want to move away from using strings to differentiate between items as
+# 	they are somewhat clunky
+
 # --Public Variables--
 # file path to item node scene
 const ITEM_NODE_SCENE_PATH: String = "res://game/items/item_node/item_node.tscn"
@@ -64,7 +122,9 @@ func _instanceItemTemplates() -> Dictionary:
 		# if the loaded resource is not an item template, ignore it
 		if not template is ItemTemplate:
 			continue
+		# get the item name from the ItemTemplate resource
+		var itemName: String = template.itemName
 		# add this item template to the dictionary
-		itemTemplateDict[template.itemName] = template
+		itemTemplateDict[itemName] = template
 	
 	return itemTemplateDict

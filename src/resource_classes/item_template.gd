@@ -1,6 +1,9 @@
 extends Resource
 class_name ItemTemplate
 
+# This class is basically only used to store info about items and to allow
+# 	new items to be added to the game in a simple and efficient way
+
 # --Public Variables--
 # the name of the item (for ex. "Wrench")
 export var itemName: String
