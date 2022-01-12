@@ -4,15 +4,21 @@ extends KinematicBody2D
 # the item resource corresponding to this item node
 var _itemResource: ItemResource
 
+onready var _sprite: Sprite = $Sprite
+
 # --Public Variables--
-func setItemResource(newItemResource: ItemResource):
-	if _itemResource != null:
-		assert(false, "Assigning an item resource to an item node that already has one")
-	_itemResource = newItemResource
 
 # returns the name of this item (for ex. "Wrench")
 func getName() -> String:
 	return _itemResource.getName()
+
+func setItemResource(newItemResource: ItemResource):
+	if _itemResource != null:
+		assert(false, "Assigning an item resource to an item node that already has one")
+	_itemResource = newItemResource
+	if _sprite != null:
+		_sprite.texture = _itemResource.getTexture()
+		_sprite.scale = _itemResource.getTextureScale()
 
 # returns the item resource corresponding to this item node
 func getItemResource() -> ItemResource:

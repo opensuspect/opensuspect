@@ -19,15 +19,21 @@ var _dropped: bool
 
 
 # --Public Functions--
-func setItemNode(newItemNode: Node):
-	if _itemNode != null:
-		assert(false, "Assigning an item node to an item resource that already has one")
-	_itemNode = newItemNode
-	
 
 # returns the name of this item (for ex. "Wrench")
 func getName() -> String:
 	return itemName
+
+func getTexture() -> Texture:
+	return texture
+
+func getTextureScale() -> Vector2:
+	return textureScale
+
+func setItemNode(newItemNode: Node):
+	if _itemNode != null:
+		assert(false, "Assigning an item node to an item resource that already has one")
+	_itemNode = newItemNode
 
 # returns the item node corresponding to this item resource
 func getItemNode() -> Node:
