@@ -1,11 +1,15 @@
 extends KinematicBody2D
-class_name ItemNode
 
 # --Private Variables--
 # the item resource corresponding to this item node
 var _itemResource: ItemResource
 
 # --Public Variables--
+func setItemResource(newItemResource: ItemResource):
+	if _itemResource != null:
+		assert(false, "Assigning an item resource to an item node that already has one")
+	_itemResource = newItemResource
+
 # returns the name of this item (for ex. "Wrench")
 func getName() -> String:
 	return _itemResource.getName()
