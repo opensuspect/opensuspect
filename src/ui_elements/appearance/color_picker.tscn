@@ -27,8 +27,7 @@ texture = ExtResource( 1 )
 centered = false
 
 [node name="Preview" type="ColorRect" parent="."]
-margin_right = 30.0
-margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
 mouse_filter = 2
 color = Color( 1, 1, 1, 0 )
 __meta__ = {
@@ -36,8 +35,7 @@ __meta__ = {
 }
 
 [node name="Outline" type="Panel" parent="Preview"]
-margin_right = 30.0
-margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
 mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
 __meta__ = {

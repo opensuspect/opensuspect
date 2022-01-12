@@ -48,7 +48,8 @@ func _checkValidPos(position) -> bool:
 
 func _showPreview(pos: Vector2, color: Color):
 	$Preview.show()
-	$Preview.rect_position = pos - Vector2(15,15)
+	var offset = ($Preview.rect_size / 2)
+	$Preview.rect_position = pos - offset
 	$Preview.color = color
 
 # --Signal Functions--
