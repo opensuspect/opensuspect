@@ -1,7 +1,5 @@
 extends Control
 
-onready var Appearance = get_node("/root/Appearance")
-
 onready var skeleton = $Viewport/Skeleton
 
 # --Public Variables--
@@ -10,6 +8,9 @@ func setOutline(color: Color) -> void:
 
 func applyAppearance():
 	skeleton.applyConfig(Appearance.currentOutfit, Appearance.currentColors)
+
+func setConfig(outfit: Dictionary, colors: Dictionary):
+	skeleton.applyConfig(outfit, colors)
 
 # --Private Variables--
 func _ready():

@@ -21,6 +21,7 @@ __meta__ = {
 [node name="MenuMargin" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = ExtResource( 2 )
 custom_constants/margin_right = 32
 custom_constants/margin_top = 32
 custom_constants/margin_left = 32
@@ -88,7 +89,7 @@ theme = ExtResource( 2 )
 margin_right = 444.0
 margin_bottom = 84.0
 theme = ExtResource( 2 )
-text = "Randomize"
+text = "Select"
 
 [node name="Back" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
 margin_top = 100.0
@@ -103,6 +104,7 @@ margin_right = 1856.0
 margin_bottom = 1016.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -118,11 +120,20 @@ margin_bottom = 74.0
 theme = ExtResource( 2 )
 text = "Customization Closet"
 
-[node name="ItemList" type="ItemList" parent="MenuMargin/HBoxContainer/ClosetBox"]
+[node name="Panel" type="PanelContainer" parent="MenuMargin/HBoxContainer/ClosetBox"]
 margin_top = 90.0
 margin_right = 1344.0
 margin_bottom = 1016.0
 rect_min_size = Vector2( 1344, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 2 )
+
+[node name="ItemList" type="ItemList" parent="MenuMargin/HBoxContainer/ClosetBox/Panel"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 1336.0
+margin_bottom = 918.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 2 )
@@ -131,3 +142,4 @@ __meta__ = {
 }
 
 [connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Back" to="." method="_on_Back_pressed"]
+[connection signal="item_selected" from="MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList" to="." method="_on_item_selected"]

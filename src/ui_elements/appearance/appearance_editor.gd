@@ -3,6 +3,7 @@ extends Node
 
 onready var tabs = $MenuMargin/HBoxContainer/TabBox/TabContainer
 onready var character = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
+onready var popupCharacter = $SavePopup/MarginContainer/HBoxContainer/MenuCharacter
 
 var currentTab: int # ID of selected tab
 var selectedItem: int # ID of selected item
@@ -32,6 +33,7 @@ const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 
 func _ready() -> void:
 	Appearance.applyConfig()
+	$Darken.hide()
 	_generateTabs()
 
 # Generate the customization menu tabs
@@ -94,10 +96,16 @@ func _getTexture(directories: Dictionary, namespace: String, resource: String) -
 	var texture = load(texturePath) # Load the texture path as a texture
 	return(texture) # Return the new texture object
 
-func _closetMenuPopup():
-	var menu = $ClosetPopup
+func _menuPopup():
+	var menu = $MenuPopup
 	menu.rect_position = get_viewport().get_mouse_position()
 	menu.popup()
+
+func _savePopup():
+	$MenuPopup.hide()
+	$Darken.show()
+	$SavePopup.popup_centered()
+	popupCharacter.setOutline(Color.black)
 
 # --Signal Functions--
 
@@ -135,10 +143,16 @@ func _on_Character_mouse_exited():
 	character.setOutline(Color("#E6E2DD"))
 
 func _on_Character_pressed():
-	_closetMenuPopup()
+	_menuPopup()
 
 func _on_Save_pressed():
-	assert(false, "Implement save config scene")
+	_savePopup()
 
 func _on_Closet_pressed():
 	get_tree().change_scene("res://ui_elements/appearance/closet.tscn")
+
+func _on_SavePopup_hide():
+	$Darken.hide()
+
+func _on_Cancel_pressed():
+	$SavePopup.hide()

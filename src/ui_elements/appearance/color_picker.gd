@@ -8,13 +8,10 @@ var imageScale: Vector2 # Scale of the image
 var windowDimensions: Vector2
 var pressing: bool
 
-onready var preview = $Preview
-
 # --Private Functions--
 
 # Setup on draw
 func _draw():
-	preview.hide()
 	windowDimensions = self.get_size() # Set dimensions of the window
 	var colorMapImage = load(colorMapPath) # Load the image
 	set_default_cursor_shape(3) # Set to cross cursor
@@ -48,21 +45,16 @@ func _checkValidPos(position) -> bool:
 		return(true)
 
 func _showPreview(pos: Vector2, color: Color):
-	preview.show()
-	preview.rect_position = pos
-	preview.color = color
+	$Preview.show()
+	$Preview.rect_position = pos
+	$Preview.color = color
 
 # --Signal Functions--
 
 ## Recieve input from Color Picker gui events
 func _on_ColorPicker_gui_input(event):
-	if event.is_action_pressed("ui_press"):
-		pressing = true
-	elif event.is_action_released("ui_press"):
-		pressing = false
-		preview.hide()
 	## If player is pressing, and at a valid position, select the color
-	if pressing and _checkValidPos(event.position):
+	if Input.is_action_pressed("ui_press") and _checkValidPos(event.position):
 		var selectedColor = Appearance.colorFromMapPos(colorMapPath, event.position, imageScale)
 		_showPreview(event.position, selectedColor)
 		emit_signal("colorOnClick", selectedColor)

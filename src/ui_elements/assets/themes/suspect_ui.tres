@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=20 format=2]
+[gd_resource type="Theme" load_steps=21 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_font_label.tres" type="DynamicFont" id=1]
 [ext_resource path="res://ui_elements/assets/themes/suspect_font_main.tres" type="DynamicFont" id=2]
@@ -135,6 +135,18 @@ border_width_right = 4
 border_width_bottom = 4
 border_color = Color( 0.901961, 0.886275, 0.866667, 1 )
 
+[sub_resource type="StyleBoxFlat" id=20]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.2, 0.2, 0.2, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.901961, 0.886275, 0.866667, 1 )
+
 [sub_resource type="StyleBoxFlat" id=18]
 content_margin_left = 8.0
 content_margin_right = 8.0
@@ -222,6 +234,7 @@ MarginContainer/constants/margin_left = 20
 MarginContainer/constants/margin_right = 20
 MarginContainer/constants/margin_top = 20
 Panel/styles/panel = SubResource( 19 )
+PanelContainer/styles/panel = SubResource( 20 )
 PopupPanel/styles/panel = SubResource( 18 )
 TabContainer/colors/font_color_bg = Color( 0.901961, 0.886275, 0.866667, 1 )
 TabContainer/colors/font_color_disabled = Color( 0.588235, 0.588235, 0.588235, 1 )
