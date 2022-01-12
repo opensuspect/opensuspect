@@ -102,12 +102,6 @@ puppet func receivePlayerData(id: int, name: String) -> void:
 		gameScene.addCharacter(id)
 	#print_debug("Connected clients: ", listConnections)
 
-puppet func playerDisconnected(id: int) -> void:
-	#print_debug("connections puppet: removing character", id)
-	var gameScene: Node = TransitionHandler.gameScene
-	gameScene.removeCharacter(id)
-	listConnections.erase(id)
-
 # -------------- Server side code --------------
 
 func createGame(portNumber: int, playerName: String) -> void:
@@ -160,14 +154,25 @@ master func receiveNewPlayerData(newPlayerName: String) -> void:
 
 func connectedNewPlayer(id: int) -> void:
 	pass
-	
+
+# handling of disconnection for clients
+puppet func disconnectPlayer(id: int) -> void:
+	handleDisconnect(id) # literally just call this
+
+# this function handles when a player disconnects, and is called on the network server
 func disconnectedPlayer(id: int) -> void:
 	#print_debug("connections server: removing character", id)
-	rpc("playerDisconnected", id)
+	rpc("disconnectPlayer", id)
+	handleDisconnect(id)
+
+## this function actually removes the player and stuff
+func handleDisconnect(id:int) -> void:
 	listConnections.erase(id)
-	
-	var gameScene: Node = TransitionHandler.gameScene
-	gameScene.removeCharacter(id)
+	var characterNode: Node = Characters.getCharacterNode(id)
+	characterNode.disconnected() ## call this function on the player to handle in-game reprocussions
+	## remove character's node and resource
+	Characters.removeCharacterNode(id)
+	Characters.removeCharacterResource(id)
 
 func allowNewConnections(switch: bool) -> void:
 	get_tree().refuse_new_network_connections = not switch
