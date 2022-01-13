@@ -1,17 +1,16 @@
 extends Node
 # --Private Variables--
-onready var Resources = get_node("/root/Resources")
-onready var Appearance = get_node("/root/Appearance")
 
 onready var tabs = $MenuMargin/HBoxContainer/TabBox/TabContainer
 onready var character = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
+onready var popupCharacter = $SavePopup/MarginContainer/HBoxContainer/MenuCharacter
+
+signal menuBack
+signal menuSwitch(menu)
 
 var currentTab: int # ID of selected tab
 var selectedItem: int # ID of selected item
 var itemsList: Dictionary # Dictionary of items, for selection lookup
-
-enum CallerScene {NOTHING, MAINMENU}
-var parentScene: int = CallerScene.NOTHING
 
 # Directories of icons
 var icons: Dictionary = {
@@ -34,22 +33,21 @@ const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 
 func _ready() -> void:
 	Appearance.applyConfig()
+	$Darken.hide()
 	_generateTabs()
 
-# Generate the customization menu tabs
+## Generate the customization menu tabs
 func _generateTabs() -> void:
-	var files = Resources.list(Appearance.directories, Appearance.extensions) # Get file list
+	var files = Resources.list(Appearance.directories, Appearance.extensions) ## Get file list
 	for resource in files.keys(): # Iterate over files
 		for namespace in Appearance.groupClothing: # Iterate over the clothing groups
-			# Check if resource is a child eg. Left Arm to Clothes
+			## Check if resource is a child eg. Left Arm to Clothes
 			if Appearance.groupClothing[namespace].has(resource):
 				pass
 			else:
-				_addChildTab(files, resource) # Otherwise add the tab for this resource
-#	var colors = VBoxContainer.new() # Add a color customization tab
-	var colorScene = "res://ui_elements/colors.tscn"
+				_addChildTab(files, resource) ## Otherwise add the tab for this resource
+	var colorScene = "res://ui_elements/appearance/colors.tscn"
 	var colors = load(colorScene).instance()
-#	colors.name = "Colors" # Set it's name to "Colors"
 	colors.connect("setColor", self, "_on_color_selected")
 	tabs.add_child(colors) # Add "Colors" as a child to tab container
 
@@ -96,6 +94,12 @@ func _getTexture(directories: Dictionary, namespace: String, resource: String) -
 	var texture = load(texturePath) # Load the texture path as a texture
 	return(texture) # Return the new texture object
 
+## Save overlay popup
+func _savePopup():
+	$Darken.show() ## Darken the screen behind
+	$SavePopup.popup_centered() # Show the popup centered on the screen
+	popupCharacter.setOutline(Color.black)
+
 # --Signal Functions--
 
 # Sets the current tab when a tab is changed
@@ -117,11 +121,26 @@ func _on_Random_pressed() -> void:
 
 # Switches back to the previous menu
 func _on_Back_pressed() -> void:
-	## Checks what is set as parent scene
-	match parentScene:
-		## If main menu
-		CallerScene.MAINMENU:
-			character.setOutline(Color("#E6E2DD"))
-			TransitionHandler.showMainMenu() ## Transition back to main menu
-		CallerScene.NOTHING:
-			assert(false, "Before showing the appearance editor, the caller scene should be set")
+	emit_signal("menuBack")
+
+# Open the save popup
+func _on_Save_pressed():
+	_savePopup()
+
+# Switch to closet scene
+func _on_Closet_pressed():
+	emit_signal("menuSwitch", "closet")
+
+# Hide darkener on save popup close
+func _on_SavePopup_hide():
+	$Darken.hide()
+
+# Close the save popup
+func _on_Cancel_pressed():
+	$SavePopup.hide()
+
+func _on_Character_mouse_entered():
+	character.setOutline(Color("#DB2921"))
+
+func _on_Character_mouse_exited():
+	character.setOutline(Color("#E6E2DD"))

@@ -9,7 +9,7 @@ extends Node
 #	}
 #
 ## Array of file types to use (only files with these extensions will be listed):
-#	var file_types: Array = [".png", ".svg"]
+#	var file_types: Array = ["png", "svg"]
 #
 ## Pass the two variables into the list function:
 #	Resources.list(dirs, file_types)
@@ -27,6 +27,8 @@ extends Node
 # Resources.getRandomOfEach(dirs, file_types)
 # > {Folder 1:{test_2:res://.../test_2.png}, Folder 2:{test_3:res://.../test_3.png}}
 
+const SPECIAL_CHARS = "[^A-Za-z0-9_]+"
+
 # --Public Functions--
 
 # Returns a dictionary of all resources from a given directory dictionary
@@ -41,7 +43,7 @@ func list(directories: Dictionary, types: PoolStringArray) -> Dictionary:
 # Returns the path of a specified resource
 func getPath(resource: String, namespace: String, directories: Dictionary, types: PoolStringArray) -> String:
 	var resources: Dictionary = list(directories, types) # Create the directory listing
-	var wantedResource = _formatString(resource) # Format the string for optimal matching
+	var wantedResource = formatString(resource) # Format the string for optimal matching
 	var output = "" # Set a blank output
 	for file in resources[namespace].keys(): # Iterate through each file in the specified namespace
 		if file == wantedResource: # Match the file name with the wanted resource
@@ -69,6 +71,22 @@ func getRandomOfEach(directories: Dictionary, types: PoolStringArray) -> Diction
 		output[namespace] = random # Set the file for this directory to be the random file
 	return(output) # Return the dictionary of random files
 
+# Formats a string to remove any special characters and replace with underscores
+func formatString(string: String) -> String:
+	var regex = RegEx.new() # Create a new RegEx object
+	regex.compile(SPECIAL_CHARS) # Select any special characters
+	for word in regex.search_all(string): # Iterate over the instances of the regex in the input string
+		string = string.replace(word.get_string(), "_") # Replace all special characters with underscores
+	return(string) # Return the string (capitalize it later if it is to be used in game)
+
+# Remove all special characters, no replacement
+func cleanString(string: String) -> String:
+	var regex = RegEx.new() # Create a new RegEx object
+	regex.compile(SPECIAL_CHARS) # Select any special characters
+	for word in regex.search_all(string): # Iterate over the instances of the regex in the input string
+		string = string.replace(word.get_string(), "") # Replace all special characters with nothing
+	return(string) # Return the string (capitalize it later if it is to be used in game)
+
 # --Private Functions--
 func _ready():
 	randomize()
@@ -85,7 +103,8 @@ func _listFilesInDirectory(path: String, types: PoolStringArray) -> Array:
 			break # Stops the loop after the end of the directory has been found
 		else:
 			for type in types: # Iterates over each specified file extension
-				if file.ends_with(type): # Checks if the file has the extension
+				type = cleanString(type) # Format type to remove special characters
+				if file.get_extension() == type: # Checks if the file has the extension
 					files.append(file) # If it does, add it to the files array
 	return(files) # Return the files array
 
@@ -94,18 +113,8 @@ func _filesToDictionary(files: PoolStringArray, path: String, types: PoolStringA
 	var output: Dictionary = {} # Defines the dictionary to output the files
 	var resource: String = "" # Defines the resource string 
 	for file in files:
-		for type in types: # Iterates over each specified file extension
-			if file.ends_with(type): # Checks if the file has the extension
-				resource = file.trim_suffix(type) # If it does, remove the extension, and set this as "resource"
-		resource = _formatString(resource) # Format the resource string for use in game
+		resource = file.get_basename() # Get the base name of the resource
+		resource = formatString(resource) # Format the resource string for use in game
 		var fullPath = path + "/" + file # Create the full file path to the resource
 		output[resource] = fullPath # Set the path in the resources dictionary
 	return(output) # Return the output dictionary
-
-# Formats a string to remove any special characters
-func _formatString(string: String) -> String:
-	var regex = RegEx.new() # Create a new RegEx object
-	regex.compile("[^A-Za-z0-9_]+") # Select any special characters
-	for word in regex.search_all(string): # Iterate over the instances of the regex in the input string
-		string = string.replace(word.get_string(), "_") # Replace all special characters with underscores
-	return(string) # Return the string (capitalize it later if it is to be used in game)
