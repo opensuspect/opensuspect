@@ -70,4 +70,4 @@ func _on_Select_pressed() -> void:
 func _on_item_selected(index) -> void:
 	var namespace = configList[index]
 	_selectConfig(namespace)
-	character.setConfig(selectedOutfit, selectedColors)
+	character.setAppearance(selectedOutfit, selectedColors)

@@ -17,11 +17,6 @@ var selectedColorPosition: Vector2
 func showPreview(pos: Vector2) -> void:
 	call_deferred("_showPreview", pos) # Call deferred runs it when it is ready
 
-# Returns the image scale of the color picker
-func getImageScale() -> Vector2:
-	var output = call_deferred("_getImageScale") # Call deferred runs it when it is ready
-	return(output)
-
 # --Private Functions--
 
 func _ready() -> void:

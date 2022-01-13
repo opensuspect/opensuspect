@@ -9,4 +9,4 @@ var currentColors: Dictionary
 func applyConfig(outfit: Dictionary, colors: Dictionary):
 	currentOutfit = outfit
 	currentColors = colors
-	skeleton.applyConfig(currentOutfit, currentColors)
+	skeleton.applyAppearance(currentOutfit, currentColors)

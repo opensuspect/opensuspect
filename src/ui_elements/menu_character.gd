@@ -10,12 +10,12 @@ func setOutline(color: Color) -> void:
 
 # Apply config from the appearance public variables to skeleton
 func applyFromAppearance():
-	skeleton.applyConfig(Appearance.currentOutfit, Appearance.currentColors)
+	skeleton.applyAppearance(Appearance.currentOutfit, Appearance.currentColors)
 
 # Set config to skeleton from inputted variables
-func setConfig(outfit: Dictionary, colors: Dictionary):
-	skeleton.applyConfig(outfit, colors)
+func setAppearance(outfit: Dictionary, colors: Dictionary):
+	skeleton.applyAppearance(outfit, colors)
 
 # --Private Variables--
 func _ready():
-	Appearance.connect("configUpdated", self, "applyFromAppearance") # Signal from appearance to set skeleton config
+	Appearance.connect("appearanceChanged", self, "applyFromAppearance") # Signal from appearance to set skeleton config

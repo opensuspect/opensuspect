@@ -1,6 +1,6 @@
 extends Node
 
-signal configUpdated # Apply config for menu character
+signal appearanceChanged # Apply config for menu character
 
 # --Public Variables--
 var currentOutfit: Dictionary
@@ -45,7 +45,7 @@ const COLOR_XY = 500
 
 # Helper to apply the current outfit
 func updateConfig() -> void:
-	emit_signal("configUpdated")
+	emit_signal("appearanceChanged")
 
 # Set the outfit and color variables
 func setConfig(outfit: Dictionary, colors: Dictionary) -> void:
