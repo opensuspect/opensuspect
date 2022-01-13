@@ -144,3 +144,6 @@ func _on_Appearance_pressed():
 	
 func _on_Settings_pressed():
 	emit_signal("menuSwitch", "settings")
+
+func _on_Quit_pressed():
+	get_tree().quit()

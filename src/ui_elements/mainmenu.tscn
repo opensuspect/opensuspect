@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
 [ext_resource path="res://ui_elements/menu_character.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui_elements/mainmenu.gd" type="Script" id=3]
+[ext_resource path="res://ui_elements/assets/images/exit_icon.png" type="Texture" id=4]
 [ext_resource path="res://ui_elements/assets/images/logo.svg" type="Texture" id=5]
 [ext_resource path="res://ui_elements/assets/images/settings_icon.png" type="Texture" id=6]
 [ext_resource path="res://ui_elements/assets/themes/hidden.tres" type="Theme" id=7]
@@ -337,13 +338,13 @@ __meta__ = {
 
 [node name="Spacer" type="Control" parent="Bottom/HBox"]
 margin_left = 276.0
-margin_right = 1688.0
+margin_right = 1592.0
 margin_bottom = 84.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Config" type="HBoxContainer" parent="Bottom/HBox"]
-margin_left = 1704.0
+margin_left = 1608.0
 margin_right = 1880.0
 margin_bottom = 84.0
 
@@ -363,6 +364,14 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 icon = ExtResource( 6 )
 
+[node name="Quit" type="Button" parent="Bottom/HBox/Config"]
+margin_left = 192.0
+margin_right = 272.0
+margin_bottom = 84.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon = ExtResource( 4 )
+
 [connection signal="mouse_entered" from="MainMenu/CenterCharacter/MenuCharacter/Character" to="." method="_on_Character_mouse_entered"]
 [connection signal="mouse_exited" from="MainMenu/CenterCharacter/MenuCharacter/Character" to="." method="_on_Character_mouse_exited"]
 [connection signal="pressed" from="MainMenu/CenterCharacter/MenuCharacter/Character" to="." method="_on_Player_pressed"]
@@ -377,3 +386,4 @@ icon = ExtResource( 6 )
 [connection signal="pressed" from="Server/HBoxContainer/Back" to="." method="_on_Back_pressed"]
 [connection signal="pressed" from="Bottom/HBox/Config/Appearance" to="." method="_on_Appearance_pressed"]
 [connection signal="pressed" from="Bottom/HBox/Config/Settings" to="." method="_on_Settings_pressed"]
+[connection signal="pressed" from="Bottom/HBox/Config/Quit" to="." method="_on_Quit_pressed"]
