@@ -19,3 +19,4 @@ func setConfig(outfit: Dictionary, colors: Dictionary):
 # --Private Variables--
 func _ready():
 	Appearance.connect("applyConfig", self, "applyAppearance") # Signal from appearance to set skeleton config
+	Appearance.randomizeIfUnset()

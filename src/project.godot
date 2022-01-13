@@ -34,6 +34,7 @@ Characters="*res://autoloads/characters.gd"
 Connections="*res://autoloads/connections.gd"
 TransitionHandler="*res://autoloads/transition_handler.gd"
 GameData="*res://autoloads/game_data.gd"
+Scenes="*res://autoloads/scenes.gd"
 
 [display]
 

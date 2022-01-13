@@ -5,15 +5,12 @@ onready var tabs = $MenuMargin/HBoxContainer/TabBox/TabContainer
 onready var character = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
 onready var popupCharacter = $SavePopup/MarginContainer/HBoxContainer/MenuCharacter
 
-signal menuBack
-signal menuSwitch(menu)
-
 var currentTab: int # ID of selected tab
 var selectedItem: int # ID of selected item
 var itemsList: Dictionary # Dictionary of items, for selection lookup
 
 # Directories of icons
-var icons: Dictionary = {
+var iconDirs: Dictionary = {
 	"Body": "res://game/character/assets/icons/body",
 	"Clothes": "res://game/character/assets/icons/clothes",
 	"Mouth": "res://game/character/assets/icons/mouth",
@@ -84,7 +81,7 @@ func _updateOutfit() -> void:
 
 # Get the texture to use for the item's icon
 func _getTexture(directories: Dictionary, namespace: String, resource: String) -> Texture:
-	var iconList = Resources.list(icons, Appearance.extensions) # Get a list of all icons
+	var iconList = Resources.list(iconDirs, Appearance.extensions) # Get a list of all icons
 	var icons = iconList[namespace] # Get the icons under the given namespace
 	var texturePath: String # Path to the texture
 	if icons.has(resource): # Check if the item has an icon
@@ -121,7 +118,7 @@ func _on_Random_pressed() -> void:
 
 # Switches back to the previous menu
 func _on_Back_pressed() -> void:
-	emit_signal("menuBack")
+	Scenes.back()
 
 # Open the save popup
 func _on_Save_pressed():
@@ -129,7 +126,7 @@ func _on_Save_pressed():
 
 # Switch to closet scene
 func _on_Closet_pressed():
-	emit_signal("menuSwitch", "closet")
+	Scenes.overlay("res://ui_elements/appearance/closet.tscn")
 
 # Hide darkener on save popup close
 func _on_SavePopup_hide():

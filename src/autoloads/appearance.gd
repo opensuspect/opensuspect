@@ -71,6 +71,11 @@ func setColor(shader: String, color: Color):
 func randomizeConfig() -> void:
 	setConfig(_randomOutfit(), _randomColors())
 
+func randomizeIfUnset() -> void:
+	if not hasConfig:
+		randomizeConfig()
+		hasConfig = true
+
 # Get a color from a position on a color map, adjusting for scale
 func colorFromMapPos(path: String, position: Vector2, scale: Vector2) -> Color:
 	var xPos = position.x / scale.x
