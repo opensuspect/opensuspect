@@ -29,7 +29,7 @@ func listItems() -> void:
 # --Private Functions--
 
 func _ready() -> void:
-	Appearance.applyConfig()
+	Appearance.updateConfig()
 	_configureItemList()
 	listItems()
 

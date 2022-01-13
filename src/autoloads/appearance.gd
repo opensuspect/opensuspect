@@ -1,10 +1,11 @@
 extends Node
 
-signal applyConfig # Apply config for menu character
+signal configUpdated # Apply config for menu character
 
 # --Public Variables--
 var currentOutfit: Dictionary
 var currentColors: Dictionary
+
 var hasConfig: bool
 
 # Dictionary of asset folders
@@ -43,14 +44,14 @@ const COLOR_XY = 500
 # --Public Functions--
 
 # Helper to apply the current outfit
-func applyConfig():
-	emit_signal("applyConfig")
+func updateConfig() -> void:
+	emit_signal("configUpdated")
 
 # Set the outfit and color variables
 func setConfig(outfit: Dictionary, colors: Dictionary) -> void:
 	currentOutfit = outfit
 	currentColors = colors
-	applyConfig()
+	updateConfig()
 
 # Set one part of the outfit
 func setOutfitPart(resource: String, namespace: String) -> void:
@@ -61,22 +62,21 @@ func setOutfitPart(resource: String, namespace: String) -> void:
 	var output = _groupOutfit(outfit)
 	setConfig(output, currentColors)
 
-# Set the color of a shader
-func setColor(shader: String, color: Color):
+# Set the color of a shader from a position
+func setColorFromPos(shader: String, colorMap: String, position: Vector2) -> void:
 	var colors = currentColors
-	colors[shader] = _setColor(color)
+	var color = getColorFromPos(colorMap, position)
+	colors[shader] = _setColorInfo(color, position)
 	setConfig(currentOutfit, colors)
+
+# Get a color from a position on a color map
+func getColorFromPos(path: String, position: Vector2) -> Color:
+	var color = _colorFromMapXY(path, position)
+	return(color)
 
 # Randomize configuration
 func randomizeConfig() -> void:
 	setConfig(_randomOutfit(), _randomColors())
-
-# Get a color from a position on a color map, adjusting for scale
-func colorFromMapPos(path: String, position: Vector2, scale: Vector2) -> Color:
-	var xPos = position.x / scale.x
-	var yPos = position.y / scale.y
-	var color = _colorFromMapXY(path, xPos, yPos)
-	return(color)
 
 # --Private Functions--
 
@@ -107,26 +107,28 @@ func _randomColors() -> Dictionary:
 	for shader in colorShaders["Color Maps"]:
 		var randX = randi() % COLOR_XY # Random X Position
 		var randY = randi() % COLOR_XY # Random Y Position
+		var position = Vector2(randX, randY)
 		# Get the color from the position
-		var randColor = _colorFromMapXY(colorShaders["Color Maps"][shader], randX, randY)
-		colors[shader] = _setColor(randColor)
+		var randColor = _colorFromMapXY(colorShaders["Color Maps"][shader], position)
+		colors[shader] = _setColorInfo(randColor, Vector2(randX, randY))
 	return(colors)
 
 # Creates a dictionary setting up the colors for the shader
-func _setColor(color: Color) -> Dictionary:
-	var rgb: Dictionary
-	rgb["Red"] = color.r
-	rgb["Green"] = color.g
-	rgb["Blue"] = color.b
-	return(rgb)
+func _setColorInfo(color: Color, position: Vector2) -> Dictionary:
+	var colorInfo: Dictionary
+	colorInfo["Red"] = color.r
+	colorInfo["Green"] = color.g
+	colorInfo["Blue"] = color.b
+	colorInfo["Position"] = position
+	return(colorInfo)
 
 # Returns the color from the given color map, at the given relative co-ordinates
-func _colorFromMapXY(colorMapPath: String, xRel: int, yRel: int) -> Color:
+func _colorFromMapXY(colorMapPath: String, relPos: Vector2) -> Color:
 	var colorMap = load(colorMapPath).get_data() # Loads the color map from the given path, and gets it's data
 	var maxX = colorMap.get_width() # Get width of the color map
 	var maxY = colorMap.get_height() # Get height of the color map
-	var x = int(float(xRel) / COLOR_XY * maxX) # Sets the x position
-	var y = int(float(yRel) / COLOR_XY * maxY) # Sets the y position
+	var x = int(float(relPos.x) / COLOR_XY * maxX) # Sets the x position
+	var y = int(float(relPos.y) / COLOR_XY * maxY) # Sets the y position
 	colorMap.lock() # ???, but it breaks without it
 	var color = colorMap.get_pixel(x, y) # Gets the color of the pixel at the co-ordinates
 	colorMap.unlock() # ???, but it breaks without it
