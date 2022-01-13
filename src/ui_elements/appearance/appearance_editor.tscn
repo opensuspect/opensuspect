@@ -62,6 +62,7 @@ custom_constants/margin_bottom = 0
 [node name="Random" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter"]
 margin_right = 456.0
 margin_bottom = 640.0
+hint_tooltip = "Randomise your appearance!"
 theme = ExtResource( 5 )
 
 [node name="ButtonMargin" type="MarginContainer" parent="MenuMargin/HBoxContainer/CharacterBox"]

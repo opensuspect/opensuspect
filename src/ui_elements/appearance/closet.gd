@@ -5,9 +5,10 @@ onready var iconCharacter = preload("res://ui_elements/icon_character.tscn")
 onready var character = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
 onready var items = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
 
-signal menuBack
-
 onready var selectButton = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Select
+onready var nameLabel = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Label
+
+signal menuBack
 
 var configData: Dictionary
 var configList: Array
@@ -42,10 +43,13 @@ func _configureItemList():
 	items.fixed_icon_size = ITEM_ICON_SIZE # Configure the icon size
 
 func _populateItems() -> void:
+	var index: int = 0
 	for config in configData:
 		configList.append(config)
 		var texture = _getIconTexture(config)
 		items.add_icon_item(texture)
+		items.set_item_tooltip(index, config)
+		index += 1
 
 func _getIconTexture(namespace) -> Texture:
 	_selectConfig(namespace)
@@ -72,6 +76,7 @@ func _on_Select_pressed() -> void:
 
 func _on_item_selected(index) -> void:
 	var namespace = configList[index]
+	nameLabel.text = namespace
 	_selectConfig(namespace)
 	selectButton.disabled = false
 	character.setAppearance(selectedOutfit, selectedColors)

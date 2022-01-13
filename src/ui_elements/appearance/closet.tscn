@@ -43,7 +43,7 @@ size_flags_horizontal = 3
 
 [node name="CenterCharacter" type="CenterContainer" parent="MenuMargin/HBoxContainer/CharacterBox"]
 margin_right = 496.0
-margin_bottom = 776.0
+margin_bottom = 686.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -51,9 +51,9 @@ size_flags_vertical = 3
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 20.0
-margin_top = 68.0
+margin_top = 23.0
 margin_right = 476.0
-margin_bottom = 708.0
+margin_bottom = 663.0
 rect_min_size = Vector2( 456, 640 )
 custom_constants/margin_right = 0
 custom_constants/margin_top = 0
@@ -68,7 +68,7 @@ size_flags_vertical = 3
 theme = ExtResource( 5 )
 
 [node name="ButtonMargin" type="MarginContainer" parent="MenuMargin/HBoxContainer/CharacterBox"]
-margin_top = 792.0
+margin_top = 702.0
 margin_right = 496.0
 margin_bottom = 1016.0
 custom_constants/margin_right = 32
@@ -77,21 +77,27 @@ custom_constants/margin_right = 32
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 464.0
-margin_bottom = 204.0
+margin_bottom = 294.0
 size_flags_horizontal = 5
 size_flags_vertical = 4
 theme = ExtResource( 2 )
 
-[node name="Select" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
+[node name="Label" type="Label" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
 margin_right = 444.0
-margin_bottom = 84.0
+margin_bottom = 74.0
+text = "Please select an outfit"
+
+[node name="Select" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
+margin_top = 90.0
+margin_right = 444.0
+margin_bottom = 174.0
 theme = ExtResource( 2 )
 text = "Select"
 
 [node name="Back" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
-margin_top = 100.0
+margin_top = 190.0
 margin_right = 444.0
-margin_bottom = 184.0
+margin_bottom = 274.0
 theme = ExtResource( 2 )
 text = "Back"
 

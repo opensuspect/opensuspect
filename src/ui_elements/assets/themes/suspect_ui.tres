@@ -1,9 +1,10 @@
-[gd_resource type="Theme" load_steps=21 format=2]
+[gd_resource type="Theme" load_steps=24 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_font_label.tres" type="DynamicFont" id=1]
 [ext_resource path="res://ui_elements/assets/themes/suspect_font_main.tres" type="DynamicFont" id=2]
 [ext_resource path="res://ui_elements/assets/themes/suspect_font_label_small.tres" type="DynamicFont" id=3]
 [ext_resource path="res://ui_elements/assets/themes/suspect_font_main_small.tres" type="DynamicFont" id=4]
+[ext_resource path="res://ui_elements/assets/fonts/PTSansNarrow-Regular.ttf" type="DynamicFontData" id=5]
 
 [sub_resource type="StyleBoxFlat" id=5]
 content_margin_left = 8.0
@@ -198,6 +199,25 @@ border_width_right = 4
 border_width_bottom = 4
 border_color = Color( 0.858824, 0.160784, 0.129412, 1 )
 
+[sub_resource type="DynamicFont" id=22]
+size = 32
+font_data = ExtResource( 5 )
+
+[sub_resource type="StyleBoxFlat" id=21]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.2, 0.2, 0.2, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.992157, 0.996078, 0.447059, 1 )
+shadow_color = Color( 0, 0, 0, 1 )
+shadow_size = 1
+shadow_offset = Vector2( 4, 4 )
+
 [resource]
 Button/colors/font_color = Color( 0.901961, 0.886275, 0.866667, 1 )
 Button/colors/font_color_disabled = Color( 0.901961, 0.886275, 0.866667, 0.372549 )
@@ -243,4 +263,6 @@ TabContainer/fonts/font = ExtResource( 4 )
 TabContainer/styles/panel = SubResource( 15 )
 TabContainer/styles/tab_bg = SubResource( 13 )
 TabContainer/styles/tab_fg = SubResource( 14 )
+TooltipLabel/fonts/font = SubResource( 22 )
+TooltipPanel/styles/panel = SubResource( 21 )
 VBoxContainer/constants/separation = 16
