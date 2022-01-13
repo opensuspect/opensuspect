@@ -29,6 +29,9 @@ func _randomIfUnset() -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		joinEvent(menu)
+	if event.is_action_pressed("ui_cancel"):
+		menu = MenuType.MAIN
+		setVisibleMenu(menu)
 
 func _on_Back_pressed() -> void:
 	menu = MenuType.MAIN

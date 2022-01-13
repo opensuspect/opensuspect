@@ -7,6 +7,8 @@ onready var items = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
 
 signal menuBack
 
+onready var selectButton = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Select
+
 var configData: Dictionary
 var configList: Array
 
@@ -29,6 +31,7 @@ func listItems() -> void:
 # --Private Functions--
 
 func _ready() -> void:
+	selectButton.disabled = true
 	Appearance.updateConfig()
 	_configureItemList()
 	listItems()
@@ -70,4 +73,5 @@ func _on_Select_pressed() -> void:
 func _on_item_selected(index) -> void:
 	var namespace = configList[index]
 	_selectConfig(namespace)
+	selectButton.disabled = false
 	character.setAppearance(selectedOutfit, selectedColors)
