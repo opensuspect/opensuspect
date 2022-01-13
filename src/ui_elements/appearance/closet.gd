@@ -19,6 +19,7 @@ const LIST_SAME_WIDTH = true # Same column width
 const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 
 func listItems() -> void:
+	items.clear()
 	if GameData.exists(NAMESPACE):
 		configData = GameData.read(NAMESPACE)
 		_populateItems()
@@ -28,6 +29,10 @@ func listItems() -> void:
 func _ready() -> void:
 	Appearance.applyConfig()
 	_configureItemList()
+	listItems()
+
+# Called from scene switcher whenever this scene is focused
+func _focus() -> void:
 	listItems()
 
 func _configureItemList():
