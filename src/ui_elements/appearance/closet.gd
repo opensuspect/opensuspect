@@ -21,6 +21,7 @@ const LIST_SAME_WIDTH = true # Same column width
 const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 
 func listItems() -> void:
+	items.clear()
 	if GameData.exists(NAMESPACE):
 		configData = GameData.read(NAMESPACE)
 		_populateItems()
@@ -36,7 +37,6 @@ func _configureItemList():
 	items.max_columns = LIST_COLUMNS # Set the max columns
 	items.same_column_width = LIST_SAME_WIDTH # Set the same column width
 	items.fixed_icon_size = ITEM_ICON_SIZE # Configure the icon size
-
 
 func _populateItems() -> void:
 	for config in configData:
@@ -65,7 +65,7 @@ func _on_Back_pressed() -> void:
 
 func _on_Select_pressed() -> void:
 	Appearance.setConfig(selectedOutfit, selectedColors)
-	get_tree().change_scene("res://ui_elements/appearance/appearance_editor.tscn")
+	emit_signal("menuBack")
 
 func _on_item_selected(index) -> void:
 	var namespace = configList[index]
