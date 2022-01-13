@@ -7,6 +7,7 @@ var currentOutfit: Dictionary
 var currentColors: Dictionary
 
 var hasConfig: bool
+var customOutfit: bool
 
 # Dictionary of asset folders
 var directories: Dictionary = {
@@ -76,6 +77,7 @@ func getColorFromPos(path: String, position: Vector2) -> Color:
 
 # Randomize configuration
 func randomizeConfig() -> void:
+	customOutfit = false
 	setConfig(_randomOutfit(), _randomColors())
 
 # --Private Functions--
