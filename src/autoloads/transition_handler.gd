@@ -9,7 +9,7 @@ func _ready() -> void:
 	## Preload the game scene
 	var root: Node = get_tree().get_root()
 	var game: Resource = ResourceLoader.load("res://game/game.tscn")
-	var appearance: Resource = ResourceLoader.load("res://ui_elements/appearance_editor.tscn")
+	var appearance: Resource = ResourceLoader.load("res://ui_elements/appearance/appearance_editor.tscn")
 	## Save current (main menu) scene
 	mainMenuScene = root.get_child(root.get_child_count() - 1)
 	## Instantiate and save th game scene

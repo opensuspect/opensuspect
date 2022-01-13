@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=18 format=2]
+[gd_resource type="Theme" load_steps=21 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_font_label.tres" type="DynamicFont" id=1]
 [ext_resource path="res://ui_elements/assets/themes/suspect_font_main.tres" type="DynamicFont" id=2]
@@ -127,6 +127,41 @@ border_width_right = 4
 border_width_bottom = 4
 border_color = Color( 0.901961, 0.886275, 0.866667, 1 )
 
+[sub_resource type="StyleBoxFlat" id=19]
+bg_color = Color( 0.2, 0.2, 0.2, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.901961, 0.886275, 0.866667, 1 )
+
+[sub_resource type="StyleBoxFlat" id=20]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.2, 0.2, 0.2, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.901961, 0.886275, 0.866667, 1 )
+
+[sub_resource type="StyleBoxFlat" id=18]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.2, 0.2, 0.2, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.992157, 0.996078, 0.447059, 1 )
+shadow_color = Color( 0, 0, 0, 1 )
+shadow_size = 1
+shadow_offset = Vector2( 4, 4 )
+
 [sub_resource type="StyleBoxFlat" id=15]
 content_margin_left = 8.0
 content_margin_right = 8.0
@@ -194,6 +229,13 @@ LineEdit/fonts/font = ExtResource( 1 )
 LineEdit/styles/focus = SubResource( 11 )
 LineEdit/styles/normal = SubResource( 9 )
 LineEdit/styles/read_only = SubResource( 10 )
+MarginContainer/constants/margin_bottom = 20
+MarginContainer/constants/margin_left = 20
+MarginContainer/constants/margin_right = 20
+MarginContainer/constants/margin_top = 20
+Panel/styles/panel = SubResource( 19 )
+PanelContainer/styles/panel = SubResource( 20 )
+PopupPanel/styles/panel = SubResource( 18 )
 TabContainer/colors/font_color_bg = Color( 0.901961, 0.886275, 0.866667, 1 )
 TabContainer/colors/font_color_disabled = Color( 0.588235, 0.588235, 0.588235, 1 )
 TabContainer/colors/font_color_fg = Color( 0.858824, 0.160784, 0.129412, 1 )
