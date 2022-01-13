@@ -18,12 +18,23 @@ func switchMenu():
 			$Closet.listItems()
 		menuType.SETTINGS: $Settings.show()
 
+func back() -> void:
+	var index = menuOrder.size() - 1 # Get the index of the last item in menu order
+	if index > 0:
+		menuOrder.remove(index) # Remove the item at the index
+		currentMenu = menuOrder.back() # Set current menu to the last item in the array
+		switchMenu()	
+
 # --Private Functions--
 
 func _ready():
 	currentMenu = menuType.MAIN
 	switchMenu()
 	menuOrder.append(currentMenu) # Add the current menu to menu order
+
+func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		back()
 
 ## Hide all menus
 func _hideMenus():
@@ -44,7 +55,4 @@ func _on_menuSwitch(menu):
 		switchMenu() # Switch to the current menu
 
 func _on_menuBack():
-	var index = menuOrder.size() - 1 # Get the index of the last item in menu order
-	menuOrder.remove(index) # Remove the item at the index
-	currentMenu = menuOrder.back() # Set current menu to the last item in the array
-	switchMenu()
+	back()

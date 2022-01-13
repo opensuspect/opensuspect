@@ -32,7 +32,7 @@ const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 # --Private Functions--
 
 func _ready() -> void:
-	Appearance.applyConfig()
+	Appearance.updateConfig()
 	$Darken.hide()
 	_generateTabs()
 
@@ -95,7 +95,7 @@ func _getTexture(directories: Dictionary, namespace: String, resource: String) -
 	return(texture) # Return the new texture object
 
 ## Save overlay popup
-func _savePopup():
+func _savePopup() -> void:
 	$Darken.show() ## Darken the screen behind
 	$SavePopup.popup_centered() # Show the popup centered on the screen
 	popupCharacter.setOutline(Color.black)
@@ -112,11 +112,14 @@ func _on_item_selected(item: int) -> void:
 	_updateOutfit() # Updates the outfit of the character
 
 # Sets the color when selected from the picker
-func _on_color_selected(color, shader):
-	Appearance.setColor(shader, color)
+func _on_color_selected(shader, colorMap, position) -> void:
+	Appearance.setColorFromPos(shader, colorMap, position)
 
 # Handles randomization of the character
 func _on_Random_pressed() -> void:
+	for child in tabs.get_children():
+		if child is ItemList:
+			child.unselect_all()
 	Appearance.randomizeConfig() # Randomize the config of the character
 
 # Switches back to the previous menu
@@ -124,23 +127,23 @@ func _on_Back_pressed() -> void:
 	emit_signal("menuBack")
 
 # Open the save popup
-func _on_Save_pressed():
+func _on_Save_pressed() -> void:
 	_savePopup()
 
 # Switch to closet scene
-func _on_Closet_pressed():
+func _on_Closet_pressed() -> void:
 	emit_signal("menuSwitch", "closet")
 
 # Hide darkener on save popup close
-func _on_SavePopup_hide():
+func _on_SavePopup_hide() -> void:
 	$Darken.hide()
 
 # Close the save popup
-func _on_Cancel_pressed():
+func _on_Cancel_pressed() -> void:
 	$SavePopup.hide()
 
-func _on_Character_mouse_entered():
+func _on_Character_mouse_entered() -> void:
 	character.setOutline(Color("#DB2921"))
 
-func _on_Character_mouse_exited():
+func _on_Character_mouse_exited() -> void:
 	character.setOutline(Color("#E6E2DD"))

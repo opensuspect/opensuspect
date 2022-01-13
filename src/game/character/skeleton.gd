@@ -31,7 +31,7 @@ var nodeStructure: Dictionary = {
 # --Public Functions--
 
 # Apply config from appearance's variables
-func applyConfig(outfit: Dictionary, colors: Dictionary) -> void:
+func applyAppearance(outfit: Dictionary, colors: Dictionary) -> void:
 	_applyOutfit(outfit)
 	_applyColors(colors)
 
