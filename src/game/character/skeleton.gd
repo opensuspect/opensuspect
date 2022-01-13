@@ -32,8 +32,12 @@ var nodeStructure: Dictionary = {
 
 # Apply config from appearance's variables
 func applyAppearance(outfit: Dictionary, colors: Dictionary) -> void:
-	_applyOutfit(outfit)
-	_applyColors(colors)
+	if outfit.empty() or colors.empty():
+		assert(not outfit.empty(), "Missing outfit data")
+		assert(not colors.empty(), "Missing colors data")
+	else:
+		_applyOutfit(outfit)
+		_applyColors(colors)
 
 # --Private Functions--
 
