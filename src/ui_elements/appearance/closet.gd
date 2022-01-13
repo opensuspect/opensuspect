@@ -26,6 +26,9 @@ const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 func listItems() -> void:
 	items.clear()
 	if GameData.exists(NAMESPACE):
+		configData.clear()
+		configList.clear()
+		items.clear()
 		configData = GameData.read(NAMESPACE)
 		_populateItems()
 
