@@ -39,6 +39,7 @@ func applyConfig(outfit: Dictionary, colors: Dictionary) -> void:
 
 # Applies the outfit to the skeleton
 func _applyOutfit(outfit: Dictionary) -> void:
+	assert(len(outfit) > 0, "Outfit should be set before calling _applyOutfit")
 	for part in outfit.keys(): # Iterate over each resource
 		for path in outfit[part].keys(): # Iterate over each path
 			var nodePath = nodeStructure[part] # Get the path to the node needing to be set
@@ -48,6 +49,7 @@ func _applyOutfit(outfit: Dictionary) -> void:
 
 # Applies the colors to the shaders
 func _applyColors(colors: Dictionary) -> void:
+	assert(len(colors) > 0, "Colors should be set before calling _applyColors")
 	for shader in colorShaders["Color Maps"].keys(): # Iterate over each shader
 		var colorsForShader = Color( # Sets the correct colors for the shader
 		colors[shader]["Red"],

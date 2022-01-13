@@ -1,12 +1,14 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
 [ext_resource path="res://ui_elements/menu_character.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui_elements/mainmenu.gd" type="Script" id=3]
 [ext_resource path="res://ui_elements/background.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui_elements/assets/images/logo.svg" type="Texture" id=5]
+[ext_resource path="res://ui_elements/appearance/closet.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ui_elements/assets/themes/hidden.tres" type="Theme" id=7]
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui_small.tres" type="Theme" id=8]
+[ext_resource path="res://ui_elements/appearance/appearance_editor.tscn" type="PackedScene" id=9]
 
 [node name="MainMenu" type="Control"]
 anchor_left = 0.5
@@ -326,6 +328,12 @@ text = "OpenSuspect Pre-Alpha"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="AppearanceEditor" parent="." instance=ExtResource( 9 )]
+visible = false
+
+[node name="Closet" parent="." instance=ExtResource( 6 )]
+visible = false
 
 [connection signal="mouse_entered" from="MainMenu/CenterCharacter/MenuCharacter/Character" to="." method="_on_Character_mouse_entered"]
 [connection signal="mouse_exited" from="MainMenu/CenterCharacter/MenuCharacter/Character" to="." method="_on_Character_mouse_exited"]

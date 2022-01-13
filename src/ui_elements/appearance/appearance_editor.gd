@@ -9,6 +9,9 @@ var currentTab: int # ID of selected tab
 var selectedItem: int # ID of selected item
 var itemsList: Dictionary # Dictionary of items, for selection lookup
 
+signal openCloset
+signal closeAppearance
+
 enum CallerScene {NOTHING, MAINMENU}
 var parentScene: int = CallerScene.NOTHING
 
@@ -32,9 +35,15 @@ const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 # --Private Functions--
 
 func _ready() -> void:
+	_randomIfUnset()
 	Appearance.applyConfig()
 	$Darken.hide()
 	_generateTabs()
+
+func _randomIfUnset() -> void:
+	if not Appearance.hasConfig:
+		Appearance.randomizeConfig()
+		Appearance.hasConfig = true
 
 # Generate the customization menu tabs
 func _generateTabs() -> void:
@@ -129,12 +138,7 @@ func _on_Random_pressed() -> void:
 # Switches back to the previous menu
 func _on_Back_pressed() -> void:
 	## Checks what is set as parent scene
-	match parentScene:
-		## If main menu
-		CallerScene.MAINMENU:
-			TransitionHandler.showMainMenu() ## Transition back to main menu
-		CallerScene.NOTHING:
-			assert(false, "Before showing the appearance editor, the caller scene should be set")
+	emit_signal("closeAppearance")
 
 func _on_Character_mouse_entered():
 	character.setOutline(Color("#DB2921"))
@@ -149,7 +153,8 @@ func _on_Save_pressed():
 	_savePopup()
 
 func _on_Closet_pressed():
-	get_tree().change_scene("res://ui_elements/appearance/closet.tscn")
+	emit_signal("openCloset")
+	$MenuPopup.hide()
 
 func _on_SavePopup_hide():
 	$Darken.hide()

@@ -5,6 +5,8 @@ onready var iconCharacter = preload("res://ui_elements/icon_character.tscn")
 onready var character = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
 onready var items = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
 
+signal closeCloset
+
 var configData: Dictionary
 var configList: Array
 
@@ -59,11 +61,11 @@ func _selectConfig(namespace: String) -> void:
 # --Signal Functions--
 
 func _on_Back_pressed() -> void:
-	get_tree().change_scene("res://ui_elements/appearance/appearance_editor.tscn")
+	emit_signal("closeCloset")
 
 func _on_Select_pressed() -> void:
 	Appearance.setConfig(selectedOutfit, selectedColors)
-	get_tree().change_scene("res://ui_elements/appearance/appearance_editor.tscn")
+	emit_signal("closeCloset")
 
 func _on_item_selected(index) -> void:
 	var namespace = configList[index]

@@ -1,7 +1,7 @@
 extends Control
 
 # --Variables--
-enum MenuType {MAIN, JOIN, CREATE, SERVER}
+enum MenuType {MAIN, JOIN, CREATE, SERVER, APPEARANCE, CLOSET}
 
 var menu: int
 
@@ -9,20 +9,20 @@ onready var mainMenu: Control = $MainMenu
 onready var joinMenu: Control = $Join
 onready var createMenu: Control = $Create
 onready var serverMenu: Control = $Server
+onready var appearanceWindow: Control = $AppearanceEditor
+onready var appearClosetWindow: Control = $Closet
+onready var centerLogo: Control = $CenterLogo
 
 onready var character = $MainMenu/CenterCharacter/MenuCharacter
 
 # --Interface--
 func _ready() -> void:
-	_randomIfUnset()
+	appearanceWindow.connect("closeAppearance", self, "_on_Back_pressed")
+	appearanceWindow.connect("openCloset", self, "_on_openCloset")
+	appearClosetWindow.connect("closeCloset", self, "_on_Player_pressed")
 	character.setOutline(Color("#E6E2DD"))
 	menu = MenuType.MAIN
 	setVisibleMenu(menu)
-
-func _randomIfUnset() -> void:
-	if not Appearance.hasConfig:
-		Appearance.randomizeConfig()
-		Appearance.hasConfig = true
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
@@ -44,6 +44,10 @@ func _on_ServerStartButton_pressed() -> void:
 	menu = MenuType.SERVER
 	setVisibleMenu(menu)
 
+func _on_openCloset() -> void:
+	menu = MenuType.CLOSET
+	setVisibleMenu(menu)
+
 func _on_AppQuitButton_pressed() -> void:
 	get_tree().quit()
 
@@ -54,12 +58,21 @@ func setVisibleMenu(menuType: int) -> void:
 		MenuType.JOIN: joinMenu.visible = true
 		MenuType.CREATE: createMenu.visible = true
 		MenuType.SERVER: serverMenu.visible = true
+		MenuType.APPEARANCE:
+			appearanceWindow.visible = true
+			centerLogo.visible = false
+		MenuType.CLOSET:
+			appearClosetWindow.visible = true
+			centerLogo.visible = false
 
 func hideMenus() -> void:
 	mainMenu.visible = false
 	joinMenu.visible = false
 	createMenu.visible = false
 	serverMenu.visible = false
+	appearanceWindow.visible = false
+	appearClosetWindow.visible = false
+	centerLogo.visible = true
 
 # --Backend--
 func joinGame() -> void:
@@ -128,7 +141,8 @@ func _on_Server_pressed() -> void:
 func _on_Player_pressed():
 	## Open appearance editor
 	character.setOutline(Color("#E6E2DD"))
-	TransitionHandler.showAppearanceEd()
+	menu = MenuType.APPEARANCE
+	setVisibleMenu(menu)
 
 func _on_Character_mouse_entered():
 	character.setOutline(Color("#DB2921"))
