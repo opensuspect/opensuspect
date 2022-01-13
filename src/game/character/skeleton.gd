@@ -3,7 +3,6 @@ extends Node2D
 # --Private Variables--
 
 onready var Resources = get_node("/root/Resources")
-onready var Appearance = get_node("/root/Appearance")
 
 # Set the accepted file extensions to ".png"
 var extensions: Array = [".png"]
@@ -34,9 +33,9 @@ var nodeStructure: Dictionary = {
 # --Public Functions--
 
 # Apply config from appearance's variables
-func applyConfig() -> void:
-	_applyOutfit(Appearance.currentOutfit)
-	_applyColors(Appearance.currentColors)
+func applyConfig(outfit: Dictionary, colors: Dictionary) -> void:
+	_applyOutfit(outfit)
+	_applyColors(colors)
 
 # --Private Functions--
 

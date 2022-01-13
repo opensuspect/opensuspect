@@ -35,8 +35,6 @@ func enterLobby() -> void:
 	gameScene.loadMap("res://game/maps/lobby/lobby.tscn")
 
 func showMainMenu() -> void:
-	## Refresh the look of the character in the main menu
-	mainMenuScene.player.applyConfig()
 	## Switch to main menu scene
 	switchScene(mainMenuScene)
 
