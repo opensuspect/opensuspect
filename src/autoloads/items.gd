@@ -22,7 +22,7 @@ extends Node
 # let's also say the resource looks something like this:
 
 #	wrench.tres
-#		itemTemplate = "Wrench"
+#		itemName = "Wrench"
 #		texture = <any texture resource>
 #		textureScale = Vector2(1, 1)
 
