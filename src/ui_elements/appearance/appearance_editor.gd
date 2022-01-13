@@ -117,6 +117,9 @@ func _on_color_selected(shader, colorMap, position) -> void:
 
 # Handles randomization of the character
 func _on_Random_pressed() -> void:
+	for child in tabs.get_children():
+		if child is ItemList:
+			child.unselect_all()
 	Appearance.randomizeConfig() # Randomize the config of the character
 
 # Switches back to the previous menu
