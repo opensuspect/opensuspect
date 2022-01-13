@@ -72,6 +72,7 @@ func _on_Back_pressed() -> void:
 
 func _on_Select_pressed() -> void:
 	Appearance.setConfig(selectedOutfit, selectedColors)
+	Appearance.customOutfit = true
 	emit_signal("menuBack")
 
 func _on_item_selected(index) -> void:
