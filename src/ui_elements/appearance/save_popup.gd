@@ -33,4 +33,5 @@ func _saveData():
 	GameData.write(NAMESPACE, configData)
 
 func _on_Save_pressed():
-	saveConfig(inputName.text)
+	if not inputName.text.empty():
+		saveConfig(inputName.text)
