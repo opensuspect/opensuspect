@@ -100,6 +100,11 @@ func _savePopup() -> void:
 	$SavePopup.popup_centered() # Show the popup centered on the screen
 	popupCharacter.setOutline(Color.black)
 
+func _deselectItems():
+	for child in tabs.get_children():
+		if child is ItemList:
+			child.unselect_all()
+
 # --Signal Functions--
 
 # Sets the current tab when a tab is changed
@@ -109,6 +114,7 @@ func _on_tab_changed(tab: int) -> void:
 # Sets the current item when an item is selected
 func _on_item_selected(item: int) -> void:
 	selectedItem = item
+	Appearance.customOutfit = true
 	_updateOutfit() # Updates the outfit of the character
 
 # Sets the color when selected from the picker
@@ -117,10 +123,11 @@ func _on_color_selected(shader, colorMap, position) -> void:
 
 # Handles randomization of the character
 func _on_Random_pressed() -> void:
-	for child in tabs.get_children():
-		if child is ItemList:
-			child.unselect_all()
-	Appearance.randomizeConfig() # Randomize the config of the character
+	if Appearance.customOutfit:
+		$RandomConfirm.popup_centered()
+	else:
+		_deselectItems()
+		Appearance.randomizeConfig() # Randomize the config of the character
 
 # Switches back to the previous menu
 func _on_Back_pressed() -> void:
@@ -135,15 +142,20 @@ func _on_Closet_pressed() -> void:
 	emit_signal("menuSwitch", "closet")
 
 # Hide darkener on save popup close
-func _on_SavePopup_hide() -> void:
+func _on_Popup_hide() -> void:
 	$Darken.hide()
 
 # Close the save popup
 func _on_Cancel_pressed() -> void:
 	$SavePopup.hide()
+	$RandomConfirm.hide()
 
 func _on_Character_mouse_entered() -> void:
 	character.setOutline(Color("#DB2921"))
 
 func _on_Character_mouse_exited() -> void:
 	character.setOutline(Color("#E6E2DD"))
+
+func _on_Confirm_pressed():
+	$RandomConfirm.hide()
+	Appearance.randomizeConfig()
