@@ -20,8 +20,6 @@ extends Node
 # GameData.getPath("unique_namespace")
 # > "user://unique_namespace.json"
 
-onready var Resources = get_node("/root/Resources")
-
 const EXTENSION = "json" # Default file extension to use
 
 # --Public Functions--

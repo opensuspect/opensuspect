@@ -24,14 +24,14 @@ const LIST_SAME_WIDTH = true # Same column width
 const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 
 func listItems() -> void:
-	## Clrear items
+	## Clear items
 	items.clear()
+	_clearObjects()
 	## If saved data exists
 	if GameData.exists(NAMESPACE):
 		## Clear everything
 		configData.clear()
 		configList.clear()
-		items.clear()
 		## Load save data
 		configData = GameData.read(NAMESPACE)
 		## Populate UI
@@ -44,6 +44,13 @@ func _ready() -> void:
 	Appearance.updateConfig() ## Update sample character
 	_configureItemList() ## Configure list of saves
 	listItems() ## Show list
+
+func _clearObjects():
+	for child in get_children():
+		if child.is_in_group("iconCharacter"):
+			remove_child(child)
+			child.remove_from_group("iconCharacter")
+			child.queue_free()
 
 func _configureItemList():
 	items.max_columns = LIST_COLUMNS # Set the max columns
@@ -68,6 +75,7 @@ func _getIconTexture(namespace) -> Texture:
 	## Creates a character icon
 	var iconInstance = iconCharacter.instance()
 	self.add_child(iconInstance)
+	iconInstance.add_to_group("iconCharacter")
 	iconInstance.hide()
 	## Sets outfit for character icon
 	iconInstance.applyConfig(selectedOutfit, selectedColors)

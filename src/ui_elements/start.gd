@@ -45,8 +45,9 @@ func _hideMenus() -> void:
 	$Settings.hide()
 
 
-func _on_menuSwitch(menu) -> void: #TODO: Resolve what the type of "menu" should be.
-	match menu:
+func _on_menuSwitch(strMenu):
+	var menu: int
+	match strMenu:
 		"appearance": menu = menuType.APPEARANCE
 		"closet": menu = menuType.CLOSET
 		"settings": menu = menuType.SETTINGS

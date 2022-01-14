@@ -120,7 +120,8 @@ func _setColorInfo(color: Color, position: Vector2) -> Dictionary:
 	colorInfo["Red"] = color.r
 	colorInfo["Green"] = color.g
 	colorInfo["Blue"] = color.b
-	colorInfo["Position"] = position
+	colorInfo["XPos"] = position.x
+	colorInfo["YPos"] = position.y
 	return(colorInfo)
 
 # Returns the color from the given color map, at the given relative co-ordinates

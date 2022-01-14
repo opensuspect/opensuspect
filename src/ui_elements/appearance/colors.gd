@@ -17,9 +17,9 @@ func _setCursorPos():
 	var skinInfo = Appearance.currentColors["skin_color"]
 	var fhairInfo = Appearance.currentColors["fhair_color"]
 	var hairInfo = Appearance.currentColors["hair_color"]
-	skin.showPreview(skinInfo["Position"])
-	fhair.showPreview(fhairInfo["Position"])
-	hair.showPreview(hairInfo["Position"])
+	skin.showPreview(Vector2(skinInfo["XPos"], skinInfo["YPos"]))
+	fhair.showPreview(Vector2(fhairInfo["XPos"], fhairInfo["YPos"]))
+	hair.showPreview(Vector2(hairInfo["XPos"], hairInfo["YPos"]))
 
 # --Signal Functions--
 
