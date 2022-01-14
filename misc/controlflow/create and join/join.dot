@@ -1,117 +1,283 @@
-digraph join {
-	subgraph cluster_mainmenu {
-		label="mainmenu.gd"; labeljust="l";
-		node [shape=box]; joinEvent; joinGame; createGame; createDedicated;
-		node [shape=diamond]; {node [label="match menu"] match_menu};
-	}
+digraph controlflow {
+    rankdir="LR";
+    subgraph cluster_client1 {
+        label="Client 1"; labeljust="l";
+        subgraph cluster_client1_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            client1_character_resource_getCharacterNode [
+                label="<begin>getCharacterNode"
+                shape="record"
+            ]
+            client1_character_resource_setCharacterNode [
+                label="<begin>setCharacterNode"
+                shape="record"
+            ]
+            client1_character_resource_setPosition [
+                label="<begin>setPosition | <f0> Set node position "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_game {
+            label="game.gd"; labeljust="l";
+            client1_game_loadMap [
+                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points "
+                shape="record"
+            ]
+            client1_game_addCharacter [
+                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
+                shape="record"
+            ]
+            client1_game_spawnCharacter [
+                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_character {
+            label="character.gd"; labeljust="l";
+            client1_character_setCharacterResource [
+                label="<begin>setCharacterResource"
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_transition_handler {
+            label="transition_handler.gd"; labeljust="l";
+            client1_transition_handler_enterLobby [
+                label="<begin>enterLobby | <f0> Switch to the game scene  | <f1> Load lobby map "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_connections {
+            label="connections.gd"; labeljust="l";
+            client1_connections_joinGame [
+                label="<begin>joinGame | <f0> Initialize Godot networking  | <f1> Save data in globals "
+                shape="record"
+            ]
+            client1_connections_connectedOK [
+                label="<begin>connectedOK | <f0> Send own data to server  | <f1> Enter the Lobby "
+                shape="record"
+            ]
+            client1_connections_receiveBulkPlayerData [
+                label="<begin>receiveBulkPlayerData | <f0> Save all received data  | {<f1> For all players  |  { <f2> Create a character  } }"
+                shape="record"
+            ]
+            client1_connections_setServerName [
+                label="<begin>setServerName"
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_characters {
+            label="characters.gd"; labeljust="l";
+            client1_characters_createCharacter [
+                label="<begin>createCharacter | <f0> Create character node and resource  | <f1> assign character nodes and resources to each other  | <f2> register character node and resource  | <f3> return character resource "
+                shape="record"
+            ]
+            client1_characters__createCharacterNode [
+                label="<begin>_createCharacterNode | <f0> instance character scene "
+                shape="record"
+            ]
+            client1_characters__createCharacterResource [
+                label="<begin>_createCharacterResource | <f0> instance a new CharacterResource object "
+                shape="record"
+            ]
+            client1_characters__registerCharacterNode [
+                label="<begin>_registerCharacterNode | <f0> Register character node for id "
+                shape="record"
+            ]
+            client1_characters__registerCharacterResource [
+                label="<begin>_registerCharacterResource | <f0> Register character resource for id "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_mainmenu {
+            label="mainmenu.gd"; labeljust="l";
+            client1_mainmenu_joinGame [
+                label="<begin>joinGame | <f0> Get data from UI  | {<f1> If port is given  |  { <f2> Custom port is used  } } | {<f3> Empty host or playername rejected } | <f4> Join a game "
+                shape="record"
+            ]
+            client1_mainmenu_joinEvent [
+                label="<begin>joinEvent | {<f0> Checks menu  |  { <f1> Join game  | <f2> Create a game  | <f3> Dedicated server  } }"
+                shape="record"
+            ]
+        }
 
-	subgraph cluster_0 {
-		label="Client 1"; labeljust="l";
-		subgraph cluster_0c {
-			label="connections.gd"; labeljust="l";
-			connections_joinGame[
-				label="<f0> joinGame"
-				shape=record
-			];
-			connections_connectedOK[
-				label="<f0> connectedOK | <f1> | <f2>"
-				shape=record
-			];
-			connections_setServerName [
-				label="<f0> setServerName"
-				shape=record
-			];
-			connections_receiveBulkPlayerData [
-				label="<f0> receiveBulkPlayerData "
-				shape=record
-			];
-		}
-		subgraph cluster_0t {
-			label="transition_handler.gd"; labeljust="l";
-			node [shape=box]; {node [label="enterLobby"] client_enterLobby};
-		}
-		subgraph cluster_0g {
-			label="game.gd"; labeljust="l";
-			client_loadMap [
-				label="loadMap"
-				shape="record"
-			];
-			client_addCharacter [
-				label="<f0> addCharacter | <f1> | <f2> | <f3> Puts the character on the scene | <f4> "
-				shape="record"
-			];
-		}
-		subgraph cluster_0char {
-			label="characters.gd"; labeljust="l";
-			client_characters_createCharacter [
-				label="<f0> createCharacter | <f1> instances character_resource.gd \n newCharacterResource"
-				shape="record"
-			];
-		}
-		subgraph cluster_0charRes {
-			label="character_resource.gd \n newCharacterResource"; labeljust="l";
-			client_characterRes_getCharacterNode [
-				label="getCharacterNode"
-				shape="record"
-			];
-			client_characterRes_setPosition [
-				label="set_Position"
-				shape="record"
-			];
-		}
-	}
-	subgraph cluster_1 {
-		label="Server"; labeljust="l";
-		subgraph cluster_1c {
-			label="connections.gd"; labeljust="l";
-			connections_receiveNewPlayerData [
-				label="<f0> receiveNewPlayerData | <f1> | <f2>| <f3> | <f4>"
-				shape=record
-			];
-		}
-		subgraph cluster_1g {
-			label="game.gd"; labeljust="l";
-			server_addCharacter [
-				label="addCharacter"
-				shape="record"
-			];
-		}
-	}
-	subgraph cluster_2 {
-		label="Client 2"; labeljust="l";
-		subgraph cluster_2c {
-			label="connections.gd"; labeljust="l";
-			connections_receivePlayerData [
-				label="<f0> receivePlayerData "
-				shape=record
-			];
-		}
-		subgraph cluster_2g {
-			label="game.gd"; labeljust="l";
-			client2_addCharacter [
-				label="addCharacter"
-				shape="record"
-			];
-		}
-	}
-	start [shape=Mdiamond];
-	start -> joinEvent;
-	joinEvent -> match_menu;
-	match_menu -> joinGame;
-	match_menu -> createGame;
-	match_menu -> createDedicated;
-	joinGame -> connections_joinGame;
-	connections_connectedOK:f1 -> connections_receiveNewPlayerData:f0 [color=darkgreen];
-	connections_connectedOK:f2 -> client_enterLobby;
-	client_enterLobby -> client_loadMap;
-	connections_receiveNewPlayerData:f1 -> connections_setServerName [color=blue];
-	connections_receiveNewPlayerData:f2 -> connections_receiveBulkPlayerData [color=blue];
-	connections_receiveNewPlayerData:f3 -> connections_receivePlayerData [color=red];
-	connections_receiveNewPlayerData:f4 -> server_addCharacter;
-	connections_receiveBulkPlayerData -> client_addCharacter:f0;
-	client_addCharacter:f1 -> client_characters_createCharacter:f0;
-	client_addCharacter:f2 -> client_characterRes_getCharacterNode;
-	client_addCharacter:f4 -> client_characterRes_setPosition;
-	connections_receivePlayerData -> client2_addCharacter;
+    }
+    subgraph cluster_server {
+        label="Server"; labeljust="l";
+        subgraph cluster_server_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            server_character_resource_getCharacterNode [
+                label="<begin>getCharacterNode"
+                shape="record"
+            ]
+            server_character_resource_setCharacterNode [
+                label="<begin>setCharacterNode"
+                shape="record"
+            ]
+            server_character_resource_setPosition [
+                label="<begin>setPosition | <f0> Set node position "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_game {
+            label="game.gd"; labeljust="l";
+            server_game_addCharacter [
+                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
+                shape="record"
+            ]
+            server_game_spawnCharacter [
+                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_character {
+            label="character.gd"; labeljust="l";
+            server_character_setCharacterResource [
+                label="<begin>setCharacterResource"
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_connections {
+            label="connections.gd"; labeljust="l";
+            server_connections_receiveNewPlayerData [
+                label="<begin>receiveNewPlayerData | <f0> Verify sender and save data  | <f1> Send server name  | <f2> Send all player data to new player  | <f3> Send new player data to all players  | <f4> Add a character to the map "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_characters {
+            label="characters.gd"; labeljust="l";
+            server_characters_createCharacter [
+                label="<begin>createCharacter | <f0> Create character node and resource  | <f1> assign character nodes and resources to each other  | <f2> register character node and resource  | <f3> return character resource "
+                shape="record"
+            ]
+            server_characters__createCharacterNode [
+                label="<begin>_createCharacterNode | <f0> instance character scene "
+                shape="record"
+            ]
+            server_characters__createCharacterResource [
+                label="<begin>_createCharacterResource | <f0> instance a new CharacterResource object "
+                shape="record"
+            ]
+            server_characters__registerCharacterNode [
+                label="<begin>_registerCharacterNode | <f0> Register character node for id "
+                shape="record"
+            ]
+            server_characters__registerCharacterResource [
+                label="<begin>_registerCharacterResource | <f0> Register character resource for id "
+                shape="record"
+            ]
+        }
+
+    }
+    subgraph cluster_client2 {
+        label="Client 2"; labeljust="l";
+        subgraph cluster_client2_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            client2_character_resource_getCharacterNode [
+                label="<begin>getCharacterNode"
+                shape="record"
+            ]
+            client2_character_resource_setCharacterNode [
+                label="<begin>setCharacterNode"
+                shape="record"
+            ]
+            client2_character_resource_setPosition [
+                label="<begin>setPosition | <f0> Set node position "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_game {
+            label="game.gd"; labeljust="l";
+            client2_game_addCharacter [
+                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
+                shape="record"
+            ]
+            client2_game_spawnCharacter [
+                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_character {
+            label="character.gd"; labeljust="l";
+            client2_character_setCharacterResource [
+                label="<begin>setCharacterResource"
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_connections {
+            label="connections.gd"; labeljust="l";
+            client2_connections_receivePlayerData [
+                label="<begin>receivePlayerData | {<f0> If the data is not own data  |  { <f1> Save the data  | <f2> Create a character  } }"
+                shape="record"
+            ]
+        }
+        subgraph cluster_client2_characters {
+            label="characters.gd"; labeljust="l";
+            client2_characters_createCharacter [
+                label="<begin>createCharacter | <f0> Create character node and resource  | <f1> assign character nodes and resources to each other  | <f2> register character node and resource  | <f3> return character resource "
+                shape="record"
+            ]
+            client2_characters__createCharacterNode [
+                label="<begin>_createCharacterNode | <f0> instance character scene "
+                shape="record"
+            ]
+            client2_characters__createCharacterResource [
+                label="<begin>_createCharacterResource | <f0> instance a new CharacterResource object "
+                shape="record"
+            ]
+            client2_characters__registerCharacterNode [
+                label="<begin>_registerCharacterNode | <f0> Register character node for id "
+                shape="record"
+            ]
+            client2_characters__registerCharacterResource [
+                label="<begin>_registerCharacterResource | <f0> Register character resource for id "
+                shape="record"
+            ]
+        }
+
+    }
+
+    client1_mainmenu_joinEvent:f1 -> client1_mainmenu_joinGame:begin;
+    client1_mainmenu_joinGame:f4 -> client1_connections_joinGame:begin;
+    client1_connections_connectedOK:f1 -> client1_transition_handler_enterLobby:begin;
+    client1_connections_connectedOK:f0 -> server_connections_receiveNewPlayerData:begin [color=blue];
+    client1_transition_handler_enterLobby:f1 -> client1_game_loadMap:begin;
+    server_connections_receiveNewPlayerData:f1 -> client1_connections_setServerName:begin [color=darkgreen];
+    server_connections_receiveNewPlayerData:f2 -> client1_connections_receiveBulkPlayerData:begin [color=darkgreen];
+    server_connections_receiveNewPlayerData:f3 -> client2_connections_receivePlayerData:begin [color=red];
+    # server adds new character
+    server_connections_receiveNewPlayerData:f4 -> server_game_addCharacter:begin;
+    server_game_addCharacter:f0 -> server_characters_createCharacter:begin;
+    server_game_addCharacter:f1 -> server_character_resource_getCharacterNode:begin;
+    server_game_addCharacter:f2 -> server_game_spawnCharacter:begin;
+    server_game_spawnCharacter:f0 -> server_character_resource_setPosition:begin;
+    server_characters_createCharacter:f0 -> server_characters__createCharacterNode:begin;
+    server_characters_createCharacter:f0 -> server_characters__createCharacterResource:begin;
+    server_characters_createCharacter:f1 -> server_character_setCharacterResource:begin;
+    server_characters_createCharacter:f1 -> server_character_resource_setCharacterNode:begin;
+    server_characters_createCharacter:f2 -> server_characters__registerCharacterNode:begin;
+    server_characters_createCharacter:f2 -> server_characters__registerCharacterResource:begin;
+    # client adds new character
+    client1_connections_receiveBulkPlayerData:f2 -> client1_game_addCharacter:begin;
+    client1_game_addCharacter:f0 -> client1_characters_createCharacter:begin;
+    client1_game_addCharacter:f1 -> client1_character_resource_getCharacterNode:begin;
+    client1_game_addCharacter:f2 -> client1_game_spawnCharacter:begin;
+    client1_game_spawnCharacter:f0 -> client1_character_resource_setPosition:begin;
+    client1_characters_createCharacter:f0 -> client1_characters__createCharacterNode:begin;
+    client1_characters_createCharacter:f0 -> client1_characters__createCharacterResource:begin;
+    client1_characters_createCharacter:f1 -> client1_character_setCharacterResource:begin;
+    client1_characters_createCharacter:f1 -> client1_character_resource_setCharacterNode:begin;
+    client1_characters_createCharacter:f2 -> client1_characters__registerCharacterNode:begin;
+    client1_characters_createCharacter:f2 -> client1_characters__registerCharacterResource:begin;
+    # other client adds new character
+    client2_connections_receivePlayerData:f2 -> client2_game_addCharacter:begin;
+    client2_game_addCharacter:f0 -> client2_characters_createCharacter:begin;
+    client2_game_addCharacter:f1 -> client2_character_resource_getCharacterNode:begin;
+    client2_game_addCharacter:f2 -> client2_game_spawnCharacter:begin;
+    client2_game_spawnCharacter:f0 -> client2_character_resource_setPosition:begin;
+    client2_characters_createCharacter:f0 -> client2_characters__createCharacterNode:begin;
+    client2_characters_createCharacter:f0 -> client2_characters__createCharacterResource:begin;
+    client2_characters_createCharacter:f1 -> client2_character_setCharacterResource:begin;
+    client2_characters_createCharacter:f1 -> client2_character_resource_setCharacterNode:begin;
+    client2_characters_createCharacter:f2 -> client2_characters__registerCharacterNode:begin;
+    client2_characters_createCharacter:f2 -> client2_characters__registerCharacterResource:begin;
 }
-
