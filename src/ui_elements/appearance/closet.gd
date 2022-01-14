@@ -19,6 +19,7 @@ const LIST_SAME_WIDTH = true # Same column width
 const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 
 func listItems() -> void:
+	items.clear()
 	_clearObjects()
 	if GameData.exists(NAMESPACE):
 		configData = GameData.read(NAMESPACE)
@@ -36,7 +37,11 @@ func _focus() -> void:
 	listItems()
 
 func _clearObjects():
-	items.clear()
+	for child in get_children():
+		if child.is_in_group("iconCharacter"):
+			remove_child(child)
+			child.remove_from_group("iconCharacter")
+			child.queue_free()
 
 func _configureItemList():
 	items.max_columns = LIST_COLUMNS # Set the max columns
