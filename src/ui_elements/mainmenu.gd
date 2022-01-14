@@ -59,6 +59,7 @@ func setVisibleMenu(menuType: int) -> void:
 		MenuType.JOIN: joinMenu.visible = true
 		MenuType.CREATE: createMenu.visible = true
 		MenuType.SERVER: serverMenu.visible = true
+		_: assert(false, "Unreachable")
 
 func hideMenus() -> void:
 	mainMenu.visible = false
