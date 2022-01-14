@@ -4,4 +4,4 @@ extends Control
 
 func _ready():
 	Scenes.baseScene = self
-	Scenes.overlay("res://ui_elements/mainmenu.tscn")
+	Scenes.overlay("res://ui_elements/main_menu.tscn")

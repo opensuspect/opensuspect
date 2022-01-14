@@ -90,7 +90,7 @@ func randomizeIfUnset() -> void:
 func colorFromMapPos(path: String, position: Vector2, scale: Vector2) -> Color:
 	var xPos = position.x / scale.x
 	var yPos = position.y / scale.y
-	var color = _colorFromMapXY(path, xPos, yPos)
+	var color = _colorFromMapXY(path, Vector2(xPos, yPos))
 	return(color)
 
 # --Private Functions--

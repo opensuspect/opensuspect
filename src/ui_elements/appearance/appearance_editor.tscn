@@ -260,7 +260,7 @@ __meta__ = {
 [node name="Label" type="Label" parent="RandomConfirm/MarginContainer/VBoxContainer"]
 margin_right = 782.0
 margin_bottom = 74.0
-text = "Do you wish to discard your appearance?"
+text = "Generate a new appearance?"
 
 [node name="Confirm" type="Button" parent="RandomConfirm/MarginContainer/VBoxContainer"]
 margin_top = 90.0

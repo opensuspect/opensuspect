@@ -43,13 +43,6 @@ func _ready() -> void:
 	_configureItemList() ## Configure list of saves
 	listItems() ## Show list
 
-func _clearObjects():
-	for child in get_children():
-		if child.is_in_group("iconCharacter"):
-			remove_child(child)
-			child.remove_from_group("iconCharacter")
-			child.queue_free()
-
 # Called from scene switcher whenever this scene is focused
 func _focus() -> void:
 	listItems()
