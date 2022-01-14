@@ -1,12 +1,12 @@
 extends Control
 
-onready var iconCharacter = preload("res://ui_elements/icon_character.tscn")
+onready var iconCharacter: Resource = preload("res://ui_elements/icon_character.tscn")
 
-onready var character = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
-onready var items = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
+onready var character: Control = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
+onready var items: ItemList = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
 
-onready var selectButton = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Select
-onready var nameLabel = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Label
+onready var selectButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Select
+onready var nameLabel: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Label
 
 signal menuBack
 
@@ -24,21 +24,26 @@ const LIST_SAME_WIDTH = true # Same column width
 const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 
 func listItems() -> void:
+	## Clrear items
 	items.clear()
+	## If saved data exists
 	if GameData.exists(NAMESPACE):
+		## Clear everything
 		configData.clear()
 		configList.clear()
 		items.clear()
+		## Load save data
 		configData = GameData.read(NAMESPACE)
+		## Populate UI
 		_populateItems()
 
 # --Private Functions--
 
 func _ready() -> void:
-	selectButton.disabled = true
-	Appearance.updateConfig()
-	_configureItemList()
-	listItems()
+	selectButton.disabled = true ## Disable selection button
+	Appearance.updateConfig() ## Update sample character
+	_configureItemList() ## Configure list of saves
+	listItems() ## Show list
 
 func _configureItemList():
 	items.max_columns = LIST_COLUMNS # Set the max columns
@@ -47,19 +52,26 @@ func _configureItemList():
 
 func _populateItems() -> void:
 	var index: int = 0
+	## For all saved appearances
 	for config in configData:
+		## Save in list
 		configList.append(config)
+		## Populate UI
 		var texture = _getIconTexture(config)
 		items.add_icon_item(texture)
 		items.set_item_tooltip(index, config)
 		index += 1
 
 func _getIconTexture(namespace) -> Texture:
+	## Selects saved config
 	_selectConfig(namespace)
+	## Creates a character icon
 	var iconInstance = iconCharacter.instance()
 	self.add_child(iconInstance)
 	iconInstance.hide()
+	## Sets outfit for character icon
 	iconInstance.applyConfig(selectedOutfit, selectedColors)
+	## Generates texture from character icon
 	var texture = iconInstance.texture
 	return(texture)
 
@@ -74,13 +86,18 @@ func _on_Back_pressed() -> void:
 	emit_signal("menuBack")
 
 func _on_Select_pressed() -> void:
+	## Set appearance
 	Appearance.setConfig(selectedOutfit, selectedColors)
+	## Set customOutfit to [TRUE] in appearance.gd
 	Appearance.customOutfit = true
-	emit_signal("menuBack")
+	emit_signal("menuBack") ## Signal menuBack
 
 func _on_item_selected(index) -> void:
+	## Selects confg with specific name
 	var namespace = configList[index]
 	nameLabel.text = namespace
 	_selectConfig(namespace)
+	## Enables selection button
 	selectButton.disabled = false
+	## Sample character appearance set
 	character.setAppearance(selectedOutfit, selectedColors)

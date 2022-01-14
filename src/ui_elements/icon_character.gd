@@ -1,6 +1,6 @@
 extends Sprite
 
-onready var skeleton = $Viewport/Skeleton
+onready var skeleton: Node2D = $Viewport/Skeleton
 
 var currentOutfit: Dictionary
 var currentColors: Dictionary
@@ -9,4 +9,5 @@ var currentColors: Dictionary
 func applyConfig(outfit: Dictionary, colors: Dictionary):
 	currentOutfit = outfit
 	currentColors = colors
+	## Applies appearance to its skeleton
 	skeleton.applyAppearance(currentOutfit, currentColors)
