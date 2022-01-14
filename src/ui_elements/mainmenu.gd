@@ -21,6 +21,9 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		joinEvent(menu)
+	if event.is_action_pressed("ui_cancel"):
+		menu = MenuType.MAIN
+		setVisibleMenu(menu)
 
 func _on_Back_pressed() -> void:
 	menu = MenuType.MAIN
@@ -48,6 +51,7 @@ func setVisibleMenu(menuType: int) -> void:
 		MenuType.JOIN: joinMenu.visible = true
 		MenuType.CREATE: createMenu.visible = true
 		MenuType.SERVER: serverMenu.visible = true
+		_: assert(false, "Unreachable")
 
 func hideMenus() -> void:
 	mainMenu.visible = false
@@ -133,3 +137,6 @@ func _on_Appearance_pressed():
 	
 func _on_Settings_pressed():
 	Scenes.overlay("res://ui_elements/settings.tscn")
+
+func _on_Quit_pressed():
+	get_tree().quit()

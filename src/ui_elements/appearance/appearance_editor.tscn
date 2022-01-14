@@ -62,6 +62,7 @@ custom_constants/margin_bottom = 0
 [node name="Random" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter"]
 margin_right = 456.0
 margin_bottom = 640.0
+hint_tooltip = "Randomise your appearance!"
 theme = ExtResource( 5 )
 
 [node name="ButtonMargin" type="MarginContainer" parent="MenuMargin/HBoxContainer/CharacterBox"]
@@ -234,6 +235,51 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="RandomConfirm" type="PopupPanel" parent="."]
+margin_right = 838.0
+margin_bottom = 330.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="RandomConfirm"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 830.0
+margin_bottom = 322.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RandomConfirm/MarginContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 802.0
+margin_bottom = 294.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="RandomConfirm/MarginContainer/VBoxContainer"]
+margin_right = 782.0
+margin_bottom = 74.0
+text = "Do you wish to discard your appearance?"
+
+[node name="Confirm" type="Button" parent="RandomConfirm/MarginContainer/VBoxContainer"]
+margin_top = 90.0
+margin_right = 782.0
+margin_bottom = 174.0
+text = "Confirm"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cancel" type="Button" parent="RandomConfirm/MarginContainer/VBoxContainer"]
+margin_top = 190.0
+margin_right = 782.0
+margin_bottom = 274.0
+text = "Cancel"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="mouse_entered" from="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter/Random" to="." method="_on_Character_mouse_entered"]
 [connection signal="mouse_exited" from="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter/Random" to="." method="_on_Character_mouse_exited"]
 [connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter/Random" to="." method="_on_Random_pressed"]
@@ -241,6 +287,8 @@ __meta__ = {
 [connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Closet" to="." method="_on_Closet_pressed"]
 [connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Back" to="." method="_on_Back_pressed"]
 [connection signal="tab_changed" from="MenuMargin/HBoxContainer/TabBox/TabContainer" to="." method="_on_tab_changed"]
-[connection signal="popup_hide" from="SavePopup" to="." method="_on_SavePopup_hide"]
+[connection signal="popup_hide" from="SavePopup" to="." method="_on_Popup_hide"]
 [connection signal="pressed" from="SavePopup/MarginContainer/HBoxContainer/Center/VBox/HBox/Save" to="SavePopup" method="_on_Save_pressed"]
 [connection signal="pressed" from="SavePopup/MarginContainer/HBoxContainer/Center/VBox/HBox/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="pressed" from="RandomConfirm/MarginContainer/VBoxContainer/Confirm" to="." method="_on_Confirm_pressed"]
+[connection signal="pressed" from="RandomConfirm/MarginContainer/VBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

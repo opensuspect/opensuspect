@@ -2,24 +2,39 @@ extends Control
 
 export var colorMapPath: String = "res://game/character/assets/colormaps/skin_color.png"
 
-signal colorOnClick(color) # Send the color of the clicked position
+signal colorOnClick(colorMap, position) # Send the color of the clicked position
 
 var windowDimensions: Vector2
 var imageScale: Vector2 # Scale of the image
 var colorMapImage: StreamTexture
 
+var selectedColor: Color
+var selectedColorPosition: Vector2
+
+# --Public Functions--
+
+# Takes a position, scales it and displays the preview box
+func showPreview(pos: Vector2) -> void:
+	call_deferred("_showPreview", pos) # Call deferred runs it when it is ready
+
 # --Private Functions--
 
-func _ready():
+func _ready() -> void:
 	colorMapImage = load(colorMapPath) # Load the image
 	set_default_cursor_shape(3) # Set to cross cursor
 	$ColorImage.texture = colorMapImage # Set the texture of the color map
 
 # Setup on draw
-func _draw():
+func _draw() -> void:
 	windowDimensions = self.get_size() # Set dimensions of the window
 	imageScale = _getImageScale(colorMapImage) # Set the image scale
 	_resizeColorImage() # Resize the image
+
+# Set the preview, after correctly scaling it
+func _showPreview(pos: Vector2) -> void:
+	var color = Appearance.getColorFromPos(colorMapPath, pos)
+	var scaledPos = pos * imageScale
+	_setPreview(scaledPos, color)
 
 ## Calculate the correct scale for the color map, based on parent controls
 func _getImageScale(colorMapImage) -> Vector2:
@@ -46,8 +61,7 @@ func _checkValidPos(position) -> bool:
 	else:
 		return(true)
 
-func _showPreview(pos: Vector2, color: Color):
-	$Preview.show()
+func _setPreview(pos: Vector2, color: Color) -> void:
 	var offset = ($Preview.rect_size / 2)
 	$Preview.rect_position = pos - offset
 	$Preview.color = color
@@ -55,9 +69,10 @@ func _showPreview(pos: Vector2, color: Color):
 # --Signal Functions--
 
 ## Recieve input from Color Picker gui events
-func _on_ColorPicker_gui_input(event):
+func _on_ColorPicker_gui_input(event) -> void:
 	## If player is pressing, and at a valid position, select the color
 	if Input.is_action_pressed("ui_press") and _checkValidPos(event.position):
-		var selectedColor = Appearance.colorFromMapPos(colorMapPath, event.position, imageScale)
-		_showPreview(event.position, selectedColor)
-		emit_signal("colorOnClick", selectedColor)
+		# Downscale position back to normal
+		var position: Vector2 = event.position / imageScale
+		var selectedColor: Color = Appearance.getColorFromPos(colorMapPath, position)
+		emit_signal("colorOnClick", colorMapPath, position)

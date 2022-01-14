@@ -38,7 +38,7 @@ func showMainMenu() -> void:
 	## Switch to main menu scene
 	switchScene(mainMenuScene)
 
-func showAppearanceEd() -> void:
+func showAppearanceEd() -> void: #TODO is this function still used?
 	## Checks what the the current scene is
 	match currentScene:
 		mainMenuScene:
