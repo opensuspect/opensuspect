@@ -44,8 +44,9 @@ func _hideMenus():
 	$Settings.hide()
 
 
-func _on_menuSwitch(menu):
-	match menu:
+func _on_menuSwitch(strMenu):
+	var menu: int
+	match strMenu:
 		"appearance": menu = menuType.APPEARANCE
 		"closet": menu = menuType.CLOSET
 		"settings": menu = menuType.SETTINGS
