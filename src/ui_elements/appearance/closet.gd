@@ -25,6 +25,7 @@ const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 
 func listItems() -> void:
 	items.clear()
+	_clearObjects()
 	if GameData.exists(NAMESPACE):
 		configData.clear()
 		configList.clear()
@@ -39,6 +40,13 @@ func _ready() -> void:
 	Appearance.updateConfig()
 	_configureItemList()
 	listItems()
+
+func _clearObjects():
+	for child in get_children():
+		if child.is_in_group("iconCharacter"):
+			remove_child(child)
+			child.remove_from_group("iconCharacter")
+			child.queue_free()
 
 func _configureItemList():
 	items.max_columns = LIST_COLUMNS # Set the max columns
@@ -58,6 +66,7 @@ func _getIconTexture(namespace) -> Texture:
 	_selectConfig(namespace)
 	var iconInstance = iconCharacter.instance()
 	self.add_child(iconInstance)
+	iconInstance.add_to_group("iconCharacter")
 	iconInstance.hide()
 	iconInstance.applyConfig(selectedOutfit, selectedColors)
 	var texture = iconInstance.texture
