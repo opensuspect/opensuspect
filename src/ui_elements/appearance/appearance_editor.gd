@@ -119,6 +119,7 @@ func _on_item_selected(item: int) -> void:
 
 # Sets the color when selected from the picker
 func _on_color_selected(shader, colorMap, position) -> void:
+	Appearance.customOutfit = true
 	Appearance.setColorFromPos(shader, colorMap, position)
 
 # Handles randomization of the character
