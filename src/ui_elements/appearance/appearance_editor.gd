@@ -8,9 +8,10 @@ onready var popupCharacter: Control = $SavePopup/MarginContainer/HBoxContainer/M
 signal menuBack
 signal menuSwitch(menu)
 
-var currentTab: int # ID of selected tab
-var selectedItem: int # ID of selected item
+var currentTabId: int # ID of selected tab
+var selectedItemId: int # ID of selected item
 var itemsList: Dictionary # Dictionary of items, for selection lookup
+var tabList: Array # Array of the names of the tabs
 
 # Directories of icons
 var icons: Dictionary = {
@@ -40,25 +41,26 @@ func _ready() -> void:
 func _generateTabs() -> void:
 	var files = Resources.list(Appearance.directories, Appearance.extensions) ## Get file list
 	assert(not files.empty(), "Empty file list")
-	for resource in files: ## Iterate over files
-		for namespace in Appearance.groupClothing: # Iterate over the clothing groups
-			## Check if resource is a child eg. Left Arm to Clothes
-			if not Appearance.groupClothing[namespace].has(resource):
-				_addChildTab(files, resource) ## Otherwise add the tab for this resource
+	var representativeSprite: String
+	for spriteGroup in Appearance.groupCustomization: ## Iterate over sprite groups
+		representativeSprite = Appearance.groupCustomization[spriteGroup][0]
+		assert(representativeSprite in files, "Files missing for sprite group")
+		_addChildTab(files, representativeSprite) ## Create tab sprite group
 	var colorScene = "res://ui_elements/appearance/colors.tscn"
 	var colors = load(colorScene).instance()
 	colors.connect("setColor", self, "_on_color_selected")
-	tabs.add_child(colors) ## Add "Colors" as a child to tab container
+	tabs.add_child(colors) ## Add "Colors" setOutfitPartas a child to tab container
 
 # Add a child tab
 func _addChildTab(files: Dictionary, resource: String) -> void:
 	var child = _createChildTab(resource) ## Create a new child tab
 	tabs.add_child(child) ## Add the new tab
+	tabList.append(resource)
 	_populateChildTab(files, resource, child) ## Populate the tab with items
 
 # Create a new child tab
 func _createChildTab(resource: String) -> ItemList:
-	## Set up new tab
+	## Creates and configures a new tab
 	var child = ItemList.new() # Create new item list
 	child.name = resource.capitalize() # Set the tab's name
 	child.max_columns = LIST_COLUMNS # Set the max columns
@@ -78,10 +80,10 @@ func _populateChildTab(files: Dictionary, resource: String, child: ItemList) -> 
 
 # Update the outfit
 func _updateOutfit() -> void:
-	var tab = tabs.get_child(currentTab) ## Get the current tab
-	var namespace = itemsList.keys()[currentTab] ## Get namespace from item list dictionary
-	var resource = itemsList[namespace][selectedItem] ## Get selected resource from item list dictionary
-	Appearance.setOutfitPart(resource, namespace) ## Set outfit part to correct resource
+	var tab = tabs.get_child(currentTabId) ## Get the current tab
+	var partName = tabList[currentTabId] ## Get name of current tab
+	var selectedItem = itemsList[partName][selectedItemId] ## Get selected resource from item list dictionary
+	Appearance.setOutfitPart(selectedItem, partName) ## Set outfit part to correct resource
 
 # Get the texture to use for the item's icon
 func _getTexture(directories: Dictionary, namespace: String, resource: String) -> Texture:
@@ -112,12 +114,12 @@ func _deselectItems():
 # --Signal Functions--
 
 # Sets the current tab when a tab is changed
-func _on_tab_changed(tab: int) -> void:
-	currentTab = tab ## Saves current tab position
+func _on_tab_changed(tabId: int) -> void:
+	currentTabId = tabId ## Saves current tab position
 
 # Sets the current item when an item is selected
-func _on_item_selected(item: int) -> void:
-	selectedItem = item
+func _on_item_selected(itemId: int) -> void:
+	selectedItemId = itemId
 	Appearance.customOutfit = true ## Set customOutfit to [TRUE] in appearance.gd
 	_updateOutfit() ## Updates outfit on sample character
 

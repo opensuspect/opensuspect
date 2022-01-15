@@ -65,7 +65,7 @@ func getRandom(namespace: String, directories: Dictionary, types: PoolStringArra
 # Return a random file for each directory listed
 func getRandomOfEach(directories: Dictionary, types: PoolStringArray) -> Dictionary:
 	var output: Dictionary = {}
-	for namespace in directories.keys(): # Iterate over the directories
+	for namespace in directories: # Iterate over the directories
 		var random = getRandom(namespace, directories, types) # Get a random file for the directory
 		output[namespace] = {}
 		output[namespace] = random # Set the file for this directory to be the random file

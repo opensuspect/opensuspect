@@ -42,12 +42,12 @@ func applyAppearance(outfit: Dictionary, colors: Dictionary) -> void:
 
 # Applies the outfit to the skeleton
 func _applyOutfit(outfit: Dictionary) -> void:
-	for part in outfit.keys(): # Iterate over each resource
-		for path in outfit[part].keys(): # Iterate over each path
+	for partGroup in outfit: ## For each customizable group
+		for part in Appearance.groupCustomization[partGroup]: ## For each custom sprite
+			var filePath: String = Appearance.customSpritePaths[part][outfit[partGroup]]
 			var nodePath = nodeStructure[part] # Get the path to the node needing to be set
-			var resourcePath = outfit[part][path] # Get the file path to the resource
 			var node = self.get_node(nodePath) # Get the actual node object
-			node.texture = load(resourcePath) # Set the texture of the node
+			node.texture = load(filePath) # Set the texture of the node
 
 # Applies the colors to the shaders
 func _applyColors(colors: Dictionary) -> void:
