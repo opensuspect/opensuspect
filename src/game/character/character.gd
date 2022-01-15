@@ -44,7 +44,6 @@ func disconnected():
 	## runs when this player disconnects from the server
 	emit_signal("player_disconnected", networkId)
 	# TODO: drop items, etc.
-	queue_free()
 
 # get the character node that corresponds to this CharacterResource
 func getCharacterResource() -> CharacterResource:

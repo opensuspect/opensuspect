@@ -168,8 +168,8 @@ func disconnectedPlayer(id: int) -> void:
 ## this function actually removes the player and stuff
 func handleDisconnect(id:int) -> void:
 	listConnections.erase(id)
-	var characterNode: Node = Characters.getCharacterNode(id)
-	characterNode.disconnected() ## call this function on the player to handle in-game reprocussions
+	var characterResource: CharacterResource = Characters.getCharacterResource(id)
+	characterResource.disconnected() ## call this function on the player to handle in-game reprocussions
 	## remove character's node and resource
 	Characters.removeCharacterNode(id)
 	Characters.removeCharacterResource(id)
