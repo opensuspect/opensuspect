@@ -56,12 +56,18 @@ var groupCustomization = {
 const COLOR_XY = 500
 
 func _ready():
-	var fileList: Dictionary
+	var fileList: Array
 	for group in groupCustomization:
 		for partName in groupCustomization[group]:
-			fileList = Resources.list({partName: directories[partName]}, extensions)
-			customSpritePaths[partName] = fileList[partName]
-		customOptions[group] = customSpritePaths[groupCustomization[group][0]].keys()
+			fileList = Resources.listDirectory(directories[partName], extensions)
+			customSpritePaths[partName] = {}
+			for files in fileList:
+				var fname: String = files["name"]
+				var path: String = files["path"]
+				customSpritePaths[partName][fname] = path
+		customOptions[group] = []
+		for files in fileList:
+			customOptions[group].append(files["name"])
 	print_debug()
 
 # --Public Functions--

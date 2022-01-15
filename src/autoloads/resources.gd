@@ -40,6 +40,13 @@ func list(directories: Dictionary, types: PoolStringArray) -> Dictionary:
 		resources[folder] = _filesToDictionary(files, directories[folder], types)
 	return(resources) # Return the dictionary of namespaced resources
 
+func listDirectory(directory: String, types: PoolStringArray) -> Array:
+	var resources: Array = []
+	var files = _listFilesInDirectory(directory, types) # List files in each folder
+	# Add each file to the output dictionary
+	resources = _filesAndNames(files, directory, types)
+	return(resources) # Return the dictionary of namespaced resources
+
 # Returns the path of a specified resource
 func getPath(resource: String, namespace: String, directories: Dictionary, types: PoolStringArray) -> String:
 	var resources: Dictionary = list(directories, types) # Create the directory listing
@@ -117,4 +124,14 @@ func _filesToDictionary(files: PoolStringArray, path: String, types: PoolStringA
 		resource = formatString(resource) # Format the resource string for use in game
 		var fullPath = path + "/" + file # Create the full file path to the resource
 		output[resource] = fullPath # Set the path in the resources dictionary
+	return(output) # Return the output dictionary
+
+func _filesAndNames(files: PoolStringArray, path: String, types: PoolStringArray) -> Array:
+	var output: Array = [] # Defines the dictionary to output the files
+	var resource: String = "" # Defines the resource string 
+	for file in files:
+		resource = file.get_basename() # Get the base name of the resource
+		resource = formatString(resource) # Format the resource string for use in game
+		var fullPath = path + "/" + file # Create the full file path to the resource
+		output.append({"name": resource, "path": fullPath})
 	return(output) # Return the output dictionary
