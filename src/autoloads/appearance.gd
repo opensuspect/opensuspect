@@ -71,20 +71,18 @@ func updateConfig() -> void:
 	emit_signal("appearanceChanged") ## Emits appearanceChanged signal
 
 # Set the outfit and color variables
-func setConfig(outfit: Dictionary, colors: Dictionary) -> void:
+func setConfig(outfitChange: Dictionary, colors: Dictionary) -> void:
 	## Set current outfit and color
-	currentOutfit = outfit
+	for partGroup in outfitChange:
+		currentOutfit[partGroup] = outfitChange[partGroup]
 	currentColors = colors
 	updateConfig() ## Update sample character
 
 # Set one part of the outfit
 func setOutfitPart(selectedItem: String, partName: String) -> void:
-	## Get specific part resource
-	var path = Resources.getPath(selectedItem, partName, directories, extensions)
-	var outfit = currentOutfit
-	outfit[partName] = {selectedItem: path} ## Switch outfit part with new one
-	#var output = _groupOutfit(outfit) ## Handles asset groups
-	#setConfig(output, currentColors) ## Sets custom outfit
+	var outfit: Dictionary = {}
+	outfit[partName] = selectedItem ## Dictionary with changed element
+	setConfig(outfit, currentColors) ## Sets custom outfit
 
 # Set the color of a shader from a position
 func setColorFromPos(shader: String, colorMap: String, position: Vector2) -> void:

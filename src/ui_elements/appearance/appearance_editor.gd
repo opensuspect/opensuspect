@@ -39,24 +39,23 @@ func _ready() -> void:
 
 ## Generate the customization menu tabs
 func _generateTabs() -> void:
-	var files = Resources.list(Appearance.directories, Appearance.extensions) ## Get file list
-	assert(not files.empty(), "Empty file list")
 	var representativeSprite: String
 	for spriteGroup in Appearance.groupCustomization: ## Iterate over sprite groups
 		representativeSprite = Appearance.groupCustomization[spriteGroup][0]
-		assert(representativeSprite in files, "Files missing for sprite group")
-		_addChildTab(files, representativeSprite) ## Create tab sprite group
+		_addChildTab(representativeSprite) ## Create tab sprite group
 	var colorScene = "res://ui_elements/appearance/colors.tscn"
 	var colors = load(colorScene).instance()
 	colors.connect("setColor", self, "_on_color_selected")
 	tabs.add_child(colors) ## Add "Colors" setOutfitPartas a child to tab container
 
 # Add a child tab
-func _addChildTab(files: Dictionary, resource: String) -> void:
-	var child = _createChildTab(resource) ## Create a new child tab
+func _addChildTab(partName: String) -> void:
+	var files = Appearance.customSpritePaths
+	assert(not files.empty(), "Empty file list")
+	var child = _createChildTab(partName) ## Create a new child tab
 	tabs.add_child(child) ## Add the new tab
-	tabList.append(resource)
-	_populateChildTab(files, resource, child) ## Populate the tab with items
+	tabList.append(partName)
+	_populateChildTab(files, partName, child) ## Populate the tab with items
 
 # Create a new child tab
 func _createChildTab(resource: String) -> ItemList:
@@ -94,6 +93,7 @@ func _getTexture(directories: Dictionary, namespace: String, resource: String) -
 	if icons.has(resource): ## If selected item has icon
 		texturePath = iconList[namespace][resource] # Set item texture to corresponding icon
 	else: ## If no icon is present
+		assert(false, "The fallback should not be required, assets seem to be missing")
 		texturePath = directories[namespace][resource] ## Use item texture
 	var texture = load(texturePath) ## Load texture path as texture
 	return(texture) # Return the new texture object
