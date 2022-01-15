@@ -9,29 +9,30 @@ var menuOrder: Array # Keeps track of the menu order, so back takes to menu befo
 
 # Switch to the correct menu based on current menu
 func switchMenu() -> void:
-	_hideMenus()
+	_hideMenus() ## Hides all windows
 	match currentMenu:
-		menuType.MAIN: $MainMenu.show()
-		menuType.APPEARANCE: $AppearanceEditor.show()
-		menuType.CLOSET: 
-			$Closet.show()
-			$Closet.listItems()
-		menuType.SETTINGS: $Settings.show()
+		menuType.MAIN: $MainMenu.show() ## Main menu
+		menuType.APPEARANCE: $AppearanceEditor.show() ## Appearance editor
+		menuType.CLOSET: ## Closet
+			$Closet.show() ## Opens closet
+			$Closet.listItems() ## Populates closet with items
+		menuType.SETTINGS: $Settings.show() ## Settings
 		_: assert(false, "Unreachable")
 
 func back() -> void:
-	var index = menuOrder.size() - 1 # Get the index of the last item in menu order
-	if index > 0:
-		menuOrder.remove(index) # Remove the item at the index
-		currentMenu = menuOrder.back() # Set current menu to the last item in the array
-		switchMenu()	
+	## If we have menu on stack
+	if menuOrder.size() > 0:
+		menuOrder.pop_back() ## Remove last item
+		currentMenu = menuOrder.back() ## Set last element as current menu
+		switchMenu()
 
 # --Private Functions--
 
 func _ready() -> void:
+	## Switch to main menu
 	currentMenu = menuType.MAIN
 	switchMenu()
-	menuOrder.append(currentMenu) # Add the current menu to menu order
+	menuOrder.append(currentMenu) ## Put main menu on stack
 
 func _input(event) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -45,17 +46,18 @@ func _hideMenus() -> void:
 	$Settings.hide()
 
 
-func _on_menuSwitch(strMenu):
+func _on_menuSwitch(strMenu: String):
 	var menu: int
+	## Checks menu type
 	match strMenu:
-		"appearance": menu = menuType.APPEARANCE
-		"closet": menu = menuType.CLOSET
-		"settings": menu = menuType.SETTINGS
+		"appearance": menu = menuType.APPEARANCE ## Appearance
+		"closet": menu = menuType.CLOSET ## Closet
+		"settings": menu = menuType.SETTINGS ## Settings
 		_: assert(false, "Unreachable")
-	if menu != menuOrder.back(): # Make sure we aren't trying to go to current menu
-		currentMenu = menu # Set current menu to the menu enum
-		menuOrder.append(currentMenu) # Append the new menu to menu order
-		switchMenu() # Switch to the current menu
+	if menu != menuOrder.back(): ## Make sure we aren't trying to go to current menu
+		currentMenu = menu ## Set current menu to the menu enum
+		menuOrder.append(currentMenu) ## Append new menu to menu order
+		switchMenu() ## Switch to new current menu
 
 func _on_menuBack() -> void:
 	back()

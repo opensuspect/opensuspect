@@ -93,6 +93,9 @@ func getCharacterNodes() -> Dictionary:
 func getCharacterResources() -> Dictionary:
 	return _characterResources
 
+func destroyCharacter() -> void:
+	assert(false, "Not implemented yet")
+
 # --Private Functions--
 
 # create a character node, this function is used when creating a new character

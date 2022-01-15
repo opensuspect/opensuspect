@@ -1,0 +1,4 @@
+server_mainmenu_joinEvent:f3 -> server_mainmenu_createDedicated:begin;
+server_mainmenu_createDedicated:f2 -> server_connections_createDedicated:begin;
+server_connections_createDedicated:f2 -> server_transition_handler_enterLobby:begin;
+server_transition_handler_enterLobby:f1 -> server_game_loadMap:begin;
