@@ -22,15 +22,18 @@ _global_script_class_icons={
 
 config/name="OpenSuspect"
 config/description="Free software implementation of a social deduction game."
-run/main_scene="res://ui_elements/mainmenu.tscn"
+run/main_scene="res://ui_elements/start.tscn"
 boot_splash/image="res://bootsplash.png"
 config/icon="res://icon.png"
 
 [autoload]
 
+Resources="*res://autoloads/resources.gd"
+Appearance="*res://autoloads/appearance.gd"
 Characters="*res://autoloads/characters.gd"
 Connections="*res://autoloads/connections.gd"
 TransitionHandler="*res://autoloads/transition_handler.gd"
+GameData="*res://autoloads/game_data.gd"
 
 [display]
 
@@ -45,6 +48,11 @@ window/stretch/aspect="expand"
 
 [input]
 
+ui_press={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
 move_left={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":65,"unicode":0,"echo":false,"script":null)
