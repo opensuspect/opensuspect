@@ -61,13 +61,13 @@ func _ready():
 		for partName in groupCustomization[group]:
 			fileList = Resources.listDirectory(directories[partName], extensions)
 			customSpritePaths[partName] = {}
-			for file in fileList:
-				var fname: String = fileList[file]["name"]
-				var path: String = fileList[file]["path"]
+			for file in fileList.values():
+				var fname: String = file["name"]
+				var path: String = file["path"]
 				customSpritePaths[partName][fname] = path
 		customOptions[group] = []
-		for file in fileList:
-			customOptions[group].append(fileList[file]["name"])
+		for file in fileList.values():
+			customOptions[group].append(file["name"])
 	print_debug()
 
 # --Public Functions--

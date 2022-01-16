@@ -12,6 +12,7 @@ var currentTabId: int # ID of selected tab
 var selectedItemId: int # ID of selected item
 var itemsList: Dictionary # Dictionary of items, for selection lookup
 var tabList: Array # Array of the names of the tabs
+var iconList: Dictionary
 
 # Directories of icons
 var icons: Dictionary = {
@@ -33,6 +34,7 @@ const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 # --Private Functions--
 
 func _ready() -> void:
+	iconList = Resources.list(icons, Appearance.extensions) # Get a list of all icons
 	Appearance.updateConfig() ## Update sample character
 	$Darken.hide()
 	_generateTabs() ## Generate customization tabs
@@ -87,7 +89,7 @@ func _updateOutfit() -> void:
 # Get the texture to use for the item's icon
 func _getTexture(directories: Dictionary, namespace: String, resource: String) -> Texture:
 	## Gather icons
-	var iconList = Resources.list(icons, Appearance.extensions) # Get a list of all icons
+	
 	var icons = iconList[namespace] # Get the icons under the given namespace
 	var texturePath: String # Path to the texture
 	if icons.has(resource): ## If selected item has icon
