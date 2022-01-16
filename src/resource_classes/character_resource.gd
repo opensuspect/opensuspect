@@ -32,6 +32,7 @@ var _tasks: Dictionary
 # this is a placeholder, not sure what this will look like because the
 # 	outfit system has not been implemented yet
 var _outfit: Dictionary
+var _colors: Dictionary
 
 # the speed at which the character moves/how many pixels it can move every frame
 var _speed: float = 150
@@ -95,15 +96,16 @@ func setTasks(newTasks: Dictionary):
 
 # get the outfit information of this character
 func getOutfit() -> Dictionary:
-	# assert false because outfits aren't implemented yet
-	assert(false, "Not implemented yet")
 	return _outfit
 
+func getColors() -> Dictionary:
+	return _colors
+
 # set the outfit information of this character
-func setOutfit(newOutfit: Dictionary):
-	# assert false because outfits aren't implemented yet
-	assert(false, "Not implemented yet")
+func setAppearance(newOutfit: Dictionary, newColors: Dictionary) -> void:
 	_outfit = newOutfit
+	_colors = newColors
+	_characterNode.call_deferred("setAppearance", _outfit, _colors)
 
 # get the speed of this character
 func getSpeed() -> float:

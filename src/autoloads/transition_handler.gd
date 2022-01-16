@@ -16,13 +16,10 @@ func _ready() -> void:
 	## Preload the game scene
 	var root: Node = get_tree().get_root()
 	var game: Resource = ResourceLoader.load("res://game/game.tscn")
-	var appearance: Resource = ResourceLoader.load("res://ui_elements/appearance_editor.tscn")
 	## Save current (main menu) scene
 	mainMenuScene = root.get_child(root.get_child_count() - 1)
 	## Instantiate and save th game scene
 	gameScene = game.instance()
-	## Instance the appearance editor scene
-	appearanceScene = appearance.instance()
 	## Current scene is the main menu
 	currentScene = mainMenuScene
 
@@ -38,29 +35,16 @@ func switchScene(nextScene: Node) -> void:
 func toss(_newValue) -> void:
 	pass
 
+func showMainMenu() -> void:
+	## Switch to main menu scene
+	switchScene(mainMenuScene)
+
 func enterLobby() -> void:
 	## Switch to the game scene
 	switchScene(gameScene)
 	currentState = States.LOBBY
 	## Load lobby map
 	gameScene.loadMap("res://game/maps/lobby/lobby.tscn")
-
-func showMainMenu() -> void:
-	## Refresh the look of the character in the main menu
-	mainMenuScene.player.applyConfig()
-	## Switch to main menu scene
-	switchScene(mainMenuScene)
-
-func showAppearanceEd() -> void:
-	## Checks what the the current scene is
-	match currentScene:
-		mainMenuScene:
-			## Sets the main menu scene as the parent scene
-			appearanceScene.parentScene = appearanceScene.CallerScene.MAINMENU
-		_:
-			assert(false, "Unreachable")
-	## Switches scene
-	switchScene(appearanceScene)
 
 puppetsync func startGame() -> void:
 	## Load game map (laboratory)

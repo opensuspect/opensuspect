@@ -2,9 +2,6 @@ extends Node2D
 
 # --Private Variables--
 
-onready var Resources = get_node("/root/Resources")
-onready var Appearance = get_node("/root/Appearance")
-
 # Set the accepted file extensions to ".png"
 var extensions: Array = [".png"]
 
@@ -34,26 +31,28 @@ var nodeStructure: Dictionary = {
 # --Public Functions--
 
 # Apply config from appearance's variables
-func applyConfig() -> void:
-	_applyOutfit(Appearance.currentOutfit)
-	_applyColors(Appearance.currentColors)
+func applyAppearance(outfitPaths: Dictionary, colors: Dictionary) -> void:
+	assert(not outfitPaths.empty(), "Missing outfit data")
+	assert(not colors.empty(), "Missing colors data")
+	if not outfitPaths.empty() and not colors.empty():
+		_applyOutfit(outfitPaths)
+		_applyColors(colors)
 
 # --Private Functions--
 
 # Applies the outfit to the skeleton
-func _applyOutfit(outfit: Dictionary) -> void:
-	for part in outfit.keys(): # Iterate over each resource
-		for path in outfit[part].keys(): # Iterate over each path
-			var nodePath = nodeStructure[part] # Get the path to the node needing to be set
-			var resourcePath = outfit[part][path] # Get the file path to the resource
-			var node = self.get_node(nodePath) # Get the actual node object
-			node.texture = load(resourcePath) # Set the texture of the node
+func _applyOutfit(outfitPaths: Dictionary) -> void:
+	for part in outfitPaths: ## For each customizable group
+		var nodePath = nodeStructure[part] # Get the path to the node needing to be set
+		var node = self.get_node(nodePath) # Get the actual node object
+		node.texture = load(outfitPaths[part]) # Set the texture of the node
 
 # Applies the colors to the shaders
 func _applyColors(colors: Dictionary) -> void:
-	for shader in colorShaders["Color Maps"].keys(): # Iterate over each shader
+	for shader in colorShaders["Color Maps"]: # Iterate over each shader
+		var shaderName = colorShaders["Color Maps"][shader]["name"]
 		var colorsForShader = Color( # Sets the correct colors for the shader
-		colors[shader]["Red"],
-		colors[shader]["Green"],
-		colors[shader]["Blue"])
-		self.material.set_shader_param(shader, colorsForShader) # Applies the colors to the given shader
+		colors[shaderName]["Red"],
+		colors[shaderName]["Green"],
+		colors[shaderName]["Blue"])
+		self.material.set_shader_param(shaderName, colorsForShader) # Applies the colors to the given shader

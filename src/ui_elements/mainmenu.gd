@@ -5,17 +5,19 @@ enum MenuType {MAIN, JOIN, CREATE, SERVER}
 
 var menu: int
 
+signal menuSwitch(menu)
+
 onready var mainMenu: Control = $MainMenu
 onready var joinMenu: Control = $Join
 onready var createMenu: Control = $Create
 onready var serverMenu: Control = $Server
 
-onready var player = $MainMenu/CenterPlayer/Player/MenuPlayer/Skeleton
+onready var character = $MainMenu/CenterCharacter/MenuCharacter
 
 # --Interface--
 func _ready() -> void:
 	_randomIfUnset()
-	player.applyConfig()
+	character.setOutline(Color("#E6E2DD"))
 	menu = MenuType.MAIN
 	setVisibleMenu(menu)
 
@@ -25,8 +27,13 @@ func _randomIfUnset() -> void:
 		Appearance.hasConfig = true
 
 func _input(event: InputEvent) -> void:
+	if not visible:
+		return
 	if event.is_action_pressed("ui_accept"):
 		joinEvent(menu)
+	if event.is_action_pressed("ui_cancel"):
+		menu = MenuType.MAIN
+		setVisibleMenu(menu)
 
 func _on_Back_pressed() -> void:
 	menu = MenuType.MAIN
@@ -54,6 +61,7 @@ func setVisibleMenu(menuType: int) -> void:
 		MenuType.JOIN: joinMenu.visible = true
 		MenuType.CREATE: createMenu.visible = true
 		MenuType.SERVER: serverMenu.visible = true
+		_: assert(false, "Unreachable")
 
 func hideMenus() -> void:
 	mainMenu.visible = false
@@ -126,5 +134,19 @@ func _on_Server_pressed() -> void:
 	joinEvent(menu)
 
 func _on_Player_pressed():
-	## Open appearance editor
-	TransitionHandler.showAppearanceEd()
+	Appearance.randomizeConfig()
+
+func _on_Character_mouse_entered():
+	character.setOutline(Color("#DB2921"))
+
+func _on_Character_mouse_exited():
+	character.setOutline(Color("#E6E2DD"))
+
+func _on_Appearance_pressed():
+	emit_signal("menuSwitch", "appearance")
+	
+func _on_Settings_pressed():
+	emit_signal("menuSwitch", "settings")
+
+func _on_Quit_pressed():
+	get_tree().quit()

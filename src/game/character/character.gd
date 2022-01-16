@@ -13,6 +13,7 @@ var characterName: String
 enum LookDirections {LEFT, RIGHT, UP, DOWN}
 var lookDirection: int = LookDirections.RIGHT
 onready var characterElements = $CharacterElements
+onready var skeleton = $CharacterElements/Skeleton
 
 # --Private Variables--
 
@@ -60,6 +61,18 @@ func getRole() -> String:
 # get tasks assigned to this character node
 func getTasks() -> Dictionary:
 	return _characterResource.getTasks()
+
+# set the outfit of the character
+func setAppearance(outfit: Dictionary, colors: Dictionary) -> void:
+	var outfitPaths: Dictionary = {}
+	for partGroup in outfit: ## For each customizable group
+		var selectedLook: String = outfit[partGroup]
+		for part in Appearance.groupCustomization[partGroup]: ## For each custom sprite
+			var filePath: String = Appearance.customSpritePaths[part][selectedLook]
+			outfitPaths[part] = filePath
+	
+	## Applies appearance to its skeleton
+	skeleton.applyAppearance(outfitPaths, colors)
 
 # get the outfit of the character
 func getOutfit() -> Dictionary:

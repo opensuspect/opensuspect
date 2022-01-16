@@ -1,11 +1,13 @@
 extends Node
 
-onready var Resources = get_node("/root/Resources")
+signal appearanceChanged # Apply config for menu character
 
 # --Public Variables--
 var currentOutfit: Dictionary
 var currentColors: Dictionary
+
 var hasConfig: bool
+var customOutfit: bool
 
 # Dictionary of asset folders
 var directories: Dictionary = {
@@ -22,8 +24,14 @@ var directories: Dictionary = {
 	"Pants": "res://game/character/assets/textures/pants"
 }
 
+# Collects all the possible customizations
+var customOptions: Dictionary = {}
+
+# Collects all the file paths for possible customizations
+var customSpritePaths: Dictionary = {}
+
 # Set the accepted file extensions to ".png"
-var extensions: Array = [".png"]
+var extensions: Array = ["png"]
 
 # --Private Variables--
 # Directory of color maps. File names within should match shader names.
@@ -34,73 +42,135 @@ var colorMapDir: Dictionary = {
 # Set the list of colormaps from the color map directory
 onready var colorShaders = Resources.list(colorMapDir, extensions)
 
-# Define which parts should be grouped under a parent part, and thus inherit the parent's clothing type
-var groupClothing = {"Clothes": ["Left Arm", "Right Arm", "Pants", "Left Leg", "Right Leg"]}
+# Define which body parts work with which customizable parts
+var groupCustomization = {
+	"Clothes":
+		["Clothes", "Left Arm", "Right Arm", "Pants", "Left Leg", "Right Leg"],
+	"Body": ["Body"],
+	"Mouth": ["Mouth"],
+	"Face Wear": ["Face Wear"],
+	"Facial Hair": ["Facial Hair"],
+	"Hat/Hair": ["Hat/Hair"]}
 
 # Color co-ordinates constant
 const COLOR_XY = 500
 
+func _ready():
+	var fileList: Dictionary
+	for group in groupCustomization:
+		for partName in groupCustomization[group]:
+			fileList = Resources.listDirectory(directories[partName], extensions)
+			customSpritePaths[partName] = {}
+			for file in fileList.values():
+				var fname: String = file["name"]
+				var path: String = file["path"]
+				customSpritePaths[partName][fname] = path
+		customOptions[group] = []
+		for file in fileList.values():
+			customOptions[group].append(file["name"])
+	print_debug()
+
 # --Public Functions--
-func setConfig(outfit: Dictionary, colors: Dictionary) -> void:
-	currentOutfit = outfit
+
+# Helper to apply the current outfit
+func updateConfig() -> void:
+	emit_signal("appearanceChanged") ## Emits appearanceChanged signal
+
+# Set the outfit and color variables
+func setConfig(outfitChange: Dictionary, colors: Dictionary) -> void:
+	## Set current outfit and color
+	for partGroup in outfitChange:
+		currentOutfit[partGroup] = outfitChange[partGroup]
 	currentColors = colors
+	updateConfig() ## Update sample character
 
-func setOutfitPart(resource: String, namespace: String) -> void:
-	var path = Resources.getPath(resource, namespace, directories, extensions)
-	var outfit = currentOutfit
-	outfit.erase(namespace)
-	outfit[namespace] = {resource: path}
-	var output = _groupOutfit(outfit)
-	setConfig(output, currentColors)
+# Set one part of the outfit
+func setOutfitPart(selectedItem: String, partName: String) -> void:
+	var outfit: Dictionary = {}
+	outfit[partName] = selectedItem ## Dictionary with changed element
+	setConfig(outfit, currentColors) ## Sets custom outfit
 
+# Set the color of a shader from a position
+func setColorFromPos(shader: String, colorMap: String, position: Vector2) -> void:
+	var colors = currentColors
+	var color = getColorFromPos(colorMap, position) ## Get color from position on colormap
+	colors[shader] = _setColorInfo(color, position) ## Sets color info
+	setConfig(currentOutfit, colors) ## Sets custom outfit
+
+# Get a color from a position on a color map
+func getColorFromPos(path: String, position: Vector2) -> Color:
+	var color = _colorFromMapXY(path, position)
+	return(color)
+
+# Randomize configuration
 func randomizeConfig() -> void:
-	currentOutfit = _randomOutfit()
-	currentColors = _randomColors()
+	customOutfit = false ## Set customOutfit to [FALSE]
+	setConfig(_randomOutfit(), _randomColors()) ## Set random appearance
 
 # --Private Functions--
+func _randomPart(partName: String) -> String:
+	var maxInt = customOptions[partName].size() # Get the size of the array
+	var randInt = randi() % maxInt # Select a number between 0 and the size of maxInt
+	return customOptions[partName][randInt]
 
 # Create a random outfit for the character
 func _randomOutfit() -> Dictionary:
-	var outfit = Resources.getRandomOfEach(directories, extensions) # Get a fully random outfit
-	return(_groupOutfit(outfit)) # Return the outfit
+	var outfit: Dictionary = {}
+	var newPart: Dictionary
+	var directory: String
+	var stuff
+	for group in groupCustomization:
+		outfit[group] = _randomPart(group)
+	return outfit
+	#return(_groupOutfit(outfit)) ## Return the outfit
 
 # Group arms and legs by the type of clothes and pants respectively
 # This is done because each set of pants have corresponding leg assets for example
-func _groupOutfit(outfit: Dictionary) -> Dictionary:
-	for parentPart in groupClothing: # Iterate through clothing groups
-		var clothesType = outfit[parentPart].keys().front() # Get the parent clothing type
-		for childPart in groupClothing[parentPart]: # Iterate over the children parts
-			# Get the child part's file path of the clothing type
-			var path = Resources.getPath(clothesType, childPart, directories, extensions)
-			if path.empty(): # Check if the child actually has that clothing type
-				# If it does not have the clothing type, throw an error in debug
-				assert(false, "Please add " + clothesType + " to " + childPart)
-			else:
-				# Otherwise set the child part to the clothing type matching the parent's
-				outfit.erase(childPart)
-				outfit[childPart] = {clothesType: path}
-	return(outfit)
+#func _groupOutfit(outfit: Dictionary) -> Dictionary:
+#	for parentPart in groupClothing: ## Iterate through clothing groups
+#		var clothesType = outfit[parentPart].keys().front() # Get the parent clothing type
+#		for childPart in groupClothing[parentPart]: ## Iterate over the children parts
+#			## Get the child part's file path of the clothing type
+#			var path = Resources.getPath(clothesType, childPart, directories, extensions)
+#			assert(not path.empty(), "Please add " + clothesType + " to " + childPart)
+#			## Set the child part to the clothing type matching the parent's
+#			outfit[childPart] = {clothesType: path}
+#	return(outfit)
 
 func _randomColors() -> Dictionary:
 	var colors: Dictionary = {}
 	for shader in colorShaders["Color Maps"]:
-		var randX = randi() % COLOR_XY
-		var randY = randi() % COLOR_XY
-		var randColor = _colorFromMapXY(colorShaders["Color Maps"][shader], randX, randY)
-		colors[shader] = {}
-		colors[shader]["Red"] = randColor.r
-		colors[shader]["Green"] = randColor.g
-		colors[shader]["Blue"] = randColor.b
+		var shaderName: String = colorShaders["Color Maps"][shader]["name"]
+		## Random position on colormap
+		var randX = randi() % COLOR_XY # Random X Position
+		var randY = randi() % COLOR_XY # Random Y Position
+		var position = Vector2(randX, randY)
+		## Get the color from position
+		var randColor = _colorFromMapXY(colorShaders["Color Maps"][shader]["path"], position)
+		colors[shaderName] = _setColorInfo(randColor, Vector2(randX, randY))
 	return(colors)
 
+# Creates a dictionary setting up the colors for the shader
+func _setColorInfo(color: Color, position: Vector2) -> Dictionary:
+	## Creates a dictionary of color info
+	var colorInfo: Dictionary
+	colorInfo["Red"] = color.r
+	colorInfo["Green"] = color.g
+	colorInfo["Blue"] = color.b
+	colorInfo["XPos"] = position.x
+	colorInfo["YPos"] = position.y
+	return(colorInfo)
+
 # Returns the color from the given color map, at the given relative co-ordinates
-func _colorFromMapXY(colorMapPath: String, xRel: int, yRel: int) -> Color:
-	var colorMap = load(colorMapPath).get_data() # Loads the color map from the given path, and gets it's data
+func _colorFromMapXY(colorMapPath: String, relPos: Vector2) -> Color:
+	var colorMap = load(colorMapPath).get_data() ## Loads the color map from given path
+	## Normalize coordinates
 	var maxX = colorMap.get_width() # Get width of the color map
 	var maxY = colorMap.get_height() # Get height of the color map
-	var x = int(float(xRel) / COLOR_XY * maxX) # Sets the x position
-	var y = int(float(yRel) / COLOR_XY * maxY) # Sets the y position
-	colorMap.lock() # ???, but it breaks without it
+	var x = int(float(relPos.x) / COLOR_XY * maxX) # Sets the x position
+	var y = int(float(relPos.y) / COLOR_XY * maxY) # Sets the y position
+	## Reads color of pixel
+	colorMap.lock() # locks the color map for access
 	var color = colorMap.get_pixel(x, y) # Gets the color of the pixel at the co-ordinates
-	colorMap.unlock() # ???, but it breaks without it
+	colorMap.unlock() # unlocks the color map
 	return(color) # Returns the given color
