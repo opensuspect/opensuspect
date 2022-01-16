@@ -28,16 +28,25 @@ extends Node
 # > {Folder 1:{test_2:res://.../test_2.png}, Folder 2:{test_3:res://.../test_3.png}}
 
 const SPECIAL_CHARS = "[^A-Za-z0-9_]+"
+const RESOURCE_NAME_KEY = "name"
+const RESOURCE_PATH_KEY = "path"
 
 # --Public Functions--
 
 # Returns a dictionary of all resources from a given directory dictionary
 func list(directories: Dictionary, types: PoolStringArray) -> Dictionary:
 	var resources: Dictionary = {}
-	for folder in directories.keys(): # Iterate over each folder specified, by their namespace (key)
+	for folder in directories: # Iterate over each folder specified, by their namespace (key)
 		var files = _listFilesInDirectory(directories[folder], types) # List files in each folder
 		# Add each file to the output dictionary
 		resources[folder] = _filesToDictionary(files, directories[folder], types)
+	return(resources) # Return the dictionary of namespaced resources
+
+func listDirectory(directory: String, types: PoolStringArray) -> Dictionary:
+	var resources: Dictionary = {}
+	var files = _listFilesInDirectory(directory, types) # List files in each folder
+	# Add each file to the output dictionary
+	resources = _filesToDictionary(files, directory, types)
 	return(resources) # Return the dictionary of namespaced resources
 
 # Returns the path of a specified resource
@@ -65,7 +74,7 @@ func getRandom(namespace: String, directories: Dictionary, types: PoolStringArra
 # Return a random file for each directory listed
 func getRandomOfEach(directories: Dictionary, types: PoolStringArray) -> Dictionary:
 	var output: Dictionary = {}
-	for namespace in directories.keys(): # Iterate over the directories
+	for namespace in directories: # Iterate over the directories
 		var random = getRandom(namespace, directories, types) # Get a random file for the directory
 		output[namespace] = {}
 		output[namespace] = random # Set the file for this directory to be the random file
@@ -111,10 +120,12 @@ func _listFilesInDirectory(path: String, types: PoolStringArray) -> Array:
 # Creates a dictionary of the files in a directory
 func _filesToDictionary(files: PoolStringArray, path: String, types: PoolStringArray) -> Dictionary:
 	var output: Dictionary = {} # Defines the dictionary to output the files
-	var resource: String = "" # Defines the resource string 
 	for file in files:
-		resource = file.get_basename() # Get the base name of the resource
-		resource = formatString(resource) # Format the resource string for use in game
-		var fullPath = path + "/" + file # Create the full file path to the resource
-		output[resource] = fullPath # Set the path in the resources dictionary
+		var fileName = file.get_basename() # Get the base name of the resource
+		var resource: Dictionary = {}
+		var resourceName: String = formatString(fileName) # Format the resource string for use in game
+		var resourcePath: String = path + "/" + file # Create the full file path to the resource
+		resource[RESOURCE_NAME_KEY] = resourceName
+		resource[RESOURCE_PATH_KEY] = resourcePath
+		output[resourceName] = resource # Set the path in the resources dictionary
 	return(output) # Return the output dictionary
