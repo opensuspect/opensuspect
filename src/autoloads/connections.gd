@@ -79,6 +79,7 @@ func disconnectedFromServer() -> void:
 	assert(false, "Not implemented yet")
 
 puppet func receiveBulkPlayerData(connections: Dictionary) -> void:
+	print_debug("Receiving data from server: ", connections)
 	## Save all received data
 	listConnections = connections
 	#print_debug("Connected clients: ", listConnections)
@@ -102,9 +103,23 @@ puppet func receivePlayerData(id: int, name: String) -> void:
 		gameScene.addCharacter(id)
 	#print_debug("Connected clients: ", listConnections)
 
+func sendCharacterData() -> void:
+	var id: int = get_tree().get_network_unique_id()
+	var characterRes: CharacterResource
+	characterRes = Characters.getCharacterResource(id)
+	var characterData: Dictionary = {}
+	characterData["outfit"] = characterRes.getOutfit()
+	characterData["colors"] = characterRes.getColors()
+	rpc_id(1, "receiveCharacterDataServer", characterData)
+
+puppet func receiveCharacterDataClient(id: int, characterData: Dictionary) -> void:
+	var gameScene: Node = TransitionHandler.gameScene
+	gameScene.setCharacterData(id, characterData)
+
 # -------------- Server side code --------------
 
 func createGame(portNumber: int, playerName: String) -> void:
+	print_debug("port: ", portNumber)
 	## Initialize Godot networking
 	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
 	peer.create_server(portNumber, MAX_PLAYERS)
@@ -117,6 +132,10 @@ func createGame(portNumber: int, playerName: String) -> void:
 	serverName = playerName + "'s Server"
 	## Enter the Lobby
 	TransitionHandler.enterLobby()
+	## Collect charaterData
+	var characterData: Dictionary = {}
+	characterData["outfit"] = Appearance.currentOutfit
+	characterData["colors"] = Appearance.currentColors
 	## Add a character to the map
 	var gameScene: Node = TransitionHandler.gameScene
 	gameScene.addCharacter(1)
@@ -137,8 +156,20 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	var gameScene: Node = TransitionHandler.gameScene
 	gameScene.showStartButton()
 
+func compileAllcharacterData() -> Dictionary:
+	var allCharData: Dictionary = {}
+	var characterRes: Dictionary = {}
+	characterRes = Characters.getCharacterResources()
+	for player in characterRes:
+		var characterData: Dictionary = {}
+		characterData["outfit"] = characterRes[player].getOutfit()
+		characterData["colors"] = characterRes[player].getColors()
+		allCharData[player] = characterData
+	return allCharData
+
 # Once the newly joined player sent us their data, that's when we send them all the data
 master func receiveNewPlayerData(newPlayerName: String) -> void:
+	print_debug("new player joined ", newPlayerName)
 	## Verify sender and save data
 	var senderId: int = get_tree().get_rpc_sender_id()
 	listConnections[senderId] = newPlayerName
@@ -151,6 +182,12 @@ master func receiveNewPlayerData(newPlayerName: String) -> void:
 	## Add a character to the map 
 	var gameScene: Node = TransitionHandler.gameScene
 	gameScene.addCharacter(senderId)
+
+master func receiveCharacterDataServer(characterData: Dictionary) -> void:
+	var senderId: int = get_tree().get_rpc_sender_id()
+	var gameScene: Node = TransitionHandler.gameScene
+	gameScene.setCharacterData(senderId, characterData)
+	rpc("receiveCharacterDataClient", senderId, characterData)
 
 func connectedNewPlayer(id: int) -> void:
 	pass

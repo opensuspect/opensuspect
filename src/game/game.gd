@@ -23,14 +23,21 @@ func loadMap(mapPath: String) -> void:
 	## Spawn characters at spawn points
 	spawnAllCharacters()
 
+# {"colors": colors, "outfit": outfit ...}
 func addCharacter(networkId: int) -> void:
 	## Create character resource
 	var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)
 	## Get character node reference
 	var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()
+	## Apply appearance to character
+	newCharacterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
 	## Spawn the character
 	spawnCharacter(newCharacterResource)
 	characterNode.add_child(newCharacter) ## Add node to scene
+	var myId: int = get_tree().get_network_unique_id()
+	if networkId == myId:
+		## Send my character data to server
+		Connections.sendCharacterData()
 
 # These functions place the character on the map, but if it is a client, it will
 # be overwritten by the position syncing. It is done only so that the characters
@@ -51,6 +58,10 @@ func spawnCharacter(character: CharacterResource) -> void:
 	spawnCounter += 1
 	if spawnCounter > len(spawnList):
 		spawnCounter = 0
+
+func setCharacterData(id: int, characterData: Dictionary) -> void:
+	var character: CharacterResource = Characters.getCharacterResource(id)
+	character.setAppearance(characterData["outfit"], characterData["colors"])
 
 func showStartButton(buttonShow: bool = true) -> void:
 	## Switch visibility of game start button
