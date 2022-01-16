@@ -51,9 +51,10 @@ func _applyOutfit(outfit: Dictionary) -> void:
 
 # Applies the colors to the shaders
 func _applyColors(colors: Dictionary) -> void:
-	for shader in colorShaders["Color Maps"].keys(): # Iterate over each shader
+	for shader in colorShaders["Color Maps"]: # Iterate over each shader
+		var shaderName = colorShaders["Color Maps"][shader]["name"]
 		var colorsForShader = Color( # Sets the correct colors for the shader
-		colors[shader]["Red"],
-		colors[shader]["Green"],
-		colors[shader]["Blue"])
-		self.material.set_shader_param(shader, colorsForShader) # Applies the colors to the given shader
+		colors[shaderName]["Red"],
+		colors[shaderName]["Green"],
+		colors[shaderName]["Blue"])
+		self.material.set_shader_param(shaderName, colorsForShader) # Applies the colors to the given shader

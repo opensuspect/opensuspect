@@ -56,18 +56,18 @@ var groupCustomization = {
 const COLOR_XY = 500
 
 func _ready():
-	var fileList: Array
+	var fileList: Dictionary
 	for group in groupCustomization:
 		for partName in groupCustomization[group]:
 			fileList = Resources.listDirectory(directories[partName], extensions)
 			customSpritePaths[partName] = {}
-			for files in fileList:
-				var fname: String = files["name"]
-				var path: String = files["path"]
+			for file in fileList:
+				var fname: String = fileList[file]["name"]
+				var path: String = fileList[file]["path"]
 				customSpritePaths[partName][fname] = path
 		customOptions[group] = []
-		for files in fileList:
-			customOptions[group].append(files["name"])
+		for file in fileList:
+			customOptions[group].append(fileList[file]["name"])
 	print_debug()
 
 # --Public Functions--
@@ -140,13 +140,14 @@ func _randomOutfit() -> Dictionary:
 func _randomColors() -> Dictionary:
 	var colors: Dictionary = {}
 	for shader in colorShaders["Color Maps"]:
+		var shaderName: String = colorShaders["Color Maps"][shader]["name"]
 		## Random position on colormap
 		var randX = randi() % COLOR_XY # Random X Position
 		var randY = randi() % COLOR_XY # Random Y Position
 		var position = Vector2(randX, randY)
 		## Get the color from position
-		var randColor = _colorFromMapXY(colorShaders["Color Maps"][shader], position)
-		colors[shader] = _setColorInfo(randColor, Vector2(randX, randY))
+		var randColor = _colorFromMapXY(colorShaders["Color Maps"][shader]["path"], position)
+		colors[shaderName] = _setColorInfo(randColor, Vector2(randX, randY))
 	return(colors)
 
 # Creates a dictionary setting up the colors for the shader

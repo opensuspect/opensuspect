@@ -91,10 +91,10 @@ func _getTexture(directories: Dictionary, namespace: String, resource: String) -
 	var icons = iconList[namespace] # Get the icons under the given namespace
 	var texturePath: String # Path to the texture
 	if icons.has(resource): ## If selected item has icon
-		texturePath = iconList[namespace][resource] # Set item texture to corresponding icon
+		texturePath = iconList[namespace][resource]["path"] # Set item texture to corresponding icon
 	else: ## If no icon is present
 		assert(false, "The fallback should not be required, assets seem to be missing")
-		texturePath = directories[namespace][resource] ## Use item texture
+		texturePath = directories[namespace][resource]["path"] ## Use item texture
 	var texture = load(texturePath) ## Load texture path as texture
 	return(texture) # Return the new texture object
 
