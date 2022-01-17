@@ -31,7 +31,7 @@ const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 # --Private Functions--
 
 func _ready() -> void:
-	iconList = Resources.list(icons, Appearance.extensions) # Get a list of all icons
+	iconList = Resources.list(iconDirs, Appearance.extensions) # Get a list of all icons
 	Appearance.updateConfig() ## Update sample character
 	$Darken.hide()
 	_generateTabs() ## Generate customization tabs
