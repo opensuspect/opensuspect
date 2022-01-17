@@ -31,23 +31,21 @@ var nodeStructure: Dictionary = {
 # --Public Functions--
 
 # Apply config from appearance's variables
-func applyAppearance(outfit: Dictionary, colors: Dictionary) -> void:
-	assert(not outfit.empty(), "Missing outfit data")
+func applyAppearance(outfitPaths: Dictionary, colors: Dictionary) -> void:
+	assert(not outfitPaths.empty(), "Missing outfit data")
 	assert(not colors.empty(), "Missing colors data")
-	if not outfit.empty() and not colors.empty():
-		_applyOutfit(outfit)
+	if not outfitPaths.empty() and not colors.empty():
+		_applyOutfit(outfitPaths)
 		_applyColors(colors)
 
 # --Private Functions--
 
 # Applies the outfit to the skeleton
-func _applyOutfit(outfit: Dictionary) -> void:
-	for partGroup in outfit: ## For each customizable group
-		for part in Appearance.groupCustomization[partGroup]: ## For each custom sprite
-			var filePath: String = Appearance.customSpritePaths[part][outfit[partGroup]]
-			var nodePath = nodeStructure[part] # Get the path to the node needing to be set
-			var node = self.get_node(nodePath) # Get the actual node object
-			node.texture = load(filePath) # Set the texture of the node
+func _applyOutfit(outfitPaths: Dictionary) -> void:
+	for part in outfitPaths: ## For each customizable group
+		var nodePath = nodeStructure[part] # Get the path to the node needing to be set
+		var node = self.get_node(nodePath) # Get the actual node object
+		node.texture = load(outfitPaths[part]) # Set the texture of the node
 
 # Applies the colors to the shaders
 func _applyColors(colors: Dictionary) -> void:
