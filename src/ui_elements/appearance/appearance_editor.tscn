@@ -288,6 +288,7 @@ __meta__ = {
 [connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Back" to="." method="_on_Back_pressed"]
 [connection signal="tab_changed" from="MenuMargin/HBoxContainer/TabBox/TabContainer" to="." method="_on_tab_changed"]
 [connection signal="popup_hide" from="SavePopup" to="." method="_on_Popup_hide"]
+[connection signal="text_entered" from="SavePopup/MarginContainer/HBoxContainer/Center/VBox/Name" to="SavePopup" method="_on_Name_text_entered"]
 [connection signal="pressed" from="SavePopup/MarginContainer/HBoxContainer/Center/VBox/HBox/Save" to="SavePopup" method="_on_Save_pressed"]
 [connection signal="pressed" from="SavePopup/MarginContainer/HBoxContainer/Center/VBox/HBox/Cancel" to="." method="_on_Cancel_pressed"]
 [connection signal="pressed" from="RandomConfirm/MarginContainer/VBoxContainer/Confirm" to="." method="_on_Confirm_pressed"]

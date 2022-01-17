@@ -35,3 +35,7 @@ func _saveData():
 func _on_Save_pressed():
 	if not inputName.text.empty():
 		saveConfig(inputName.text)
+
+func _on_Name_text_entered(new_text):
+	if not new_text.empty():
+		saveConfig(new_text)
