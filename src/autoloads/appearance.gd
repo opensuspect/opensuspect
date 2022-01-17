@@ -56,19 +56,18 @@ var groupCustomization = {
 const COLOR_XY = 500
 
 func _ready():
-	var fileList: Dictionary
+	var assetList: Dictionary
 	for group in groupCustomization:
 		for partName in groupCustomization[group]:
-			fileList = Resources.listDirectory(directories[partName], extensions)
+			assetList = Resources.listDirectory(directories[partName], extensions)
 			customSpritePaths[partName] = {}
-			for file in fileList:
-				var fname: String = fileList[file]["name"]
-				var path: String = fileList[file]["path"]
-				customSpritePaths[partName][fname] = path
+			for asset in assetList:
+				var assetName: String = assetList[asset]["name"]
+				var assetPath: String = assetList[asset]["path"]
+				customSpritePaths[partName][assetName] = assetPath
 		customOptions[group] = []
-		for file in fileList:
-			customOptions[group].append(fileList[file]["name"])
-	print_debug()
+		for asset in assetList:
+			customOptions[group].append(assetList[asset]["name"])
 
 # --Public Functions--
 
@@ -116,26 +115,9 @@ func _randomPart(partName: String) -> String:
 # Create a random outfit for the character
 func _randomOutfit() -> Dictionary:
 	var outfit: Dictionary = {}
-	var newPart: Dictionary
-	var directory: String
-	var stuff
 	for group in groupCustomization:
 		outfit[group] = _randomPart(group)
 	return outfit
-	#return(_groupOutfit(outfit)) ## Return the outfit
-
-# Group arms and legs by the type of clothes and pants respectively
-# This is done because each set of pants have corresponding leg assets for example
-#func _groupOutfit(outfit: Dictionary) -> Dictionary:
-#	for parentPart in groupClothing: ## Iterate through clothing groups
-#		var clothesType = outfit[parentPart].keys().front() # Get the parent clothing type
-#		for childPart in groupClothing[parentPart]: ## Iterate over the children parts
-#			## Get the child part's file path of the clothing type
-#			var path = Resources.getPath(clothesType, childPart, directories, extensions)
-#			assert(not path.empty(), "Please add " + clothesType + " to " + childPart)
-#			## Set the child part to the clothing type matching the parent's
-#			outfit[childPart] = {clothesType: path}
-#	return(outfit)
 
 func _randomColors() -> Dictionary:
 	var colors: Dictionary = {}
