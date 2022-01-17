@@ -39,7 +39,8 @@ func back() -> void:
 func _deferredOverlay(path: String):
 	var newScene = load(path).instance()
 	baseScene.add_child(newScene)
-	newScene.call_deferred("_focus")
+	if newScene.has_method("_focus"):
+		newScene.call("_focus")
 	loadedScenes[path] = newScene
 
 func _deferredRebase(path: String):
