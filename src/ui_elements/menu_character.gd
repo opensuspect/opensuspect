@@ -10,12 +10,19 @@ func setOutline(color: Color) -> void:
 
 # Apply config from the appearance public variables to skeleton
 func applyFromAppearance():
-	skeleton.applyAppearance(Appearance.currentOutfit, Appearance.currentColors)
+	setAppearance(Appearance.currentOutfit, Appearance.currentColors)
 
 # Set config to skeleton from inputted variables
 func setAppearance(outfit: Dictionary, colors: Dictionary):
-	skeleton.applyAppearance(outfit, colors)
+	var outfitPaths: Dictionary = {}
+	for partGroup in Appearance.currentOutfit: ## For each customizable group
+		var selectedLook: String = outfit[partGroup]
+		for part in Appearance.groupCustomization[partGroup]: ## For each custom sprite
+			var filePath: String = Appearance.customSpritePaths[part][selectedLook]
+			outfitPaths[part] = filePath
+	skeleton.applyAppearance(outfitPaths, colors)
 
 # --Private Variables--
 func _ready():
 	Appearance.connect("appearanceChanged", self, "applyFromAppearance") # Signal from appearance to set skeleton config
+	Appearance.randomizeIfUnset()
