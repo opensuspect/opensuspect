@@ -3,8 +3,23 @@ extends Control
 # --Private Functions--
 
 func _ready():
-	Scenes.baseScene = self
-	Scenes.overlay("res://ui_elements/main_menu.tscn")
+	$Darken.hide()
+	Scenes.setBase(self)
+	Scenes.setLowest("res://ui_elements/main_menu.tscn")
 
 func _onBack():
-	print("back")
+	if $ExitMenu.visible:
+		$ExitMenu.hide()
+		$Darken.hide()
+	else:
+		$Darken.show()
+		$ExitMenu.popup_centered()
+
+# --Signal Functions--
+
+func _on_Cancel_pressed():
+	$ExitMenu.hide()
+	$Darken.hide()
+
+func _on_Exit_pressed():
+	get_tree().quit()

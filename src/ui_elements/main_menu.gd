@@ -116,6 +116,8 @@ func joinEvent(menu: int) -> void:
 		MenuType.CREATE: createGame() ## Create a game
 		MenuType.SERVER: createDedicated() ## Dedicated server
 
+# --Signal Functions--
+
 func _on_Join_pressed() -> void:
 	joinEvent(menu)
 	
@@ -141,4 +143,4 @@ func _on_Settings_pressed():
 	Scenes.overlay("res://ui_elements/settings.tscn")
 
 func _on_Quit_pressed():
-	get_tree().quit()
+	Scenes.back()

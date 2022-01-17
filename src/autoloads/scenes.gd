@@ -1,7 +1,9 @@
 extends Node
 
-var baseScene
+var baseScene: Node
 var baseScenePath: String
+
+var lowestScenePath: String
 
 var loadedScenes: Dictionary
 var sceneOrder: Array
@@ -14,7 +16,7 @@ var sceneOrder: Array
 # Add a child scene to the base scene, and show it
 func overlay(path: String) -> void:
 	_hideAllLoaded()
-	_checkBasePath()
+	_checkLowestPath()
 	if loadedScenes.has(path):
 		_showLoaded(path)
 	else:
@@ -26,10 +28,18 @@ func overlay(path: String) -> void:
 func rebase(path: String) -> void:
 	call_deferred("_deferredRebase", path)
 
+func setBase(scene):
+	baseScene = scene
+	baseScenePath = scene.filename
+
+func setLowest(path: String):
+	lowestScenePath = path
+	overlay(path)
+
 # Switch back to the previous scene
 func back() -> void:
 	var index = sceneOrder.size() - 1
-	if index > 1:
+	if index > 0:
 		sceneOrder.remove(index)
 		overlay(sceneOrder.back())
 	else:
@@ -42,9 +52,9 @@ func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		back()
 
-func _checkBasePath():
-	if sceneOrder.front() != baseScenePath:
-		sceneOrder.push_front(baseScenePath)
+func _checkLowestPath():
+	if sceneOrder.front() != lowestScenePath:
+		sceneOrder.push_front(lowestScenePath)
 
 func _deferredOverlay(path: String):
 	var newScene = load(path).instance()
@@ -54,7 +64,7 @@ func _deferredOverlay(path: String):
 
 func _deferredRebase(path: String):
 	baseScenePath = path
-	_checkBasePath()
+	_checkLowestPath()
 	loadedScenes.clear()
 	sceneOrder.clear()
 	sceneOrder.append(baseScenePath)
