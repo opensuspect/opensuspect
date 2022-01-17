@@ -8,6 +8,9 @@ onready var characterNode: Node2D = $Characters
 onready var gamestartButton: Button = $CanvasLayer/GameStart
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
+func _ready() -> void:
+	TransitionHandler.gameLoaded(self)
+
 func loadMap(mapPath: String) -> void:
 	## Remove previous map if applicable
 	for child in mapNode.get_children():
