@@ -74,5 +74,4 @@ func _on_ColorPicker_gui_input(event) -> void:
 	if Input.is_action_pressed("ui_press") and _checkValidPos(event.position):
 		# Downscale position back to normal
 		var position: Vector2 = event.position / imageScale
-		var selectedColor: Color = Appearance.getColorFromPos(colorMapPath, position)
 		emit_signal("colorOnClick", colorMapPath, position)

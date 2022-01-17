@@ -61,6 +61,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 
 [node name="MenuCharacter" parent="MainMenu/CenterCharacter" instance=ExtResource( 8 )]
+material = null
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 412.0

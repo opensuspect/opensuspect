@@ -147,7 +147,7 @@ func _randomColors() -> Dictionary:
 # Creates a dictionary setting up the colors for the shader
 func _setColorInfo(color: Color, position: Vector2) -> Dictionary:
 	## Creates a dictionary of color info
-	var colorInfo: Dictionary
+	var colorInfo: Dictionary = {}
 	colorInfo["Red"] = color.r
 	colorInfo["Green"] = color.g
 	colorInfo["Blue"] = color.b

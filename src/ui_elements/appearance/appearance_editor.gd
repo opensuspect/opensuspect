@@ -78,7 +78,6 @@ func _populateChildTab(files: Dictionary, resource: String, child: ItemList) -> 
 
 # Update the outfit
 func _updateOutfit() -> void:
-	var tab = tabs.get_child(currentTabId) ## Get the current tab
 	var partName = tabList[currentTabId] ## Get name of current tab
 	var selectedItem = itemsList[partName][selectedItemId] ## Get selected resource from item list dictionary
 	Appearance.setOutfitPart(selectedItem, partName) ## Set outfit part to correct resource

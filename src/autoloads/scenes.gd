@@ -14,6 +14,7 @@ var sceneOrder: Array
 # Add a child scene to the base scene, and show it
 func overlay(path: String) -> void:
 	_hideAllLoaded()
+	_checkBasePath()
 	if loadedScenes.has(path):
 		_showLoaded(path)
 	else:
@@ -28,23 +29,32 @@ func rebase(path: String) -> void:
 # Switch back to the previous scene
 func back() -> void:
 	var index = sceneOrder.size() - 1
-	sceneOrder.remove(index)
-	if sceneOrder.empty():
-		assert(false, "No scene to switch back to")
-	else:
+	if index > 1:
+		sceneOrder.remove(index)
 		overlay(sceneOrder.back())
+	else:
+		if baseScene.has_method("_onBack"):
+			baseScene.call("_onBack")
 
 # --Private Functions--
+
+func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		back()
+
+func _checkBasePath():
+	if sceneOrder.front() != baseScenePath:
+		sceneOrder.push_front(baseScenePath)
 
 func _deferredOverlay(path: String):
 	var newScene = load(path).instance()
 	baseScene.add_child(newScene)
-	if newScene.has_method("_focus"):
-		newScene.call("_focus")
+	_callFocusOnScene(newScene)
 	loadedScenes[path] = newScene
 
 func _deferredRebase(path: String):
 	baseScenePath = path
+	_checkBasePath()
 	loadedScenes.clear()
 	sceneOrder.clear()
 	sceneOrder.append(baseScenePath)
@@ -62,8 +72,12 @@ func _hideAllLoaded():
 	for scene in loadedScenes.values():
 		scene.hide()
 
+func _callFocusOnScene(scene):
+	if scene.has_method("_focus"):
+		scene.call("_focus")
+
 # Show the loaded scene matching the path
 func _showLoaded(path: String):
 	var scene = loadedScenes[path]
 	scene.show()
-	scene.call_deferred("_focus")
+	_callFocusOnScene(scene)

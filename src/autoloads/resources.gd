@@ -39,14 +39,14 @@ func list(directories: Dictionary, types: PoolStringArray) -> Dictionary:
 	for folder in directories: # Iterate over each folder specified, by their namespace (key)
 		var files = _listFilesInDirectory(directories[folder], types) # List files in each folder
 		# Add each file to the output dictionary
-		resources[folder] = _filesToDictionary(files, directories[folder], types)
+		resources[folder] = _filesToDictionary(files, directories[folder])
 	return(resources) # Return the dictionary of namespaced resources
 
 func listDirectory(directory: String, types: PoolStringArray) -> Dictionary:
 	var resources: Dictionary = {}
 	var files = _listFilesInDirectory(directory, types) # List files in each folder
 	# Add each file to the output dictionary
-	resources = _filesToDictionary(files, directory, types)
+	resources = _filesToDictionary(files, directory)
 	return(resources) # Return the dictionary of namespaced resources
 
 # Returns the path of a specified resource
@@ -118,7 +118,7 @@ func _listFilesInDirectory(path: String, types: PoolStringArray) -> Array:
 	return(files) # Return the files array
 
 # Creates a dictionary of the files in a directory
-func _filesToDictionary(files: PoolStringArray, path: String, types: PoolStringArray) -> Dictionary:
+func _filesToDictionary(files: PoolStringArray, path: String) -> Dictionary:
 	var output: Dictionary = {} # Defines the dictionary to output the files
 	for file in files:
 		var fileName = file.get_basename() # Get the base name of the resource
