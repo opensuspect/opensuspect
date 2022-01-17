@@ -13,9 +13,21 @@ _global_script_classes=[ {
 "class": "CharacterResource",
 "language": "GDScript",
 "path": "res://resource_classes/character_resource.gd"
+}, {
+"base": "Resource",
+"class": "ItemResource",
+"language": "GDScript",
+"path": "res://resource_classes/item_resource.gd"
+}, {
+"base": "Resource",
+"class": "ItemTemplate",
+"language": "GDScript",
+"path": "res://resource_classes/item_template.gd"
 } ]
 _global_script_class_icons={
-"CharacterResource": ""
+"CharacterResource": "",
+"ItemResource": "",
+"ItemTemplate": ""
 }
 
 [application]
@@ -28,7 +40,9 @@ config/icon="res://icon.png"
 
 [autoload]
 
+Helpers="*res://autoloads/helpers.gd"
 Characters="*res://autoloads/characters.gd"
+Items="*res://autoloads/items.gd"
 Connections="*res://autoloads/connections.gd"
 TransitionHandler="*res://autoloads/transition_handler.gd"
 
