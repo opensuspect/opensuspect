@@ -20,13 +20,22 @@ func overlay(path: String) -> void:
 	if loadedScenes.has(path):
 		_showLoaded(path)
 	else:
-		call_deferred("_deferredOverlay", path)
+		call_deferred("_deferredOverlay", path, true)
 	if path != sceneOrder.back():
 		sceneOrder.append(path)
 
+# Preload a child scene to the base scene, but don't show it
+func preloadOverlay(path: String) -> void:
+	if not loadedScenes.has(path):
+		call_deferred("_deferredOverlay", path, false)
+
 # Set a new scene to be the base scene
-func rebase(path: String) -> void:
-	call_deferred("_deferredRebase", path)
+func switchBase(path: String, baseLowest: bool) -> void:
+	loadedScenes.clear()
+	sceneOrder.clear()
+	if baseLowest:
+		lowestScenePath = path
+	call_deferred("_deferredSwitchBase", path)
 
 func setBase(scene):
 	baseScene = scene
@@ -48,27 +57,28 @@ func back() -> void:
 
 # --Private Functions--
 
-func _input(event):
+func _input(event) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		back()
 
-func _checkLowestPath():
+func _checkLowestPath() -> void:
+	assert(not lowestScenePath.empty(), "Please set the lowest scene path")
 	if sceneOrder.front() != lowestScenePath:
 		sceneOrder.push_front(lowestScenePath)
 
-func _deferredOverlay(path: String):
+func _deferredOverlay(path: String, focus: bool) -> void:
 	var newScene = load(path).instance()
 	baseScene.add_child(newScene)
-	_callFocusOnScene(newScene)
 	loadedScenes[path] = newScene
+	if focus:
+		_showLoaded(path)
+	else:
+		newScene.hide()
 
-func _deferredRebase(path: String):
+func _deferredSwitchBase(path: String) -> void:
 	baseScenePath = path
-	_checkLowestPath()
-	loadedScenes.clear()
-	sceneOrder.clear()
-	sceneOrder.append(baseScenePath)
 	_reloadBase()
+	loadedScenes[baseScenePath] = baseScene
 	get_tree().set_current_scene(baseScene)
 
 func _reloadBase() -> void:
@@ -77,17 +87,19 @@ func _reloadBase() -> void:
 	baseScene = load(baseScenePath).instance()
 	get_tree().get_root().add_child(baseScene)
 
-# Hide all loaded scenes
-func _hideAllLoaded():
+# Hide all loaded child scenes
+func _hideAllLoaded() -> void:
 	for scene in loadedScenes.values():
-		scene.hide()
+		if scene != baseScene:
+			scene.hide()
 
-func _callFocusOnScene(scene):
+# Calls the _focus method if the scene has it
+func _callFocusOnScene(scene: Node) -> void:
 	if scene.has_method("_focus"):
 		scene.call("_focus")
 
 # Show the loaded scene matching the path
-func _showLoaded(path: String):
+func _showLoaded(path: String) -> void:
 	var scene = loadedScenes[path]
 	scene.show()
 	_callFocusOnScene(scene)

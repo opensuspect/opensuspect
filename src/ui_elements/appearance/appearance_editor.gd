@@ -36,6 +36,9 @@ func _ready() -> void:
 	$Darken.hide()
 	_generateTabs() ## Generate customization tabs
 
+func _focus() -> void:
+	Scenes.preloadOverlay("res://ui_elements/appearance/closet.tscn")
+
 ## Generate the customization menu tabs
 func _generateTabs() -> void:
 	var representativeSprite: String
