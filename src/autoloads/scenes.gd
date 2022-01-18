@@ -1,15 +1,16 @@
 extends Node
 
-var baseScene: Node
-var baseScenePath: String
+## HOW TO USE SCENE SWITCHER:
+#
+## 
 
-var lowestScenePath: String
+var baseScene: Node # Always loaded scene
+var baseScenePath: String # Path of baseScene
 
-var loadedScenes: Dictionary
-var sceneOrder: Array
+var lowestScenePath: String # Path to scene that won't be hidden by back
 
-# Overlay: Adds scene below as child of base scene, then switches visibility
-# Rebase: Unloads all scenes, and sets the parent scene
+var loadedScenes: Dictionary # Loaded scenes with their paths as keys
+var sceneOrder: Array # Order of scenes, with back being the top
 
 # --Public Functions--
 
