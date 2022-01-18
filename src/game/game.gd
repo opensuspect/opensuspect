@@ -29,15 +29,15 @@ func addCharacter(networkId: int) -> void:
 	var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)
 	## Get character node reference
 	var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()
-	## Apply appearance to character
-	newCharacterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
 	## Spawn the character
 	spawnCharacter(newCharacterResource)
 	characterNode.add_child(newCharacter) ## Add node to scene
 	var myId: int = get_tree().get_network_unique_id()
 	if networkId == myId:
+		## Apply appearance to character
+		newCharacterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
 		## Send my character data to server
-		Connections.sendCharacterData()
+		Characters.sendCharacterData()
 
 # These functions place the character on the map, but if it is a client, it will
 # be overwritten by the position syncing. It is done only so that the characters
