@@ -22,6 +22,8 @@ func loadMap(mapPath: String) -> void:
 		spawnList.append(posNode.position)
 	## Spawn characters at spawn points
 	spawnAllCharacters()
+	## Request server for character data
+	Characters.requestCharacterData()
 
 # {"colors": colors, "outfit": outfit ...}
 func addCharacter(networkId: int) -> void:
