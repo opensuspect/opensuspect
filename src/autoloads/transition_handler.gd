@@ -15,7 +15,8 @@ func toss(_newValue) -> void:
 
 func showMainMenu() -> void:
 	## Switch to main menu scene
-	Scenes.switchBase("res://ui_elements//main_menu.tscn", true)
+	Scenes.switchBase("res://ui_elements/menu_base.tscn", true)
+	Scenes.overlay("res://ui_elements/main_menu.tscn")
 	currentState = States.MENU
 
 func gameLoaded(newGameScene: Node2D) -> void:
