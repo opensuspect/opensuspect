@@ -69,7 +69,7 @@ func connectedOK() -> void:
 	## Send own data to server
 	rpc_id(1, "receiveNewPlayerData", myName)
 	## Enter the Lobby
-	TransitionHandler.enterLobby()
+	TransitionHandler.loadGameScene()
 
 func connectedFail() -> void:
 	print_debug("Connection failed")
@@ -116,11 +116,7 @@ func createGame(portNumber: int, playerName: String) -> void:
 	listConnections[1] = playerName
 	serverName = playerName + "'s Server"
 	## Enter the Lobby
-	TransitionHandler.enterLobby()
-	## Add a character to the map
-	var gameScene: Node = TransitionHandler.gameScene
-	gameScene.addCharacter(1)
-	gameScene.showStartButton()
+	TransitionHandler.loadGameScene()
 
 func createDedicated(portNumber: int, srvName: String) -> void:
 	## Initialize Godot networking
@@ -133,9 +129,7 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	connectionType = ConnectionTypes.DEDICATED_SERVER
 	serverName = srvName
 	## Enter the Lobby
-	TransitionHandler.enterLobby()
-	var gameScene: Node = TransitionHandler.gameScene
-	gameScene.showStartButton()
+	TransitionHandler.loadGameScene()
 
 # Once the newly joined player sent us their data, that's when we send them all the data
 master func receiveNewPlayerData(newPlayerName: String) -> void:
