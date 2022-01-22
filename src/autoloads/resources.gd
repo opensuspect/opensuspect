@@ -30,6 +30,7 @@ extends Node
 const SPECIAL_CHARS = "[^A-Za-z0-9_]+"
 const RESOURCE_NAME_KEY = "name"
 const RESOURCE_PATH_KEY = "path"
+const IMPORT_TYPE = "import"
 
 # --Public Functions--
 
@@ -110,12 +111,18 @@ func _listFilesInDirectory(path: String, types: PoolStringArray) -> Array:
 		var file: String = dir.get_next() # Gets the next file in the list
 		if file == "": # If the file is "", means the end of the directory has been found
 			break # Stops the loop after the end of the directory has been found
-		else:
-			for type in types: # Iterates over each specified file extension
-				type = cleanString(type) # Format type to remove special characters
-				if file.get_extension() == type: # Checks if the file has the extension
-					files.append(file) # If it does, add it to the files array
+		elif file.get_extension() == IMPORT_TYPE: # Go through import files
+			file = file.rstrip("." + cleanString(IMPORT_TYPE)) # Cleanly strip out the input extension
+			if _matchFileType(file, types): # Check if the file matches the correct filetype
+				files.append(file) # If it does, add it to the files array
 	return(files) # Return the files array
+
+func _matchFileType(file: String, types: PoolStringArray) -> bool:
+	for type in types: # Iterates over each specified file extension
+		type = cleanString(type) # Format type to remove special characters
+		if file.get_extension() == type: # Checks if the file has the extension
+			return(true)
+	return(false)
 
 # Creates a dictionary of the files in a directory
 func _filesToDictionary(files: PoolStringArray, path: String) -> Dictionary:
