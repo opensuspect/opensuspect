@@ -54,7 +54,8 @@ func _resizeColorImage() -> void:
 
 ## Check if click is in a valid position (not outside color selector)
 func _checkValidPos(position) -> bool:
-	if position.x > windowDimensions.x || position.y > windowDimensions.y:
+	var errorMargin: int = 5
+	if position.x > windowDimensions.x - errorMargin || position.y > windowDimensions.y - errorMargin:
 		return(false)
 	elif position.x < 0 || position.y < 0:
 		return(false)
