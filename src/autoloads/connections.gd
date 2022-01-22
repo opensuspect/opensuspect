@@ -32,6 +32,9 @@ func getMyName() -> String:
 func getServerName() -> String:
 	return serverName
 
+func getMyId() -> int:
+	return get_tree().get_network_unique_id()
+
 func isServer() -> bool:
 	return isDedicatedServer() or isClientServer()
 

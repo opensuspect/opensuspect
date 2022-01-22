@@ -55,7 +55,7 @@ func spawnAllCharacters() -> void:
 
 func spawnCharacter(character: CharacterResource) -> void:
 	## Set character position
-	character.setPosition(spawnList[spawnCounter])
+	character.spawn(spawnList[spawnCounter])
 	## Step spawn position counter
 	spawnCounter += 1
 	if spawnCounter > len(spawnList):

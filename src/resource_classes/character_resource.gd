@@ -9,7 +9,7 @@ class_name CharacterResource
 # --Public Variables--
 
 # network id corresponding to this character
-var networkId: int
+var networkId: int = -1 setget setNetworkId, getNetworkId
 
 # the name of this player
 var characterName: String
@@ -17,7 +17,7 @@ var characterName: String
 # --Private Variables--
 
 # the character node corresponding to this CharacterResource
-var _characterNode: Node
+var _characterNode: KinematicBody2D
 
 # PLACEHOLDER variable storing the role of this character
 # not sure what type this variable will be, string is PLACEHOLDER
@@ -39,10 +39,17 @@ var _speed: float = 150
 
 # --Public Functions--
 
+func setNetworkId(newId: int) -> void:
+	assert(networkId == -1, "attempting to change networkID on something that has been set")
+	networkId = newId
+
+func getNetworkId() -> int:
+	return networkId
+
 # function called when character is spawned
-func spawn():
-	# assert false because spawning isn't implemented yet
-	assert(false, "Not implemented yet")
+func spawn(coords: Vector2):
+	_characterNode.spawn()
+	setPosition(coords)
 
 # PLACEHOLDER function for killing characters
 func kill():
@@ -67,6 +74,8 @@ func setCharacterNode(newCharacterNode: Node) -> void:
 		printerr("Assigning a new character node to a CharacterResource that already has one")
 		assert(false, "Should be unreachable")
 	_characterNode = newCharacterNode
+	if networkId == Connections.getMyId():
+		_characterNode.setMainCharacter()
 
 # get the role of this character
 # string is PLACEHOLDER
