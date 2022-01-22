@@ -37,27 +37,28 @@ var sceneOrder: Array # Order of scenes, with back being the top
 
 # Add a child scene to the base scene, and show it
 func overlay(path: String) -> void:
-	_hideAllLoaded()
-	_checkLowestPath()
+	_hideAllLoaded() # Hide all loaded overlays
+	_checkLowestPath() # Check that the lowest path is in the sceneOrder array
 	if loadedScenes.has(path):
-		_showLoaded(path)
+		_showLoaded(path) # Show the scene if it has already been loaded
 	else:
-		call_deferred("_deferredOverlay", path, true)
+		call_deferred("_deferredOverlay", path, true) # Otherwise load the scene
 	if path != sceneOrder.back():
-		sceneOrder.append(path)
+		sceneOrder.append(path) # Add the path to sceneOrder if it isn't already there
 
 # Preload a child scene to the base scene, but don't show it
 func preloadOverlay(path: String) -> void:
 	if not loadedScenes.has(path):
-		call_deferred("_deferredOverlay", path, false)
+		call_deferred("_deferredOverlay", path, false) # Load the scene if not already loaded
 
 # Set a new scene to be the base scene
 func switchBase(path: String, lowest: String) -> void:
 	loadedScenes.clear()
 	sceneOrder.clear()
 	lowestScenePath = lowest
-	call_deferred("_deferredSwitchBase", path)
+	call_deferred("_deferredSwitchBase", path) # Switch out the base scene
 
+# Set the base scene from an already loaded scene. Only to be used if base scene hasn't been set.
 func setBase(scene: Node, lowest: String) -> void:
 	assert(baseScene == null, "Please use switchBase instead.")
 	baseScene = scene
@@ -78,15 +79,18 @@ func back() -> void:
 
 # --Private Functions--
 
+# Back on ui_cancel
 func _input(event) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		back()
 
+# Make sure the front of the sceneOrder array is lowestScenePath
 func _checkLowestPath() -> void:
 	assert(not lowestScenePath.empty(), "Please set the lowest scene path")
 	if sceneOrder.front() != lowestScenePath:
 		sceneOrder.push_front(lowestScenePath)
 
+# Deferred overlay function
 func _deferredOverlay(path: String, focus: bool) -> void:
 	var newScene = load(path).instance()
 	baseScene.add_child(newScene)
@@ -96,6 +100,7 @@ func _deferredOverlay(path: String, focus: bool) -> void:
 	else:
 		newScene.hide()
 
+# Deferred switch base function
 func _deferredSwitchBase(path: String) -> void:
 	baseScenePath = path
 	_reloadBase()
@@ -103,6 +108,7 @@ func _deferredSwitchBase(path: String) -> void:
 	get_tree().set_current_scene(baseScene)
 	overlay(lowestScenePath)
 
+# Reload the base scene, performing the switchout
 func _reloadBase() -> void:
 	if baseScene != null:
 		baseScene.free()
