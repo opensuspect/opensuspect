@@ -15,8 +15,7 @@ func toss(_newValue) -> void:
 
 func showMainMenu() -> void:
 	## Switch to main menu scene
-	Scenes.switchBase("res://ui_elements/menu_base.tscn", true)
-	Scenes.overlay("res://ui_elements/main_menu.tscn")
+	Scenes.switchBase("res://ui_elements/menu_base.tscn", "res://ui_elements/main_menu.tscn")
 	currentState = States.MENU
 
 func gameLoaded(newGameScene: Node2D) -> void:
@@ -31,7 +30,7 @@ func gameLoaded(newGameScene: Node2D) -> void:
 func loadGameScene() -> void:
 	## Switch to the game scene
 	currentState = States.WAITING
-	Scenes.switchBase("res://game/game.tscn", true)
+	Scenes.switchBase("res://game/game.tscn", self.filename)
 
 puppetsync func startGame() -> void:
 	## Load game map (laboratory)

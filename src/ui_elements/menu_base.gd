@@ -4,7 +4,8 @@ extends Control
 
 func _ready():
 	$Darken.hide()
-	Scenes.setBase(self, "res://ui_elements/main_menu.tscn")
+	if Scenes.baseScene == null:
+		Scenes.setBase(self, "res://ui_elements/main_menu.tscn")
 
 func _onBack():
 	if $ExitMenu.visible:
