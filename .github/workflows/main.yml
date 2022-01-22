@@ -41,6 +41,16 @@ jobs:
         with:
           name: linux
           path: build/linux
+      - name: macOS Build
+        run: |
+          mkdir -v -p $GITHUB_WORKSPACE/build/macos
+          cd $GITHUB_WORKSPACE/src
+          godot -v --export "macOS" $GITHUB_WORKSPACE/build/macos/$EXPORT_NAME.app
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: macos
+          path: build/macos
       - name: Windows Desktop Build
         run: |
           mkdir -v -p $GITHUB_WORKSPACE/build/windows-desktop
