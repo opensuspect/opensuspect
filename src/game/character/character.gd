@@ -5,15 +5,17 @@ extends KinematicBody2D
 # --Public Variables--
 
 # network id corresponding to this character
-var networkId: int
+var networkId: int setget setNetworkId, getNetworkId
 
 # the name of this character
 var characterName: String
 
+var mainCharacter: bool = false
 enum LookDirections {LEFT, RIGHT, UP, DOWN}
 var lookDirection: int = LookDirections.RIGHT
 onready var characterElements = $CharacterElements
 onready var skeleton = $CharacterElements/Skeleton
+onready var camera = $CharacterCamera
 
 # --Private Variables--
 
@@ -24,10 +26,15 @@ var _characterResource: CharacterResource
 
 # --Public Functions--
 
+func setNetworkId(newId: int) -> void:
+	networkId = newId
+
+func getNetworkId() -> int:
+	return networkId
+
 # function called when character is spawned
-func spawn():
-	# assert false because spawning isn't implemented yet
-	assert(false, "Not implemented yet")
+func spawn() -> void:
+	pass
 
 # PLACEHOLDER function for killing characters
 func kill():
@@ -73,6 +80,9 @@ func setAppearance(outfit: Dictionary, colors: Dictionary) -> void:
 	
 	## Applies appearance to its skeleton
 	skeleton.applyAppearance(outfitPaths, colors)
+
+func setMainCharacter() -> void:
+	mainCharacter = true
 
 # get the outfit of the character
 func getOutfit() -> Dictionary:
@@ -135,6 +145,10 @@ func setLookDirection(newLookDirection: int) -> void:
 		characterElements.scale.x = xScale
 
 # --Private Functions--
+
+func _ready() -> void:
+	if mainCharacter:
+		camera.current = true
 
 func _process(_delta: float) -> void:
 	var amountMoved: Vector2

@@ -32,6 +32,9 @@ func getMyName() -> String:
 func getServerName() -> String:
 	return serverName
 
+func getMyId() -> int:
+	return get_tree().get_network_unique_id()
+
 func isServer() -> bool:
 	return isDedicatedServer() or isClientServer()
 
@@ -103,19 +106,6 @@ puppet func receivePlayerData(id: int, name: String) -> void:
 		gameScene.addCharacter(id)
 	#print_debug("Connected clients: ", listConnections)
 
-func sendCharacterData() -> void:
-	var id: int = get_tree().get_network_unique_id()
-	var characterRes: CharacterResource
-	characterRes = Characters.getCharacterResource(id)
-	var characterData: Dictionary = {}
-	characterData["outfit"] = characterRes.getOutfit()
-	characterData["colors"] = characterRes.getColors()
-	rpc_id(1, "receiveCharacterDataServer", characterData)
-
-puppet func receiveCharacterDataClient(id: int, characterData: Dictionary) -> void:
-	var gameScene: Node = TransitionHandler.gameScene
-	gameScene.setCharacterData(id, characterData)
-
 # -------------- Server side code --------------
 
 func createGame(portNumber: int, playerName: String) -> void:
@@ -156,17 +146,6 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	var gameScene: Node = TransitionHandler.gameScene
 	gameScene.showStartButton()
 
-func compileAllcharacterData() -> Dictionary:
-	var allCharData: Dictionary = {}
-	var characterRes: Dictionary = {}
-	characterRes = Characters.getCharacterResources()
-	for player in characterRes:
-		var characterData: Dictionary = {}
-		characterData["outfit"] = characterRes[player].getOutfit()
-		characterData["colors"] = characterRes[player].getColors()
-		allCharData[player] = characterData
-	return allCharData
-
 # Once the newly joined player sent us their data, that's when we send them all the data
 master func receiveNewPlayerData(newPlayerName: String) -> void:
 	print_debug("new player joined ", newPlayerName)
@@ -182,12 +161,6 @@ master func receiveNewPlayerData(newPlayerName: String) -> void:
 	## Add a character to the map 
 	var gameScene: Node = TransitionHandler.gameScene
 	gameScene.addCharacter(senderId)
-
-master func receiveCharacterDataServer(characterData: Dictionary) -> void:
-	var senderId: int = get_tree().get_rpc_sender_id()
-	var gameScene: Node = TransitionHandler.gameScene
-	gameScene.setCharacterData(senderId, characterData)
-	rpc("receiveCharacterDataClient", senderId, characterData)
 
 func connectedNewPlayer(id: int) -> void:
 	pass
