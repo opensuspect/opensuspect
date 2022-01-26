@@ -37,7 +37,7 @@ func _ready() -> void:
 	_generateTabs() ## Generate customization tabs
 
 func _focus() -> void:
-	Scenes.preloadOverlay("res://ui_elements/appearance/closet.tscn")
+	Scenes.preloadOverlay("res://ui_elements/appearance/closet.tscn", false)
 
 ## Generate the customization menu tabs
 func _generateTabs() -> void:
@@ -147,7 +147,7 @@ func _on_Save_pressed() -> void:
 
 # Switch to closet scene
 func _on_Closet_pressed():
-	Scenes.overlay("res://ui_elements/appearance/closet.tscn")
+	Scenes.overlay("res://ui_elements/appearance/closet.tscn", false)
 
 # Hide darkener on save popup close
 func _on_Popup_hide() -> void:
