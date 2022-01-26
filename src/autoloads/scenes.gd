@@ -1,49 +1,71 @@
 extends Node
 
-var baseScene: Node
-var baseScenePath: String
+## HOW TO USE SCENE SWITCHER:
+#
+## back() -> void
+# Goes back a scene, based on the order in sceneOrder. The function will instead call the function "_onBack"
+# on the base scene, if the current scene matches lowestScenePath. The lowestScenePath is always at the front
+# of sceneOrder.
+#
+## setBase(scene: Node, lowest: String) -> void
+# Sets the base scene to a currently loaded scene. Should only be used if baseScene is unset. Lowest defines
+# the path to set lowestScenePath.
+# This function is specifically for setting the baseScene from a scene already instanced in the editor. After
+# baseScene is set, switchBase() should be called instead to change the base scene.
+#
+## switchBase(path: String, lowest: String) -> void
+# Switches out the base scene for the one defined in path. Lowest defines the path to set lowestScenePath.
+#
+## overlay(path: String) -> void
+# Adds the scene specified by it's resource path, as a child of the base scene. All other child scenes are 
+# hidden, and the newly overlayed scene is shown. If the scene is already loaded, it is just shown instead. 
+# The _focus method, if it exists, is run on the scene.
+#
+## preloadOverlay(path: String) -> void
+# Similar to overlay(), except the scene is loaded in the background, and not shown. The _focus method is not
+# run on the scene either.
 
-var lowestScenePath: String
+var baseScene: Node # Always loaded scene
+var baseScenePath: String # Path of baseScene
 
-var loadedScenes: Dictionary
-var sceneOrder: Array
+var lowestScenePath: String # Path to scene that won't be hidden by back
 
-# Overlay: Adds scene below as child of base scene, then switches visibility
-# Rebase: Unloads all scenes, and sets the parent scene
+var loadedScenes: Dictionary # Loaded scenes with their paths as keys
+var sceneOrder: Array # Order of scenes, with back being the top
 
 # --Public Functions--
 
 # Add a child scene to the base scene, and show it
 func overlay(path: String) -> void:
-	_hideAllLoaded()
-	_checkLowestPath()
+	_hideAllLoaded() # Hide all loaded overlays
+	_checkLowestPath() # Check that the lowest path is in the sceneOrder array
 	if loadedScenes.has(path):
-		_showLoaded(path)
+		_showLoaded(path) # Show the scene if it has already been loaded
 	else:
-		call_deferred("_deferredOverlay", path, true)
+		call_deferred("_deferredOverlay", path, true) # Otherwise load the scene
 	if path != sceneOrder.back():
-		sceneOrder.append(path)
+		sceneOrder.append(path) # Add the path to sceneOrder if it isn't already there
 
 # Preload a child scene to the base scene, but don't show it
 func preloadOverlay(path: String) -> void:
 	if not loadedScenes.has(path):
-		call_deferred("_deferredOverlay", path, false)
+		call_deferred("_deferredOverlay", path, false) # Load the scene if not already loaded
 
 # Set a new scene to be the base scene
-func switchBase(path: String, baseLowest: bool) -> void:
+func switchBase(path: String, lowest: String) -> void:
 	loadedScenes.clear()
 	sceneOrder.clear()
-	if baseLowest:
-		lowestScenePath = path
-	call_deferred("_deferredSwitchBase", path)
+	lowestScenePath = lowest
+	call_deferred("_deferredSwitchBase", path) # Switch out the base scene
 
-func setBase(scene):
+# Set the base scene from an already loaded scene. Only to be used if base scene hasn't been set.
+func setBase(scene: Node, lowest: String) -> void:
+	assert(baseScene == null, "Please use switchBase instead.")
 	baseScene = scene
 	baseScenePath = scene.filename
-
-func setLowest(path: String):
-	lowestScenePath = path
-	overlay(path)
+	loadedScenes[baseScenePath] = baseScene
+	lowestScenePath = lowest
+	overlay(lowestScenePath)
 
 # Switch back to the previous scene
 func back() -> void:
@@ -57,15 +79,18 @@ func back() -> void:
 
 # --Private Functions--
 
+# Back on ui_cancel
 func _input(event) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		back()
 
+# Make sure the front of the sceneOrder array is lowestScenePath
 func _checkLowestPath() -> void:
 	assert(not lowestScenePath.empty(), "Please set the lowest scene path")
 	if sceneOrder.front() != lowestScenePath:
 		sceneOrder.push_front(lowestScenePath)
 
+# Deferred overlay function
 func _deferredOverlay(path: String, focus: bool) -> void:
 	var newScene = load(path).instance()
 	baseScene.add_child(newScene)
@@ -75,12 +100,15 @@ func _deferredOverlay(path: String, focus: bool) -> void:
 	else:
 		newScene.hide()
 
+# Deferred switch base function
 func _deferredSwitchBase(path: String) -> void:
 	baseScenePath = path
 	_reloadBase()
 	loadedScenes[baseScenePath] = baseScene
 	get_tree().set_current_scene(baseScene)
+	overlay(lowestScenePath)
 
+# Reload the base scene, performing the switchout
 func _reloadBase() -> void:
 	if baseScene != null:
 		baseScene.free()
