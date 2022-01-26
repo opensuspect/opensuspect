@@ -30,7 +30,7 @@ func gameLoaded(newGameScene: Node2D) -> void:
 func loadGameScene() -> void:
 	## Switch to the game scene
 	currentState = States.WAITING
-	Scenes.switchBase("res://game/game.tscn", self.filename)
+	Scenes.switchBase("res://game/game.tscn", "res://game/game.tscn")
 
 puppetsync func startGame() -> void:
 	## Load game map (laboratory)
