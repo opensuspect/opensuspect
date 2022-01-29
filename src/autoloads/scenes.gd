@@ -15,9 +15,12 @@ extends Node
 #
 ## switchBase(path: String, lowest: String) -> void
 # Switches out the base scene for the one defined in path. Lowest defines the path to set lowestScenePath.
+# If the lowest is different then the path, it creates a new CanvasLayer and parents the lowest scene to
+# the CanvasLayer.
 #
 ## overlay(path: String) -> void
-# Adds the scene specified by it's resource path, as a child of the base scene. All other child scenes are 
+# Adds the scene specified by it's resource path. If a CanvasLayer doesn't yet exists it creates it.
+# Adds the new path as a child of the CanvasLayer. All other child scenes are 
 # hidden, and the newly overlayed scene is shown. If the scene is already loaded, it is just shown instead. 
 # The _focus method, if it exists, is run on the scene.
 #
