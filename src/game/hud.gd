@@ -1,6 +1,6 @@
 extends Control
 
-onready var gamestartButton: Button = $GameStart
+onready var gameStartButton: Button = $GameStart
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,7 +11,7 @@ func _ready():
 
 func showStartButton(buttonShow: bool = true) -> void:
 	## Switch visibility of game start button
-	gamestartButton.visible = buttonShow
+	gameStartButton.visible = buttonShow
 
 func _on_GameStart_pressed() -> void:
 	if not Connections.isServer():
@@ -20,8 +20,8 @@ func _on_GameStart_pressed() -> void:
 	TransitionHandler.changeMap()
 	## Change button text
 	if TransitionHandler.getCurrentState() == TransitionHandler.States.LOBBY:
-		gamestartButton.text = "Start game"
+		gameStartButton.text = "Start game"
 	elif TransitionHandler.getCurrentState() == TransitionHandler.States.MAP:
-		gamestartButton.text = "Back to lobby"
+		gameStartButton.text = "Back to lobby"
 	else:
 		assert(false, "Unreachable")
