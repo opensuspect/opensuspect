@@ -14,6 +14,7 @@ var networkId: int = -1 setget setNetworkId, getNetworkId
 # the name of this player
 var characterName: String
 
+var mainCharacter: bool = false
 # --Private Variables--
 
 # the character node corresponding to this CharacterResource
@@ -76,6 +77,7 @@ func setCharacterNode(newCharacterNode: Node) -> void:
 	_characterNode = newCharacterNode
 	if networkId == Connections.getMyId():
 		_characterNode.setMainCharacter()
+		mainCharacter = true
 
 # get the role of this character
 # string is PLACEHOLDER
