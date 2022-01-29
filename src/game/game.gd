@@ -25,7 +25,6 @@ func loadMap(mapPath: String) -> void:
 	## Request server for character data
 	Characters.requestCharacterData()
 
-# {"colors": colors, "outfit": outfit ...}
 func addCharacter(networkId: int) -> void:
 	## Create character resource
 	var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)
@@ -39,7 +38,7 @@ func addCharacter(networkId: int) -> void:
 		## Apply appearance to character
 		newCharacterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
 		## Send my character data to server
-		Characters.sendCharacterData()
+		Characters.sendOwnCharacterData()
 
 # These functions place the character on the map, but if it is a client, it will
 # be overwritten by the position syncing. It is done only so that the characters
@@ -63,7 +62,8 @@ func spawnCharacter(character: CharacterResource) -> void:
 
 func setCharacterData(id: int, characterData: Dictionary) -> void:
 	var character: CharacterResource = Characters.getCharacterResource(id)
-	character.setAppearance(characterData["outfit"], characterData["colors"])
+	if characterData.has("outfit") and characterData.has("colors"):
+		character.setAppearance(characterData["outfit"], characterData["colors"])
 
 func showStartButton(buttonShow: bool = true) -> void:
 	## Switch visibility of game start button
