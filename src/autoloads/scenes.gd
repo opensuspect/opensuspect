@@ -39,12 +39,12 @@ var sceneOrder: Array # Order of scenes, with back being the top
 # --Public Functions--
 
 # Add a child scene to the base scene, and show it
-func overlay(path: String, onCanvasLayer: bool) -> void:
+func overlay(path: String) -> void:
 	_hideAllLoaded() # Hide all loaded overlays
 	if loadedScenes.has(path):
 		_showLoaded(path) # Show the scene if it has already been loaded
 	else:
-		call_deferred("_deferredOverlay", path, true, onCanvasLayer) # Otherwise load the scene
+		call_deferred("_deferredOverlay", path, true) # Otherwise load the scene
 	if path != sceneOrder.back():
 		sceneOrder.append(path) # Add the path to sceneOrder if it isn't already there
 
@@ -69,14 +69,14 @@ func setBase(scene: Node, lowest: String) -> void:
 	canvasNode = null
 	loadedScenes[baseScenePath] = baseScene
 	lowestScenePath = lowest
-	overlay(lowestScenePath, false)
+	overlay(lowestScenePath)
 
 # Switch back to the previous scene
 func back() -> void:
 	var index = sceneOrder.size() - 1
 	if index > 0:
 		sceneOrder.remove(index)
-		overlay(sceneOrder.back(), false)
+		overlay(sceneOrder.back())
 	else:
 		if baseScene.has_method("_onBack"):
 			baseScene.call("_onBack")
@@ -89,15 +89,12 @@ func _input(event) -> void:
 		back()
 
 # Deferred overlay function
-func _deferredOverlay(path: String, focus: bool, onCanvasLayer: bool) -> void:
+func _deferredOverlay(path: String, focus: bool) -> void:
 	var newScene = load(path).instance()
-	if onCanvasLayer:
-		if canvasNode == null:
-			canvasNode = CanvasLayer.new()
-			baseScene.add_child(canvasNode)
-		canvasNode.add_child(newScene)
-	else:
-		baseScene.add_child(newScene)
+	if canvasNode == null:
+		canvasNode = CanvasLayer.new()
+		baseScene.add_child(canvasNode)
+	canvasNode.add_child(newScene)
 	loadedScenes[path] = newScene
 	if focus:
 		_showLoaded(path)
@@ -112,7 +109,10 @@ func _deferredSwitchBase(path: String) -> void:
 	loadedScenes[baseScenePath] = baseScene
 	get_tree().set_current_scene(baseScene)
 	_hideAllLoaded() # Hide all loaded overlays
-	_showLoaded(lowestScenePath)
+	if lowestScenePath in loadedScenes:
+		_showLoaded(lowestScenePath)
+	else:
+		call_deferred("_deferredOverlay", lowestScenePath, true)
 
 # Reload the base scene, performing the switchout
 func _reloadBase() -> void:

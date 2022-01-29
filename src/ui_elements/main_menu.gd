@@ -137,10 +137,10 @@ func _on_Character_mouse_exited():
 	character.setOutline(Color("#E6E2DD"))
 
 func _on_Appearance_pressed():
-	Scenes.overlay("res://ui_elements/appearance/appearance_editor.tscn", false)
+	Scenes.overlay("res://ui_elements/appearance/appearance_editor.tscn")
 	
 func _on_Settings_pressed():
-	Scenes.overlay("res://ui_elements/settings.tscn", false)
+	Scenes.overlay("res://ui_elements/settings.tscn")
 
 func _on_Quit_pressed():
 	Scenes.back()

@@ -147,7 +147,7 @@ func _on_Save_pressed() -> void:
 
 # Switch to closet scene
 func _on_Closet_pressed():
-	Scenes.overlay("res://ui_elements/appearance/closet.tscn", false)
+	Scenes.overlay("res://ui_elements/appearance/closet.tscn")
 
 # Hide darkener on save popup close
 func _on_Popup_hide() -> void:
