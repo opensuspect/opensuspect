@@ -23,6 +23,9 @@ func _ready() -> void:
 	## Current scene is the main menu
 	currentScene = mainMenuScene
 
+func isPlaying() -> bool:
+	return currentState == States.LOBBY or currentState == States.MAP
+
 func switchScene(nextScene: Node) -> void:
 	## Removes current scene from scene tree
 	var root: Node = get_tree().get_root()
