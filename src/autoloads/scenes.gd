@@ -15,9 +15,12 @@ extends Node
 #
 ## switchBase(path: String, lowest: String) -> void
 # Switches out the base scene for the one defined in path. Lowest defines the path to set lowestScenePath.
+# If the lowest is different then the path, it creates a new CanvasLayer and parents the lowest scene to
+# the CanvasLayer.
 #
 ## overlay(path: String) -> void
-# Adds the scene specified by it's resource path, as a child of the base scene. All other child scenes are 
+# Adds the scene specified by it's resource path. If a CanvasLayer doesn't yet exists it creates it.
+# Adds the new path as a child of the CanvasLayer. All other child scenes are 
 # hidden, and the newly overlayed scene is shown. If the scene is already loaded, it is just shown instead. 
 # The _focus method, if it exists, is run on the scene.
 #
@@ -27,6 +30,9 @@ extends Node
 
 var baseScene: Node # Always loaded scene
 var baseScenePath: String # Path of baseScene
+
+# If the node has a canvaslayer, this variable refers to it. if it does not, this variable is null
+var canvasNode: CanvasLayer = null
 
 var lowestScenePath: String # Path to scene that won't be hidden by back
 
@@ -38,7 +44,6 @@ var sceneOrder: Array # Order of scenes, with back being the top
 # Add a child scene to the base scene, and show it
 func overlay(path: String) -> void:
 	_hideAllLoaded() # Hide all loaded overlays
-	_checkLowestPath() # Check that the lowest path is in the sceneOrder array
 	if loadedScenes.has(path):
 		_showLoaded(path) # Show the scene if it has already been loaded
 	else:
@@ -47,15 +52,16 @@ func overlay(path: String) -> void:
 		sceneOrder.append(path) # Add the path to sceneOrder if it isn't already there
 
 # Preload a child scene to the base scene, but don't show it
-func preloadOverlay(path: String) -> void:
+func preloadOverlay(path: String, onCanvasLayer: bool) -> void:
 	if not loadedScenes.has(path):
-		call_deferred("_deferredOverlay", path, false) # Load the scene if not already loaded
+		call_deferred("_deferredOverlay", path, false, onCanvasLayer) # Load the scene if not already loaded
 
 # Set a new scene to be the base scene
 func switchBase(path: String, lowest: String) -> void:
 	loadedScenes.clear()
 	sceneOrder.clear()
 	lowestScenePath = lowest
+	sceneOrder.append(lowestScenePath)
 	call_deferred("_deferredSwitchBase", path) # Switch out the base scene
 
 # Set the base scene from an already loaded scene. Only to be used if base scene hasn't been set.
@@ -63,6 +69,7 @@ func setBase(scene: Node, lowest: String) -> void:
 	assert(baseScene == null, "Please use switchBase instead.")
 	baseScene = scene
 	baseScenePath = scene.filename
+	canvasNode = null
 	loadedScenes[baseScenePath] = baseScene
 	lowestScenePath = lowest
 	overlay(lowestScenePath)
@@ -84,16 +91,13 @@ func _input(event) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		back()
 
-# Make sure the front of the sceneOrder array is lowestScenePath
-func _checkLowestPath() -> void:
-	assert(not lowestScenePath.empty(), "Please set the lowest scene path")
-	if sceneOrder.front() != lowestScenePath:
-		sceneOrder.push_front(lowestScenePath)
-
 # Deferred overlay function
 func _deferredOverlay(path: String, focus: bool) -> void:
 	var newScene = load(path).instance()
-	baseScene.add_child(newScene)
+	if canvasNode == null:
+		canvasNode = CanvasLayer.new()
+		baseScene.add_child(canvasNode)
+	canvasNode.add_child(newScene)
 	loadedScenes[path] = newScene
 	if focus:
 		_showLoaded(path)
@@ -103,10 +107,15 @@ func _deferredOverlay(path: String, focus: bool) -> void:
 # Deferred switch base function
 func _deferredSwitchBase(path: String) -> void:
 	baseScenePath = path
+	canvasNode = null
 	_reloadBase()
 	loadedScenes[baseScenePath] = baseScene
 	get_tree().set_current_scene(baseScene)
-	overlay(lowestScenePath)
+	_hideAllLoaded() # Hide all loaded overlays
+	if lowestScenePath in loadedScenes:
+		_showLoaded(lowestScenePath)
+	else:
+		call_deferred("_deferredOverlay", lowestScenePath, true)
 
 # Reload the base scene, performing the switchout
 func _reloadBase() -> void:

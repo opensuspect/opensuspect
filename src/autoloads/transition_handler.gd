@@ -22,15 +22,13 @@ func gameLoaded(newGameScene: Node2D) -> void:
 	gameScene = newGameScene
 	currentState = States.LOBBY
 	enterLobby()
-	if Connections.isServer():
-		gameScene.showStartButton()
 	if Connections.isClientServer():
 		gameScene.addCharacter(1)
 
 func loadGameScene() -> void:
 	## Switch to the game scene
 	currentState = States.WAITING
-	Scenes.switchBase("res://game/game.tscn", "res://game/game.tscn")
+	Scenes.switchBase("res://game/game.tscn", "res://game/hud.tscn")
 
 puppetsync func startGame() -> void:
 	## Load game map (laboratory)

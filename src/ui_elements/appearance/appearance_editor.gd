@@ -37,7 +37,7 @@ func _ready() -> void:
 	_generateTabs() ## Generate customization tabs
 
 func _focus() -> void:
-	Scenes.preloadOverlay("res://ui_elements/appearance/closet.tscn")
+	Scenes.preloadOverlay("res://ui_elements/appearance/closet.tscn", false)
 
 ## Generate the customization menu tabs
 func _generateTabs() -> void:
