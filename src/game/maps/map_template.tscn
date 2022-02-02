@@ -1,0 +1,5 @@
+[gd_scene format=2]
+
+[node name="MapTemplate" type="Node2D"]
+
+[node name="SpawnPositions" type="Node2D" parent="."]
