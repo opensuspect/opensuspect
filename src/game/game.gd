@@ -8,6 +8,7 @@ onready var characterNode: Node2D = $Characters
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 func _ready() -> void:
+	## Game scene loaded
 	TransitionHandler.gameLoaded(self)
 
 func loadMap(mapPath: String) -> void:
@@ -36,6 +37,7 @@ func addCharacter(networkId: int) -> void:
 	spawnCharacter(newCharacterResource)
 	characterNode.add_child(newCharacter) ## Add node to scene
 	var myId: int = get_tree().get_network_unique_id()
+	## If own character is added
 	if networkId == myId:
 		## Apply appearance to character
 		newCharacterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
@@ -55,7 +57,7 @@ func spawnAllCharacters() -> void:
 		spawnCharacter(allChars[character]) ## Set spawn position
 
 func spawnCharacter(character: CharacterResource) -> void:
-	## Set character position
+	## Spawn character at next spawn position
 	character.spawn(spawnList[spawnCounter])
 	## Step spawn position counter
 	spawnCounter += 1

@@ -22,14 +22,18 @@ func showMainMenu() -> void:
 	currentState = States.MENU
 
 func gameLoaded(newGameScene: Node2D) -> void:
+	## Save reference to game scene
 	gameScene = newGameScene
+	## Set scene to lobby
 	currentState = States.LOBBY
+	## Enter lobby
 	enterLobby()
+	## If client-server
 	if Connections.isClientServer():
-		gameScene.addCharacter(1)
+		gameScene.addCharacter(1) ## Add own character
 
 func loadGameScene() -> void:
-	## Switch to the game scene
+	## Switch to game scene and load HUD
 	currentState = States.WAITING
 	Scenes.switchBase("res://game/game.tscn", "res://game/hud.tscn")
 

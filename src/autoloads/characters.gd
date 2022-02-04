@@ -50,15 +50,15 @@ func createCharacter(networkId: int) -> CharacterResource:
 	var characterNode: Node = _createCharacterNode(networkId)
 	var characterResource: CharacterResource = _createCharacterResource(networkId)
 	
-	## assign character nodes and resources to each other
+	## Assign character nodes and resources to each other
 	characterNode.setCharacterResource(characterResource)
 	characterResource.setCharacterNode(characterNode)
 	
-	## register character node and resource
+	## Register character node and resource
 	_registerCharacterNode(networkId, characterNode)
 	_registerCharacterResource(networkId, characterResource)
 	
-	## return character resource
+	## Return character resource
 	return characterResource
 
 # get character node for the input network id
@@ -180,6 +180,7 @@ func _process(delta: float) -> void:
 ## --Client functions
 
 func requestCharacterData() -> void:
+	## Call server to send all character data
 	rpc_id(1, "sendAllCharacterData")
 
 # puppet keyword means that when this function is used in an rpc call
@@ -203,11 +204,14 @@ puppet func _updateAllCharacterData(positions: Dictionary, characterData: Array)
 
 func sendOwnCharacterData() -> void:
 	var id: int = get_tree().get_network_unique_id()
+	## Get own character resource
 	var characterRes: CharacterResource
 	characterRes = Characters.getCharacterResource(id)
+	## Get own character outfit data
 	var characterData: Dictionary = {}
 	characterData["outfit"] = characterRes.getOutfit()
 	characterData["colors"] = characterRes.getColors()
+	## Save data to be sent to the server
 	serverSendQueue.append(characterData)
 
 puppet func receiveCharacterDataClient(id: int, characterData: Dictionary) -> void:
@@ -217,9 +221,13 @@ puppet func receiveCharacterDataClient(id: int, characterData: Dictionary) -> vo
 ## --Server Functions--
 
 master func sendAllCharacterData() -> void:
+	## Get all character resourcse
 	var characterRes: Dictionary = {}
 	characterRes = getCharacterResources()
+	## For each character
 	for player in characterRes:
+		## Collect character outfit data
+		## and prepare to broadcast
 		var characterData: Dictionary = {}
 		var outfit: Dictionary = characterRes[player].getOutfit()
 		var colors: Dictionary = characterRes[player].getColors()
@@ -273,7 +281,8 @@ func _updateCharacterPosition(networkId: int, characterPos: Vector2) -> void:
 # send the position if this client's character to the server
 func _sendMyCharacterDataToServer() -> void:
 	#print("sending my position to server")
-	## Send own character position to server
+	## Send own character position 
+	## and custom data to server
 	var myPosition: Vector2 = getMyCharacterResource().getPosition()
 	rpc_id(1, "_receiveCharacterDataFromClient", myPosition, serverSendQueue)
 	serverSendQueue = []

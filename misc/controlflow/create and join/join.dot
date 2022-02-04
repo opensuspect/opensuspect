@@ -2,33 +2,22 @@ digraph controlflow {
     rankdir="LR";
     subgraph cluster_client1 {
         label="Client 1"; labeljust="l";
-        subgraph cluster_client1_character_resource {
-            label="character_resource.gd"; labeljust="l";
-            client1_character_resource_getCharacterNode [
-                label="<begin>getCharacterNode"
-                shape="record"
-            ]
-            client1_character_resource_setCharacterNode [
-                label="<begin>setCharacterNode"
-                shape="record"
-            ]
-            client1_character_resource_setPosition [
-                label="<begin>setPosition | <f0> Set node position "
-                shape="record"
-            ]
-        }
         subgraph cluster_client1_game {
             label="game.gd"; labeljust="l";
+            client1_game__ready [
+                label="<begin>_ready | <f0> Game scene loaded "
+                shape="record"
+            ]
             client1_game_loadMap [
-                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points "
+                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points  | <f4> Request server for character data "
                 shape="record"
             ]
             client1_game_addCharacter [
-                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
+                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene  | {<f4> If own character is added  |  { <f5> Apply appearance to character  | <f6> Send my character data to server  } }"
                 shape="record"
             ]
             client1_game_spawnCharacter [
-                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
+                label="<begin>spawnCharacter | <f0> Spawn character at next spawn position  | <f1> Step spawn position counter "
                 shape="record"
             ]
         }
@@ -39,10 +28,14 @@ digraph controlflow {
                 shape="record"
             ]
         }
-        subgraph cluster_client1_transition_handler {
-            label="transition_handler.gd"; labeljust="l";
-            client1_transition_handler_enterLobby [
-                label="<begin>enterLobby | <f0> Switch to the game scene  | <f1> Load lobby map "
+        subgraph cluster_client1_main_menu {
+            label="main_menu.gd"; labeljust="l";
+            client1_main_menu_joinGame [
+                label="<begin>joinGame | <f0> Get data from UI  | {<f1> If port is given  |  { <f2> Custom port is used  } } | {<f3> Empty host or playername rejected } | <f4> Join a game "
+                shape="record"
+            ]
+            client1_main_menu_joinEvent [
+                label="<begin>joinEvent | {<f0> Checks menu  |  { <f1> Join game  | <f2> Create a game  | <f3> Dedicated server  } }"
                 shape="record"
             ]
         }
@@ -53,7 +46,7 @@ digraph controlflow {
                 shape="record"
             ]
             client1_connections_connectedOK [
-                label="<begin>connectedOK | <f0> Send own data to server  | <f1> Enter the Lobby "
+                label="<begin>connectedOK | <f0> Send own data to server  | <f1> Load the game scene "
                 shape="record"
             ]
             client1_connections_receiveBulkPlayerData [
@@ -65,10 +58,25 @@ digraph controlflow {
                 shape="record"
             ]
         }
+        subgraph cluster_client1_transition_handler {
+            label="transition_handler.gd"; labeljust="l";
+            client1_transition_handler_gameLoaded [
+                label="<begin>gameLoaded | <f0> Save reference to game scene  | <f1> Set scene to lobby  | <f2> Enter lobby  | {<f3> If client-server  |  { <f4> Add own character  } }"
+                shape="record"
+            ]
+            client1_transition_handler_loadGameScene [
+                label="<begin>loadGameScene | <f0> Switch to game scene and load HUD "
+                shape="record"
+            ]
+            client1_transition_handler_enterLobby [
+                label="<begin>enterLobby | <f0> Load lobby map "
+                shape="record"
+            ]
+        }
         subgraph cluster_client1_characters {
             label="characters.gd"; labeljust="l";
             client1_characters_createCharacter [
-                label="<begin>createCharacter | <f0> Create character node and resource  | <f1> assign character nodes and resources to each other  | <f2> register character node and resource  | <f3> return character resource "
+                label="<begin>createCharacter | <f0> Create character node and resource  | <f1> Assign character nodes and resources to each other  | <f2> Register character node and resource  | <f3> Return character resource "
                 shape="record"
             ]
             client1_characters__createCharacterNode [
@@ -87,15 +95,35 @@ digraph controlflow {
                 label="<begin>_registerCharacterResource | <f0> Register character resource for id "
                 shape="record"
             ]
-        }
-        subgraph cluster_client1_mainmenu {
-            label="mainmenu.gd"; labeljust="l";
-            client1_mainmenu_joinGame [
-                label="<begin>joinGame | <f0> Get data from UI  | {<f1> If port is given  |  { <f2> Custom port is used  } } | {<f3> Empty host or playername rejected } | <f4> Join a game "
+            client1_characters_requestCharacterData [
+                label="<begin>requestCharacterData | <f0> Call server to send all character data "
                 shape="record"
             ]
-            client1_mainmenu_joinEvent [
-                label="<begin>joinEvent | {<f0> Checks menu  |  { <f1> Join game  | <f2> Create a game  | <f3> Dedicated server  } }"
+            client1_characters_sendOwnCharacterData [
+                label="<begin>sendOwnCharacterData | <f0> Get own character resource  | <f1> Get own character outfit data  | <f2> Save data to be sent to the server "
+                shape="record"
+            ]
+            client1_characters__sendMyCharacterDataToServer [
+                label="<begin>_sendMyCharacterDataToServer | <f0> Send own character position\nand custom data to server "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            client1_character_resource_getCharacterNode [
+                label="<begin>getCharacterNode"
+                shape="record"
+            ]
+            client1_character_resource_setCharacterNode [
+                label="<begin>setCharacterNode"
+                shape="record"
+            ]
+            client1_character_resource_setAppearance [
+                label="<begin>setAppearance"
+                shape="record"
+            ]
+            client1_character_resource_setPosition [
+                label="<begin>setPosition | <f0> Set node position "
                 shape="record"
             ]
         }
@@ -103,29 +131,14 @@ digraph controlflow {
     }
     subgraph cluster_server {
         label="Server"; labeljust="l";
-        subgraph cluster_server_character_resource {
-            label="character_resource.gd"; labeljust="l";
-            server_character_resource_getCharacterNode [
-                label="<begin>getCharacterNode"
-                shape="record"
-            ]
-            server_character_resource_setCharacterNode [
-                label="<begin>setCharacterNode"
-                shape="record"
-            ]
-            server_character_resource_setPosition [
-                label="<begin>setPosition | <f0> Set node position "
-                shape="record"
-            ]
-        }
         subgraph cluster_server_game {
             label="game.gd"; labeljust="l";
             server_game_addCharacter [
-                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
+                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene  | {<f4> If own character is added  |  { <f5> Apply appearance to character  | <f6> Send my character data to server  } }"
                 shape="record"
             ]
             server_game_spawnCharacter [
-                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
+                label="<begin>spawnCharacter | <f0> Spawn character at next spawn position  | <f1> Step spawn position counter "
                 shape="record"
             ]
         }
@@ -146,7 +159,7 @@ digraph controlflow {
         subgraph cluster_server_characters {
             label="characters.gd"; labeljust="l";
             server_characters_createCharacter [
-                label="<begin>createCharacter | <f0> Create character node and resource  | <f1> assign character nodes and resources to each other  | <f2> register character node and resource  | <f3> return character resource "
+                label="<begin>createCharacter | <f0> Create character node and resource  | <f1> Assign character nodes and resources to each other  | <f2> Register character node and resource  | <f3> Return character resource "
                 shape="record"
             ]
             server_characters__createCharacterNode [
@@ -165,34 +178,38 @@ digraph controlflow {
                 label="<begin>_registerCharacterResource | <f0> Register character resource for id "
                 shape="record"
             ]
+            server_characters_sendAllCharacterData [
+                label="<begin>sendAllCharacterData | <f0> Get all character resourcse  | {<f1> For each character  |  { <f2> Collect character outfit data\nand prepare to broadcast  } }"
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            server_character_resource_getCharacterNode [
+                label="<begin>getCharacterNode"
+                shape="record"
+            ]
+            server_character_resource_setCharacterNode [
+                label="<begin>setCharacterNode"
+                shape="record"
+            ]
+            server_character_resource_setPosition [
+                label="<begin>setPosition | <f0> Set node position "
+                shape="record"
+            ]
         }
 
     }
     subgraph cluster_client2 {
         label="Client 2"; labeljust="l";
-        subgraph cluster_client2_character_resource {
-            label="character_resource.gd"; labeljust="l";
-            client2_character_resource_getCharacterNode [
-                label="<begin>getCharacterNode"
-                shape="record"
-            ]
-            client2_character_resource_setCharacterNode [
-                label="<begin>setCharacterNode"
-                shape="record"
-            ]
-            client2_character_resource_setPosition [
-                label="<begin>setPosition | <f0> Set node position "
-                shape="record"
-            ]
-        }
         subgraph cluster_client2_game {
             label="game.gd"; labeljust="l";
             client2_game_addCharacter [
-                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
+                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene  | {<f4> If own character is added  |  { <f5> Apply appearance to character  | <f6> Send my character data to server  } }"
                 shape="record"
             ]
             client2_game_spawnCharacter [
-                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
+                label="<begin>spawnCharacter | <f0> Spawn character at next spawn position  | <f1> Step spawn position counter "
                 shape="record"
             ]
         }
@@ -213,7 +230,7 @@ digraph controlflow {
         subgraph cluster_client2_characters {
             label="characters.gd"; labeljust="l";
             client2_characters_createCharacter [
-                label="<begin>createCharacter | <f0> Create character node and resource  | <f1> assign character nodes and resources to each other  | <f2> register character node and resource  | <f3> return character resource "
+                label="<begin>createCharacter | <f0> Create character node and resource  | <f1> Assign character nodes and resources to each other  | <f2> Register character node and resource  | <f3> Return character resource "
                 shape="record"
             ]
             client2_characters__createCharacterNode [
@@ -233,17 +250,40 @@ digraph controlflow {
                 shape="record"
             ]
         }
+        subgraph cluster_client2_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            client2_character_resource_getCharacterNode [
+                label="<begin>getCharacterNode"
+                shape="record"
+            ]
+            client2_character_resource_setCharacterNode [
+                label="<begin>setCharacterNode"
+                shape="record"
+            ]
+            client2_character_resource_setPosition [
+                label="<begin>setPosition | <f0> Set node position "
+                shape="record"
+            ]
+        }
 
     }
 
-    client1_mainmenu_joinEvent:f1 -> client1_mainmenu_joinGame:begin;
-    client1_mainmenu_joinGame:f4 -> client1_connections_joinGame:begin;
-    client1_connections_connectedOK:f1 -> client1_transition_handler_enterLobby:begin;
+    client1_main_menu_joinEvent:f1 -> client1_main_menu_joinGame:begin;
+    client1_main_menu_joinGame:f4 -> client1_connections_joinGame:begin;
+    client1_connections_connectedOK:f1 -> client1_transition_handler_loadGameScene:begin;
+    client1_transition_handler_loadGameScene:f0 -> client1_game__ready:begin [style=dashed];
+    
+    client1_game__ready:f0 -> client1_transition_handler_gameLoaded:begin;
+    client1_transition_handler_gameLoaded:f2 -> client1_transition_handler_enterLobby:begin;
+    client1_transition_handler_enterLobby:f0 -> client1_game_loadMap:begin;
+    client1_game_loadMap:f4 -> client1_characters_requestCharacterData:begin;
+    client1_characters_requestCharacterData:f0 -> server_characters_sendAllCharacterData:begin [color=blue];
+    
     client1_connections_connectedOK:f0 -> server_connections_receiveNewPlayerData:begin [color=blue];
-    client1_transition_handler_enterLobby:f1 -> client1_game_loadMap:begin;
     server_connections_receiveNewPlayerData:f1 -> client1_connections_setServerName:begin [color=darkgreen];
     server_connections_receiveNewPlayerData:f2 -> client1_connections_receiveBulkPlayerData:begin [color=darkgreen];
     server_connections_receiveNewPlayerData:f3 -> client2_connections_receivePlayerData:begin [color=red];
+    
     # server adds new character
     server_connections_receiveNewPlayerData:f4 -> server_game_addCharacter:begin;
     server_game_addCharacter:f0 -> server_characters_createCharacter:begin;
@@ -256,11 +296,14 @@ digraph controlflow {
     server_characters_createCharacter:f1 -> server_character_resource_setCharacterNode:begin;
     server_characters_createCharacter:f2 -> server_characters__registerCharacterNode:begin;
     server_characters_createCharacter:f2 -> server_characters__registerCharacterResource:begin;
+    
     # client adds new character
     client1_connections_receiveBulkPlayerData:f2 -> client1_game_addCharacter:begin;
     client1_game_addCharacter:f0 -> client1_characters_createCharacter:begin;
     client1_game_addCharacter:f1 -> client1_character_resource_getCharacterNode:begin;
     client1_game_addCharacter:f2 -> client1_game_spawnCharacter:begin;
+    client1_game_addCharacter:f5 -> client1_character_resource_setAppearance:begin;
+    client1_game_addCharacter:f6 -> client1_characters_sendOwnCharacterData:begin;
     client1_game_spawnCharacter:f0 -> client1_character_resource_setPosition:begin;
     client1_characters_createCharacter:f0 -> client1_characters__createCharacterNode:begin;
     client1_characters_createCharacter:f0 -> client1_characters__createCharacterResource:begin;
@@ -268,6 +311,8 @@ digraph controlflow {
     client1_characters_createCharacter:f1 -> client1_character_resource_setCharacterNode:begin;
     client1_characters_createCharacter:f2 -> client1_characters__registerCharacterNode:begin;
     client1_characters_createCharacter:f2 -> client1_characters__registerCharacterResource:begin;
+    client1_characters_sendOwnCharacterData -> client1_characters__sendMyCharacterDataToServer:begin [style=dashed];
+    
     # other client adds new character
     client2_connections_receivePlayerData:f2 -> client2_game_addCharacter:begin;
     client2_game_addCharacter:f0 -> client2_characters_createCharacter:begin;

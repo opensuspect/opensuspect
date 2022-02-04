@@ -6,88 +6,85 @@ digraph controlflow {
     }
     subgraph cluster_server {
         label="Server"; labeljust="l";
-        subgraph cluster_server_character_resource {
-            label="character_resource.gd"; labeljust="l";
-            server_character_resource_getCharacterNode [
-                label="<begin>getCharacterNode"
-                shape="record"
-            ]
-            server_character_resource_setCharacterNode [
-                label="<begin>setCharacterNode"
-                shape="record"
-            ]
-            server_character_resource_setPosition [
-                label="<begin>setPosition | <f0> Set node position "
-                shape="record"
-            ]
-        }
         subgraph cluster_server_game {
             label="game.gd"; labeljust="l";
+            server_game__ready [
+                label="<begin>_ready | <f0> Game scene loaded "
+                shape="record"
+            ]
             server_game_loadMap [
-                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points "
+                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points  | <f4> Request server for character data "
                 shape="record"
             ]
             server_game_addCharacter [
-                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene "
+                label="<begin>addCharacter | <f0> Create character resource  | <f1> Get character node reference  | <f2> Spawn the character  | <f3> Add node to scene  | {<f4> If own character is added  |  { <f5> Apply appearance to character  | <f6> Send my character data to server  } }"
+                shape="record"
+            ]
+            server_game_spawnAllCharacters [
+                label="<begin>spawnAllCharacters | <f0> Reset spawn position counter  | <f1> Get all character resources  | {<f2> Loop through all characters  |  { <f3> Set spawn position  } }"
                 shape="record"
             ]
             server_game_spawnCharacter [
-                label="<begin>spawnCharacter | <f0> Set character position  | <f1> Step spawn position counter "
+                label="<begin>spawnCharacter | <f0> Spawn character at next spawn position  | <f1> Step spawn position counter "
                 shape="record"
             ]
         }
-        subgraph cluster_server_character {
-            label="character.gd"; labeljust="l";
-            server_character_setCharacterResource [
-                label="<begin>setCharacterResource"
+        subgraph cluster_server_main_menu {
+            label="main_menu.gd"; labeljust="l";
+            server_main_menu_createGame [
+                label="<begin>createGame | <f0> Get data from UI  | {<f1> Empty playername rejected } | <f2> Create a game "
                 shape="record"
             ]
-        }
-        subgraph cluster_server_transition_handler {
-            label="transition_handler.gd"; labeljust="l";
-            server_transition_handler_enterLobby [
-                label="<begin>enterLobby | <f0> Switch to the game scene  | <f1> Load lobby map "
+            server_main_menu_joinEvent [
+                label="<begin>joinEvent | {<f0> Checks menu  |  { <f1> Join game  | <f2> Create a game  | <f3> Dedicated server  } }"
                 shape="record"
             ]
         }
         subgraph cluster_server_connections {
             label="connections.gd"; labeljust="l";
             server_connections_createGame [
-                label="<begin>createGame | <f0> Initialize Godot networking  | <f1> Save data in globals  | <f2> Enter the Lobby  | <f3> Add a character to the map "
+                label="<begin>createGame | <f0> Initialize Godot networking  | <f1> Save data in globals  | <f2> Load the game scene "
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_transition_handler {
+            label="transition_handler.gd"; labeljust="l";
+            server_transition_handler_gameLoaded [
+                label="<begin>gameLoaded | <f0> Save reference to game scene  | <f1> Set scene to lobby  | <f2> Enter lobby  | {<f3> If client-server  |  { <f4> Add own character  } }"
+                shape="record"
+            ]
+            server_transition_handler_loadGameScene [
+                label="<begin>loadGameScene | <f0> Switch to game scene and load HUD "
+                shape="record"
+            ]
+            server_transition_handler_enterLobby [
+                label="<begin>enterLobby | <f0> Load lobby map "
                 shape="record"
             ]
         }
         subgraph cluster_server_characters {
             label="characters.gd"; labeljust="l";
             server_characters_createCharacter [
-                label="<begin>createCharacter | <f0> Create character node and resource  | <f1> assign character nodes and resources to each other  | <f2> register character node and resource  | <f3> return character resource "
+                label="<begin>createCharacter | <f0> Create character node and resource  | <f1> Assign character nodes and resources to each other  | <f2> Register character node and resource  | <f3> Return character resource "
                 shape="record"
             ]
-            server_characters__createCharacterNode [
-                label="<begin>_createCharacterNode | <f0> instance character scene "
-                shape="record"
-            ]
-            server_characters__createCharacterResource [
-                label="<begin>_createCharacterResource | <f0> instance a new CharacterResource object "
-                shape="record"
-            ]
-            server_characters__registerCharacterNode [
-                label="<begin>_registerCharacterNode | <f0> Register character node for id "
-                shape="record"
-            ]
-            server_characters__registerCharacterResource [
-                label="<begin>_registerCharacterResource | <f0> Register character resource for id "
+            server_characters_sendOwnCharacterData [
+                label="<begin>sendOwnCharacterData | <f0> Get own character resource  | <f1> Get own character outfit data  | <f2> Save data to be sent to the server "
                 shape="record"
             ]
         }
-        subgraph cluster_server_mainmenu {
-            label="mainmenu.gd"; labeljust="l";
-            server_mainmenu_createGame [
-                label="<begin>createGame | <f0> Get data from UI  | {<f1> Empty playername rejected } | <f2> Create a game "
+        subgraph cluster_server_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            server_character_resource_spawn [
+                label="<begin>spawn"
                 shape="record"
             ]
-            server_mainmenu_joinEvent [
-                label="<begin>joinEvent | {<f0> Checks menu  |  { <f1> Join game  | <f2> Create a game  | <f3> Dedicated server  } }"
+            server_character_resource_getCharacterNode [
+                label="<begin>getCharacterNode"
+                shape="record"
+            ]
+            server_character_resource_setAppearance [
+                label="<begin>setAppearance"
                 shape="record"
             ]
         }
@@ -98,19 +95,27 @@ digraph controlflow {
 
     }
 
-    server_mainmenu_joinEvent:f2 -> server_mainmenu_createGame:begin;
-    server_mainmenu_createGame:f2 -> server_connections_createGame:begin;
-    server_connections_createGame:f2 -> server_transition_handler_enterLobby:begin;
-    server_transition_handler_enterLobby:f1 -> server_game_loadMap:begin;
-    server_connections_createGame:f3 -> server_game_addCharacter:begin;
+    server_main_menu_joinEvent:f2 -> server_main_menu_createGame:begin;
+    server_main_menu_createGame:f2 -> server_connections_createGame:begin;
+    server_connections_createGame:f2 -> server_transition_handler_loadGameScene:begin;
+    server_transition_handler_loadGameScene:f0 -> server_game__ready:begin [style=dashed];
+    
+    server_game__ready:f0 -> server_transition_handler_gameLoaded:begin;
+    server_transition_handler_gameLoaded:f2 -> server_transition_handler_enterLobby:begin;
+    server_transition_handler_enterLobby:f0 -> server_game_loadMap:begin;
+    server_game_loadMap:f3 -> server_game_spawnAllCharacters:begin;
+    
+    server_transition_handler_gameLoaded:f4 -> server_game_addCharacter:begin [minlen=2];
     server_game_addCharacter:f0 -> server_characters_createCharacter:begin;
-    server_characters_createCharacter:f0 -> server_characters__createCharacterNode:begin;
-    server_characters_createCharacter:f0 -> server_characters__createCharacterResource:begin;
-    server_characters_createCharacter:f1 -> server_character_setCharacterResource:begin;
-    server_characters_createCharacter:f1 -> server_character_resource_setCharacterNode:begin;
-    server_characters_createCharacter:f2 -> server_characters__registerCharacterNode:begin;
-    server_characters_createCharacter:f2 -> server_characters__registerCharacterResource:begin;
     server_game_addCharacter:f1 -> server_character_resource_getCharacterNode:begin;
     server_game_addCharacter:f2 -> server_game_spawnCharacter:begin;
-    server_game_spawnCharacter:f0 -> server_character_resource_setPosition:begin;
+    server_game_addCharacter:f5 -> server_character_resource_setAppearance:begin;
+    server_game_addCharacter:f6 -> server_characters_sendOwnCharacterData:begin;
+    
+    server_game_spawnCharacter:f0 -> server_character_resource_spawn:begin;
+    
+    server_game__ready -> server_game_addCharacter [style=invis];
+    server_transition_handler_loadGameScene -> server_transition_handler_gameLoaded [style=invis]
+    server_game__ready -> server_game_loadMap [style=invis];
+    server_characters_createCharacter -> server_characters_sendOwnCharacterData [style=invis];
 }
