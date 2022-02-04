@@ -236,7 +236,8 @@ master func sendAllCharacterData() -> void:
 		if len(colors) > 0:
 			characterData["colors"] = colors
 		if len(characterData) > 0:
-			var dataSend: Dictionary = {"to": -1, "id": player, "data": characterData}
+			var senderId: int = get_tree().get_rpc_sender_id()
+			var dataSend: Dictionary = {"to": senderId, "id": player, "data": characterData}
 			broadcastDataQueue.append(dataSend)
 	#print_debug(characterRes)
 	#print_debug(broadcastDataQueue)
