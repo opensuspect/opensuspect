@@ -5,9 +5,6 @@ onready var tabs: Control  = $MenuMargin/HBoxContainer/TabBox/TabContainer
 onready var character: Control = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
 onready var popupCharacter: Control = $SavePopup/MarginContainer/HBoxContainer/MenuCharacter
 
-signal menuBack
-signal menuSwitch(menu)
-
 var currentTabId: int # ID of selected tab
 var selectedItemId: int # ID of selected item
 var itemsList: Dictionary # Dictionary of items, for selection lookup
@@ -15,7 +12,7 @@ var tabList: Array # Array of the names of the tabs
 var iconList: Dictionary
 
 # Directories of icons
-var icons: Dictionary = {
+var iconDirs: Dictionary = {
 	"Body": "res://game/character/assets/icons/body",
 	"Clothes": "res://game/character/assets/icons/clothes",
 	"Mouth": "res://game/character/assets/icons/mouth",
@@ -34,10 +31,13 @@ const ITEM_ICON_SIZE = Vector2(256, 256) # Icon size of items
 # --Private Functions--
 
 func _ready() -> void:
-	iconList = Resources.list(icons, Appearance.extensions) # Get a list of all icons
+	iconList = Resources.list(iconDirs, Appearance.extensions) # Get a list of all icons
 	Appearance.updateConfig() ## Update sample character
 	$Darken.hide()
 	_generateTabs() ## Generate customization tabs
+
+func _focus() -> void:
+	Scenes.preloadOverlay("res://ui_elements/appearance/closet.tscn", false)
 
 ## Generate the customization menu tabs
 func _generateTabs() -> void:
@@ -81,7 +81,6 @@ func _populateChildTab(files: Dictionary, resource: String, child: ItemList) -> 
 
 # Update the outfit
 func _updateOutfit() -> void:
-	var tab = tabs.get_child(currentTabId) ## Get the current tab
 	var partName = tabList[currentTabId] ## Get name of current tab
 	var selectedItem = itemsList[partName][selectedItemId] ## Get selected resource from item list dictionary
 	Appearance.setOutfitPart(selectedItem, partName) ## Set outfit part to correct resource
@@ -89,7 +88,6 @@ func _updateOutfit() -> void:
 # Get the texture to use for the item's icon
 func _getTexture(directories: Dictionary, namespace: String, resource: String) -> Texture:
 	## Gather icons
-	
 	var icons = iconList[namespace] # Get the icons under the given namespace
 	var texturePath: String # Path to the texture
 	if icons.has(resource): ## If selected item has icon
@@ -141,15 +139,15 @@ func _on_Random_pressed() -> void:
 
 # Switches back to the previous menu
 func _on_Back_pressed() -> void:
-	emit_signal("menuBack") ## Signal menuBack
+	Scenes.back()
 
 # Open the save popup
 func _on_Save_pressed() -> void:
 	_savePopup() ## Show save popup
 
 # Switch to closet scene
-func _on_Closet_pressed() -> void:
-	emit_signal("menuSwitch", "closet") ## Signal menuSwitch to closet
+func _on_Closet_pressed():
+	Scenes.overlay("res://ui_elements/appearance/closet.tscn")
 
 # Hide darkener on save popup close
 func _on_Popup_hide() -> void:

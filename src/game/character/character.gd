@@ -81,8 +81,8 @@ func setAppearance(outfit: Dictionary, colors: Dictionary) -> void:
 	## Applies appearance to its skeleton
 	skeleton.applyAppearance(outfitPaths, colors)
 
-func setMainCharacter() -> void:
-	mainCharacter = true
+func setMainCharacter(main: bool = true) -> void:
+	mainCharacter = main
 
 # get the outfit of the character
 func getOutfit() -> Dictionary:

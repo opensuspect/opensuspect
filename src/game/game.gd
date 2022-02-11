@@ -5,8 +5,10 @@ var spawnCounter: int = 0 # A counter to take care of where characters spawn
 
 onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
-onready var gamestartButton: Button = $CanvasLayer/GameStart
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+
+func _ready() -> void:
+	TransitionHandler.gameLoaded(self)
 
 func loadMap(mapPath: String) -> void:
 	## Remove previous map if applicable
@@ -25,7 +27,6 @@ func loadMap(mapPath: String) -> void:
 	## Request server for character data
 	Characters.requestCharacterData()
 
-# {"colors": colors, "outfit": outfit ...}
 func addCharacter(networkId: int) -> void:
 	## Create character resource
 	var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)
@@ -39,7 +40,7 @@ func addCharacter(networkId: int) -> void:
 		## Apply appearance to character
 		newCharacterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
 		## Send my character data to server
-		Characters.sendCharacterData()
+		Characters.sendOwnCharacterData()
 
 # These functions place the character on the map, but if it is a client, it will
 # be overwritten by the position syncing. It is done only so that the characters
@@ -63,21 +64,5 @@ func spawnCharacter(character: CharacterResource) -> void:
 
 func setCharacterData(id: int, characterData: Dictionary) -> void:
 	var character: CharacterResource = Characters.getCharacterResource(id)
-	character.setAppearance(characterData["outfit"], characterData["colors"])
-
-func showStartButton(buttonShow: bool = true) -> void:
-	## Switch visibility of game start button
-	gamestartButton.visible = buttonShow
-
-func _on_GameStart_pressed() -> void:
-	if not Connections.isServer():
-		assert(false, "Unreachable")
-	## Change the map
-	TransitionHandler.changeMap()
-	## Change button text
-	if TransitionHandler.getCurrentState() == TransitionHandler.States.LOBBY:
-		gamestartButton.text = "Start game"
-	elif TransitionHandler.getCurrentState() == TransitionHandler.States.MAP:
-		gamestartButton.text = "Back to lobby"
-	else:
-		assert(false, "Unreachable")
+	if characterData.has("outfit") and characterData.has("colors"):
+		character.setAppearance(characterData["outfit"], characterData["colors"])

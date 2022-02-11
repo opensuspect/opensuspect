@@ -2,7 +2,7 @@ extends Control
 
 onready var skeleton = $Viewport/Skeleton
 
-# --Public Variables--
+# --Public Functions--
 
 # Set the outline shader color
 func setOutline(color: Color) -> void:
@@ -22,6 +22,7 @@ func setAppearance(outfit: Dictionary, colors: Dictionary):
 			outfitPaths[part] = filePath
 	skeleton.applyAppearance(outfitPaths, colors)
 
-# --Private Variables--
+# --Private Functions--
 func _ready():
 	Appearance.connect("appearanceChanged", self, "applyFromAppearance") # Signal from appearance to set skeleton config
+	Appearance.randomizeIfUnset()

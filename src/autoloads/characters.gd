@@ -35,6 +35,7 @@ var _characterResources: Dictionary = {}
 
 # Stores data to be sent through the network during the next broadcast
 var broadcastDataQueue: Array = []
+var serverSendQueue: Array = []
 
 var _positionSyncsPerSecond: int = 30
 var _timeSincePositionSync: float = 0.0
@@ -158,14 +159,21 @@ func _process(delta: float) -> void:
 		var positions: Dictionary = {}
 		for characterId in _characterResources:
 			positions[characterId] = _characterResources[characterId].getPosition()
-		rpc("_updateAllCharacterPositions", positions, broadcastDataQueue)
+		##
+		if len(serverSendQueue) > 0:
+			receiveCharacterDataServer(1, serverSendQueue)
+			serverSendQueue = []
+		## Broadcast all character data
+		#if len(broadcastDataQueue) > 0:
+			#print_debug(broadcastDataQueue)
+		rpc("_updateAllCharacterData", positions, broadcastDataQueue)
 		broadcastDataQueue = []
 	## If client
 	elif Connections.isClient():
 		if not get_tree().get_network_unique_id() in _characterResources:
 			return
 		## Send own character position to server
-		_sendMyCharacterPosToServer()
+		_sendMyCharacterDataToServer()
 	else:
 		assert(false, "Unreachable")
 
@@ -176,7 +184,7 @@ func requestCharacterData() -> void:
 
 # puppet keyword means that when this function is used in an rpc call
 # 	it will only be run on client
-puppet func _updateAllCharacterPositions(positions: Dictionary, characterData: Array) -> void:
+puppet func _updateAllCharacterData(positions: Dictionary, characterData: Array) -> void:
 	var myId: int = get_tree().get_network_unique_id()
 	## Loop through all characters
 	for characterId in positions:
@@ -193,14 +201,14 @@ puppet func _updateAllCharacterPositions(positions: Dictionary, characterData: A
 		if data["to"] == myId or data["to"] == -1:
 			receiveCharacterDataClient(data["id"], data["data"])
 
-func sendCharacterData() -> void:
+func sendOwnCharacterData() -> void:
 	var id: int = get_tree().get_network_unique_id()
 	var characterRes: CharacterResource
 	characterRes = Characters.getCharacterResource(id)
 	var characterData: Dictionary = {}
 	characterData["outfit"] = characterRes.getOutfit()
 	characterData["colors"] = characterRes.getColors()
-	broadcastDataQueue.append(characterData)
+	serverSendQueue.append(characterData)
 
 puppet func receiveCharacterDataClient(id: int, characterData: Dictionary) -> void:
 	var gameScene: Node = TransitionHandler.gameScene
@@ -213,15 +221,20 @@ master func sendAllCharacterData() -> void:
 	characterRes = getCharacterResources()
 	for player in characterRes:
 		var characterData: Dictionary = {}
-		characterData["outfit"] = characterRes[player].getOutfit()
-		characterData["colors"] = characterRes[player].getColors()
-		var dataSend: Dictionary = {"to": -1, "id": player, "data": characterData}
-		broadcastDataQueue.append(dataSend)
-	print_debug(characterRes)
-	print_debug(broadcastDataQueue)
+		var outfit: Dictionary = characterRes[player].getOutfit()
+		var colors: Dictionary = characterRes[player].getColors()
+		if len(outfit) > 0:
+			characterData["outfit"] = outfit
+		if len(colors) > 0:
+			characterData["colors"] = colors
+		if len(characterData) > 0:
+			var senderId: int = get_tree().get_rpc_sender_id()
+			var dataSend: Dictionary = {"to": senderId, "id": player, "data": characterData}
+			broadcastDataQueue.append(dataSend)
+	#print_debug(characterRes)
+	#print_debug(broadcastDataQueue)
 
-master func receiveCharacterDataServer(characterData: Array) -> void:
-	var senderId: int = get_tree().get_rpc_sender_id()
+func receiveCharacterDataServer(senderId: int, characterData: Array) -> void:
 	var gameScene: Node2D = TransitionHandler.gameScene
 	## Decompose and compile received data
 	if len(characterData) == 0:
@@ -236,14 +249,15 @@ master func receiveCharacterDataServer(characterData: Array) -> void:
 	## Broadcast new data
 	var dataSend: Dictionary = {"to": -1, "id": senderId, "data": compiledData}
 	broadcastDataQueue.append(dataSend)
+	#print_debug(broadcastDataQueue)
 
 # receive a client's position
 # master keyword means that this function will only be run on the server when RPCed
-master func _receiveCharacterPosFromClient(newPos: Vector2, characterData: Array) -> void:
+master func _receiveCharacterDataFromClient(newPos: Vector2, characterData: Array) -> void:
 	var sender: int = get_tree().get_rpc_sender_id()
 	## Set character position
 	_updateCharacterPosition(sender, newPos)
-	receiveCharacterDataServer(characterData)
+	receiveCharacterDataServer(sender, characterData)
 
 # update a character's position
 func _updateCharacterPosition(networkId: int, characterPos: Vector2) -> void:
@@ -258,9 +272,9 @@ func _updateCharacterPosition(networkId: int, characterPos: Vector2) -> void:
 # --Client Functions
 
 # send the position if this client's character to the server
-func _sendMyCharacterPosToServer() -> void:
+func _sendMyCharacterDataToServer() -> void:
 	#print("sending my position to server")
 	## Send own character position to server
 	var myPosition: Vector2 = getMyCharacterResource().getPosition()
-	rpc_id(1, "_receiveCharacterPosFromClient", myPosition, broadcastDataQueue)
-	broadcastDataQueue = []
+	rpc_id(1, "_receiveCharacterDataFromClient", myPosition, serverSendQueue)
+	serverSendQueue = []

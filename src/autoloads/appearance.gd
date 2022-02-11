@@ -56,19 +56,18 @@ var groupCustomization = {
 const COLOR_XY = 500
 
 func _ready():
-	var fileList: Dictionary
+	var assetList: Dictionary
 	for group in groupCustomization:
 		for partName in groupCustomization[group]:
-			fileList = Resources.listDirectory(directories[partName], extensions)
+			assetList = Resources.listDirectory(directories[partName], extensions)
 			customSpritePaths[partName] = {}
-			for file in fileList.values():
-				var fname: String = file["name"]
-				var path: String = file["path"]
-				customSpritePaths[partName][fname] = path
+			for asset in assetList:
+				var assetName: String = assetList[asset]["name"]
+				var assetPath: String = assetList[asset]["path"]
+				customSpritePaths[partName][assetName] = assetPath
 		customOptions[group] = []
-		for file in fileList.values():
-			customOptions[group].append(file["name"])
-	print_debug()
+		for asset in assetList:
+			customOptions[group].append(assetList[asset]["name"])
 
 # --Public Functions--
 
@@ -107,6 +106,18 @@ func randomizeConfig() -> void:
 	customOutfit = false ## Set customOutfit to [FALSE]
 	setConfig(_randomOutfit(), _randomColors()) ## Set random appearance
 
+func randomizeIfUnset() -> void:
+	if not hasConfig:
+		randomizeConfig()
+		hasConfig = true
+
+# Get a color from a position on a color map, adjusting for scale
+func colorFromMapPos(path: String, position: Vector2, scale: Vector2) -> Color:
+	var xPos = position.x / scale.x
+	var yPos = position.y / scale.y
+	var color = _colorFromMapXY(path, Vector2(xPos, yPos))
+	return(color)
+
 # --Private Functions--
 func _randomPart(partName: String) -> String:
 	var maxInt = customOptions[partName].size() # Get the size of the array
@@ -116,26 +127,9 @@ func _randomPart(partName: String) -> String:
 # Create a random outfit for the character
 func _randomOutfit() -> Dictionary:
 	var outfit: Dictionary = {}
-	var newPart: Dictionary
-	var directory: String
-	var stuff
 	for group in groupCustomization:
 		outfit[group] = _randomPart(group)
 	return outfit
-	#return(_groupOutfit(outfit)) ## Return the outfit
-
-# Group arms and legs by the type of clothes and pants respectively
-# This is done because each set of pants have corresponding leg assets for example
-#func _groupOutfit(outfit: Dictionary) -> Dictionary:
-#	for parentPart in groupClothing: ## Iterate through clothing groups
-#		var clothesType = outfit[parentPart].keys().front() # Get the parent clothing type
-#		for childPart in groupClothing[parentPart]: ## Iterate over the children parts
-#			## Get the child part's file path of the clothing type
-#			var path = Resources.getPath(clothesType, childPart, directories, extensions)
-#			assert(not path.empty(), "Please add " + clothesType + " to " + childPart)
-#			## Set the child part to the clothing type matching the parent's
-#			outfit[childPart] = {clothesType: path}
-#	return(outfit)
 
 func _randomColors() -> Dictionary:
 	var colors: Dictionary = {}
@@ -153,7 +147,7 @@ func _randomColors() -> Dictionary:
 # Creates a dictionary setting up the colors for the shader
 func _setColorInfo(color: Color, position: Vector2) -> Dictionary:
 	## Creates a dictionary of color info
-	var colorInfo: Dictionary
+	var colorInfo: Dictionary = {}
 	colorInfo["Red"] = color.r
 	colorInfo["Green"] = color.g
 	colorInfo["Blue"] = color.b
