@@ -8,8 +8,6 @@ onready var items: ItemList = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
 onready var selectButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Select
 onready var nameLabel: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Label
 
-signal menuBack
-
 var configData: Dictionary
 var configList: Array
 
@@ -44,6 +42,10 @@ func _ready() -> void:
 	Appearance.updateConfig() ## Update sample character
 	_configureItemList() ## Configure list of saves
 	listItems() ## Show list
+
+# Called from scene switcher whenever this scene is focused
+func _focus() -> void:
+	listItems()
 
 func _clearObjects():
 	for child in get_children():
@@ -91,14 +93,14 @@ func _selectConfig(namespace: String) -> void:
 # --Signal Functions--
 
 func _on_Back_pressed() -> void:
-	emit_signal("menuBack")
+	Scenes.back()
 
 func _on_Select_pressed() -> void:
 	## Set appearance
 	Appearance.setConfig(selectedOutfit, selectedColors)
 	## Set customOutfit to [TRUE] in appearance.gd
 	Appearance.customOutfit = true
-	emit_signal("menuBack") ## Signal menuBack
+	Scenes.back()
 
 func _on_item_selected(index) -> void:
 	## Selects confg with specific name

@@ -54,7 +54,8 @@ func _resizeColorImage() -> void:
 
 ## Check if click is in a valid position (not outside color selector)
 func _checkValidPos(position) -> bool:
-	if position.x > windowDimensions.x || position.y > windowDimensions.y:
+	var errorMargin: int = 5
+	if position.x > windowDimensions.x - errorMargin || position.y > windowDimensions.y - errorMargin:
 		return(false)
 	elif position.x < 0 || position.y < 0:
 		return(false)
@@ -74,5 +75,4 @@ func _on_ColorPicker_gui_input(event) -> void:
 	if Input.is_action_pressed("ui_press") and _checkValidPos(event.position):
 		# Downscale position back to normal
 		var position: Vector2 = event.position / imageScale
-		var selectedColor: Color = Appearance.getColorFromPos(colorMapPath, position)
 		emit_signal("colorOnClick", colorMapPath, position)

@@ -22,7 +22,7 @@ _global_script_class_icons={
 
 config/name="OpenSuspect"
 config/description="Free software implementation of a social deduction game."
-run/main_scene="res://ui_elements/start.tscn"
+run/main_scene="res://ui_elements/menu_base.tscn"
 boot_splash/image="res://bootsplash.png"
 config/icon="res://icon.png"
 
@@ -34,6 +34,7 @@ Characters="*res://autoloads/characters.gd"
 Connections="*res://autoloads/connections.gd"
 TransitionHandler="*res://autoloads/transition_handler.gd"
 GameData="*res://autoloads/game_data.gd"
+Scenes="*res://autoloads/scenes.gd"
 
 [display]
 
