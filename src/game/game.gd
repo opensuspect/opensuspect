@@ -66,5 +66,6 @@ func spawnCharacter(character: CharacterResource) -> void:
 
 func setCharacterData(id: int, characterData: Dictionary) -> void:
 	var character: CharacterResource = Characters.getCharacterResource(id)
+	## Apply character outfit and colors
 	if characterData.has("outfit") and characterData.has("colors"):
 		character.setAppearance(characterData["outfit"], characterData["colors"])
