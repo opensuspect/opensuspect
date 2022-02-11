@@ -197,7 +197,7 @@ puppet func _updateAllCharacterData(positions: Dictionary, characterData: Array)
 		getCharacterResource(characterId).setPosition(positions[characterId])
 	if len(characterData) > 0:
 		print_debug(characterData)
-	## Decompose character data
+	## For all character data
 	for data in characterData:
 		## If recipient is me
 		if data["to"] == myId or data["to"] == -1:
@@ -230,7 +230,7 @@ master func sendAllCharacterData() -> void:
 	## For each character
 	for player in characterRes:
 		## Collect character outfit data
-		## and prepare to broadcast
+		## and prepare to send back to sender
 		var characterData: Dictionary = {}
 		var outfit: Dictionary = characterRes[player].getOutfit()
 		var colors: Dictionary = characterRes[player].getColors()

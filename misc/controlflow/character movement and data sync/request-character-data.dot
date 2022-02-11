@@ -1,0 +1,100 @@
+digraph controlflow {
+    rankdir="LR";
+    subgraph cluster_client1 {
+        label="Client 1"; labeljust="l";
+        subgraph cluster_client1_game {
+            label="game.gd"; labeljust="l";
+            client1_game_setCharacterData [
+                label="<begin>setCharacterData | {<f0> Apply character outfit and colors }"
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_skeleton {
+            label="skeleton.gd"; labeljust="l";
+            client1_skeleton_applyAppearance [
+                label="<begin>applyAppearance | {<f0> If received data valid  |  { <f1> Apply Outfit  | <f2> Apply colors  } }"
+                shape="record"
+            ]
+            client1_skeleton__applyOutfit [
+                label="<begin>_applyOutfit | {<f0> For each customizable group  |  { <f1> Get the path to the node needing to be set  | <f2> Get the actual node object  | <f3> Set the texture of the node  } }"
+                shape="record"
+            ]
+            client1_skeleton__applyColors [
+                label="<begin>_applyColors | {<f0> Iterate over each shader  |  { <f1> Sets the correct colors for the shader  | <f2> Applies the colors to the given shader  } }"
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_character {
+            label="character.gd"; labeljust="l";
+            client1_character_setAppearance [
+                label="<begin>setAppearance | {<f0> For each customizable group  |  { {<f1> For each custom sprite  |  { <f2> Saves sprite file path  } } } } | <f3> Applies appearance to its skeleton "
+                shape="record"
+            ]
+        }
+        subgraph cluster_client1_characters {
+            label="characters.gd"; labeljust="l";
+            client1_characters_requestCharacterData [
+                label="<begin>requestCharacterData | <f0> Call server to send all character data "
+                shape="record"
+            ]
+            client1_characters__updateAllCharacterData [
+                label="<begin>_updateAllCharacterData | {<f0> Loop through all characters  |  { <f1> Set the position for the character  } } | {<f2> For all character data  |  { {<f3> If recipient is me  |  { <f4> Apply data  } } } }"
+                shape="record"
+            ]
+            client1_characters_receiveCharacterDataClient [
+                label="<begin>receiveCharacterDataClient | <f0> Set character data on game scene "
+                shape="record"
+            ]
+        }
+
+    }
+    subgraph cluster_server {
+        label="Server"; labeljust="l";
+        subgraph cluster_server_characters {
+            label="characters.gd"; labeljust="l";
+            server_characters_getCharacterResources [
+                label="<begin>getCharacterResources"
+                shape="record"
+            ]
+            server_characters__process [
+                label="<begin>_process | {<f0> Only proceed if enough time passed } | <f1> Reset position sync timer  | {<f2> If server  |  { <f3> Collect all character positions  | {<f4> Apply received character Data } | <f5> Broadcast all character positions and data  } } | {<f6> If client  |  { <f7> Send own character position to server  } }"
+                shape="record"
+            ]
+            server_characters_sendAllCharacterData [
+                label="<begin>sendAllCharacterData | <f0> Get all character resourcse  | {<f1> For each character  |  { <f2> Collect character outfit data\nand prepare to send back to sender  } }"
+                shape="record"
+            ]
+        }
+        subgraph cluster_server_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            server_character_resource_getOutfit [
+                label="<begin>getOutfit"
+                shape="record"
+            ]
+            server_character_resource_getColors [
+                label="<begin>getColors"
+                shape="record"
+            ]
+        }
+
+    }
+    subgraph cluster_client2 {
+        label="Client 2"; labeljust="l";
+
+    }
+
+    START [shape=diamond];
+    START -> client1_characters_requestCharacterData:begin;
+    client1_characters_requestCharacterData:f0 -> server_characters_sendAllCharacterData:begin [color=blue];
+    server_characters_sendAllCharacterData:f0 -> server_characters_getCharacterResources:begin;
+    server_characters_sendAllCharacterData:f2 -> server_character_resource_getOutfit:begin;
+    server_characters_sendAllCharacterData:f2 -> server_character_resource_getColors:begin;
+    server_characters_sendAllCharacterData:f2 -> server_characters__process:begin [style=dashed minlen=2];
+    server_characters__process:f5 -> client1_characters__updateAllCharacterData:begin [color=darkgreen];
+    client1_characters__updateAllCharacterData:f4 -> client1_characters_receiveCharacterDataClient:begin;
+    client1_characters_receiveCharacterDataClient:f0 -> client1_game_setCharacterData:begin;
+    client1_game_setCharacterData:f0 -> client1_character_setAppearance:begin;
+    client1_character_setAppearance:f3 -> client1_skeleton_applyAppearance:begin;
+    client1_skeleton_applyAppearance:f1 -> client1_skeleton__applyOutfit:begin;
+    client1_skeleton_applyAppearance:f2 -> client1_skeleton__applyColors:begin;
+}
