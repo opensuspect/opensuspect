@@ -46,6 +46,13 @@ digraph controlflow {
                 shape="record"
             ]
         }
+        subgraph cluster_client1_character_resource {
+            label="character_resource.gd"; labeljust="l";
+            client1_character_resource_setAppearance [
+                label="<begin>setAppearance | <f0> Set appearance (deferred) "
+                shape="record"
+            ]
+        }
 
     }
     subgraph cluster_server {
@@ -93,7 +100,8 @@ digraph controlflow {
     server_characters__process:f5 -> client1_characters__updateAllCharacterData:begin [color=darkgreen];
     client1_characters__updateAllCharacterData:f4 -> client1_characters_receiveCharacterDataClient:begin;
     client1_characters_receiveCharacterDataClient:f0 -> client1_game_setCharacterData:begin;
-    client1_game_setCharacterData:f0 -> client1_character_setAppearance:begin;
+    client1_game_setCharacterData:f0 -> client1_character_resource_setAppearance:begin;
+    client1_character_resource_setAppearance:f0 -> client1_character_setAppearance:begin [style=dashed];
     client1_character_setAppearance:f3 -> client1_skeleton_applyAppearance:begin;
     client1_skeleton_applyAppearance:f1 -> client1_skeleton__applyOutfit:begin;
     client1_skeleton_applyAppearance:f2 -> client1_skeleton__applyColors:begin;

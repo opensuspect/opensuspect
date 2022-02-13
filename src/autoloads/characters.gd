@@ -274,7 +274,7 @@ master func _receiveCharacterDataFromClient(newPos: Vector2, characterData: Arra
 # update a character's position
 func _updateCharacterPosition(networkId: int, characterPos: Vector2) -> void:
 	#print("updating position of ", networkId, " to ", characterPos)
-	# if this position is for this client's character
+	## if position is for own character, exit
 	if networkId == get_tree().get_network_unique_id():
 		# don't update its position
 		return

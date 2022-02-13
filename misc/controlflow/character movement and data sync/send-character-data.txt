@@ -1,0 +1,25 @@
+client1_characters__sendMyCharacterDataToServer:f0 -> server_characters__receiveCharacterDataFromClient:begin [color=blue];
+server_characters__receiveCharacterDataFromClient:f0 -> server_characters__updateCharacterPosition:begin;
+server_characters__updateCharacterPosition:f1 -> server_character_resource_setPosition:begin;
+server_character_resource_setPosition:f0 -> server_character_setPosition:begin;
+server_characters__receiveCharacterDataFromClient:f1 -> server_characters_receiveCharacterDataServer:begin;
+server_characters_receiveCharacterDataServer:f1 -> server_game_setCharacterData:begin;
+server_game_setCharacterData:f0 -> server_character_resource_setAppearance:begin;
+server_character_resource_setAppearance:f0 -> server_character_setAppearance:begin [style=dashed];
+server_character_setAppearance:f3 -> server_skeleton_applyAppearance:begin;
+server_skeleton_applyAppearance:f1 -> server_skeleton__applyOutfit:begin;
+server_skeleton_applyAppearance:f2 -> server_skeleton__applyColors:begin;
+server_characters_receiveCharacterDataServer:f2 -> server_characters__process:begin [style=dashed];
+
+server_characters__process:f4 -> server_characters_receiveCharacterDataServer:begin;
+
+server_characters__process:f5 -> client1_characters__updateAllCharacterData:begin [color=red];
+server_characters__process:f5 -> client2_characters__updateAllCharacterData:begin [color=red];
+
+client2_characters__updateAllCharacterData:f4 -> client2_characters_receiveCharacterDataClient:begin;
+client2_characters_receiveCharacterDataClient:f0 -> client2_game_setCharacterData:begin;
+client2_game_setCharacterData:f0 -> client2_character_resource_setAppearance:begin;
+client2_character_resource_setAppearance:f0 -> client2_character_setAppearance:begin [style=dashed];
+client2_character_setAppearance:f3 -> client2_skeleton_applyAppearance:begin;
+client2_skeleton_applyAppearance:f1 -> client2_skeleton__applyOutfit:begin;
+client2_skeleton_applyAppearance:f2 -> client2_skeleton__applyColors:begin;
