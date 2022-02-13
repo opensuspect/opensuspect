@@ -97,6 +97,9 @@ func getCharacterNodes() -> Dictionary:
 func getCharacterResources() -> Dictionary:
 	return _characterResources
 
+func getCharacterKeys() -> Array:
+	return _characterResources.keys()
+
 func destroyCharacter() -> void:
 	assert(false, "Not implemented yet")
 

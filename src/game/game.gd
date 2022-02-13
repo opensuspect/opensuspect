@@ -2,6 +2,7 @@ extends Node2D
 
 var spawnList: Array = [] # Storing spawn positions for current map
 var spawnCounter: int = 0 # A counter to take care of where characters spawn
+var actualMap: Node2D = null
 
 onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
@@ -15,10 +16,10 @@ func loadMap(mapPath: String) -> void:
 	for child in mapNode.get_children():
 		child.queue_free()
 	## Load map and place it on scene tree
-	var mapToLoad: Node = ResourceLoader.load(mapPath).instance()
-	mapNode.add_child(mapToLoad)
+	actualMap = ResourceLoader.load(mapPath).instance()
+	mapNode.add_child(actualMap)
 	## Save spawn positions from the map
-	var spawnPosNode: Node = mapNode.get_child(0).get_node("SpawnPositions")
+	var spawnPosNode: Node = actualMap.get_node("SpawnPositions")
 	spawnList = []
 	for posNode in spawnPosNode.get_children():
 		spawnList.append(posNode.position)
@@ -26,6 +27,12 @@ func loadMap(mapPath: String) -> void:
 	spawnAllCharacters()
 	## Request server for character data
 	Characters.requestCharacterData()
+	## Initiate role assignment
+	call_deferred("teamRoleAssignment")
+
+func teamRoleAssignment() -> void:
+	var roles: Dictionary
+	roles = actualMap.teamsRolesResource.assignTeamsRoles(Characters.getCharacterKeys())
 
 func addCharacter(networkId: int) -> void:
 	## Create character resource
