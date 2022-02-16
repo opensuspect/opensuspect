@@ -21,7 +21,7 @@ func _on_GameStart_pressed() -> void:
 	## Change button text
 	if TransitionHandler.getCurrentState() == TransitionHandler.States.LOBBY:
 		gameStartButton.text = "Start game"
-	elif TransitionHandler.getCurrentState() == TransitionHandler.States.MAP:
+	elif TransitionHandler.getCurrentState() == TransitionHandler.States.ASSIGNMENT:
 		gameStartButton.text = "Back to lobby"
 	else:
 		assert(false, "Unreachable")

@@ -4,9 +4,14 @@ var spawnList: Array = [] # Storing spawn positions for current map
 var spawnCounter: int = 0 # A counter to take care of where characters spawn
 var actualMap: Node2D = null
 
+var roles: Dictionary = {} # Stores the roles for all players
+
 onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
+onready var roleScreenTimeout: Timer = $RoleScreenTimeout
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+
+signal teamsRolesAssigned
 
 func _ready() -> void:
 	TransitionHandler.gameLoaded(self)
@@ -27,12 +32,6 @@ func loadMap(mapPath: String) -> void:
 	spawnAllCharacters()
 	## Request server for character data
 	Characters.requestCharacterData()
-	## Initiate role assignment
-	call_deferred("teamRoleAssignment")
-
-func teamRoleAssignment() -> void:
-	var roles: Dictionary
-	roles = actualMap.teamsRolesResource.assignTeamsRoles(Characters.getCharacterKeys())
 
 func addCharacter(networkId: int) -> void:
 	## Create character resource
@@ -73,3 +72,23 @@ func setCharacterData(id: int, characterData: Dictionary) -> void:
 	var character: CharacterResource = Characters.getCharacterResource(id)
 	if characterData.has("outfit") and characterData.has("colors"):
 		character.setAppearance(characterData["outfit"], characterData["colors"])
+
+func _on_RoleScreenTimeout_timeout():
+	TransitionHandler.gameStarted()
+
+# -- Client functions --
+puppet func receiveTeamsRoles(newRoles: Dictionary) -> void:
+	roles = newRoles
+	emit_signal("teamsRolesAssigned", roles)
+	roleScreenTimeout.start()
+
+# -- Server functions --
+func teamRoleAssignment() -> void:
+	call_deferred("deferredTeamRoleAssignment")
+
+func deferredTeamRoleAssignment() -> void:
+	roles = actualMap.teamsRolesResource.assignTeamsRoles(Characters.getCharacterKeys())
+	# TODO: RPC should not be done in the game scene!
+	rpc("receiveTeamsRoles", roles)
+	emit_signal("teamsRolesAssigned", roles)
+	roleScreenTimeout.start()

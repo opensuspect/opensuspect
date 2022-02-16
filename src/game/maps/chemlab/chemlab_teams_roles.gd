@@ -8,6 +8,7 @@ func init():
 				"CIA": ["Infiltrator"],
 				"Yugoslavs": ["Infiltrator"]}
 	random = RandomNumberGenerator.new()
+	random.randomize()
 
 func assignTeamsRoles(characterList: Array) -> Dictionary:
 	var teamsRoles: Dictionary

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
+[ext_resource path="res://game/role_assignment.gd" type="Script" id=2]
+
+[node name="RoleAssignment" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color( 0.0431373, 0.0352941, 0.0352941, 1 )
+polygon = PoolVector2Array( 10, 10, 10, 1070, 1910, 1070, 1910, 10 )
+
+[node name="RichTextLabel" type="Label" parent="."]
+margin_left = 743.0
+margin_top = 156.0
+margin_right = 1421.0
+margin_bottom = 280.0
+theme = ExtResource( 1 )
+text = "Team and role assignment"
+__meta__ = {
+"_edit_use_anchors_": false
+}

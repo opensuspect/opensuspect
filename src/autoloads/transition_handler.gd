@@ -4,6 +4,7 @@ enum States {
 	MENU			# Not in game
 	WAITING			# Between states
 	LOBBY			# In the lobby where people can join
+	ASSIGNMENT		# On the assignment screen
 	MAP				# On a game map
 }
 
@@ -33,9 +34,18 @@ func loadGameScene() -> void:
 	currentState = States.WAITING
 	Scenes.switchBase("res://game/game.tscn", "res://game/hud.tscn")
 
+func gameStarted() -> void:
+	currentState = States.MAP
+	Scenes.back()
+
 puppetsync func startGame() -> void:
 	## Load game map (laboratory)
 	gameScene.loadMap("res://game/maps/chemlab/chemlab.tscn")
+	## Overlay role assignment scene
+	Scenes.overlay("res://game/role_assignment.tscn")
+	## If server, assign roles
+	if Connections.isServer():
+		gameScene.teamRoleAssignment()
 
 puppetsync func enterLobby() -> void:
 	## Load lobby map
@@ -52,7 +62,7 @@ func changeMap() -> void:
 	## Are we in the lobby
 	if currentState == States.LOBBY:
 		rpc("startGame")				## Start the game
-		currentState = States.MAP
+		currentState = States.ASSIGNMENT
 		## No new connections allowed
 		Connections.allowNewConnections(false)
 	## Are we in the game
