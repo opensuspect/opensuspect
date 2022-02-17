@@ -9,15 +9,16 @@ class_name CharacterResource
 # --Public Variables--
 
 # network id corresponding to this character
-var networkId: int
+var networkId: int = -1 setget setNetworkId, getNetworkId
 
 # the name of this player
 var characterName: String
 
+var mainCharacter: bool = false
 # --Private Variables--
 
 # the character node corresponding to this CharacterResource
-var _characterNode: Node
+var _characterNode: KinematicBody2D
 
 # PLACEHOLDER variable storing the role of this character
 # not sure what type this variable will be, string is PLACEHOLDER
@@ -32,16 +33,24 @@ var _tasks: Dictionary
 # this is a placeholder, not sure what this will look like because the
 # 	outfit system has not been implemented yet
 var _outfit: Dictionary
+var _colors: Dictionary
 
 # the speed at which the character moves/how many pixels it can move every frame
 var _speed: float = 150
 
 # --Public Functions--
 
+func setNetworkId(newId: int) -> void:
+	assert(networkId == -1, "attempting to change networkID on something that has been set")
+	networkId = newId
+
+func getNetworkId() -> int:
+	return networkId
+
 # function called when character is spawned
-func spawn():
-	# assert false because spawning isn't implemented yet
-	assert(false, "Not implemented yet")
+func spawn(coords: Vector2):
+	_characterNode.spawn()
+	setPosition(coords)
 
 # PLACEHOLDER function for killing characters
 func kill():
@@ -66,6 +75,9 @@ func setCharacterNode(newCharacterNode: Node) -> void:
 		printerr("Assigning a new character node to a CharacterResource that already has one")
 		assert(false, "Should be unreachable")
 	_characterNode = newCharacterNode
+	if networkId == Connections.getMyId():
+		_characterNode.setMainCharacter()
+		mainCharacter = true
 
 # get the role of this character
 # string is PLACEHOLDER
@@ -95,15 +107,16 @@ func setTasks(newTasks: Dictionary):
 
 # get the outfit information of this character
 func getOutfit() -> Dictionary:
-	# assert false because outfits aren't implemented yet
-	assert(false, "Not implemented yet")
 	return _outfit
 
+func getColors() -> Dictionary:
+	return _colors
+
 # set the outfit information of this character
-func setOutfit(newOutfit: Dictionary):
-	# assert false because outfits aren't implemented yet
-	assert(false, "Not implemented yet")
+func setAppearance(newOutfit: Dictionary, newColors: Dictionary) -> void:
 	_outfit = newOutfit
+	_colors = newColors
+	_characterNode.call_deferred("setAppearance", _outfit, _colors)
 
 # get the speed of this character
 func getSpeed() -> float:

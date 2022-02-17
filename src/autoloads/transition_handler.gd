@@ -10,6 +10,9 @@ enum States {
 var currentState: int = States.MENU setget toss, getCurrentState
 var gameScene: Node2D setget toss, getGameScene
 
+func isPlaying() -> bool:
+	return currentState == States.LOBBY or currentState == States.MAP
+
 func toss(_newValue) -> void:
 	pass
 
