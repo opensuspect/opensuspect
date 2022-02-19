@@ -4,6 +4,7 @@ class_name TeamsRolesTemplate
 var teamNames: Array = [] # A list of the teams
 var roleNames: Dictionary = {} # A list of roles for each team
 # A list of teams and roles that appear to others as different roles
+# Follows the rule of "who" (team+role) sees "whom" (team+role) "as" what (team+role)
 var teamRoleAlias: Array = []
 
 # Examples:

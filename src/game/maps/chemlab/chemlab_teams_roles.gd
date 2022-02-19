@@ -7,6 +7,29 @@ func init():
 	roleNames = {"Agents": ["Agent", "Counter-intelligence"],
 				"CIA": ["Infiltrator"],
 				"Yugoslavs": ["Infiltrator"]}
+	# Counter-intelligence agents are unknown to everyone else
+	teamRoleAlias = [{	"who":  {"team": "Agents", "role": "Agent"},
+						"whom": {"team": "Agents", "role": "Counter-intelligence"},
+						"as":   {"team": "Agents", "role": "Agent"}},
+					{	"who":  {"team": "CIA", "role": "Infiltrator"},
+						"whom": {"team": "Agents", "role": "Counter-intelligence"},
+						"as":   {"team": "Agents", "role": "Agent"}},
+					{	"who":  {"team": "Yugoslavs", "role": "Infiltrator"},
+						"whom": {"team": "Agents", "role": "Counter-intelligence"},
+						"as":   {"team": "Agents", "role": "Agent"}},
+	# Infiltrators are unknown to regular agents and infiltrators of other teams
+					{	"who":  {"team": "Agents", "role": "Agent"},
+						"whom": {"team": "CIA", "role": "Infiltrator"},
+						"as":   {"team": "Agents", "role": "Agent"}},
+					{	"who":  {"team": "Agents", "role": "Agent"},
+						"whom": {"team": "Yugoslavs", "role": "Infiltrator"},
+						"as":   {"team": "Agents", "role": "Agent"}},
+					{	"who":  {"team": "CIA", "role": "Infiltrator"},
+						"whom": {"team": "Yugoslavs", "role": "Infiltrator"},
+						"as":   {"team": "Agents", "role": "Agent"}},
+					{	"who":  {"team": "Yugoslavs", "role": "Infiltrator"},
+						"whom": {"team": "CIA", "role": "Infiltrator"},
+						"as":   {"team": "Agents", "role": "Agent"}}]
 	random = RandomNumberGenerator.new()
 	random.randomize()
 
