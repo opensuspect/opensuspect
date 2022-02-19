@@ -4,7 +4,9 @@ var spawnList: Array = [] # Storing spawn positions for current map
 var spawnCounter: int = 0 # A counter to take care of where characters spawn
 var actualMap: Node2D = null
 
-var roles: Dictionary = {} # Stores the roles for all players
+var roles: Dictionary = {} # Stores the roles of all the players
+# Stores the roles of the players based on what the current player sees
+var visibleRoles: Dictionary = {}
 
 onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
@@ -76,10 +78,31 @@ func setCharacterData(id: int, characterData: Dictionary) -> void:
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
 
+func makeVisibleRoles(realRoles: Dictionary) -> Dictionary:
+	var shownRoles: Dictionary = realRoles.duplicate(true)
+	## Get my information
+	var id: int = get_tree().get_network_unique_id()
+	var myTeam: String = realRoles[id]["team"]
+	var myRole: String = realRoles[id]["role"]
+	## Get map's role conversation table
+	var conversionTable: Array = actualMap.teamsRolesResource.getAlisases()
+	var myConersion: Array = []
+	for conversion in conversionTable:
+		if conversion["who"]["team"] != myTeam or conversion["who"]["role"] != myRole:
+			continue
+		for character in realRoles:
+			var realTeam: String = realRoles[character]["team"]
+			var realRole: String = realRoles[character]["role"]
+			if conversion["whom"]["team"] == realTeam and conversion["whom"]["role"] == realRole:
+				shownRoles[character]["team"] = conversion["as"]["team"]
+				shownRoles[character]["role"] = conversion["as"]["role"]
+	return shownRoles
+
 # -- Client functions --
 puppet func receiveTeamsRoles(newRoles: Dictionary) -> void:
 	roles = newRoles
-	emit_signal("teamsRolesAssigned", roles)
+	visibleRoles = makeVisibleRoles(newRoles)
+	emit_signal("teamsRolesAssigned", visibleRoles)
 	roleScreenTimeout.start()
 
 # -- Server functions --
@@ -90,5 +113,6 @@ func deferredTeamRoleAssignment() -> void:
 	roles = actualMap.teamsRolesResource.assignTeamsRoles(Characters.getCharacterKeys())
 	# TODO: RPC should not be done in the game scene!
 	rpc("receiveTeamsRoles", roles)
-	emit_signal("teamsRolesAssigned", roles)
+	visibleRoles = makeVisibleRoles(roles)
+	emit_signal("teamsRolesAssigned", visibleRoles)
 	roleScreenTimeout.start()

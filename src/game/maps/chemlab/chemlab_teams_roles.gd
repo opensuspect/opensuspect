@@ -33,16 +33,28 @@ func init():
 	random = RandomNumberGenerator.new()
 	random.randomize()
 
+func getAlisases() -> Array:
+	return teamRoleAlias
+
 func assignTeamsRoles(characterList: Array) -> Dictionary:
 	var teamsRoles: Dictionary
 	var chosen: int
 	if len(characterList) < 10:
 		var infiltNum: int = int(len(characterList) / 5) + 1
+		var counterNum: int = 0
+		if len(characterList) % 5 < 4 and len(characterList) > 1:
+			counterNum = 1
 		while infiltNum > 0:
 			chosen = random.randi() % len(characterList)
 			if not teamsRoles.has(characterList[chosen]):
 				teamsRoles[characterList[chosen]] = {"team": "CIA", "role": "Infiltrator"}
 				infiltNum -= 1
+		while counterNum > 0:
+			chosen = random.randi() % len(characterList)
+			if not teamsRoles.has(characterList[chosen]):
+				teamsRoles[characterList[chosen]] = {"team": "Agents",
+													"role": "Counter-intelligence"}
+				counterNum -= 1
 	else:
 		pass
 	for character in characterList:

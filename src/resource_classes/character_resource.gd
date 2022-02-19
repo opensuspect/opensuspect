@@ -20,8 +20,9 @@ var mainCharacter: bool = false
 # the character node corresponding to this CharacterResource
 var _characterNode: KinematicBody2D
 
-# PLACEHOLDER variable storing the role of this character
-# not sure what type this variable will be, string is PLACEHOLDER
+# Names of the apparent team and role of the character. This might not be the
+# "Real" role (that is stored on the server)
+var _team: String
 var _role: String
 
 # the dictionary (?) that stores the tasks assigned to this CharacterResource
@@ -79,18 +80,20 @@ func setCharacterNode(newCharacterNode: Node) -> void:
 		_characterNode.setMainCharacter()
 		mainCharacter = true
 
-# get the role of this character
-# string is PLACEHOLDER
+# get the Team of this chacter
+func getTean() -> String:
+	return _team
+
+# set the role of this character
+func setTeam(newTeam: String) -> void:
+	_team = newTeam
+
+# get the role of this chacter
 func getRole() -> String:
-	# assert false because roles aren't implemented yet
-	assert(false, "Not implemented yet")
 	return _role
 
 # set the role of this character
-# string return type is PLACEHOLDER
 func setRole(newRole: String) -> void:
-	# assert false because roles aren't implemented yet
-	assert(false, "Not implemented yet")
 	_role = newRole
 
 # get tasks assigned to this CharacterResource
