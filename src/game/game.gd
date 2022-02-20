@@ -38,6 +38,7 @@ func loadMap(mapPath: String) -> void:
 func addCharacter(networkId: int) -> void:
 	## Create character resource
 	var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)
+	newCharacterResource.setCharacterName(Connections.listConnections[networkId])
 	## Get character node reference
 	var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()
 	## Spawn the character
@@ -98,11 +99,25 @@ func makeVisibleRoles(realRoles: Dictionary) -> Dictionary:
 				shownRoles[character]["role"] = conversion["as"]["role"]
 	return shownRoles
 
+func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
+	var allCharacters: Dictionary = Characters.getCharacterResources()
+	var teamName: String
+	var roleName: String
+	for characterID in allCharacters:
+		print_debug("setting team and roles for  ", characterID)
+		teamName = roles[characterID]["team"]
+		roleName = roles[characterID]["role"]
+		var textColor: Color = actualMap.teamsRolesResource.getRoleColor(teamName, roleName)
+		allCharacters[characterID].setTeam(teamName)
+		allCharacters[characterID].setRole(roleName)
+		allCharacters[characterID].setColor(textColor)
+
 # -- Client functions --
 puppet func receiveTeamsRoles(newRoles: Dictionary) -> void:
 	roles = newRoles
 	visibleRoles = makeVisibleRoles(newRoles)
 	emit_signal("teamsRolesAssigned", visibleRoles)
+	setTeamsRolesOnCharacter(visibleRoles)
 	roleScreenTimeout.start()
 
 # -- Server functions --
@@ -111,8 +126,9 @@ func teamRoleAssignment() -> void:
 
 func deferredTeamRoleAssignment() -> void:
 	roles = actualMap.teamsRolesResource.assignTeamsRoles(Characters.getCharacterKeys())
-	# TODO: RPC should not be done in the game scene!
+	# TODO: RPC should not be done directly the game scene!
 	rpc("receiveTeamsRoles", roles)
 	visibleRoles = makeVisibleRoles(roles)
 	emit_signal("teamsRolesAssigned", visibleRoles)
+	setTeamsRolesOnCharacter(visibleRoles)
 	roleScreenTimeout.start()

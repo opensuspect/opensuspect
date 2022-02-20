@@ -30,6 +30,10 @@ func init():
 					{	"who":  {"team": "Yugoslavs", "role": "Infiltrator"},
 						"whom": {"team": "CIA", "role": "Infiltrator"},
 						"as":   {"team": "Agents", "role": "Agent"}}]
+	teamRoleColors = {	["Agents", "Agent"]: Color.white,
+						["Agents", "Counter-intelligence"]: Color.yellow,
+						["CIA", "Infiltrator"]: Color.aqua,
+						["Yugoslavs", "Infiltrator"]: Color.pink}
 	random = RandomNumberGenerator.new()
 	random.randomize()
 

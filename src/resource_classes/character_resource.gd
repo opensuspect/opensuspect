@@ -80,6 +80,13 @@ func setCharacterNode(newCharacterNode: Node) -> void:
 		_characterNode.setMainCharacter()
 		mainCharacter = true
 
+func getCharacterName() -> String:
+	return characterName
+
+func setCharacterName(newName: String) -> void:
+	characterName = newName
+	_characterNode.setCharacterName(characterName)
+
 # get the Team of this chacter
 func getTean() -> String:
 	return _team
@@ -95,6 +102,10 @@ func getRole() -> String:
 # set the role of this character
 func setRole(newRole: String) -> void:
 	_role = newRole
+
+# set the color of the name for the character
+func setColor(newColor: Color) -> void:
+	_characterNode.setColor(newColor)
 
 # get tasks assigned to this CharacterResource
 func getTasks() -> Dictionary:

@@ -3,6 +3,7 @@ class_name TeamsRolesTemplate
 
 var teamNames: Array = [] # A list of the teams
 var roleNames: Dictionary = {} # A list of roles for each team
+var teamRoleColors: Dictionary = {} # A list of team, role, color pairings
 # A list of teams and roles that appear to others as different roles
 # Follows the rule of "who" (team+role) sees "whom" (team+role) "as" what (team+role)
 var teamRoleAlias: Array = []
@@ -34,7 +35,15 @@ var teamRoleAlias: Array = []
 func init():
 	teamNames = ["Agents"]
 	roleNames = {"Agents": ["Agent"]}
+	teamRoleColors = {["Agents", "Agent"]: Color.white}
 	teamRoleAlias = []
+
+func getRoleColor(team: String, role: String) -> Color:
+	var textColor: Color = Color.white
+	var searchBase: Array = [team, role]
+	if searchBase in teamRoleColors:
+		textColor = teamRoleColors[searchBase]
+	return textColor
 
 func assignTeamsRoles(characterList: Array) -> Dictionary:
 	var teamsRoles: Dictionary

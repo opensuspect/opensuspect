@@ -86,8 +86,10 @@ __meta__ = {
 }
 
 [node name="RolesTest" type="Label" parent="CharacterSprites"]
-margin_right = 1400.0
-margin_bottom = 500.0
+margin_left = 831.0
+margin_top = 213.0
+margin_right = 889.0
+margin_bottom = 287.0
 theme = ExtResource( 1 )
 text = "[...]"
 align = 1

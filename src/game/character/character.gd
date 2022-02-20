@@ -16,6 +16,7 @@ var lookDirection: int = LookDirections.RIGHT
 onready var characterElements = $CharacterElements
 onready var skeleton = $CharacterElements/Skeleton
 onready var camera = $CharacterCamera
+onready var nameLabel = $Name
 
 # --Private Variables--
 
@@ -31,6 +32,16 @@ func setNetworkId(newId: int) -> void:
 
 func getNetworkId() -> int:
 	return networkId
+
+func getCharacterName() -> String:
+	return characterName
+
+func setCharacterName(newName: String) -> void:
+	assert(nameLabel==null, "You should set the character name before it's ready")
+	characterName = newName
+
+func setColor(newColor: Color) -> void:
+	nameLabel.add_color_override("font_color", newColor)
 
 # function called when character is spawned
 func spawn() -> void:
@@ -149,6 +160,7 @@ func setLookDirection(newLookDirection: int) -> void:
 func _ready() -> void:
 	if mainCharacter:
 		camera.current = true
+	nameLabel.text = characterName
 
 func _process(_delta: float) -> void:
 	var amountMoved: Vector2
