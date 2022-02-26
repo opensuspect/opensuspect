@@ -7,38 +7,12 @@ func init():
 	roleNames = {"Agents": ["Agent", "Counter-intelligence"],
 				"CIA": ["Infiltrator"],
 				"Yugoslavs": ["Infiltrator"]}
-	# Counter-intelligence agents are unknown to everyone else
-	teamRoleAlias = [{	"who":  {"team": "Agents", "role": "Agent"},
-						"whom": {"team": "Agents", "role": "Counter-intelligence"},
-						"as":   {"team": "Agents", "role": "Agent"}},
-					{	"who":  {"team": "CIA", "role": "Infiltrator"},
-						"whom": {"team": "Agents", "role": "Counter-intelligence"},
-						"as":   {"team": "Agents", "role": "Agent"}},
-					{	"who":  {"team": "Yugoslavs", "role": "Infiltrator"},
-						"whom": {"team": "Agents", "role": "Counter-intelligence"},
-						"as":   {"team": "Agents", "role": "Agent"}},
-	# Infiltrators are unknown to regular agents and infiltrators of other teams
-					{	"who":  {"team": "Agents", "role": "Agent"},
-						"whom": {"team": "CIA", "role": "Infiltrator"},
-						"as":   {"team": "Agents", "role": "Agent"}},
-					{	"who":  {"team": "Agents", "role": "Agent"},
-						"whom": {"team": "Yugoslavs", "role": "Infiltrator"},
-						"as":   {"team": "Agents", "role": "Agent"}},
-					{	"who":  {"team": "CIA", "role": "Infiltrator"},
-						"whom": {"team": "Yugoslavs", "role": "Infiltrator"},
-						"as":   {"team": "Agents", "role": "Agent"}},
-					{	"who":  {"team": "Yugoslavs", "role": "Infiltrator"},
-						"whom": {"team": "CIA", "role": "Infiltrator"},
-						"as":   {"team": "Agents", "role": "Agent"}}]
 	teamRoleColors = {	["Agents", "Agent"]: Color.white,
 						["Agents", "Counter-intelligence"]: Color.yellow,
 						["CIA", "Infiltrator"]: Color.aqua,
 						["Yugoslavs", "Infiltrator"]: Color.pink}
 	random = RandomNumberGenerator.new()
 	random.randomize()
-
-func getAlisases() -> Array:
-	return teamRoleAlias
 
 func assignTeamsRoles(characterList: Array) -> Dictionary:
 	var teamsRoles: Dictionary
@@ -65,3 +39,24 @@ func assignTeamsRoles(characterList: Array) -> Dictionary:
 		if not teamsRoles.has(character):
 			teamsRoles[character] = {"team": "Agents", "role": "Agent"}
 	return teamsRoles
+
+func getVisibleTeamRole(realTeamsRoles: Dictionary, myTeam: String, myRole: String) -> Dictionary:
+	var visibleTeamRoles: Dictionary = realTeamsRoles.duplicate()
+	## Based on player's team
+	match myTeam:
+		"Agents": ## If agents
+			if myRole == "Agent": ## If regular agent, see everyone as agent
+				for character in visibleTeamRoles.values():
+					character["team"] = "Agents"
+					character["role"] = "Agent"
+		"CIA": ## If CIA infiltrator, can see other CIA
+			for character in visibleTeamRoles.values():
+				if character["team"] != "CIA":
+					character["team"] = "Agents"
+					character["role"] = "Agent"
+		"Yugoslavs": ## If Yugoslav, can see other Yugoslavs
+			for character in visibleTeamRoles.values():
+				if character["team"] != "Yugoslavs":
+					character["team"] = "Agents"
+					character["role"] = "Agent"
+	return visibleTeamRoles

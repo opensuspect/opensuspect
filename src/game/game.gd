@@ -79,26 +79,6 @@ func setCharacterData(id: int, characterData: Dictionary) -> void:
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
 
-func makeVisibleRoles(realRoles: Dictionary) -> Dictionary:
-	var shownRoles: Dictionary = realRoles.duplicate(true)
-	## Get my information
-	var id: int = get_tree().get_network_unique_id()
-	var myTeam: String = realRoles[id]["team"]
-	var myRole: String = realRoles[id]["role"]
-	## Get map's role conversation table
-	var conversionTable: Array = actualMap.teamsRolesResource.getAlisases()
-	var myConersion: Array = []
-	for conversion in conversionTable:
-		if conversion["who"]["team"] != myTeam or conversion["who"]["role"] != myRole:
-			continue
-		for character in realRoles:
-			var realTeam: String = realRoles[character]["team"]
-			var realRole: String = realRoles[character]["role"]
-			if conversion["whom"]["team"] == realTeam and conversion["whom"]["role"] == realRole:
-				shownRoles[character]["team"] = conversion["as"]["team"]
-				shownRoles[character]["role"] = conversion["as"]["role"]
-	return shownRoles
-
 func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 	var allCharacters: Dictionary = Characters.getCharacterResources()
 	var teamName: String
@@ -115,7 +95,10 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 # -- Client functions --
 puppet func receiveTeamsRoles(newRoles: Dictionary) -> void:
 	roles = newRoles
-	visibleRoles = makeVisibleRoles(newRoles)
+	var id: int = get_tree().get_network_unique_id()
+	var myTeam: String = newRoles[id]["team"]
+	var myRole: String = newRoles[id]["role"]
+	visibleRoles = actualMap.teamsRolesResource.getVisibleTeamRole(newRoles, myTeam, myRole)
 	emit_signal("teamsRolesAssigned", visibleRoles)
 	setTeamsRolesOnCharacter(visibleRoles)
 	roleScreenTimeout.start()
@@ -128,7 +111,11 @@ func deferredTeamRoleAssignment() -> void:
 	roles = actualMap.teamsRolesResource.assignTeamsRoles(Characters.getCharacterKeys())
 	# TODO: RPC should not be done directly the game scene!
 	rpc("receiveTeamsRoles", roles)
-	visibleRoles = makeVisibleRoles(roles)
+	if Connections.isClientServer():
+		var id: int = get_tree().get_network_unique_id()
+		var myTeam: String = roles[id]["team"]
+		var myRole: String = roles[id]["role"]
+		visibleRoles = actualMap.teamsRolesResource.getVisibleTeamRole(roles, myTeam, myRole)
 	emit_signal("teamsRolesAssigned", visibleRoles)
 	setTeamsRolesOnCharacter(visibleRoles)
 	roleScreenTimeout.start()
