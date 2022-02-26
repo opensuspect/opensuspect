@@ -24,6 +24,7 @@ var _characterNode: KinematicBody2D
 # "Real" role (that is stored on the server)
 var _team: String
 var _role: String
+var _nameColor: Color
 
 # the dictionary (?) that stores the tasks assigned to this CharacterResource
 # this is a placeholder, not sure what this will look like because the
@@ -88,7 +89,7 @@ func setCharacterName(newName: String) -> void:
 	_characterNode.setCharacterName(characterName)
 
 # get the Team of this chacter
-func getTean() -> String:
+func getTeam() -> String:
 	return _team
 
 # set the role of this character
@@ -104,8 +105,12 @@ func setRole(newRole: String) -> void:
 	_role = newRole
 
 # set the color of the name for the character
-func setColor(newColor: Color) -> void:
-	_characterNode.setColor(newColor)
+func setNameColor(newColor: Color) -> void:
+	_characterNode.setNameColor(newColor)
+	_nameColor = newColor
+
+func getNameColor() -> Color:
+	return _nameColor
 
 # get tasks assigned to this CharacterResource
 func getTasks() -> Dictionary:

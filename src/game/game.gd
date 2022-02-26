@@ -90,7 +90,7 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 		var textColor: Color = actualMap.teamsRolesResource.getRoleColor(teamName, roleName)
 		allCharacters[characterID].setTeam(teamName)
 		allCharacters[characterID].setRole(roleName)
-		allCharacters[characterID].setColor(textColor)
+		allCharacters[characterID].setNameColor(textColor)
 
 # -- Client functions --
 puppet func receiveTeamsRoles(newRoles: Dictionary) -> void:
@@ -99,8 +99,8 @@ puppet func receiveTeamsRoles(newRoles: Dictionary) -> void:
 	var myTeam: String = newRoles[id]["team"]
 	var myRole: String = newRoles[id]["role"]
 	visibleRoles = actualMap.teamsRolesResource.getVisibleTeamRole(newRoles, myTeam, myRole)
-	emit_signal("teamsRolesAssigned", visibleRoles)
 	setTeamsRolesOnCharacter(visibleRoles)
+	emit_signal("teamsRolesAssigned", visibleRoles)
 	roleScreenTimeout.start()
 
 # -- Server functions --
@@ -116,6 +116,8 @@ func deferredTeamRoleAssignment() -> void:
 		var myTeam: String = roles[id]["team"]
 		var myRole: String = roles[id]["role"]
 		visibleRoles = actualMap.teamsRolesResource.getVisibleTeamRole(roles, myTeam, myRole)
-	emit_signal("teamsRolesAssigned", visibleRoles)
+	else:
+		visibleRoles = roles
 	setTeamsRolesOnCharacter(visibleRoles)
+	emit_signal("teamsRolesAssigned", visibleRoles)
 	roleScreenTimeout.start()

@@ -40,7 +40,7 @@ func setCharacterName(newName: String) -> void:
 	assert(nameLabel==null, "You should set the character name before it's ready")
 	characterName = newName
 
-func setColor(newColor: Color) -> void:
+func setNameColor(newColor: Color) -> void:
 	nameLabel.add_color_override("font_color", newColor)
 
 # function called when character is spawned
