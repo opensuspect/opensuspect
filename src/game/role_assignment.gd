@@ -4,16 +4,18 @@ onready var teamNameField: Label = $LabelTeamName
 onready var roleNameField: Label = $LabelRoleName
 onready var characterList: HBoxContainer = $CharacterSprites
 
-# Converts a list of dictionaries into a dictionary of lits.
-func zip(input: Array) -> Dictionary:
-	var output: Dictionary
-	for dict in input:
-		for key in dict:
-			if key in output:
-				output[key].append(dict[key])
+func isDictInArray(input: Array, what: Dictionary) -> bool:
+	for element in input:
+		var check: bool = true
+		for key in what:
+			if element.has(key):
+				if element[key] != what[key]:
+					check = false
 			else:
-				output[key] = [dict[key]]
-	return output
+				check = false
+		if check == true:
+			return true
+	return false
 
 func _ready():
 	TransitionHandler.gameScene.connect("teamsRolesAssigned", self, "showTeamsRoles")
@@ -28,12 +30,10 @@ func showTeamsRoles(roles: Dictionary, rolesToShow: Array) -> void:
 		nodeToRemove.free()
 	## Preload character icons
 	var characterIconRes: Resource = ResourceLoader.load("res://game/character/character_role_screen.tscn")
-	## Convert list of roles to display
-	var toShowLists: Dictionary = zip(rolesToShow)
 	## For each character
 	for character in roles:
 		## If this role is not for show, skip
-		if toShowLists["team"].count(roles[character]["team"]) == 0 and toShowLists["role"].count(roles[character]["role"]) == 0:
+		if not isDictInArray(rolesToShow, roles[character]):
 			continue
 		## Creates a character instance and adds to scene tree
 		var newCharacterIcon: Control = characterIconRes.instance()
