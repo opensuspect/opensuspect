@@ -101,7 +101,7 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 		allCharacters[characterID].setNameColor(textColor)
 
 # -- Client functions --
-puppet func receiveTeamsRoles(newRoles: Dictionary) -> void:
+puppet func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
 	roles = newRoles
 	var id: int = get_tree().get_network_unique_id()
 	var myTeam: String = newRoles[id]["team"]
@@ -109,17 +109,18 @@ puppet func receiveTeamsRoles(newRoles: Dictionary) -> void:
 	visibleRoles = actualMap.teamsRolesResource.getVisibleTeamRole(newRoles, myTeam, myRole)
 	var rolesToShow: Array = actualMap.teamsRolesResource.getTeamsRolesToShow(newRoles, myTeam, myRole)
 	setTeamsRolesOnCharacter(visibleRoles)
-	emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
-	roleScreenTimeout.start()
+	if not isLobby:
+		emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
+		roleScreenTimeout.start()
 
 # -- Server functions --
-func teamRoleAssignment() -> void:
-	call_deferred("deferredTeamRoleAssignment")
+func teamRoleAssignment(isLobby: bool) -> void:
+	call_deferred("deferredTeamRoleAssignment", isLobby)
 
-func deferredTeamRoleAssignment() -> void:
+func deferredTeamRoleAssignment(isLobby: bool) -> void:
 	roles = actualMap.teamsRolesResource.assignTeamsRoles(Characters.getCharacterKeys())
 	# TODO: RPC should not be done directly the game scene!
-	rpc("receiveTeamsRoles", roles)
+	rpc("receiveTeamsRoles", roles, isLobby)
 	var rolesToShow: Array = []
 	if Connections.isClientServer():
 		var id: int = get_tree().get_network_unique_id()
@@ -130,5 +131,6 @@ func deferredTeamRoleAssignment() -> void:
 	else:
 		visibleRoles = roles
 	setTeamsRolesOnCharacter(visibleRoles)
-	emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
-	roleScreenTimeout.start()
+	if not isLobby:
+		emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
+		roleScreenTimeout.start()

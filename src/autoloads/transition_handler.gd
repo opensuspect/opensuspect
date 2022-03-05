@@ -45,11 +45,14 @@ puppetsync func startGame() -> void:
 	Scenes.overlay("res://game/role_assignment.tscn")
 	## If server, assign roles
 	if Connections.isServer():
-		gameScene.teamRoleAssignment()
+		gameScene.teamRoleAssignment(false)
 
 puppetsync func enterLobby() -> void:
 	## Load lobby map
 	gameScene.loadMap("res://game/maps/lobby/lobby.tscn")
+	## If server, assign roles
+	if Connections.isServer():
+		gameScene.teamRoleAssignment(true)
 
 func getCurrentState() -> int:
 	return currentState
