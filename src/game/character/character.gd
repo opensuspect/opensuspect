@@ -23,7 +23,8 @@ onready var nameLabel = $Name
 # the CharacterResource corresponding to this character node
 var _characterResource: CharacterResource
 
-
+# --Signals--
+signal player_disconnected(id)
 
 # --Public Functions--
 
@@ -58,6 +59,11 @@ func kill():
 func reset():
 	# assert false because resetting is not implemented yet
 	assert(false, "Not implemented yet")
+	
+func disconnected():
+	## runs when this player disconnects from the server
+	emit_signal("player_disconnected", networkId)
+	# TODO: drop items, etc.
 
 # get the character node that corresponds to this CharacterResource
 func getCharacterResource() -> CharacterResource:

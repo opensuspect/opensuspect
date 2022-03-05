@@ -66,6 +66,11 @@ func reset():
 	# assert false because resetting is not implemented yet
 	assert(false, "Not implemented yet")
 
+# function called when character disconnects from server
+func disconnected():
+	_characterNode.disconnected()
+	_characterNode.queue_free()
+
 # get the character node that corresponds to this CharacterResource
 func getCharacterNode() -> Node:
 	return _characterNode

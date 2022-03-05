@@ -76,6 +76,14 @@ func setCharacterData(id: int, characterData: Dictionary) -> void:
 	if characterData.has("outfit") and characterData.has("colors"):
 		character.setAppearance(characterData["outfit"], characterData["colors"])
 
+func removeCharacter(networkId: int) -> void:
+	#print_debug("game: removing character", networkId)
+	var characterNode = Characters.getCharacterNode(networkId)
+	characterNode.queue_free()
+	## remove the resource and the node
+	Characters.removeCharacterNode(networkId)
+	Characters.removeCharacterResource(networkId)
+
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
 
