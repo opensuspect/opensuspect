@@ -26,3 +26,9 @@ func assignTeamsRoles(characterList: Array) -> Dictionary:
 # This function shows how someone with a certain team and role sees everyone else
 func getVisibleTeamRole(realTeamsRoles: Dictionary, myTeam: String, myRole: String) -> Dictionary:
 	return realTeamsRoles
+
+# This function tells the role announcement scene what teams and roles should be
+# displayed.
+func getTeamsRolesToShow(realTeamsRoles: Dictionary, myTeam: String, myRole: String) -> Array:
+	return [{"team": "Agents", "role": "Agent"}]
+	

@@ -60,3 +60,19 @@ func getVisibleTeamRole(realTeamsRoles: Dictionary, myTeam: String, myRole: Stri
 					character["team"] = "Agents"
 					character["role"] = "Agent"
 	return visibleTeamRoles
+
+func getTeamsRolesToShow(realTeamsRoles: Dictionary, myTeam: String, myRole: String) -> Array:
+	match myTeam:
+		"CIA":
+			return [{"team": "CIA", "role": "Infiltrator"}]
+		"Yugoslavs":
+			return [{"team": "Yugoslavs", "role": "Infiltrator"}]
+		"Agents":
+			if myRole == "Agent":
+				return [{"team": "Agents", "role": "Agent"}]
+			else:
+				return	[	{"team": "CIA", "role": "Infiltrator"},
+							{"team": "Yugoslavs", "role": "Infiltrator"}]
+		_:
+			assert (false, "Team name is not set properly")
+	return []

@@ -99,8 +99,9 @@ puppet func receiveTeamsRoles(newRoles: Dictionary) -> void:
 	var myTeam: String = newRoles[id]["team"]
 	var myRole: String = newRoles[id]["role"]
 	visibleRoles = actualMap.teamsRolesResource.getVisibleTeamRole(newRoles, myTeam, myRole)
+	var rolesToShow: Array = actualMap.teamsRolesResource.getTeamsRolesToShow(newRoles, myTeam, myRole)
 	setTeamsRolesOnCharacter(visibleRoles)
-	emit_signal("teamsRolesAssigned", visibleRoles)
+	emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
 	roleScreenTimeout.start()
 
 # -- Server functions --
@@ -111,13 +112,15 @@ func deferredTeamRoleAssignment() -> void:
 	roles = actualMap.teamsRolesResource.assignTeamsRoles(Characters.getCharacterKeys())
 	# TODO: RPC should not be done directly the game scene!
 	rpc("receiveTeamsRoles", roles)
+	var rolesToShow: Array = []
 	if Connections.isClientServer():
 		var id: int = get_tree().get_network_unique_id()
 		var myTeam: String = roles[id]["team"]
 		var myRole: String = roles[id]["role"]
 		visibleRoles = actualMap.teamsRolesResource.getVisibleTeamRole(roles, myTeam, myRole)
+		rolesToShow = actualMap.teamsRolesResource.getTeamsRolesToShow(visibleRoles, myTeam, myRole)
 	else:
 		visibleRoles = roles
 	setTeamsRolesOnCharacter(visibleRoles)
-	emit_signal("teamsRolesAssigned", visibleRoles)
+	emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
 	roleScreenTimeout.start()
