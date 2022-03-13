@@ -14,6 +14,8 @@ onready var roleScreenTimeout: Timer = $RoleScreenTimeout
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 signal teamsRolesAssigned
+signal abilityAssigned
+signal clearAbilities
 
 func _ready() -> void:
 	TransitionHandler.gameLoaded(self)
@@ -112,6 +114,7 @@ puppet func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
 	visibleRoles = teamsRolesRes.getVisibleTeamRole(newRoles, myTeam, myRole)
 	var rolesToShow: Array = teamsRolesRes.getTeamsRolesToShow(newRoles, myTeam, myRole)
 	setTeamsRolesOnCharacter(visibleRoles)
+	emit_signal("clearAbilities")
 	if not isLobby:
 		emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
 		roleScreenTimeout.start()
@@ -123,7 +126,7 @@ puppet func receiveAbility(newAbilityName: String) -> void:
 	if newAbility == null:
 		return
 	myCharacter.addAbility(newAbility)
-	print_debug(myCharacter.getAbilities())
+	emit_signal("abilityAssigned", newAbilityName)
 
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
@@ -144,6 +147,7 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 			#print_debug(character, ": ", ability.getName())
 			# TODO: RPC should not be done directly in the game scene
 			rpc_id(character, "receiveAbility", ability.getName())
+	emit_signal("clearAbilities")
 	var rolesToShow: Array = []
 	if Connections.isClientServer():
 		var id: int = get_tree().get_network_unique_id()
@@ -151,6 +155,9 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 		var myRole: String = roles[id]["role"]
 		visibleRoles = teamsRolesRes.getVisibleTeamRole(roles, myTeam, myRole)
 		rolesToShow = teamsRolesRes.getTeamsRolesToShow(visibleRoles, myTeam, myRole)
+		for ability in Characters.getCharacterResource(id).getAbilities():
+			var myAbilityName: String = ability.getName()
+			emit_signal("abilityAssigned", myAbilityName)
 	else:
 		visibleRoles = roles
 	setTeamsRolesOnCharacter(visibleRoles)

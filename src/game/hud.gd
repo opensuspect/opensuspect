@@ -1,6 +1,7 @@
 extends Control
 
 onready var gameStartButton: Button = $GameStart
+onready var abilityBox: HBoxContainer = $GameUI/Abilities
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -8,6 +9,8 @@ func _ready():
 		showStartButton()
 	else:
 		showStartButton(false)
+	TransitionHandler.gameScene.connect("abilityAssigned", self, "addAbility")
+	TransitionHandler.gameScene.connect("clearAbilities", self, "clearAbilities")
 
 func showStartButton(buttonShow: bool = true) -> void:
 	## Switch visibility of game start button
@@ -25,3 +28,12 @@ func _on_GameStart_pressed() -> void:
 		gameStartButton.text = "Back to lobby"
 	else:
 		assert(false, "Unreachable")
+
+func addAbility(buttontext: String) -> void:
+	var newButton = Button.new()
+	newButton.text = buttontext
+	abilityBox.add_child(newButton)
+
+func clearAbilities() -> void:
+	for element in abilityBox.get_children():
+		element.queue_free()
