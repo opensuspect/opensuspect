@@ -76,3 +76,17 @@ func getTeamsRolesToShow(realTeamsRoles: Dictionary, myTeam: String, myRole: Str
 		_:
 			assert (false, "Team name is not set properly")
 	return []
+
+func assignAbilities(characterList: Array, teamsRoles: Dictionary) -> Dictionary:
+	var abilities: Dictionary
+	for character in characterList:
+		abilities[character] = []
+		if teamsRoles[character]["team"] == "CIA":
+			var ability: Ability = GunAbility.new()
+			abilities[character].append(ability)
+	return abilities
+
+func getAbilityByName(name: String) -> Ability:
+	if name == "Gun":
+		return GunAbility.new()
+	return null

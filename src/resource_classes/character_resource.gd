@@ -26,6 +26,9 @@ var _team: String
 var _role: String
 var _nameColor: Color
 
+# List of special abilities
+var _abilities: Array = []
+
 # the dictionary (?) that stores the tasks assigned to this CharacterResource
 # this is a placeholder, not sure what this will look like because the
 #	task system has not been implemented yet
@@ -116,6 +119,21 @@ func setNameColor(newColor: Color) -> void:
 
 func getNameColor() -> Color:
 	return _nameColor
+
+func addAbility(ability: Ability) -> void:
+	_abilities.append(ability)
+
+func resetAbility() -> void:
+	_abilities = []
+
+func getAbilities() -> Array:
+	return _abilities
+
+func isAbility(abilityName: String) -> bool:
+	for ability in _abilities:
+		if ability.getName() == abilityName:
+			return true
+	return false
 
 # get tasks assigned to this CharacterResource
 func getTasks() -> Dictionary:

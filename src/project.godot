@@ -10,9 +10,19 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Resource",
+"class": "Ability",
+"language": "GDScript",
+"path": "res://resource_classes/ability.gd"
+}, {
+"base": "Resource",
 "class": "CharacterResource",
 "language": "GDScript",
 "path": "res://resource_classes/character_resource.gd"
+}, {
+"base": "Ability",
+"class": "GunAbility",
+"language": "GDScript",
+"path": "res://game/maps/chemlab/gun.gd"
 }, {
 "base": "Resource",
 "class": "TeamsRolesTemplate",
@@ -20,7 +30,9 @@ _global_script_classes=[ {
 "path": "res://resource_classes/teams_roles_template.gd"
 } ]
 _global_script_class_icons={
+"Ability": "",
 "CharacterResource": "",
+"GunAbility": "",
 "TeamsRolesTemplate": ""
 }
 

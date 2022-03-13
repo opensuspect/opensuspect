@@ -34,6 +34,9 @@ func loadMap(mapPath: String) -> void:
 	spawnAllCharacters()
 	## Request server for character data
 	Characters.requestCharacterData()
+	## Remove abilities from characters
+	for characterResource in Characters.getCharacterResources().values():
+		characterResource.resetAbility()
 
 func addCharacter(networkId: int) -> void:
 	## Create character resource
@@ -92,7 +95,6 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 	var teamName: String
 	var roleName: String
 	for characterID in allCharacters:
-		print_debug("setting team and roles for  ", characterID)
 		teamName = roles[characterID]["team"]
 		roleName = roles[characterID]["role"]
 		var textColor: Color = actualMap.teamsRolesResource.getRoleColor(teamName, roleName)
@@ -102,32 +104,53 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 
 # -- Client functions --
 puppet func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
+	var teamsRolesRes: TeamsRolesTemplate = actualMap.teamsRolesResource
 	roles = newRoles
 	var id: int = get_tree().get_network_unique_id()
 	var myTeam: String = newRoles[id]["team"]
 	var myRole: String = newRoles[id]["role"]
-	visibleRoles = actualMap.teamsRolesResource.getVisibleTeamRole(newRoles, myTeam, myRole)
-	var rolesToShow: Array = actualMap.teamsRolesResource.getTeamsRolesToShow(newRoles, myTeam, myRole)
+	visibleRoles = teamsRolesRes.getVisibleTeamRole(newRoles, myTeam, myRole)
+	var rolesToShow: Array = teamsRolesRes.getTeamsRolesToShow(newRoles, myTeam, myRole)
 	setTeamsRolesOnCharacter(visibleRoles)
 	if not isLobby:
 		emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
 		roleScreenTimeout.start()
+
+puppet func receiveAbility(newAbilityName: String) -> void:
+	var teamsRolesRes: TeamsRolesTemplate = actualMap.teamsRolesResource
+	var myCharacter: CharacterResource = Characters.getMyCharacterResource()
+	var newAbility: Ability = teamsRolesRes.getAbilityByName(newAbilityName)
+	if newAbility == null:
+		return
+	myCharacter.addAbility(newAbility)
+	print_debug(myCharacter.getAbilities())
 
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
 	call_deferred("deferredTeamRoleAssignment", isLobby)
 
 func deferredTeamRoleAssignment(isLobby: bool) -> void:
-	roles = actualMap.teamsRolesResource.assignTeamsRoles(Characters.getCharacterKeys())
+	var teamsRolesRes: TeamsRolesTemplate = actualMap.teamsRolesResource
+	## Assign teams and roles to all players
+	roles = teamsRolesRes.assignTeamsRoles(Characters.getCharacterKeys())
 	# TODO: RPC should not be done directly the game scene!
 	rpc("receiveTeamsRoles", roles, isLobby)
+	var abilities: Dictionary = {}
+	abilities = teamsRolesRes.assignAbilities(Characters.getCharacterKeys(), roles)
+	for character in abilities:
+		var characterResource = Characters.getCharacterResource(character)
+		for ability in abilities[character]:
+			characterResource.addAbility(ability)
+			#print_debug(character, ": ", ability.getName())
+			# TODO: RPC should not be done directly in the game scene
+			rpc_id(character, "receiveAbility", ability.getName())
 	var rolesToShow: Array = []
 	if Connections.isClientServer():
 		var id: int = get_tree().get_network_unique_id()
 		var myTeam: String = roles[id]["team"]
 		var myRole: String = roles[id]["role"]
-		visibleRoles = actualMap.teamsRolesResource.getVisibleTeamRole(roles, myTeam, myRole)
-		rolesToShow = actualMap.teamsRolesResource.getTeamsRolesToShow(visibleRoles, myTeam, myRole)
+		visibleRoles = teamsRolesRes.getVisibleTeamRole(roles, myTeam, myRole)
+		rolesToShow = teamsRolesRes.getTeamsRolesToShow(visibleRoles, myTeam, myRole)
 	else:
 		visibleRoles = roles
 	setTeamsRolesOnCharacter(visibleRoles)

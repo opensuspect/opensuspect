@@ -5,9 +5,6 @@
 
 [node name="Hud" type="Control"]
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="GameStart" type="Button" parent="."]
 anchor_top = 1.0

@@ -32,3 +32,11 @@ func getVisibleTeamRole(realTeamsRoles: Dictionary, myTeam: String, myRole: Stri
 func getTeamsRolesToShow(realTeamsRoles: Dictionary, myTeam: String, myRole: String) -> Array:
 	return [{"team": "Agents", "role": "Agent"}]
 	
+func assignAbilities(characterList: Array, teamsRoles: Dictionary) -> Dictionary:
+	var abilities: Dictionary
+	for character in characterList:
+		abilities[character] = []
+	return abilities
+
+func getAbilityByName(name: String) -> Ability:
+	return null
