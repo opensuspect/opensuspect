@@ -89,6 +89,9 @@ func removeCharacter(networkId: int) -> void:
 	Characters.removeCharacterNode(networkId)
 	Characters.removeCharacterResource(networkId)
 
+func abilityActivate(parameters: Dictionary) -> void:
+	rpc_id(1, "abilityActServer", parameters)
+
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
 
@@ -126,7 +129,7 @@ puppet func receiveAbility(newAbilityName: String) -> void:
 	if newAbility == null:
 		return
 	myCharacter.addAbility(newAbility)
-	emit_signal("abilityAssigned", newAbilityName)
+	emit_signal("abilityAssigned", newAbilityName, newAbility)
 
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
@@ -157,10 +160,19 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 		rolesToShow = teamsRolesRes.getTeamsRolesToShow(visibleRoles, myTeam, myRole)
 		for ability in Characters.getCharacterResource(id).getAbilities():
 			var myAbilityName: String = ability.getName()
-			emit_signal("abilityAssigned", myAbilityName)
+			emit_signal("abilityAssigned", myAbilityName, ability)
 	else:
 		visibleRoles = roles
 	setTeamsRolesOnCharacter(visibleRoles)
 	if not isLobby:
 		emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
 		roleScreenTimeout.start()
+
+remotesync func abilityActServer(parameters: Dictionary):
+	var abilityPlayer: int = get_tree().get_rpc_sender_id()
+	var abilityName: String = parameters["ability"]
+	var abilityCharacter: CharacterResource = Characters.getCharacterResource(abilityPlayer)
+	if abilityCharacter.isAbility(abilityName):
+		var abilityInstance: Ability = abilityCharacter.getAbility(abilityName)
+		abilityInstance.canActivate(parameters)
+		

@@ -31,9 +31,6 @@ margin_bottom = -180.0
 theme = ExtResource( 4 )
 text = "Name"
 align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CharacterElements" type="Node2D" parent="."]
 

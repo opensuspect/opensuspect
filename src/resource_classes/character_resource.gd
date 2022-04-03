@@ -122,6 +122,7 @@ func getNameColor() -> Color:
 
 func addAbility(ability: Ability) -> void:
 	_abilities.append(ability)
+	ability.registerOwner(self)
 
 func resetAbility() -> void:
 	_abilities = []
@@ -134,6 +135,12 @@ func isAbility(abilityName: String) -> bool:
 		if ability.getName() == abilityName:
 			return true
 	return false
+
+func getAbility(abilityName: String) -> Ability:
+	for ability in _abilities:
+		if ability.getName() == abilityName:
+			return ability
+	return null
 
 # get tasks assigned to this CharacterResource
 func getTasks() -> Dictionary:
