@@ -6,6 +6,7 @@ var spawnCounter: int = 0 # A counter to take care of where characters spawn
 onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+onready var gamestartButton: Button = $CanvasLayer/GameStart
 
 func _ready() -> void:
 	TransitionHandler.gameLoaded(self)
