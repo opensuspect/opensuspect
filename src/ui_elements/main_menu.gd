@@ -5,8 +5,6 @@ enum MenuType {MAIN, JOIN, CREATE, SERVER}
 
 var menu: int
 
-signal menuSwitch(menu)
-
 onready var mainMenu: Control = $MainMenu
 onready var joinMenu: Control = $Join
 onready var createMenu: Control = $Create
@@ -16,15 +14,9 @@ onready var character = $MainMenu/CenterCharacter/MenuCharacter
 
 # --Interface--
 func _ready() -> void:
-	_randomIfUnset()
 	character.setOutline(Color("#E6E2DD"))
 	menu = MenuType.MAIN
 	setVisibleMenu(menu)
-
-func _randomIfUnset() -> void:
-	if not Appearance.hasConfig:
-		Appearance.randomizeConfig()
-		Appearance.hasConfig = true
 
 func _input(event: InputEvent) -> void:
 	if not visible:
@@ -124,6 +116,8 @@ func joinEvent(menu: int) -> void:
 		MenuType.CREATE: createGame() ## Create a game
 		MenuType.SERVER: createDedicated() ## Dedicated server
 
+# --Signal Functions--
+
 func _on_Join_pressed() -> void:
 	joinEvent(menu)
 	
@@ -143,10 +137,10 @@ func _on_Character_mouse_exited():
 	character.setOutline(Color("#E6E2DD"))
 
 func _on_Appearance_pressed():
-	emit_signal("menuSwitch", "appearance")
+	Scenes.overlay("res://ui_elements/appearance/appearance_editor.tscn")
 	
 func _on_Settings_pressed():
-	emit_signal("menuSwitch", "settings")
+	Scenes.overlay("res://ui_elements/settings.tscn")
 
 func _on_Quit_pressed():
-	get_tree().quit()
+	Scenes.back()

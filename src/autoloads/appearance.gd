@@ -106,6 +106,18 @@ func randomizeConfig() -> void:
 	customOutfit = false ## Set customOutfit to [FALSE]
 	setConfig(_randomOutfit(), _randomColors()) ## Set random appearance
 
+func randomizeIfUnset() -> void:
+	if not hasConfig:
+		randomizeConfig()
+		hasConfig = true
+
+# Get a color from a position on a color map, adjusting for scale
+func colorFromMapPos(path: String, position: Vector2, scale: Vector2) -> Color:
+	var xPos = position.x / scale.x
+	var yPos = position.y / scale.y
+	var color = _colorFromMapXY(path, Vector2(xPos, yPos))
+	return(color)
+
 # --Private Functions--
 func _randomPart(partName: String) -> String:
 	var maxInt = customOptions[partName].size() # Get the size of the array
@@ -135,7 +147,7 @@ func _randomColors() -> Dictionary:
 # Creates a dictionary setting up the colors for the shader
 func _setColorInfo(color: Color, position: Vector2) -> Dictionary:
 	## Creates a dictionary of color info
-	var colorInfo: Dictionary
+	var colorInfo: Dictionary = {}
 	colorInfo["Red"] = color.r
 	colorInfo["Green"] = color.g
 	colorInfo["Blue"] = color.b

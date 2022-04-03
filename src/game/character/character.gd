@@ -5,13 +5,17 @@ extends KinematicBody2D
 # --Public Variables--
 
 # network id corresponding to this character
-var networkId: int
+var networkId: int setget setNetworkId, getNetworkId
 
 # the name of this character
 var characterName: String
 
+var mainCharacter: bool = false
 enum LookDirections {LEFT, RIGHT, UP, DOWN}
-var lookDirection = LookDirections.RIGHT
+var lookDirection: int = LookDirections.RIGHT
+onready var characterElements = $CharacterElements
+onready var skeleton = $CharacterElements/Skeleton
+onready var camera = $CharacterCamera
 
 # --Private Variables--
 
@@ -23,10 +27,15 @@ signal player_disconnected(id)
 
 # --Public Functions--
 
+func setNetworkId(newId: int) -> void:
+	networkId = newId
+
+func getNetworkId() -> int:
+	return networkId
+
 # function called when character is spawned
-func spawn():
-	# assert false because spawning isn't implemented yet
-	assert(false, "Not implemented yet")
+func spawn() -> void:
+	pass
 
 # PLACEHOLDER function for killing characters
 func kill():
@@ -65,6 +74,21 @@ func getRole() -> String:
 # get tasks assigned to this character node
 func getTasks() -> Dictionary:
 	return _characterResource.getTasks()
+
+# set the outfit of the character
+func setAppearance(outfit: Dictionary, colors: Dictionary) -> void:
+	var outfitPaths: Dictionary = {}
+	for partGroup in outfit: ## For each customizable group
+		var selectedLook: String = outfit[partGroup]
+		for part in Appearance.groupCustomization[partGroup]: ## For each custom sprite
+			var filePath: String = Appearance.customSpritePaths[part][selectedLook]
+			outfitPaths[part] = filePath
+	
+	## Applies appearance to its skeleton
+	skeleton.applyAppearance(outfitPaths, colors)
+
+func setMainCharacter(main: bool = true) -> void:
+	mainCharacter = main
 
 # get the outfit of the character
 func getOutfit() -> Dictionary:
@@ -117,19 +141,20 @@ func setLookDirection(newLookDirection: int) -> void:
 	# this should eventually be moved into a separate script that handles
 	# 	animations and stuff
 	# the angle to set the rotation of the triangle to
-	var angle: int
+	var xScale: int = 0
 	match lookDirection:
 		LookDirections.LEFT:
-			angle = 270
+			xScale = -1
 		LookDirections.RIGHT:
-			angle = 90
-		LookDirections.UP:
-			angle = 0
-		LookDirections.DOWN:
-			angle = 180
-	$Polygon2D.rotation_degrees = angle
+			xScale = 1
+	if characterElements != null and xScale != 0:
+		characterElements.scale.x = xScale
 
 # --Private Functions--
+
+func _ready() -> void:
+	if mainCharacter:
+		camera.current = true
 
 func _process(_delta: float) -> void:
 	var amountMoved: Vector2

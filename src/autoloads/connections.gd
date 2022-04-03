@@ -32,6 +32,9 @@ func getMyName() -> String:
 func getServerName() -> String:
 	return serverName
 
+func getMyId() -> int:
+	return get_tree().get_network_unique_id()
+
 func isServer() -> bool:
 	return isDedicatedServer() or isClientServer()
 
@@ -69,7 +72,7 @@ func connectedOK() -> void:
 	## Send own data to server
 	rpc_id(1, "receiveNewPlayerData", myName)
 	## Enter the Lobby
-	TransitionHandler.enterLobby()
+	TransitionHandler.loadGameScene()
 
 func connectedFail() -> void:
 	print_debug("Connection failed")
@@ -79,6 +82,7 @@ func disconnectedFromServer() -> void:
 	assert(false, "Not implemented yet")
 
 puppet func receiveBulkPlayerData(connections: Dictionary) -> void:
+	print_debug("Receiving data from server: ", connections)
 	## Save all received data
 	listConnections = connections
 	#print_debug("Connected clients: ", listConnections)
@@ -105,6 +109,7 @@ puppet func receivePlayerData(id: int, name: String) -> void:
 # -------------- Server side code --------------
 
 func createGame(portNumber: int, playerName: String) -> void:
+	print_debug("port: ", portNumber)
 	## Initialize Godot networking
 	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
 	peer.create_server(portNumber, MAX_PLAYERS)
@@ -115,12 +120,8 @@ func createGame(portNumber: int, playerName: String) -> void:
 	## Save data in globals
 	listConnections[1] = playerName
 	serverName = playerName + "'s Server"
-	## Enter the Lobby
-	TransitionHandler.enterLobby()
-	## Add a character to the map
-	var gameScene: Node = TransitionHandler.gameScene
-	gameScene.addCharacter(1)
-	gameScene.showStartButton()
+	## Load the game scene
+	TransitionHandler.loadGameScene()
 
 func createDedicated(portNumber: int, srvName: String) -> void:
 	## Initialize Godot networking
@@ -133,12 +134,11 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	connectionType = ConnectionTypes.DEDICATED_SERVER
 	serverName = srvName
 	## Enter the Lobby
-	TransitionHandler.enterLobby()
-	var gameScene: Node = TransitionHandler.gameScene
-	gameScene.showStartButton()
+	TransitionHandler.loadGameScene()
 
 # Once the newly joined player sent us their data, that's when we send them all the data
 master func receiveNewPlayerData(newPlayerName: String) -> void:
+	print_debug("new player joined ", newPlayerName)
 	## Verify sender and save data
 	var senderId: int = get_tree().get_rpc_sender_id()
 	listConnections[senderId] = newPlayerName
