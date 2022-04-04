@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 70.0
+height = 106.0
+
+[node name="Gun" type="Area2D"]
+collision_layer = 256
+
+[node name="KillZone" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource( 1 )

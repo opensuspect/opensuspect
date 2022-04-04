@@ -16,13 +16,16 @@ var lookDirection: int = LookDirections.RIGHT
 onready var characterElements = $CharacterElements
 onready var skeleton = $CharacterElements/Skeleton
 onready var camera = $CharacterCamera
+onready var nameLabel = $Name
+onready var abilityPoint = $CharacterElements/Abilities
 
 # --Private Variables--
 
 # the CharacterResource corresponding to this character node
 var _characterResource: CharacterResource
 
-
+# --Signals--
+signal player_disconnected(id)
 
 # --Public Functions--
 
@@ -31,6 +34,16 @@ func setNetworkId(newId: int) -> void:
 
 func getNetworkId() -> int:
 	return networkId
+
+func getCharacterName() -> String:
+	return characterName
+
+func setCharacterName(newName: String) -> void:
+	assert(nameLabel==null, "You should set the character name before it's ready")
+	characterName = newName
+
+func setNameColor(newColor: Color) -> void:
+	nameLabel.add_color_override("font_color", newColor)
 
 # function called when character is spawned
 func spawn() -> void:
@@ -45,8 +58,12 @@ func kill():
 # 	probably going to be used mostly between rounds when roles and stuff are
 # 	changing
 func reset():
-	# assert false because resetting is not implemented yet
-	assert(false, "Not implemented yet")
+	rotation = 0
+
+func disconnected():
+	## runs when this player disconnects from the server
+	emit_signal("player_disconnected", networkId)
+	# TODO: drop items, etc.
 
 # get the character node that corresponds to this CharacterResource
 func getCharacterResource() -> CharacterResource:
@@ -87,6 +104,13 @@ func setMainCharacter(main: bool = true) -> void:
 # get the outfit of the character
 func getOutfit() -> Dictionary:
 	return _characterResource.getOutfit()
+
+func attachAbility(newAbility: Node2D) -> void:
+	abilityPoint.add_child(newAbility)
+
+func clearAbilities() -> void:
+	for ability in abilityPoint.get_children():
+		ability.queue_free()
 
 # get the position of the character
 func getPosition() -> Vector2:
@@ -144,16 +168,20 @@ func setLookDirection(newLookDirection: int) -> void:
 	if characterElements != null and xScale != 0:
 		characterElements.scale.x = xScale
 
+func die() -> void:
+	rotate(3.1416/2)
+
 # --Private Functions--
 
 func _ready() -> void:
 	if mainCharacter:
 		camera.current = true
+	nameLabel.text = characterName
 
 func _process(_delta: float) -> void:
 	var amountMoved: Vector2
 	## If this character belongs to this client
-	if networkId == get_tree().get_network_unique_id():
+	if networkId == get_tree().get_network_unique_id() and _characterResource.isAlive():
 		## Move character
 		amountMoved = _move(_delta)
 

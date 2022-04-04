@@ -5,20 +5,19 @@
 
 [node name="Hud" type="Control"]
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="GameStart" type="Button" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = 995.0
-margin_right = 300.0
-margin_bottom = 1075.0
+margin_right = 332.0
+margin_bottom = 89.0
 theme = ExtResource( 1 )
 text = "Start game"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
+[node name="GameUI" type="HBoxContainer" parent="."]
+margin_top = 934.0
+margin_right = 1899.0
+margin_bottom = 1068.0
+
+[node name="Abilities" type="HBoxContainer" parent="GameUI"]
+margin_bottom = 134.0
 
 [connection signal="pressed" from="GameStart" to="." method="_on_GameStart_pressed"]
