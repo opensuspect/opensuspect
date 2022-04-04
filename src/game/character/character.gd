@@ -17,6 +17,7 @@ onready var characterElements = $CharacterElements
 onready var skeleton = $CharacterElements/Skeleton
 onready var camera = $CharacterCamera
 onready var nameLabel = $Name
+onready var abilityPoint = $CharacterElements/Abilities
 
 # --Private Variables--
 
@@ -57,8 +58,7 @@ func kill():
 # 	probably going to be used mostly between rounds when roles and stuff are
 # 	changing
 func reset():
-	# assert false because resetting is not implemented yet
-	assert(false, "Not implemented yet")
+	rotation = 0
 	
 func disconnected():
 	## runs when this player disconnects from the server
@@ -104,6 +104,13 @@ func setMainCharacter(main: bool = true) -> void:
 # get the outfit of the character
 func getOutfit() -> Dictionary:
 	return _characterResource.getOutfit()
+
+func attachAbility(newAbility: Node2D) -> void:
+	abilityPoint.add_child(newAbility)
+
+func clearAbilities() -> void:
+	for ability in abilityPoint.get_children():
+		ability.queue_free()
 
 # get the position of the character
 func getPosition() -> Vector2:
@@ -161,6 +168,9 @@ func setLookDirection(newLookDirection: int) -> void:
 	if characterElements != null and xScale != 0:
 		characterElements.scale.x = xScale
 
+func die() -> void:
+	rotate(3.1416/2)
+
 # --Private Functions--
 
 func _ready() -> void:
@@ -171,7 +181,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	var amountMoved: Vector2
 	## If this character belongs to this client
-	if networkId == get_tree().get_network_unique_id():
+	if networkId == get_tree().get_network_unique_id() and _characterResource.isAlive():
 		## Move character
 		amountMoved = _move(_delta)
 

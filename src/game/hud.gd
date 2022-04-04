@@ -30,11 +30,8 @@ func _on_GameStart_pressed() -> void:
 		assert(false, "Unreachable")
 
 func addAbility(buttontext: String, abilityResource: Ability) -> void:
-	var newButton = Button.new()
-	newButton.text = buttontext
+	var newButton: Node = abilityResource.createAbilityHudNode()
 	abilityBox.add_child(newButton)
-	abilityResource.setAbilityHudNode(newButton)
-	newButton.connect("button_down", abilityResource, "abilityActivate")
 
 func clearAbilities() -> void:
 	for element in abilityBox.get_children():

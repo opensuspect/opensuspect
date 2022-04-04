@@ -11,14 +11,20 @@ func _init() -> void:
 func getName() -> String:
 	return _name
 
-func setAbilityHudNode(new_node: Node):
+func createAbilityHudNode() -> Node:
+	var new_node: Node = Button.new()
+	new_node.text = _name
 	_abilityHudNode = new_node
+	return new_node
 
-func abilityActivate() -> void:
+func activate() -> void:
 	pass
 
-func canActivate(properties: Dictionary) -> bool:
+func canExecute(properties: Dictionary) -> bool:
 	return false
+
+func execute(properties: Dictionary) -> void:
+	pass
 
 # newOwner SHOULD BE CharacterResource (typcheck breaks: cyclic dependency)
 func registerOwner(newOwner) -> void:

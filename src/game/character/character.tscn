@@ -39,6 +39,8 @@ material = SubResource( 2 )
 position = Vector2( -80, -190 )
 scale = Vector2( 0.2, 0.2 )
 
+[node name="Abilities" type="Node2D" parent="CharacterElements"]
+
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource( 3 )

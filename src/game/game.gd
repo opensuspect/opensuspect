@@ -38,7 +38,7 @@ func loadMap(mapPath: String) -> void:
 	Characters.requestCharacterData()
 	## Remove abilities from characters
 	for characterResource in Characters.getCharacterResources().values():
-		characterResource.resetAbility()
+		characterResource.resetCharacter()
 
 func addCharacter(networkId: int) -> void:
 	## Create character resource
@@ -90,6 +90,7 @@ func removeCharacter(networkId: int) -> void:
 	Characters.removeCharacterResource(networkId)
 
 func abilityActivate(parameters: Dictionary) -> void:
+	# TODO: RPC should not be done directly the game scene!
 	rpc_id(1, "abilityActServer", parameters)
 
 func _on_RoleScreenTimeout_timeout():
@@ -108,6 +109,9 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 		allCharacters[characterID].setNameColor(textColor)
 
 # -- Client functions --
+puppetsync func killCharacter(id: int) -> void:
+	Characters.getCharacterResource(id).die()
+
 puppet func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
 	var teamsRolesRes: TeamsRolesTemplate = actualMap.teamsRolesResource
 	roles = newRoles
@@ -130,6 +134,13 @@ puppet func receiveAbility(newAbilityName: String) -> void:
 		return
 	myCharacter.addAbility(newAbility)
 	emit_signal("abilityAssigned", newAbilityName, newAbility)
+
+puppet func executeAbility(parameters: Dictionary) -> void:
+	var abilityName: String = parameters["ability"]
+	var myCharacter: CharacterResource = Characters.getMyCharacterResource()
+	if myCharacter.isAbility(abilityName):
+		var abilityInstance: Ability = myCharacter.getAbility(abilityName)
+		abilityInstance.execute(parameters)
 
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
@@ -174,5 +185,9 @@ remotesync func abilityActServer(parameters: Dictionary):
 	var abilityCharacter: CharacterResource = Characters.getCharacterResource(abilityPlayer)
 	if abilityCharacter.isAbility(abilityName):
 		var abilityInstance: Ability = abilityCharacter.getAbility(abilityName)
-		abilityInstance.canActivate(parameters)
-		
+		if abilityInstance.canExecute(parameters):
+			rpc_id(abilityPlayer, "executeAbility", parameters)
+			abilityInstance.execute(parameters)
+
+func killCharacterServer(id: int) -> void:
+	rpc("killCharacter", id)

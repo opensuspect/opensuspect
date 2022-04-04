@@ -7,6 +7,6 @@ height = 106.0
 [node name="Gun" type="Area2D"]
 collision_layer = 256
 
-[node name="KillZone2" type="CollisionShape2D" parent="."]
+[node name="KillZone" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource( 1 )

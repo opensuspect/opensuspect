@@ -26,6 +26,9 @@ var _team: String
 var _role: String
 var _nameColor: Color
 
+# Is the character alive or not
+var _alive: bool = true
+
 # List of special abilities
 var _abilities: Array = []
 
@@ -57,10 +60,12 @@ func spawn(coords: Vector2):
 	_characterNode.spawn()
 	setPosition(coords)
 
-# PLACEHOLDER function for killing characters
-func kill():
-	# assert false because killing is not implemented yet
-	assert(false, "Not implemented yet")
+func die():
+	_characterNode.die()
+	_alive = false
+
+func isAlive() -> bool:
+	return _alive
 
 # function called to reset the character resource to default settings
 # 	probably going to be used mostly between rounds when roles and stuff are
@@ -88,6 +93,14 @@ func setCharacterNode(newCharacterNode: Node) -> void:
 	if networkId == Connections.getMyId():
 		_characterNode.setMainCharacter()
 		mainCharacter = true
+
+func resetCharacter() -> void:
+	resetAbilities()
+	_team = ""
+	_role = ""
+	_nameColor = Color.white
+	_alive = true
+	_characterNode.reset()
 
 func getCharacterName() -> String:
 	return characterName
@@ -124,8 +137,9 @@ func addAbility(ability: Ability) -> void:
 	_abilities.append(ability)
 	ability.registerOwner(self)
 
-func resetAbility() -> void:
+func resetAbilities() -> void:
 	_abilities = []
+	_characterNode.clearAbilities()
 
 func getAbilities() -> Array:
 	return _abilities
