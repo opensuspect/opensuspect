@@ -11,7 +11,7 @@ var connectionType: int = ConnectionTypes.LOCAL setget toss, getConnectionType
 var myName: String = "" setget toss, getMyName
 var serverName: String = "" setget toss, getServerName
 const MAX_PLAYERS: int = 20
-var listConnections: Dictionary = {}
+var listConnections: Dictionary = {} # Only lists playing connections, dedicated server is not here
 
 
 # Called when the node enters the scene tree for the first time.
@@ -154,9 +154,25 @@ master func receiveNewPlayerData(newPlayerName: String) -> void:
 
 func connectedNewPlayer(id: int) -> void:
 	pass
-	
+
+# handling of disconnection for clients
+puppet func disconnectPlayer(id: int) -> void:
+	handleDisconnect(id) # literally just call this
+
+# this function handles when a player disconnects, and is called on the network server
 func disconnectedPlayer(id: int) -> void:
-	assert(false, "Not implemented yet")
+	#print_debug("connections server: removing character", id)
+	rpc("disconnectPlayer", id)
+	handleDisconnect(id)
+
+## this function actually removes the player and stuff
+func handleDisconnect(id:int) -> void:
+	listConnections.erase(id)
+	var characterResource: CharacterResource = Characters.getCharacterResource(id)
+	characterResource.disconnected() ## call this function on the player to handle in-game reprocussions
+	## remove character's node and resource
+	Characters.removeCharacterNode(id)
+	Characters.removeCharacterResource(id)
 
 func allowNewConnections(switch: bool) -> void:
 	get_tree().refuse_new_network_connections = not switch
