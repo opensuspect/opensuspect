@@ -93,6 +93,7 @@ func setAppearance(outfit: Dictionary, colors: Dictionary) -> void:
 		var selectedLook: String = outfit[partGroup]
 		for part in Appearance.groupCustomization[partGroup]: ## For each custom sprite
 			var filePath: String = Appearance.customSpritePaths[part][selectedLook]
+			## Saves sprite file path
 			outfitPaths[part] = filePath
 	
 	## Applies appearance to its skeleton

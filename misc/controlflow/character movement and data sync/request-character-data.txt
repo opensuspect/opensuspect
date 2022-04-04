@@ -1,0 +1,15 @@
+START [shape=diamond];
+START -> client1_characters_requestCharacterData:begin;
+client1_characters_requestCharacterData:f0 -> server_characters_sendAllCharacterData:begin [color=blue];
+server_characters_sendAllCharacterData:f0 -> server_characters_getCharacterResources:begin;
+server_characters_sendAllCharacterData:f2 -> server_character_resource_getOutfit:begin;
+server_characters_sendAllCharacterData:f2 -> server_character_resource_getColors:begin;
+server_characters_sendAllCharacterData:f2 -> server_characters__process:begin [style=dashed minlen=2];
+server_characters__process:f5 -> client1_characters__updateAllCharacterData:begin [color=darkgreen];
+client1_characters__updateAllCharacterData:f4 -> client1_characters_receiveCharacterDataClient:begin;
+client1_characters_receiveCharacterDataClient:f0 -> client1_game_setCharacterData:begin;
+client1_game_setCharacterData:f0 -> client1_character_resource_setAppearance:begin;
+client1_character_resource_setAppearance:f0 -> client1_character_setAppearance:begin [style=dashed];
+client1_character_setAppearance:f3 -> client1_skeleton_applyAppearance:begin;
+client1_skeleton_applyAppearance:f1 -> client1_skeleton__applyOutfit:begin;
+client1_skeleton_applyAppearance:f2 -> client1_skeleton__applyColors:begin;

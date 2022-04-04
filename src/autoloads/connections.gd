@@ -71,7 +71,7 @@ func connectedOK() -> void:
 	print_debug("Connected")
 	## Send own data to server
 	rpc_id(1, "receiveNewPlayerData", myName)
-	## Enter the Lobby
+	## Load the game scene
 	TransitionHandler.loadGameScene()
 
 func connectedFail() -> void:
@@ -133,7 +133,7 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	## Save data in globals
 	connectionType = ConnectionTypes.DEDICATED_SERVER
 	serverName = srvName
-	## Enter the Lobby
+	## Load the game scene
 	TransitionHandler.loadGameScene()
 
 # Once the newly joined player sent us their data, that's when we send them all the data

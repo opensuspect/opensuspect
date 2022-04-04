@@ -1,11 +1,19 @@
-client1_mainmenu_joinEvent:f1 -> client1_mainmenu_joinGame:begin;
-client1_mainmenu_joinGame:f4 -> client1_connections_joinGame:begin;
-client1_connections_connectedOK:f1 -> client1_transition_handler_enterLobby:begin;
+client1_main_menu_joinEvent:f1 -> client1_main_menu_joinGame:begin;
+client1_main_menu_joinGame:f4 -> client1_connections_joinGame:begin;
+client1_connections_connectedOK:f1 -> client1_transition_handler_loadGameScene:begin;
+client1_transition_handler_loadGameScene:f0 -> client1_game__ready:begin [style=dashed];
+
+client1_game__ready:f0 -> client1_transition_handler_gameLoaded:begin;
+client1_transition_handler_gameLoaded:f2 -> client1_transition_handler_enterLobby:begin;
+client1_transition_handler_enterLobby:f0 -> client1_game_loadMap:begin;
+client1_game_loadMap:f4 -> client1_characters_requestCharacterData:begin;
+client1_characters_requestCharacterData:f0 -> server_characters_sendAllCharacterData:begin [color=blue];
+
 client1_connections_connectedOK:f0 -> server_connections_receiveNewPlayerData:begin [color=blue];
-client1_transition_handler_enterLobby:f1 -> client1_game_loadMap:begin;
 server_connections_receiveNewPlayerData:f1 -> client1_connections_setServerName:begin [color=darkgreen];
 server_connections_receiveNewPlayerData:f2 -> client1_connections_receiveBulkPlayerData:begin [color=darkgreen];
 server_connections_receiveNewPlayerData:f3 -> client2_connections_receivePlayerData:begin [color=red];
+
 # server adds new character
 server_connections_receiveNewPlayerData:f4 -> server_game_addCharacter:begin;
 server_game_addCharacter:f0 -> server_characters_createCharacter:begin;
@@ -18,11 +26,14 @@ server_characters_createCharacter:f1 -> server_character_setCharacterResource:be
 server_characters_createCharacter:f1 -> server_character_resource_setCharacterNode:begin;
 server_characters_createCharacter:f2 -> server_characters__registerCharacterNode:begin;
 server_characters_createCharacter:f2 -> server_characters__registerCharacterResource:begin;
+
 # client adds new character
 client1_connections_receiveBulkPlayerData:f2 -> client1_game_addCharacter:begin;
 client1_game_addCharacter:f0 -> client1_characters_createCharacter:begin;
 client1_game_addCharacter:f1 -> client1_character_resource_getCharacterNode:begin;
 client1_game_addCharacter:f2 -> client1_game_spawnCharacter:begin;
+client1_game_addCharacter:f5 -> client1_character_resource_setAppearance:begin;
+client1_game_addCharacter:f6 -> client1_characters_sendOwnCharacterData:begin;
 client1_game_spawnCharacter:f0 -> client1_character_resource_setPosition:begin;
 client1_characters_createCharacter:f0 -> client1_characters__createCharacterNode:begin;
 client1_characters_createCharacter:f0 -> client1_characters__createCharacterResource:begin;
@@ -30,6 +41,8 @@ client1_characters_createCharacter:f1 -> client1_character_setCharacterResource:
 client1_characters_createCharacter:f1 -> client1_character_resource_setCharacterNode:begin;
 client1_characters_createCharacter:f2 -> client1_characters__registerCharacterNode:begin;
 client1_characters_createCharacter:f2 -> client1_characters__registerCharacterResource:begin;
+client1_characters_sendOwnCharacterData -> client1_characters__sendMyCharacterDataToServer:begin [style=dashed];
+
 # other client adds new character
 client2_connections_receivePlayerData:f2 -> client2_game_addCharacter:begin;
 client2_game_addCharacter:f0 -> client2_characters_createCharacter:begin;

@@ -1,15 +1,23 @@
-server_mainmenu_joinEvent:f2 -> server_mainmenu_createGame:begin;
-server_mainmenu_createGame:f2 -> server_connections_createGame:begin;
-server_connections_createGame:f2 -> server_transition_handler_enterLobby:begin;
-server_transition_handler_enterLobby:f1 -> server_game_loadMap:begin;
-server_connections_createGame:f3 -> server_game_addCharacter:begin;
+server_main_menu_joinEvent:f2 -> server_main_menu_createGame:begin;
+server_main_menu_createGame:f2 -> server_connections_createGame:begin;
+server_connections_createGame:f2 -> server_transition_handler_loadGameScene:begin;
+server_transition_handler_loadGameScene:f0 -> server_game__ready:begin [style=dashed];
+
+server_game__ready:f0 -> server_transition_handler_gameLoaded:begin;
+server_transition_handler_gameLoaded:f2 -> server_transition_handler_enterLobby:begin;
+server_transition_handler_enterLobby:f0 -> server_game_loadMap:begin;
+server_game_loadMap:f3 -> server_game_spawnAllCharacters:begin;
+
+server_transition_handler_gameLoaded:f4 -> server_game_addCharacter:begin [minlen=2];
 server_game_addCharacter:f0 -> server_characters_createCharacter:begin;
-server_characters_createCharacter:f0 -> server_characters__createCharacterNode:begin;
-server_characters_createCharacter:f0 -> server_characters__createCharacterResource:begin;
-server_characters_createCharacter:f1 -> server_character_setCharacterResource:begin;
-server_characters_createCharacter:f1 -> server_character_resource_setCharacterNode:begin;
-server_characters_createCharacter:f2 -> server_characters__registerCharacterNode:begin;
-server_characters_createCharacter:f2 -> server_characters__registerCharacterResource:begin;
 server_game_addCharacter:f1 -> server_character_resource_getCharacterNode:begin;
 server_game_addCharacter:f2 -> server_game_spawnCharacter:begin;
-server_game_spawnCharacter:f0 -> server_character_resource_setPosition:begin;
+server_game_addCharacter:f5 -> server_character_resource_setAppearance:begin;
+server_game_addCharacter:f6 -> server_characters_sendOwnCharacterData:begin;
+
+server_game_spawnCharacter:f0 -> server_character_resource_spawn:begin;
+
+server_game__ready -> server_game_addCharacter [style=invis];
+server_transition_handler_loadGameScene -> server_transition_handler_gameLoaded [style=invis]
+server_game__ready -> server_game_loadMap [style=invis];
+server_characters_createCharacter -> server_characters_sendOwnCharacterData [style=invis];
