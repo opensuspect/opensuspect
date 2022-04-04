@@ -12,6 +12,7 @@ onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
 onready var roleScreenTimeout: Timer = $RoleScreenTimeout
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+onready var gamestartButton: Button = $CanvasLayer/GameStart
 
 signal teamsRolesAssigned
 signal abilityAssigned
@@ -76,11 +77,6 @@ func spawnCharacter(character: CharacterResource) -> void:
 	if spawnCounter > len(spawnList):
 		spawnCounter = 0
 
-func setCharacterData(id: int, characterData: Dictionary) -> void:
-	var character: CharacterResource = Characters.getCharacterResource(id)
-	if characterData.has("outfit") and characterData.has("colors"):
-		character.setAppearance(characterData["outfit"], characterData["colors"])
-
 func removeCharacter(networkId: int) -> void:
 	#print_debug("game: removing character", networkId)
 	var characterNode = Characters.getCharacterNode(networkId)
@@ -88,6 +84,28 @@ func removeCharacter(networkId: int) -> void:
 	## remove the resource and the node
 	Characters.removeCharacterNode(networkId)
 	Characters.removeCharacterResource(networkId)
+
+func showStartButton(buttonShow: bool = true) -> void:
+	## Switch visibility of game start button
+	gamestartButton.visible = buttonShow
+
+func _on_GameStart_pressed() -> void:
+	if not Connections.isServer():
+		assert(false, "Unreachable")
+	## Change the map
+	TransitionHandler.changeMap()
+	## Change button text
+	if TransitionHandler.getCurrentState() == TransitionHandler.States.LOBBY:
+		gamestartButton.text = "Start game"
+	elif TransitionHandler.getCurrentState() == TransitionHandler.States.MAP:
+		gamestartButton.text = "Back to lobby"
+	else:
+		assert(false, "Unreachable")
+
+func setCharacterData(id: int, characterData: Dictionary) -> void:
+	var character: CharacterResource = Characters.getCharacterResource(id)
+	if characterData.has("outfit") and characterData.has("colors"):
+		character.setAppearance(characterData["outfit"], characterData["colors"])
 
 func abilityActivate(parameters: Dictionary) -> void:
 	# TODO: RPC should not be done directly the game scene!
@@ -191,3 +209,4 @@ remotesync func abilityActServer(parameters: Dictionary):
 
 func killCharacterServer(id: int) -> void:
 	rpc("killCharacter", id)
+

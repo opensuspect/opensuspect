@@ -59,7 +59,7 @@ func kill():
 # 	changing
 func reset():
 	rotation = 0
-	
+
 func disconnected():
 	## runs when this player disconnects from the server
 	emit_signal("player_disconnected", networkId)
