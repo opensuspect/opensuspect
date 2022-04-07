@@ -10,12 +10,30 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Resource",
+"class": "Ability",
+"language": "GDScript",
+"path": "res://resource_classes/ability.gd"
+}, {
+"base": "Resource",
 "class": "CharacterResource",
 "language": "GDScript",
 "path": "res://resource_classes/character_resource.gd"
+}, {
+"base": "Ability",
+"class": "GunAbility",
+"language": "GDScript",
+"path": "res://game/maps/chemlab/gun.gd"
+}, {
+"base": "Resource",
+"class": "TeamsRolesTemplate",
+"language": "GDScript",
+"path": "res://resource_classes/teams_roles_template.gd"
 } ]
 _global_script_class_icons={
-"CharacterResource": ""
+"Ability": "",
+"CharacterResource": "",
+"GunAbility": "",
+"TeamsRolesTemplate": ""
 }
 
 [application]
@@ -47,6 +65,10 @@ window/energy_saving/keep_screen_on=false
 window/stretch/mode="2d"
 window/stretch/aspect="expand"
 
+[global]
+
+collision=false
+
 [input]
 
 ui_press={
@@ -74,6 +96,11 @@ move_down={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":83,"unicode":0,"echo":false,"script":null)
  ]
 }
+
+[layer_names]
+
+2d_physics/layer_1="PlayersCollide"
+2d_physics/layer_9="AbilityRange"
 
 [physics]
 

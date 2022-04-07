@@ -11,7 +11,7 @@ var connectionType: int = ConnectionTypes.LOCAL setget toss, getConnectionType
 var myName: String = "" setget toss, getMyName
 var serverName: String = "" setget toss, getServerName
 const MAX_PLAYERS: int = 20
-var listConnections: Dictionary = {}
+var listConnections: Dictionary = {} # Only lists playing connections, dedicated server is not here
 
 
 # Called when the node enters the scene tree for the first time.
