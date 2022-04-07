@@ -12,6 +12,7 @@ offset = Vector2( 800, 700 )
 polygon = PoolVector2Array( -100, -100, -100, 100, 100, 100, 100, -100 )
 
 [node name="1" type="Node2D" parent="SpawnPositions" index="0"]
+
 position = Vector2( 800, 500 )
 
 [node name="2" type="Node2D" parent="SpawnPositions" index="1"]
