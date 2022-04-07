@@ -119,8 +119,8 @@ func getCharacterNodes() -> Dictionary:
 func getCharacterResources() -> Dictionary:
 	return _characterResources
 
-func destroyCharacter() -> void:
-	assert(false, "Not implemented yet")
+func getCharacterKeys() -> Array:
+	return _characterResources.keys()
 
 # --Private Functions--
 
@@ -217,8 +217,8 @@ puppet func _updateAllCharacterData(positions: Dictionary, characterData: Array)
 		## Set the position for the character
 		getCharacterResource(characterId).setPosition(positions[characterId])
 	## Decompose character data
-	if len(characterData) > 0:
-		print_debug(characterData)
+	#if len(characterData) > 0:
+	#	print_debug(characterData)
 	for data in characterData:
 		if data["to"] == myId or data["to"] == -1:
 			receiveCharacterDataClient(data["id"], data["data"])
