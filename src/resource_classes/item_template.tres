@@ -6,3 +6,4 @@
 script = ExtResource( 1 )
 itemName = ""
 textureScale = Vector2( 1, 1 )
+hudTextureScale = Vector2( 1, 1 )

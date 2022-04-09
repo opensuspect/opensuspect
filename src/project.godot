@@ -116,6 +116,7 @@ move_down={
 2d_physics/layer_1="PlayersCollide"
 2d_physics/layer_2="ItemsCollide"
 2d_physics/layer_9="AbilityRange"
+2d_physics/layer_10="ItemPickup"
 
 [physics]
 

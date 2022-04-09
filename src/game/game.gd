@@ -8,6 +8,7 @@ var roles: Dictionary = {} # Stores the roles of all the players
 # Stores the roles of the players based on what the current player sees
 var visibleRoles: Dictionary = {}
 
+var hudNode: Control = null
 onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
 onready var roleScreenTimeout: Timer = $RoleScreenTimeout
@@ -21,6 +22,11 @@ signal clearAbilities
 func _ready() -> void:
 	## Game scene loaded
 	TransitionHandler.gameLoaded(self)
+
+func setHudNode(newHudNode: Control) -> void:
+	if hudNode != null:
+		assert(false, "shouldn't set the hudNode again")
+	hudNode = newHudNode
 
 func loadMap(mapPath: String) -> void:
 	## Remove previous map if applicable
@@ -56,8 +62,13 @@ func addCharacter(networkId: int) -> void:
 	if networkId == myId:
 		## Apply appearance to character
 		newCharacterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
+		print_debug(hudNode)
+		newCharacter.connect("itemInteraction", self, "itemInteract")
 		## Send my character data to server
 		Characters.sendOwnCharacterData()
+
+func itemInteract(item: Node, action: String) -> void:
+	hudNode.itemInteract(item, action)
 
 # These functions place the character on the map, but if it is a client, it will
 # be overwritten by the position syncing. It is done only so that the characters

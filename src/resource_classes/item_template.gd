@@ -11,6 +11,9 @@ export var itemName: String
 export var texture: Texture
 # scale to be applied to the texture
 export var textureScale: Vector2 = Vector2(1, 1)
+# the texture and scale used on the HUD for the item
+export var hudTexture: Texture = null
+export var hudTextureScale: Vector2 = Vector2(1, 1)
 
 # --Private Variables--
 
@@ -19,5 +22,8 @@ export var textureScale: Vector2 = Vector2(1, 1)
 # configure an ItemResource based on this item template
 func configureItemResource(itemResource: ItemResource):
 	# transfer over general item info to itemResource
-	for property in ["itemName", "texture", "textureScale"]:
+	var propertyList: Array = [
+		"itemName", "texture", "textureScale", "hudTexture",
+		"hudTextureScale"]
+	for property in propertyList:
 		itemResource.set(property, get(property))

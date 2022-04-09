@@ -17,7 +17,12 @@ margin_top = 934.0
 margin_right = 1899.0
 margin_bottom = 1068.0
 
+[node name="ItemInteract" type="HBoxContainer" parent="GameUI"]
+margin_bottom = 134.0
+
 [node name="Abilities" type="HBoxContainer" parent="GameUI"]
+margin_left = 4.0
+margin_right = 4.0
 margin_bottom = 134.0
 
 [connection signal="pressed" from="GameStart" to="." method="_on_GameStart_pressed"]

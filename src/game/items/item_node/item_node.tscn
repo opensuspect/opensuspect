@@ -5,7 +5,7 @@
 [sub_resource type="CircleShape2D" id=1]
 
 [node name="item_node" type="KinematicBody2D"]
-collision_layer = 2
+collision_layer = 514
 collision_mask = 2
 script = ExtResource( 1 )
 

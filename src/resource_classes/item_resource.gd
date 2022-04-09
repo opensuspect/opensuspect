@@ -8,6 +8,9 @@ var itemName: String
 var texture: Texture = null
 # scale to be applied to the texture
 var textureScale: Vector2 = Vector2(1, 1)
+# the texture and scale used on the HUD for the item
+var hudTexture: Texture = null
+var hudTextureScale: Vector2 = Vector2(1, 1)
 
 # --Private Variables--
 # the item node corresponding to this resource
@@ -29,6 +32,12 @@ func getTexture() -> Texture:
 
 func getTextureScale() -> Vector2:
 	return textureScale
+
+func getHudTexture() -> Texture:
+	return hudTexture
+
+func getHudTextureScale() -> Vector2:
+	return hudTextureScale
 
 func setItemNode(newItemNode: Node):
 	if _itemNode != null:

@@ -27,6 +27,7 @@ var _characterResource: CharacterResource
 
 # --Signals--
 signal player_disconnected(id)
+signal itemInteraction(item, interaction)
 
 # --Public Functions--
 
@@ -222,3 +223,12 @@ func _getLookDirFromVec(vec: Vector2) -> int:
 	if vec.x > 0:
 		newlookDirection = LookDirections.RIGHT
 	return newlookDirection
+
+
+func _on_ItemPickup_body_entered(body):
+	if mainCharacter:
+		emit_signal("itemInteraction", body, "entered")
+
+func _on_ItemPickup_body_exited(body):
+	if mainCharacter:
+		emit_signal("itemInteraction", body, "exited")
