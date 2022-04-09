@@ -11,7 +11,7 @@ var connectionType: int = ConnectionTypes.LOCAL setget toss, getConnectionType
 var myName: String = "" setget toss, getMyName
 var serverName: String = "" setget toss, getServerName
 const MAX_PLAYERS: int = 20
-var listConnections: Dictionary = {}
+var listConnections: Dictionary = {} # Only lists playing connections, dedicated server is not here
 
 
 # Called when the node enters the scene tree for the first time.
@@ -31,6 +31,9 @@ func getMyName() -> String:
 
 func getServerName() -> String:
 	return serverName
+
+func getMyId() -> int:
+	return get_tree().get_network_unique_id()
 
 func isServer() -> bool:
 	return isDedicatedServer() or isClientServer()
@@ -68,8 +71,8 @@ func connectedOK() -> void:
 	print_debug("Connected")
 	## Send own data to server
 	rpc_id(1, "receiveNewPlayerData", myName)
-	## Enter the Lobby
-	TransitionHandler.enterLobby()
+	## Load the game scene
+	TransitionHandler.loadGameScene()
 
 func connectedFail() -> void:
 	print_debug("Connection failed")
@@ -79,6 +82,7 @@ func disconnectedFromServer() -> void:
 	assert(false, "Not implemented yet")
 
 puppet func receiveBulkPlayerData(connections: Dictionary) -> void:
+	print_debug("Receiving data from server: ", connections)
 	## Save all received data
 	listConnections = connections
 	#print_debug("Connected clients: ", listConnections)
@@ -105,6 +109,7 @@ puppet func receivePlayerData(id: int, name: String) -> void:
 # -------------- Server side code --------------
 
 func createGame(portNumber: int, playerName: String) -> void:
+	print_debug("port: ", portNumber)
 	## Initialize Godot networking
 	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
 	peer.create_server(portNumber, MAX_PLAYERS)
@@ -115,12 +120,8 @@ func createGame(portNumber: int, playerName: String) -> void:
 	## Save data in globals
 	listConnections[1] = playerName
 	serverName = playerName + "'s Server"
-	## Enter the Lobby
-	TransitionHandler.enterLobby()
-	## Add a character to the map
-	var gameScene: Node = TransitionHandler.gameScene
-	gameScene.addCharacter(1)
-	gameScene.showStartButton()
+	## Load the game scene
+	TransitionHandler.loadGameScene()
 
 func createDedicated(portNumber: int, srvName: String) -> void:
 	## Initialize Godot networking
@@ -132,13 +133,12 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	## Save data in globals
 	connectionType = ConnectionTypes.DEDICATED_SERVER
 	serverName = srvName
-	## Enter the Lobby
-	TransitionHandler.enterLobby()
-	var gameScene: Node = TransitionHandler.gameScene
-	gameScene.showStartButton()
+	## Load the game scene
+	TransitionHandler.loadGameScene()
 
 # Once the newly joined player sent us their data, that's when we send them all the data
 master func receiveNewPlayerData(newPlayerName: String) -> void:
+	print_debug("new player joined ", newPlayerName)
 	## Verify sender and save data
 	var senderId: int = get_tree().get_rpc_sender_id()
 	listConnections[senderId] = newPlayerName
@@ -154,9 +154,25 @@ master func receiveNewPlayerData(newPlayerName: String) -> void:
 
 func connectedNewPlayer(id: int) -> void:
 	pass
-	
+
+# handling of disconnection for clients
+puppet func disconnectPlayer(id: int) -> void:
+	handleDisconnect(id) # literally just call this
+
+# this function handles when a player disconnects, and is called on the network server
 func disconnectedPlayer(id: int) -> void:
-	assert(false, "Not implemented yet")
+	#print_debug("connections server: removing character", id)
+	rpc("disconnectPlayer", id)
+	handleDisconnect(id)
+
+## this function actually removes the player and stuff
+func handleDisconnect(id:int) -> void:
+	listConnections.erase(id)
+	var characterResource: CharacterResource = Characters.getCharacterResource(id)
+	characterResource.disconnected() ## call this function on the player to handle in-game reprocussions
+	## remove character's node and resource
+	Characters.removeCharacterNode(id)
+	Characters.removeCharacterResource(id)
 
 func allowNewConnections(switch: bool) -> void:
 	get_tree().refuse_new_network_connections = not switch

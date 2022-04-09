@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/powder-bottle.png-f6dab8cd57b6e3a11c74bc0d3cd6e760.stex"
+path="res://.import/powder-bottle.png-8312697b6ecc0d5657a2a8aa44413e3c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/items/assets/ingame-texture/powder-bottle.png"
-dest_files=[ "res://.import/powder-bottle.png-f6dab8cd57b6e3a11c74bc0d3cd6e760.stex" ]
+source_file="res://game/items/assets/ingame_texture/powder-bottle.png"
+dest_files=[ "res://.import/powder-bottle.png-8312697b6ecc0d5657a2a8aa44413e3c.stex" ]
 
 [params]
 

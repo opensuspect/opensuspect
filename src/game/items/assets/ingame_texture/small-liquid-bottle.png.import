@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/small-liquid-bottle.png-e58aabda3f570e7a20a435c83f920cc1.stex"
+path="res://.import/small-liquid-bottle.png-dabada93cbfffb35ba30bb56a5176d76.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/items/assets/ingame-texture/small-liquid-bottle.png"
-dest_files=[ "res://.import/small-liquid-bottle.png-e58aabda3f570e7a20a435c83f920cc1.stex" ]
+source_file="res://game/items/assets/ingame_texture/small-liquid-bottle.png"
+dest_files=[ "res://.import/small-liquid-bottle.png-dabada93cbfffb35ba30bb56a5176d76.stex" ]
 
 [params]
 

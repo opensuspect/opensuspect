@@ -10,9 +10,19 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Resource",
+"class": "Ability",
+"language": "GDScript",
+"path": "res://resource_classes/ability.gd"
+}, {
+"base": "Resource",
 "class": "CharacterResource",
 "language": "GDScript",
 "path": "res://resource_classes/character_resource.gd"
+}, {
+"base": "Ability",
+"class": "GunAbility",
+"language": "GDScript",
+"path": "res://game/maps/chemlab/gun.gd"
 }, {
 "base": "Resource",
 "class": "ItemResource",
@@ -23,18 +33,26 @@ _global_script_classes=[ {
 "class": "ItemTemplate",
 "language": "GDScript",
 "path": "res://resource_classes/item_template.gd"
+}, {
+"base": "Resource",
+"class": "TeamsRolesTemplate",
+"language": "GDScript",
+"path": "res://resource_classes/teams_roles_template.gd"
 } ]
 _global_script_class_icons={
+"Ability": "",
 "CharacterResource": "",
+"GunAbility": "",
 "ItemResource": "",
-"ItemTemplate": ""
+"ItemTemplate": "",
+"TeamsRolesTemplate": ""
 }
 
 [application]
 
 config/name="OpenSuspect"
 config/description="Free software implementation of a social deduction game."
-run/main_scene="res://ui_elements/start.tscn"
+run/main_scene="res://ui_elements/menu_base.tscn"
 boot_splash/image="res://bootsplash.png"
 config/icon="res://icon.png"
 
@@ -48,6 +66,7 @@ Items="*res://autoloads/items.gd"
 Connections="*res://autoloads/connections.gd"
 TransitionHandler="*res://autoloads/transition_handler.gd"
 GameData="*res://autoloads/game_data.gd"
+Scenes="*res://autoloads/scenes.gd"
 
 [display]
 
@@ -59,6 +78,10 @@ window/dpi/allow_hidpi=true
 window/energy_saving/keep_screen_on=false
 window/stretch/mode="2d"
 window/stretch/aspect="expand"
+
+[global]
+
+collision=false
 
 [input]
 
@@ -87,6 +110,11 @@ move_down={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":83,"unicode":0,"echo":false,"script":null)
  ]
 }
+
+[layer_names]
+
+2d_physics/layer_1="PlayersCollide"
+2d_physics/layer_9="AbilityRange"
 
 [physics]
 

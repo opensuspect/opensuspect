@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/beaker-empty.png-b92e85313ab0f6714c9f664b18ff9000.stex"
+path="res://.import/beaker-empty.png-08a8a13e7010409dbe0b48df8529dde7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/items/assets/ingame-texture/beaker-empty.png"
-dest_files=[ "res://.import/beaker-empty.png-b92e85313ab0f6714c9f664b18ff9000.stex" ]
+source_file="res://game/items/assets/ingame_texture/beaker-empty.png"
+dest_files=[ "res://.import/beaker-empty.png-08a8a13e7010409dbe0b48df8529dde7.stex" ]
 
 [params]
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/flask-empty.png-fc6ee1a0b077ca4d22d680ffc234228a.stex"
+path="res://.import/flask-empty.png-6f3641abd6b34c72d5f276bc67298e21.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/items/assets/ingame-texture/flask-empty.png"
-dest_files=[ "res://.import/flask-empty.png-fc6ee1a0b077ca4d22d680ffc234228a.stex" ]
+source_file="res://game/items/assets/ingame_texture/flask-empty.png"
+dest_files=[ "res://.import/flask-empty.png-6f3641abd6b34c72d5f276bc67298e21.stex" ]
 
 [params]
 

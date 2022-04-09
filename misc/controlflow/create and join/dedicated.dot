@@ -8,33 +8,49 @@ digraph controlflow {
         label="Server"; labeljust="l";
         subgraph cluster_server_game {
             label="game.gd"; labeljust="l";
+            server_game__ready [
+                label="<begin>_ready | <f0> Game scene loaded "
+                shape="record"
+            ]
             server_game_loadMap [
-                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points "
+                label="<begin>loadMap | {<f0> Remove previous map if applicable } | <f1> Load map and place it on scene tree  | <f2> Save spawn positions from the map  | <f3> Spawn characters at spawn points  | <f4> Request server for character data "
+                shape="record"
+            ]
+            server_game_spawnAllCharacters [
+                label="<begin>spawnAllCharacters | <f0> Reset spawn position counter  | <f1> Get all character resources  | {<f2> Loop through all characters  |  { <f3> Set spawn position  } }"
                 shape="record"
             ]
         }
-        subgraph cluster_server_transition_handler {
-            label="transition_handler.gd"; labeljust="l";
-            server_transition_handler_enterLobby [
-                label="<begin>enterLobby | <f0> Switch to the game scene  | <f1> Load lobby map "
+        subgraph cluster_server_main_menu {
+            label="main_menu.gd"; labeljust="l";
+            server_main_menu_createDedicated [
+                label="<begin>createDedicated | <f0> Get data from UI  | {<f1> Empty servername rejected } | <f2> Create a dedicated server "
+                shape="record"
+            ]
+            server_main_menu_joinEvent [
+                label="<begin>joinEvent | {<f0> Checks menu  |  { <f1> Join game  | <f2> Create a game  | <f3> Dedicated server  } }"
                 shape="record"
             ]
         }
         subgraph cluster_server_connections {
             label="connections.gd"; labeljust="l";
             server_connections_createDedicated [
-                label="<begin>createDedicated | <f0> Initialize Godot networking  | <f1> Save data in globals  | <f2> Enter the Lobby "
+                label="<begin>createDedicated | <f0> Initialize Godot networking  | <f1> Save data in globals  | <f2> Load the game scene "
                 shape="record"
             ]
         }
-        subgraph cluster_server_mainmenu {
-            label="mainmenu.gd"; labeljust="l";
-            server_mainmenu_createDedicated [
-                label="<begin>createDedicated | <f0> Get data from UI  | {<f1> Empty servername rejected } | <f2> Create a dedicated server "
+        subgraph cluster_server_transition_handler {
+            label="transition_handler.gd"; labeljust="l";
+            server_transition_handler_gameLoaded [
+                label="<begin>gameLoaded | <f0> Save reference to game scene  | <f1> Set scene to lobby  | <f2> Enter lobby  | {<f3> If client-server  |  { <f4> Add own character  } }"
                 shape="record"
             ]
-            server_mainmenu_joinEvent [
-                label="<begin>joinEvent | {<f0> Checks menu  |  { <f1> Join game  | <f2> Create a game  | <f3> Dedicated server  } }"
+            server_transition_handler_loadGameScene [
+                label="<begin>loadGameScene | <f0> Switch to game scene and load HUD "
+                shape="record"
+            ]
+            server_transition_handler_enterLobby [
+                label="<begin>enterLobby | <f0> Load lobby map "
                 shape="record"
             ]
         }
@@ -45,8 +61,13 @@ digraph controlflow {
 
     }
 
-    server_mainmenu_joinEvent:f3 -> server_mainmenu_createDedicated:begin;
-    server_mainmenu_createDedicated:f2 -> server_connections_createDedicated:begin;
-    server_connections_createDedicated:f2 -> server_transition_handler_enterLobby:begin;
-    server_transition_handler_enterLobby:f1 -> server_game_loadMap:begin;
+    server_main_menu_joinEvent:f3 -> server_main_menu_createDedicated:begin;
+    server_main_menu_createDedicated:f2 -> server_connections_createDedicated:begin;
+    server_connections_createDedicated:f2 -> server_transition_handler_loadGameScene:begin;
+    server_transition_handler_loadGameScene:f0 -> server_game__ready:begin [style=dashed];
+    server_game__ready -> server_game_loadMap [style=invis];
+    server_game__ready:f0 -> server_transition_handler_gameLoaded:begin;
+    server_transition_handler_gameLoaded:f2 -> server_transition_handler_enterLobby:begin;
+    server_transition_handler_enterLobby:f0 -> server_game_loadMap:begin;
+    server_game_loadMap:f3 -> server_game_spawnAllCharacters:begin;
 }

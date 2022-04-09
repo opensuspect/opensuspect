@@ -1,7 +1,5 @@
 extends Control
 
-signal menuBack
-
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -18,4 +16,4 @@ func _ready():
 
 
 func _on_Back_pressed():
-	emit_signal("menuBack")
+	Scenes.back()

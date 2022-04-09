@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/iron_tripod.png-caa4af1724fc6cc945a2088424fd4b21.stex"
+path="res://.import/iron_tripod.png-9cc0e3b4e9cf2d2ef6d35b0881dfe6b3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/items/assets/ingame-texture/iron_tripod.png"
-dest_files=[ "res://.import/iron_tripod.png-caa4af1724fc6cc945a2088424fd4b21.stex" ]
+source_file="res://game/items/assets/ingame_texture/iron_tripod.png"
+dest_files=[ "res://.import/iron_tripod.png-9cc0e3b4e9cf2d2ef6d35b0881dfe6b3.stex" ]
 
 [params]
 
