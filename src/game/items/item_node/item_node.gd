@@ -16,9 +16,12 @@ func setItemResource(newItemResource: ItemResource):
 	if _itemResource != null:
 		assert(false, "Assigning an item resource to an item node that already has one")
 	_itemResource = newItemResource
-	if _sprite != null:
-		_sprite.texture = _itemResource.getTexture()
-		_sprite.scale = _itemResource.getTextureScale()
+	if _itemResource.getTexture() != null:
+		call_deferred("setSprite")
+		
+func setSprite():
+	_sprite.texture = _itemResource.getTexture()
+	_sprite.scale = _itemResource.getTextureScale()
 
 # returns the item resource corresponding to this item node
 func getItemResource() -> ItemResource:

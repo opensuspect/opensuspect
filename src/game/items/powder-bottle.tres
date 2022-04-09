@@ -1,10 +1,10 @@
 [gd_resource type="Resource" load_steps=3 format=2]
 
 [ext_resource path="res://resource_classes/item_template.gd" type="Script" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://game/items/assets/ingame_texture/powder-bottle.png" type="Texture" id=2]
 
 [resource]
 script = ExtResource( 1 )
-itemName = "Wrench"
+itemName = "Powder Bottle"
 texture = ExtResource( 2 )
-textureScale = Vector2( 1, 1 )
+textureScale = Vector2( 0.5, 0.5 )

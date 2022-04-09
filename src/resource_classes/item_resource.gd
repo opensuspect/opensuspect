@@ -5,7 +5,7 @@ class_name ItemResource
 # the name of the item (for ex. "Wrench")
 var itemName: String
 # the texture used by the item
-var texture: Texture
+var texture: Texture = null
 # scale to be applied to the texture
 var textureScale: Vector2 = Vector2(1, 1)
 
