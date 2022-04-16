@@ -11,6 +11,7 @@ var visibleRoles: Dictionary = {}
 var hudNode: Control = null
 onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
+onready var itemsNode: Node2D = $Items
 onready var roleScreenTimeout: Timer = $RoleScreenTimeout
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 onready var gamestartButton: Button = $CanvasLayer/GameStart
@@ -32,6 +33,8 @@ func loadMap(mapPath: String) -> void:
 	## Remove previous map if applicable
 	for child in mapNode.get_children():
 		child.queue_free()
+	## Removove items from the map
+	Items.clearItems()
 	## Load map and place it on scene tree
 	actualMap = ResourceLoader.load(mapPath).instance()
 	mapNode.add_child(actualMap)
@@ -66,9 +69,6 @@ func addCharacter(networkId: int) -> void:
 		newCharacter.connect("itemInteraction", self, "itemInteract")
 		## Send my character data to server
 		Characters.sendOwnCharacterData()
-
-func itemInteract(item: Node, action: String) -> void:
-	hudNode.itemInteract(item, action)
 
 # These functions place the character on the map, but if it is a client, it will
 # be overwritten by the position syncing. It is done only so that the characters
@@ -125,6 +125,12 @@ func abilityActivate(parameters: Dictionary) -> void:
 	# TODO: RPC should not be done directly the game scene!
 	rpc_id(1, "abilityActServer", parameters)
 
+func itemInteract(item: Node, action: String) -> void:
+	hudNode.itemInteract(item, action)
+
+func itemPickUpAttempt(itemId) -> void:
+	rpc_id(1, "itemPickUpServer", itemId)
+
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
 
@@ -174,6 +180,11 @@ puppet func executeAbility(parameters: Dictionary) -> void:
 		var abilityInstance: Ability = myCharacter.getAbility(abilityName)
 		abilityInstance.execute(parameters)
 
+puppetsync func itemPickUpClient(characterId: int, itemId: int) -> void:
+	var characterRes: CharacterResource = Characters.getCharacterResource(characterId)
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	characterRes.pickUpItem(itemRes)
+
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
 	call_deferred("deferredTeamRoleAssignment", isLobby)
@@ -220,6 +231,13 @@ remotesync func abilityActServer(parameters: Dictionary):
 		if abilityInstance.canExecute(parameters):
 			rpc_id(abilityPlayer, "executeAbility", parameters)
 			abilityInstance.execute(parameters)
+
+mastersync func itemPickUpServer(itemId: int) -> void:
+	var playerId: int = get_tree().get_rpc_sender_id()
+	var characterNode: KinematicBody2D = Characters.getCharacterNode(playerId)
+	var itemNode: KinematicBody2D = Items.getItemNode(itemId)
+	if itemNode in characterNode.itemPickupArea.get_overlapping_bodies():
+		rpc("itemPickUpClient", playerId, itemId)
 
 func killCharacterServer(id: int) -> void:
 	rpc("killCharacter", id)

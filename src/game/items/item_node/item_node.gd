@@ -23,6 +23,11 @@ func setSprite():
 	_sprite.texture = _itemResource.getTexture()
 	_sprite.scale = _itemResource.getTextureScale()
 
+func changeLook(newTexture: Texture, newScale: Vector2, newRotataion: float):
+	_sprite.texture = newTexture
+	_sprite.scale = newScale
+	rotation_degrees = newRotataion
+
 # returns the item resource corresponding to this item node
 func getItemResource() -> ItemResource:
 	return _itemResource

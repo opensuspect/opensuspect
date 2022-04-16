@@ -3,7 +3,9 @@ class_name ItemResource
 
 # --Public Variables--
 # the name of the item (for ex. "Wrench")
-var itemName: String
+var itemName: String setget setName, getName
+# the random id of the item
+var itemId: int = -1 setget setId, getId
 # the texture used by the item
 var texture: Texture = null
 # scale to be applied to the texture
@@ -11,6 +13,10 @@ var textureScale: Vector2 = Vector2(1, 1)
 # the texture and scale used on the HUD for the item
 var hudTexture: Texture = null
 var hudTextureScale: Vector2 = Vector2(1, 1)
+# the texture, scale and rotatation used when picked up
+export var pickUpTexture: Texture = null
+export var pickUpTextureScale: Vector2 = Vector2(1, 1)
+export var pickUpRotation: float = 0
 
 # --Private Variables--
 # the item node corresponding to this resource
@@ -26,6 +32,17 @@ var _dropped: bool
 # returns the name of this item (for ex. "Wrench")
 func getName() -> String:
 	return itemName
+
+func setName(newName: String) -> void:
+	itemName = newName
+
+func getId() -> int:
+	return itemId
+
+func setId(newId: int) -> void:
+	if itemId != -1:
+		assert(false, "Shouldn't change item ID ever.")
+	itemId = newId
 
 func getTexture() -> Texture:
 	return texture
@@ -55,3 +72,11 @@ func getHolder() -> CharacterResource:
 # returns whether or not the item is dropped
 func isDropped() -> bool:
 	return _dropped
+
+func attemptPickUp() -> void:
+	TransitionHandler.gameScene.itemPickUpAttempt(itemId)
+
+func pickedUp(characterRes: CharacterResource) -> void:
+	_holder = characterRes
+	_itemNode.changeLook(pickUpTexture, pickUpTextureScale, pickUpRotation)
+

@@ -16,6 +16,7 @@ enum LookDirections {LEFT, RIGHT, UP, DOWN}
 var lookDirection: int = LookDirections.RIGHT
 onready var characterElements = $CharacterElements
 onready var skeleton = $CharacterElements/Skeleton
+onready var itemPickupArea = $CharacterElements/ItemPickup
 onready var camera = $CharacterCamera
 onready var nameLabel = $Name
 onready var abilityPoint = $CharacterElements/Abilities

@@ -70,16 +70,57 @@ const ITEM_TEMPLATE_FOLDER_PATH: String = "res://game/items/"
 # dictionary storing all item templates keyed by item name
 var _itemTemplates: Dictionary = _instanceItemTemplates()
 
+var _items: Dictionary = {}
 
 # --Public Functions--
+func getItemTemplate(itemName: String) -> ItemTemplate:
+	if not itemName in _itemTemplates:
+		assert(false, "Trying to get an item template that doesn't exist")
+		return null
+	return _itemTemplates[itemName]
+
+func getItemNode(itemId) -> KinematicBody2D:
+	return _items[itemId].getItemNode()
+
+func getItemResource(itemId) -> ItemResource:
+	return _items[itemId]
+
+func removeItem(itemId: int) -> void:
+	var itemNode: KinematicBody2D
+	itemNode = _items[itemId].getItemNode()
+	itemNode.queue_free()
+	_items.erase(itemId)
+
+func clearItems() -> void:
+	var itemIds: Array = _items.keys()
+	for itemId in itemIds:
+		removeItem(itemId)
+
+# --Server Functions--
+func createItemServer(itemName: String, itemPosition: Vector2):
+	var newId: int = -1
+	while newId == -1 or newId in _items.keys():
+		newId = randi()
+	rpc("createItemClient", itemName, itemPosition, newId)
+
+# --Client functions--
+puppetsync func createItemClient(itemName: String, itemPosition: Vector2, newId: int):
+	_createItem(itemName, itemPosition, newId)
+
+# --Private Functions--
 # creates a new ItemResource from this template
-func createItem(itemName: String) -> ItemResource:
-	# the item template to use when creating this item
+func _createItem(itemName: String, itemPosition: Vector2, newId: int):
+		# the item template to use when creating this item
 	var itemTemplate: ItemTemplate = getItemTemplate(itemName)
 	# initialize a new ItemResource
 	var itemResource: ItemResource = _createItemResource()
+	
+	itemResource.itemId = newId
+	_items[newId] = itemResource
 	# initialize a new ItemNode
-	var itemNode: Node = _createItemNode()
+	var itemNode: Node2D = _createItemNode()
+	itemNode.position = itemPosition
+	TransitionHandler.gameScene.itemsNode.add_child(itemNode)
 	
 	# have the item template configure the item resource
 	itemTemplate.configureItemResource(itemResource)
@@ -87,21 +128,10 @@ func createItem(itemName: String) -> ItemResource:
 	# assign item nodes and resources to each other
 	itemResource.setItemNode(itemNode)
 	itemNode.setItemResource(itemResource)
-	
-	return itemResource
-
-func getItemTemplate(itemName: String) -> ItemTemplate:
-	if not itemName in _itemTemplates:
-		assert(false, "Trying to get an item template that doesn't exist")
-		return null
-	return _itemTemplates[itemName]
-
-# --Private Functions--
 
 func _createItemResource() -> ItemResource:
 	# initialize a new ItemResource
 	var itemResource: ItemResource = ItemResource.new()
-	
 	# placeholder space to put whatever we need to do to initialize a general item resource
 	
 	return itemResource

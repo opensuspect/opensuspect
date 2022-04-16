@@ -156,6 +156,13 @@ func getAbility(abilityName: String) -> Ability:
 			return ability
 	return null
 
+func pickUpItem(itemRes) -> void:
+	var itemNode: KinematicBody2D = itemRes.getItemNode()
+	if TransitionHandler.gameScene.itemsNode.is_a_parent_of(itemNode):
+		TransitionHandler.gameScene.itemsNode.remove_child(itemNode)
+	_characterNode.skeleton.putItemInHand(itemNode, itemRes.itemId)
+	itemRes.pickedUp(self)
+
 # get tasks assigned to this CharacterResource
 func getTasks() -> Dictionary:
 	# assert false because tasks aren't implemented yet
