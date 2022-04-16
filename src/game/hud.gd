@@ -4,6 +4,8 @@ onready var gameStartButton: Button = $GameStart
 onready var abilityBox: HBoxContainer = $GameUI/Abilities
 onready var itemIntBox: HBoxContainer = $GameUI/ItemInteract
 
+var itemPickUpScene: PackedScene = preload("res://game/hud/item_pick_up_button.tscn")
+
 var interactable: Array = []
 var interactUi: Array = []
 
@@ -43,10 +45,10 @@ func clearAbilities() -> void:
 		element.queue_free()
 
 func addItemToPickUp(item: Node) -> void:
-	var newItemIcon: TextureButton = TextureButton.new()
+	var newItemIcon: Control = itemPickUpScene.instance()
 	var itemRes: ItemResource = item.getItemResource()
-	newItemIcon.texture_normal = itemRes.getHudTexture()
-	newItemIcon.rect_scale = itemRes.getHudTextureScale()
+	newItemIcon.setItemResource(itemRes)
+
 	itemIntBox.add_child(newItemIcon)
 	interactable.append(item)
 	interactUi.append(newItemIcon)
