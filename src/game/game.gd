@@ -125,11 +125,14 @@ func abilityActivate(parameters: Dictionary) -> void:
 	# TODO: RPC should not be done directly the game scene!
 	rpc_id(1, "abilityActServer", parameters)
 
-func itemInteract(item: Node, action: String) -> void:
-	hudNode.itemInteract(item, action)
+func itemInteract(itemRes: ItemResource, action: String) -> void:
+	hudNode.itemInteract(itemRes, action)
 
 func itemPickUpAttempt(itemId) -> void:
 	rpc_id(1, "itemPickUpServer", itemId)
+
+func itemDropAttempt(itemId) -> void:
+	rpc_id(1, "itemDropServer", itemId)
 
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
@@ -184,6 +187,17 @@ puppetsync func itemPickUpClient(characterId: int, itemId: int) -> void:
 	var characterRes: CharacterResource = Characters.getCharacterResource(characterId)
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	characterRes.pickUpItem(itemRes)
+	if characterId == get_tree().get_network_unique_id():
+		hudNode.hidePickUpButtons()
+		hudNode.refreshItemButtons()
+
+puppetsync func itemDropClient(characterId: int, itemId: int) -> void:
+	var characterRes: CharacterResource = Characters.getCharacterResource(characterId)
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	characterRes.dropItem(itemRes)
+	if characterId == get_tree().get_network_unique_id():
+		hudNode.refreshItemButtons()
+		hudNode.refreshPickUpButtons()
 
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
@@ -234,10 +248,17 @@ remotesync func abilityActServer(parameters: Dictionary):
 
 mastersync func itemPickUpServer(itemId: int) -> void:
 	var playerId: int = get_tree().get_rpc_sender_id()
-	var characterNode: KinematicBody2D = Characters.getCharacterNode(playerId)
-	var itemNode: KinematicBody2D = Items.getItemNode(itemId)
-	if itemNode in characterNode.itemPickupArea.get_overlapping_bodies():
+	var characterRes: CharacterResource = Characters.getCharacterResource(playerId)
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	if characterRes.canPickUpItem(itemRes):
 		rpc("itemPickUpClient", playerId, itemId)
+
+mastersync func itemDropServer(itemId: int) -> void:
+	var playerId: int = get_tree().get_rpc_sender_id()
+	var characterRes: CharacterResource = Characters.getCharacterResource(playerId)
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	if characterRes.canDropItem(itemRes):
+		rpc("itemDropClient", playerId, itemId)
 
 func killCharacterServer(id: int) -> void:
 	rpc("killCharacter", id)

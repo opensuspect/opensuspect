@@ -225,11 +225,14 @@ func _getLookDirFromVec(vec: Vector2) -> int:
 		newlookDirection = LookDirections.RIGHT
 	return newlookDirection
 
-
 func _on_ItemPickup_body_entered(body):
 	if mainCharacter:
-		emit_signal("itemInteraction", body, "entered")
+		# This pickup area should ONLY interact with items.
+		var itemRes: ItemResource = body.getItemResource()
+		emit_signal("itemInteraction", itemRes, "entered")
 
 func _on_ItemPickup_body_exited(body):
 	if mainCharacter:
-		emit_signal("itemInteraction", body, "exited")
+		# This pickup area should ONLY interact with items.
+		var itemRes: ItemResource = body.getItemResource()
+		emit_signal("itemInteraction", itemRes, "exited")

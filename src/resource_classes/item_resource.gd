@@ -22,7 +22,7 @@ export var pickUpRotation: float = 0
 # the item node corresponding to this resource
 var _itemNode: Node
 # the player resource holding this item
-var _holder: CharacterResource
+var _holder: CharacterResource = null
 # whether or not this item is dropped
 var _dropped: bool
 
@@ -73,6 +73,17 @@ func getHolder() -> CharacterResource:
 func isDropped() -> bool:
 	return _dropped
 
+func canBePickedUp(characterRes: CharacterResource) -> bool:
+	var characterNode: KinematicBody2D = characterRes.getCharacterNode()
+	if _holder != null:
+		return false
+	if not _itemNode in characterNode.itemPickupArea.get_overlapping_bodies():
+		return false
+	return true
+
+func canBeDropped(characterRes: CharacterResource) -> bool:
+	return true
+
 func attemptPickUp() -> void:
 	TransitionHandler.gameScene.itemPickUpAttempt(itemId)
 
@@ -80,3 +91,9 @@ func pickedUp(characterRes: CharacterResource) -> void:
 	_holder = characterRes
 	_itemNode.changeLook(pickUpTexture, pickUpTextureScale, pickUpRotation)
 
+func attemptDrop() -> void:
+	TransitionHandler.gameScene.itemDropAttempt(itemId)
+
+func droppedDown() -> void:
+	_holder = null
+	_itemNode.changeLook(texture, textureScale, 0)

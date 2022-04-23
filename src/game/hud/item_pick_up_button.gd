@@ -5,15 +5,13 @@ onready var pickUpButton: TextureButton = $Button
 
 var item: ItemResource
 
-signal buttonPressed
+func _ready():
+	assert(item != null, "The item should be set right when this scene is instanced.")
+	itemIcon.texture = item.getHudTexture()
+	itemIcon.scale = item.getHudTextureScale()
 
 func setItemResource(new_item: ItemResource) -> void:
 	item = new_item
-	call_deferred("setTexture")
-
-func setTexture() -> void:
-	itemIcon.texture = item.getHudTexture()
-	itemIcon.scale = item.getHudTextureScale()
 
 func _on_Button_button_down():
 	item.attemptPickUp()
