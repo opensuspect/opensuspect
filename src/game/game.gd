@@ -258,8 +258,14 @@ mastersync func itemDropServer(itemId: int) -> void:
 	var characterRes: CharacterResource = Characters.getCharacterResource(playerId)
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	if characterRes.canDropItem(itemRes):
+		#TODO: think about whether we should enforce server-side coordinates for the items to be dropped.
 		rpc("itemDropClient", playerId, itemId)
 
 func killCharacterServer(id: int) -> void:
+	var characterRes: CharacterResource = Characters.getCharacterResource(id)
+	for itemRes in characterRes.getItems():
+		itemRes = itemRes as ItemResource
+		if characterRes.canDropItem(itemRes):
+			rpc("itemDropClient", id, itemRes.getId())
 	rpc("killCharacter", id)
 
