@@ -59,11 +59,6 @@ extends Node
 # 	they are somewhat clunky
 
 # --Public Variables--
-# file path to item node scene
-const ITEM_NODE_SCENE_PATH: String = "res://game/items/item_node/item_node.tscn"
-# scene of the item node
-var itemNodeScene: PackedScene = preload(ITEM_NODE_SCENE_PATH)
-
 const ITEM_TEMPLATE_FOLDER_PATH: String = "res://game/items/"
 
 # --Private Variables--
@@ -113,12 +108,12 @@ func _createItem(itemName: String, itemPosition: Vector2, newId: int):
 		# the item template to use when creating this item
 	var itemTemplate: ItemTemplate = getItemTemplate(itemName)
 	# initialize a new ItemResource
-	var itemResource: ItemResource = _createItemResource()
+	var itemResource: ItemResource = itemTemplate.createItemResource()
 	
 	itemResource.itemId = newId
 	_items[newId] = itemResource
 	# initialize a new ItemNode
-	var itemNode: Node2D = _createItemNode()
+	var itemNode: KinematicBody2D = itemTemplate.createItemNode()
 	itemNode.position = itemPosition
 	TransitionHandler.gameScene.itemsNode.add_child(itemNode)
 	
@@ -128,20 +123,6 @@ func _createItem(itemName: String, itemPosition: Vector2, newId: int):
 	# assign item nodes and resources to each other
 	itemResource.setItemNode(itemNode)
 	itemNode.setItemResource(itemResource)
-
-func _createItemResource() -> ItemResource:
-	# initialize a new ItemResource
-	var itemResource: ItemResource = ItemResource.new()
-	# placeholder space to put whatever we need to do to initialize a general item resource
-	
-	return itemResource
-
-func _createItemNode() -> Node:
-	var itemNode: Node = itemNodeScene.instance()
-	
-	# placeholder space to put whatever we need to do to initialize a general item node
-	
-	return itemNode
 
 # loads all item templates and returns a dictionary of them keyed by itemName
 func _instanceItemTemplates() -> Dictionary:

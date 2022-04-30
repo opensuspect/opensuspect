@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://resource_classes/item_template.gd" type="Script" id=1]
+[ext_resource path="res://game/items/assets/ingame_texture/flask-empty.png" type="Texture" id=2]
+
+[resource]
+script = ExtResource( 1 )
+itemName = "Flask"
+texture = ExtResource( 2 )
+textureScale = Vector2( 0.5, 0.5 )
+hudTexture = ExtResource( 2 )
+hudTextureScale = Vector2( 1, 1 )
+pickUpTexture = ExtResource( 2 )
+pickUpTextureScale = Vector2( 1.5, 1.5 )
+pickUpRotation = 0.0

@@ -8,6 +8,11 @@ class_name ItemTemplate
 # the name of the item (for ex. "Wrench")
 export var itemName: String
 # the texture used by the item
+# file path to item node scene
+const ITEM_NODE_SCENE_PATH: String = "res://game/items/item_node/item_node.tscn"
+# scene of the item node
+var itemNodeScene: PackedScene = preload(ITEM_NODE_SCENE_PATH)
+
 export var texture: Texture
 # scale to be applied to the texture
 export var textureScale: Vector2 = Vector2(1, 1)
@@ -32,3 +37,17 @@ func configureItemResource(itemResource: ItemResource):
 		"pickUpRotation"]
 	for property in propertyList:
 		itemResource.set(property, get(property))
+
+func createItemResource() -> ItemResource:
+	# initialize a new ItemResource
+	var itemResource: ItemResource = ItemResource.new()
+	# placeholder space to put whatever we need to do to initialize a general item resource
+	
+	return itemResource
+
+func createItemNode() -> Node:
+	var itemNode: Node = itemNodeScene.instance()
+	
+	# placeholder space to put whatever we need to do to initialize a general item node
+	
+	return itemNode
