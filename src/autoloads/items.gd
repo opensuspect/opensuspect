@@ -92,23 +92,23 @@ func clearItems() -> void:
 		removeItem(itemId)
 
 # --Server Functions--
-func createItemServer(itemName: String, itemPosition: Vector2):
+func createItemServer(itemName: String, itemPosition: Vector2, properties: Dictionary = {}):
 	var newId: int = -1
 	while newId == -1 or newId in _items.keys():
 		newId = randi()
-	rpc("createItemClient", itemName, itemPosition, newId)
+	rpc("createItemClient", itemName, itemPosition, newId, properties)
 
 # --Client functions--
-puppetsync func createItemClient(itemName: String, itemPosition: Vector2, newId: int):
-	_createItem(itemName, itemPosition, newId)
+puppetsync func createItemClient(itemName: String, itemPosition: Vector2, newId: int, properties: Dictionary):
+	_createItem(itemName, itemPosition, newId, properties)
 
 # --Private Functions--
 # creates a new ItemResource from this template
-func _createItem(itemName: String, itemPosition: Vector2, newId: int):
+func _createItem(itemName: String, itemPosition: Vector2, newId: int, properties: Dictionary):
 		# the item template to use when creating this item
 	var itemTemplate: ItemTemplate = getItemTemplate(itemName)
 	# initialize a new ItemResource
-	var itemResource: ItemResource = itemTemplate.createItemResource()
+	var itemResource: ItemResource = itemTemplate.createItemResource(properties)
 	
 	itemResource.itemId = newId
 	_items[newId] = itemResource

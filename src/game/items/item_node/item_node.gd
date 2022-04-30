@@ -18,15 +18,11 @@ func setItemResource(newItemResource: ItemResource):
 	_itemResource = newItemResource
 	if _itemResource.getTexture() != null:
 		call_deferred("setSprite")
-		
+
 func setSprite():
 	_sprite.texture = _itemResource.getTexture()
 	_sprite.scale = _itemResource.getTextureScale()
-
-func changeLook(newTexture: Texture, newScale: Vector2, newRotataion: float):
-	_sprite.texture = newTexture
-	_sprite.scale = newScale
-	rotation_degrees = newRotataion
+	rotation_degrees = _itemResource.getRotationDegrees()
 
 # returns the item resource corresponding to this item node
 func getItemResource() -> ItemResource:

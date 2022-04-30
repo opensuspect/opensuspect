@@ -38,7 +38,8 @@ func configureItemResource(itemResource: ItemResource):
 	for property in propertyList:
 		itemResource.set(property, get(property))
 
-func createItemResource() -> ItemResource:
+# properties dictionary is not used by default. It is a placeholder for more complex inhereted items.
+func createItemResource(properties: Dictionary) -> ItemResource:
 	# initialize a new ItemResource
 	var itemResource: ItemResource = ItemResource.new()
 	# placeholder space to put whatever we need to do to initialize a general item resource
