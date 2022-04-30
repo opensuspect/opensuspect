@@ -4,6 +4,7 @@ class_name FlaskTemplate
 export var textureFull: Texture
 export var hudTextureFull: Texture = null
 export var pickUpTextureFull: Texture = null
+export var abilityTexture: Texture = null
 
 func createItemResource(properties: Dictionary) -> ItemResource:
 	# initialize a new ItemResource
@@ -21,3 +22,5 @@ func configureItemResource(itemResource: ItemResource):
 		"pickUpTextureFull"]
 	for property in propertyList:
 		itemResource.set(property, get(property))
+	itemResource._abilities = ["Pour"]
+	itemResource._abilityIcons = {"Pour": abilityTexture}

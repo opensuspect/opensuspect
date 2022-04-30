@@ -23,7 +23,12 @@ var pickUpRotation: float = 0
 var _itemNode: Node
 # the player resource holding this item
 var _holder: CharacterResource = null
-
+# an array with the names of the abilities assigned to this item
+# (for the base item resource, there is no special ability though, these
+# functions are strictly placeholders for items inheriting this resource)
+var _abilities: Array = []
+# an array with the icons (textures) for the abilities
+var _abilityIcons: Dictionary = {}
 
 # --Public Functions--
 
@@ -107,3 +112,18 @@ func attemptDrop() -> void:
 func droppedDown() -> void:
 	_holder = null
 	_itemNode.setSprite()
+
+func itemAbilities() -> Array:
+	return _abilities
+
+func abilityActivateIcon(abilityName: String) -> Texture:
+	return _abilityIcons[abilityName]
+
+func canBeActivated(abilityName: String) -> bool:
+	return false
+
+func attemptActivate() -> void:
+	pass
+
+func activate() -> void:
+	pass

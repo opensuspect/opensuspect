@@ -3,14 +3,17 @@ extends Control
 onready var gameStartButton: Button = $GameStart
 onready var abilityBox: HBoxContainer = $GameUI/Abilities
 onready var itemIntBox: HBoxContainer = $GameUI/ItemInteract
+onready var itemUseBox: HBoxContainer = $GameUI/ItemUse
 
 var itemPickUpScene: PackedScene = preload("res://game/hud/item_pick_up_button.tscn")
 var itemDropScene: PackedScene = preload("res://game/hud/item_drop_button.tscn")
+var itemAbilityScene: PackedScene = preload("res://game/hud/item_ability_button.tscn")
 
 var interactable: Array = []
 var interactUi: Array = []
 var pickedUp: Array = []
 var dropUi: Array = []
+var itemUse: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -76,8 +79,11 @@ func removeItemButton(itemRes: ItemResource) -> void:
 	var index: int
 	index = pickedUp.find(itemRes)
 	dropUi[index].queue_free()
+	for itemIcon in itemUse[index]:
+		itemIcon.queue_free()
 	dropUi.pop_at(index)
 	pickedUp.pop_at(index)
+	itemUse.pop_at(index)
 
 func refreshItemButtons() -> void:
 	var charaterRes: CharacterResource = Characters.getMyCharacterResource()
@@ -90,6 +96,14 @@ func refreshItemButtons() -> void:
 		itemIntBox.add_child(newItemIcon)
 		pickedUp.append(itemRes)
 		dropUi.append(newItemIcon)
+		var itemAbilityButtons: Array = []
+		for abilityName in itemRes.itemAbilities():
+			var newAbilityButton: Control
+			newAbilityButton = itemAbilityScene.instance()
+			newAbilityButton.setupButton(itemRes, abilityName)
+			itemUseBox.add_child(newAbilityButton)
+			itemAbilityButtons.append(newAbilityButton)
+		itemUse.append(itemAbilityButtons)
 	for droppable in pickedUp:
 		if droppable in charaterRes.getItems():
 			continue
