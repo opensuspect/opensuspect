@@ -75,22 +75,18 @@ func refreshPickUpButtons() -> void:
 			continue
 		itemIntBox.add_child(buttonInstance)
 
-func removeItemButton(itemRes: ItemResource) -> void:
-	var index: int
-	index = pickedUp.find(itemRes)
-	dropUi[index].queue_free()
-	for itemIcon in itemUse[index]:
-		itemIcon.queue_free()
-	dropUi.pop_at(index)
-	pickedUp.pop_at(index)
-	itemUse.pop_at(index)
-
 func refreshItemButtons() -> void:
 	var charaterRes: CharacterResource = Characters.getMyCharacterResource()
 	var newItemIcon: Control
+	for button in dropUi:
+		button.queue_free()
+	for buttonList in itemUse:
+		for button in buttonList:
+			button.queue_free()
+	dropUi = []
+	pickedUp = []
+	itemUse = []
 	for itemRes in charaterRes.getItems():
-		if itemRes in pickedUp:
-			continue
 		newItemIcon = itemDropScene.instance()
 		newItemIcon.setItemResource(itemRes)
 		itemIntBox.add_child(newItemIcon)
@@ -104,10 +100,6 @@ func refreshItemButtons() -> void:
 			itemUseBox.add_child(newAbilityButton)
 			itemAbilityButtons.append(newAbilityButton)
 		itemUse.append(itemAbilityButtons)
-	for droppable in pickedUp:
-		if droppable in charaterRes.getItems():
-			continue
-		removeItemButton(droppable)
 
 func itemInteract(itemRes: ItemResource, action: String) -> void:
 	if action == "entered":

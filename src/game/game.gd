@@ -128,11 +128,14 @@ func abilityActivate(parameters: Dictionary) -> void:
 func itemInteract(itemRes: ItemResource, action: String) -> void:
 	hudNode.itemInteract(itemRes, action)
 
-func itemPickUpAttempt(itemId) -> void:
+func itemPickUpAttempt(itemId: int) -> void:
 	rpc_id(1, "itemPickUpServer", itemId)
 
-func itemDropAttempt(itemId) -> void:
+func itemDropAttempt(itemId: int) -> void:
 	rpc_id(1, "itemDropServer", itemId)
+
+func itemActivateAttempt(itemId: int, abilityName: String, properties: Dictionary) -> void:
+	rpc_id(1, "itemActivateServer", itemId, abilityName, properties)
 
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
@@ -199,6 +202,12 @@ puppetsync func itemDropClient(characterId: int, itemId: int) -> void:
 		hudNode.refreshItemButtons()
 		hudNode.refreshPickUpButtons()
 
+puppetsync func itemActivateClient(itemId: int, abilityName: String, properties: Dictionary) -> void:
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	itemRes.activate(abilityName, properties)
+	if itemRes.getHolder().getNetworkId() == get_tree().get_network_unique_id():
+		hudNode.refreshItemButtons()
+
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
 	call_deferred("deferredTeamRoleAssignment", isLobby)
@@ -260,6 +269,12 @@ mastersync func itemDropServer(itemId: int) -> void:
 	if characterRes.canDropItem(itemRes):
 		#TODO: think about whether we should enforce server-side coordinates for the items to be dropped.
 		rpc("itemDropClient", playerId, itemId)
+
+mastersync func itemActivateServer(itemId: int, abilityName: String, properties: Dictionary) -> void:
+	var playerId: int = get_tree().get_rpc_sender_id()
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	if itemRes.canBeActivated(abilityName, properties):
+		rpc("itemActivateClient", itemId, abilityName, properties)
 
 func killCharacterServer(id: int) -> void:
 	var characterRes: CharacterResource = Characters.getCharacterResource(id)

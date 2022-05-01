@@ -119,11 +119,13 @@ func itemAbilities() -> Array:
 func abilityActivateIcon(abilityName: String) -> Texture:
 	return _abilityIcons[abilityName]
 
-func canBeActivated(abilityName: String) -> bool:
+func canBeActivated(abilityName: String, properties: Dictionary) -> bool:
 	return false
 
-func attemptActivate() -> void:
+# Placeholder function for inherited items which have abilities
+func attemptActivate(abilityName: String) -> void:
 	pass
 
-func activate() -> void:
+# Placeholder function for inherited items which have abilities
+func activate(abilityName: String, properties: Dictionary) -> void:
 	pass
