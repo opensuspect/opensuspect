@@ -8,8 +8,10 @@ var roles: Dictionary = {} # Stores the roles of all the players
 # Stores the roles of the players based on what the current player sees
 var visibleRoles: Dictionary = {}
 
+var hudNode: Control = null
 onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
+onready var itemsNode: Node2D = $Items
 onready var roleScreenTimeout: Timer = $RoleScreenTimeout
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 onready var gamestartButton: Button = $CanvasLayer/GameStart
@@ -22,10 +24,17 @@ func _ready() -> void:
 	## Game scene loaded
 	TransitionHandler.gameLoaded(self)
 
+func setHudNode(newHudNode: Control) -> void:
+	if hudNode != null:
+		assert(false, "shouldn't set the hudNode again")
+	hudNode = newHudNode
+
 func loadMap(mapPath: String) -> void:
 	## Remove previous map if applicable
 	for child in mapNode.get_children():
 		child.queue_free()
+	## Removove items from the map
+	Items.clearItems()
 	## Load map and place it on scene tree
 	actualMap = ResourceLoader.load(mapPath).instance()
 	mapNode.add_child(actualMap)
@@ -56,6 +65,8 @@ func addCharacter(networkId: int) -> void:
 	if networkId == myId:
 		## Apply appearance to character
 		newCharacterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
+		print_debug(hudNode)
+		newCharacter.connect("itemInteraction", self, "itemInteract")
 		## Send my character data to server
 		Characters.sendOwnCharacterData()
 
@@ -114,6 +125,15 @@ func abilityActivate(parameters: Dictionary) -> void:
 	# TODO: RPC should not be done directly the game scene!
 	rpc_id(1, "abilityActServer", parameters)
 
+func itemInteract(itemRes: ItemResource, action: String) -> void:
+	hudNode.itemInteract(itemRes, action)
+
+func itemPickUpAttempt(itemId) -> void:
+	rpc_id(1, "itemPickUpServer", itemId)
+
+func itemDropAttempt(itemId) -> void:
+	rpc_id(1, "itemDropServer", itemId)
+
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
 
@@ -163,6 +183,22 @@ puppet func executeAbility(parameters: Dictionary) -> void:
 		var abilityInstance: Ability = myCharacter.getAbility(abilityName)
 		abilityInstance.execute(parameters)
 
+puppetsync func itemPickUpClient(characterId: int, itemId: int) -> void:
+	var characterRes: CharacterResource = Characters.getCharacterResource(characterId)
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	characterRes.pickUpItem(itemRes)
+	if characterId == get_tree().get_network_unique_id():
+		hudNode.hidePickUpButtons()
+		hudNode.refreshItemButtons()
+
+puppetsync func itemDropClient(characterId: int, itemId: int) -> void:
+	var characterRes: CharacterResource = Characters.getCharacterResource(characterId)
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	characterRes.dropItem(itemRes)
+	if characterId == get_tree().get_network_unique_id():
+		hudNode.refreshItemButtons()
+		hudNode.refreshPickUpButtons()
+
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
 	call_deferred("deferredTeamRoleAssignment", isLobby)
@@ -210,6 +246,26 @@ remotesync func abilityActServer(parameters: Dictionary):
 			rpc_id(abilityPlayer, "executeAbility", parameters)
 			abilityInstance.execute(parameters)
 
+mastersync func itemPickUpServer(itemId: int) -> void:
+	var playerId: int = get_tree().get_rpc_sender_id()
+	var characterRes: CharacterResource = Characters.getCharacterResource(playerId)
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	if characterRes.canPickUpItem(itemRes):
+		rpc("itemPickUpClient", playerId, itemId)
+
+mastersync func itemDropServer(itemId: int) -> void:
+	var playerId: int = get_tree().get_rpc_sender_id()
+	var characterRes: CharacterResource = Characters.getCharacterResource(playerId)
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	if characterRes.canDropItem(itemRes):
+		#TODO: think about whether we should enforce server-side coordinates for the items to be dropped.
+		rpc("itemDropClient", playerId, itemId)
+
 func killCharacterServer(id: int) -> void:
+	var characterRes: CharacterResource = Characters.getCharacterResource(id)
+	for itemRes in characterRes.getItems():
+		itemRes = itemRes as ItemResource
+		if characterRes.canDropItem(itemRes):
+			rpc("itemDropClient", id, itemRes.getId())
 	rpc("killCharacter", id)
 

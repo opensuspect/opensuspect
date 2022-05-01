@@ -25,6 +25,16 @@ _global_script_classes=[ {
 "path": "res://game/maps/chemlab/gun.gd"
 }, {
 "base": "Resource",
+"class": "ItemResource",
+"language": "GDScript",
+"path": "res://resource_classes/item_resource.gd"
+}, {
+"base": "Resource",
+"class": "ItemTemplate",
+"language": "GDScript",
+"path": "res://resource_classes/item_template.gd"
+}, {
+"base": "Resource",
 "class": "TeamsRolesTemplate",
 "language": "GDScript",
 "path": "res://resource_classes/teams_roles_template.gd"
@@ -33,6 +43,8 @@ _global_script_class_icons={
 "Ability": "",
 "CharacterResource": "",
 "GunAbility": "",
+"ItemResource": "",
+"ItemTemplate": "",
 "TeamsRolesTemplate": ""
 }
 
@@ -46,9 +58,11 @@ config/icon="res://icon.png"
 
 [autoload]
 
+Helpers="*res://autoloads/helpers.gd"
 Resources="*res://autoloads/resources.gd"
 Appearance="*res://autoloads/appearance.gd"
 Characters="*res://autoloads/characters.gd"
+Items="*res://autoloads/items.gd"
 Connections="*res://autoloads/connections.gd"
 TransitionHandler="*res://autoloads/transition_handler.gd"
 GameData="*res://autoloads/game_data.gd"
@@ -100,7 +114,9 @@ move_down={
 [layer_names]
 
 2d_physics/layer_1="PlayersCollide"
+2d_physics/layer_2="ItemsCollide"
 2d_physics/layer_9="AbilityRange"
+2d_physics/layer_10="ItemPickup"
 
 [physics]
 

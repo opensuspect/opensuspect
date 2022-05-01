@@ -10,6 +10,10 @@ var colorMapDir: Dictionary = {
 	"Color Maps": "res://game/character/assets/colormaps"
 }
 
+var _itemsInHand: Array = []
+
+onready var handNode: Node2D = $Skeleton/Hip/RightShoulder/RArm1/RArm2/RHand
+
 # Set the list of colormaps from the color map directory
 onready var colorShaders = Resources.list(colorMapDir, extensions)
 
@@ -38,6 +42,21 @@ func applyAppearance(outfitPaths: Dictionary, colors: Dictionary) -> void:
 	if not outfitPaths.empty() and not colors.empty():
 		_applyOutfit(outfitPaths) ## Apply Outfit
 		_applyColors(colors) ## Apply colors
+
+func putItemInHand(newItem: Node2D):
+	if newItem in _itemsInHand:
+		return
+	newItem.position = Vector2(0, 0)
+	_itemsInHand.append(newItem)
+	handNode.add_child(newItem)
+
+func removeItemFromHand(itemNode: Node2D):
+	if not itemNode in _itemsInHand:
+		return
+	var index: int
+	index = _itemsInHand.find(itemNode)
+	_itemsInHand.pop_at(index)
+	handNode.remove_child(itemNode)
 
 # --Private Functions--
 

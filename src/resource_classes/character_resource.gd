@@ -32,6 +32,9 @@ var _alive: bool = true
 # List of special abilities
 var _abilities: Array = []
 
+# List of items in hand
+var _items: Array = []
+
 # the dictionary (?) that stores the tasks assigned to this CharacterResource
 # this is a placeholder, not sure what this will look like because the
 #	task system has not been implemented yet
@@ -155,6 +158,35 @@ func getAbility(abilityName: String) -> Ability:
 		if ability.getName() == abilityName:
 			return ability
 	return null
+
+func canPickUpItem(itemRes) -> bool:
+	if len(_items) > 0:
+		return false
+	return itemRes.canBePickedUp(self)
+
+func pickUpItem(itemRes) -> void:
+	var itemNode: KinematicBody2D = itemRes.getItemNode()
+	if TransitionHandler.gameScene.itemsNode.is_a_parent_of(itemNode):
+		TransitionHandler.gameScene.itemsNode.remove_child(itemNode)
+	_characterNode.skeleton.putItemInHand(itemNode)
+	_items.append(itemRes)
+	itemRes.pickedUp(self)
+
+func getItems() -> Array:
+	return _items.duplicate()
+
+func canDropItem(itemRes) -> bool:
+	if not itemRes in _items:
+		return false
+	return itemRes.canBeDropped(self)
+
+func dropItem(itemRes):
+	var itemNode: KinematicBody2D = itemRes.getItemNode()
+	_characterNode.skeleton.removeItemFromHand(itemNode)
+	_items.pop_at(_items.find(itemRes))
+	itemNode.position = _characterNode.position
+	TransitionHandler.gameScene.itemsNode.add_child(itemNode)
+	itemRes.droppedDown()
 
 # get tasks assigned to this CharacterResource
 func getTasks() -> Dictionary:

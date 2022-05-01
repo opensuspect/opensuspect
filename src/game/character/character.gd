@@ -1,5 +1,6 @@
 extends KinematicBody2D
 
+
 # this script acts as the frontend for the characters/controls the character node
 
 # --Public Variables--
@@ -15,6 +16,7 @@ enum LookDirections {LEFT, RIGHT, UP, DOWN}
 var lookDirection: int = LookDirections.RIGHT
 onready var characterElements = $CharacterElements
 onready var skeleton = $CharacterElements/Skeleton
+onready var itemPickupArea = $CharacterElements/ItemPickup
 onready var camera = $CharacterCamera
 onready var nameLabel = $Name
 onready var abilityPoint = $CharacterElements/Abilities
@@ -26,6 +28,7 @@ var _characterResource: CharacterResource
 
 # --Signals--
 signal player_disconnected(id)
+signal itemInteraction(item, interaction)
 
 # --Public Functions--
 
@@ -221,3 +224,15 @@ func _getLookDirFromVec(vec: Vector2) -> int:
 	if vec.x > 0:
 		newlookDirection = LookDirections.RIGHT
 	return newlookDirection
+
+func _on_ItemPickup_body_entered(body):
+	if mainCharacter:
+		# This pickup area should ONLY interact with items.
+		var itemRes: ItemResource = body.getItemResource()
+		emit_signal("itemInteraction", itemRes, "entered")
+
+func _on_ItemPickup_body_exited(body):
+	if mainCharacter:
+		# This pickup area should ONLY interact with items.
+		var itemRes: ItemResource = body.getItemResource()
+		emit_signal("itemInteraction", itemRes, "exited")

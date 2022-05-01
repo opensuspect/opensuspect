@@ -2,6 +2,15 @@ extends Control
 
 onready var gameStartButton: Button = $GameStart
 onready var abilityBox: HBoxContainer = $GameUI/Abilities
+onready var itemIntBox: HBoxContainer = $GameUI/ItemInteract
+
+var itemPickUpScene: PackedScene = preload("res://game/hud/item_pick_up_button.tscn")
+var itemDropScene: PackedScene = preload("res://game/hud/item_drop_button.tscn")
+
+var interactable: Array = []
+var interactUi: Array = []
+var pickedUp: Array = []
+var dropUi: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -9,6 +18,7 @@ func _ready():
 		showStartButton()
 	else:
 		showStartButton(false)
+	TransitionHandler.gameScene.setHudNode(self)
 	TransitionHandler.gameScene.connect("abilityAssigned", self, "addAbility")
 	TransitionHandler.gameScene.connect("clearAbilities", self, "clearAbilities")
 
@@ -36,3 +46,57 @@ func addAbility(buttontext: String, abilityResource: Ability) -> void:
 func clearAbilities() -> void:
 	for element in abilityBox.get_children():
 		element.queue_free()
+
+func addItemToPickUp(itemRes: ItemResource) -> void:
+	var newItemIcon: Control = itemPickUpScene.instance()
+	newItemIcon.setItemResource(itemRes)
+	if Characters.getMyCharacterResource().canPickUpItem(itemRes):
+		itemIntBox.add_child(newItemIcon)
+	interactable.append(itemRes)
+	interactUi.append(newItemIcon)
+
+func removePickUpItem(itemRes: ItemResource) -> void:
+	var index: int
+	index = interactable.find(itemRes)
+	interactUi[index].queue_free()
+	interactUi.pop_at(index)
+	interactable.pop_at(index)
+
+func hidePickUpButtons() -> void:
+	for interactIconInstance in interactUi:
+		itemIntBox.remove_child(interactIconInstance)
+
+func refreshPickUpButtons() -> void:
+	for buttonInstance in interactUi:
+		if itemIntBox.is_a_parent_of(buttonInstance):
+			continue
+		itemIntBox.add_child(buttonInstance)
+
+func removeItemButton(itemRes: ItemResource) -> void:
+	var index: int
+	index = pickedUp.find(itemRes)
+	dropUi[index].queue_free()
+	dropUi.pop_at(index)
+	pickedUp.pop_at(index)
+
+func refreshItemButtons() -> void:
+	var charaterRes: CharacterResource = Characters.getMyCharacterResource()
+	var newItemIcon: Control
+	for itemRes in charaterRes.getItems():
+		if itemRes in pickedUp:
+			continue
+		newItemIcon = itemDropScene.instance()
+		newItemIcon.setItemResource(itemRes)
+		itemIntBox.add_child(newItemIcon)
+		pickedUp.append(itemRes)
+		dropUi.append(newItemIcon)
+	for droppable in pickedUp:
+		if droppable in charaterRes.getItems():
+			continue
+		removeItemButton(droppable)
+
+func itemInteract(itemRes: ItemResource, action: String) -> void:
+	if action == "entered":
+		addItemToPickUp(itemRes)
+	if action == "exited":
+		removePickUpItem(itemRes)
