@@ -16,7 +16,7 @@ enum LookDirections {LEFT, RIGHT, UP, DOWN}
 var lookDirection: int = LookDirections.RIGHT
 onready var characterElements = $CharacterElements
 onready var skeleton = $CharacterElements/Skeleton
-onready var itemPickupArea = $CharacterElements/ItemPickup
+onready var interactionArea = $CharacterElements/Interaction
 onready var camera = $CharacterCamera
 onready var nameLabel = $Name
 onready var abilityPoint = $CharacterElements/Abilities
@@ -173,7 +173,13 @@ func setLookDirection(newLookDirection: int) -> void:
 		characterElements.scale.x = xScale
 
 func die() -> void:
-	rotate(3.1416/2)
+	rotation_degrees = 90
+
+func becomeGhost() -> void:
+	rotation_degrees = 0
+	collision_layer = 0
+	collision_mask = 0
+	interactionArea.collision_mask = 0
 
 # --Private Functions--
 
@@ -185,7 +191,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	var amountMoved: Vector2
 	## If this character belongs to this client
-	if networkId == get_tree().get_network_unique_id() and _characterResource.isAlive():
+	if networkId == get_tree().get_network_unique_id() and _characterResource.canMove(self):
 		## Move character
 		amountMoved = _move(_delta)
 

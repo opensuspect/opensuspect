@@ -92,7 +92,7 @@ func canBePickedUp(characterRes: CharacterResource) -> bool:
 	var characterNode: KinematicBody2D = characterRes.getCharacterNode()
 	if _holder != null:
 		return false
-	if not _itemNode in characterNode.itemPickupArea.get_overlapping_bodies():
+	if not _itemNode in characterNode.interactionArea.get_overlapping_bodies():
 		return false
 	return true
 

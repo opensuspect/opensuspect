@@ -12,9 +12,9 @@ var hudNode: Control = null
 onready var mapNode: Node2D = $Map
 onready var characterNode: Node2D = $Characters
 onready var itemsNode: Node2D = $Items
+onready var ghostNode: Node2D = $Ghosts
 onready var roleScreenTimeout: Timer = $RoleScreenTimeout
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-onready var gamestartButton: Button = $CanvasLayer/GameStart
 
 signal teamsRolesAssigned
 signal abilityAssigned
@@ -100,22 +100,11 @@ func removeCharacter(networkId: int) -> void:
 	Characters.removeCharacterNode(networkId)
 	Characters.removeCharacterResource(networkId)
 
-func showStartButton(buttonShow: bool = true) -> void:
-	## Switch visibility of game start button
-	gamestartButton.visible = buttonShow
-
 func _on_GameStart_pressed() -> void:
 	if not Connections.isServer():
 		assert(false, "Unreachable")
 	## Change the map
 	TransitionHandler.changeMap()
-	## Change button text
-	if TransitionHandler.getCurrentState() == TransitionHandler.States.LOBBY:
-		gamestartButton.text = "Start game"
-	elif TransitionHandler.getCurrentState() == TransitionHandler.States.MAP:
-		gamestartButton.text = "Back to lobby"
-	else:
-		assert(false, "Unreachable")
 
 func setCharacterData(id: int, characterData: Dictionary) -> void:
 	var character: CharacterResource = Characters.getCharacterResource(id)
@@ -281,6 +270,10 @@ mastersync func itemActivateServer(itemId: int, abilityName: String, properties:
 
 func killCharacterServer(id: int) -> void:
 	var characterRes: CharacterResource = Characters.getCharacterResource(id)
+	if not characterRes.canBeKilled():
+		return
+	# TODO: is this something that the server needs to do one by one for every item
+	# held by the killed character?
 	for itemRes in characterRes.getItems():
 		itemRes = itemRes as ItemResource
 		if characterRes.canDropItem(itemRes):

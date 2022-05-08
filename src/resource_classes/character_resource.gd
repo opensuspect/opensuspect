@@ -28,6 +28,7 @@ var _nameColor: Color
 
 # Is the character alive or not
 var _alive: bool = true
+var _ghost: bool = false
 
 # List of special abilities
 var _abilities: Array = []
@@ -63,12 +64,37 @@ func spawn(coords: Vector2):
 	_characterNode.spawn()
 	setPosition(coords)
 
-func die():
+func canBeKilled() -> bool:
+	if not isAlive():
+		return false
+	return true
+
+func die() -> void:
 	_characterNode.die()
 	_alive = false
+	if mainCharacter:
+		becomeGhost()
+
+func becomeGhost() -> void:
+	var deadBody: KinematicBody2D = _characterNode.duplicate(7)
+	TransitionHandler.gameScene.characterNode.add_child(deadBody)
+	_characterNode.get_parent().remove_child(_characterNode)
+	TransitionHandler.gameScene.ghostNode.add_child(_characterNode)
+	_characterNode.becomeGhost()
+	resetAbilities()
+	_ghost = true
 
 func isAlive() -> bool:
 	return _alive
+
+func canMove(node: KinematicBody2D) -> bool:
+	if node != _characterNode:
+		return false
+	if _alive:
+		return true
+	if _ghost:
+		return true
+	return false
 
 # function called when character disconnects from server
 func disconnected():
@@ -99,6 +125,7 @@ func reset() -> void:
 	_role = ""
 	_nameColor = Color.white
 	_alive = true
+	_ghost = false
 	_characterNode.reset()
 	var items: Array = _items.duplicate()
 	for itemRes in items:

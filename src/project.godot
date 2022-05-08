@@ -32,7 +32,7 @@ _global_script_classes=[ {
 "base": "Ability",
 "class": "GunAbility",
 "language": "GDScript",
-"path": "res://game/maps/chemlab/gun.gd"
+"path": "res://game/maps/chemlab/gun_resource.gd"
 }, {
 "base": "Resource",
 "class": "ItemResource",
