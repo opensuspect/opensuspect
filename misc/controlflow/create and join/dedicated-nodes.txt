@@ -1,4 +1,9 @@
-server_mainmenu_joinEvent:f3 -> server_mainmenu_createDedicated:begin;
-server_mainmenu_createDedicated:f2 -> server_connections_createDedicated:begin;
-server_connections_createDedicated:f2 -> server_transition_handler_enterLobby:begin;
-server_transition_handler_enterLobby:f1 -> server_game_loadMap:begin;
+server_main_menu_joinEvent:f3 -> server_main_menu_createDedicated:begin;
+server_main_menu_createDedicated:f2 -> server_connections_createDedicated:begin;
+server_connections_createDedicated:f2 -> server_transition_handler_loadGameScene:begin;
+server_transition_handler_loadGameScene:f0 -> server_game__ready:begin [style=dashed];
+server_game__ready -> server_game_loadMap [style=invis];
+server_game__ready:f0 -> server_transition_handler_gameLoaded:begin;
+server_transition_handler_gameLoaded:f2 -> server_transition_handler_enterLobby:begin;
+server_transition_handler_enterLobby:f0 -> server_game_loadMap:begin;
+server_game_loadMap:f3 -> server_game_spawnAllCharacters:begin;

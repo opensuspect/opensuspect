@@ -20,9 +20,20 @@ var mainCharacter: bool = false
 # the character node corresponding to this CharacterResource
 var _characterNode: KinematicBody2D
 
-# PLACEHOLDER variable storing the role of this character
-# not sure what type this variable will be, string is PLACEHOLDER
+# Names of the apparent team and role of the character. This might not be the
+# "Real" role (that is stored on the server)
+var _team: String
 var _role: String
+var _nameColor: Color
+
+# Is the character alive or not
+var _alive: bool = true
+
+# List of special abilities
+var _abilities: Array = []
+
+# List of items in hand
+var _items: Array = []
 
 # the dictionary (?) that stores the tasks assigned to this CharacterResource
 # this is a placeholder, not sure what this will look like because the
@@ -52,17 +63,12 @@ func spawn(coords: Vector2):
 	_characterNode.spawn()
 	setPosition(coords)
 
-# PLACEHOLDER function for killing characters
-func kill():
-	# assert false because killing is not implemented yet
-	assert(false, "Not implemented yet")
+func die():
+	_characterNode.die()
+	_alive = false
 
-# function called to reset the character resource to default settings
-# 	probably going to be used mostly between rounds when roles and stuff are
-# 	changing
-func reset():
-	# assert false because resetting is not implemented yet
-	assert(false, "Not implemented yet")
+func isAlive() -> bool:
+	return _alive
 
 # function called when character disconnects from server
 func disconnected():
@@ -84,19 +90,102 @@ func setCharacterNode(newCharacterNode: Node) -> void:
 		_characterNode.setMainCharacter()
 		mainCharacter = true
 
-# get the role of this character
-# string is PLACEHOLDER
+# function called to reset the character resource to default settings
+# 	probably going to be used mostly between rounds when roles and stuff are
+# 	changing
+func reset() -> void:
+	resetAbilities()
+	_team = ""
+	_role = ""
+	_nameColor = Color.white
+	_alive = true
+	_characterNode.reset()
+	var items: Array = _items.duplicate()
+	for itemRes in items:
+		dropItem(itemRes)
+
+func getCharacterName() -> String:
+	return characterName
+
+func setCharacterName(newName: String) -> void:
+	characterName = newName
+	_characterNode.setCharacterName(characterName)
+
+# get the Team of this chacter
+func getTeam() -> String:
+	return _team
+
+# set the role of this character
+func setTeam(newTeam: String) -> void:
+	_team = newTeam
+
+# get the role of this chacter
 func getRole() -> String:
-	# assert false because roles aren't implemented yet
-	assert(false, "Not implemented yet")
 	return _role
 
 # set the role of this character
-# string return type is PLACEHOLDER
 func setRole(newRole: String) -> void:
-	# assert false because roles aren't implemented yet
-	assert(false, "Not implemented yet")
 	_role = newRole
+
+# set the color of the name for the character
+func setNameColor(newColor: Color) -> void:
+	_characterNode.setNameColor(newColor)
+	_nameColor = newColor
+
+func getNameColor() -> Color:
+	return _nameColor
+
+func addAbility(ability: Ability) -> void:
+	_abilities.append(ability)
+	ability.registerOwner(self)
+
+func resetAbilities() -> void:
+	_abilities = []
+	_characterNode.clearAbilities()
+
+func getAbilities() -> Array:
+	return _abilities
+
+func isAbility(abilityName: String) -> bool:
+	for ability in _abilities:
+		if ability.getName() == abilityName:
+			return true
+	return false
+
+func getAbility(abilityName: String) -> Ability:
+	for ability in _abilities:
+		if ability.getName() == abilityName:
+			return ability
+	return null
+
+func canPickUpItem(itemRes) -> bool:
+	if len(_items) > 0:
+		return false
+	return itemRes.canBePickedUp(self)
+
+func pickUpItem(itemRes) -> void:
+	var itemNode: KinematicBody2D = itemRes.getItemNode()
+	if TransitionHandler.gameScene.itemsNode.is_a_parent_of(itemNode):
+		TransitionHandler.gameScene.itemsNode.remove_child(itemNode)
+	_characterNode.skeleton.putItemInHand(itemNode)
+	_items.append(itemRes)
+	itemRes.pickedUp(self)
+
+func getItems() -> Array:
+	return _items.duplicate()
+
+func canDropItem(itemRes) -> bool:
+	if not itemRes in _items:
+		return false
+	return itemRes.canBeDropped(self)
+
+func dropItem(itemRes):
+	var itemNode: KinematicBody2D = itemRes.getItemNode()
+	_characterNode.skeleton.removeItemFromHand(itemNode)
+	_items.pop_at(_items.find(itemRes))
+	itemNode.position = _characterNode.position
+	TransitionHandler.gameScene.itemsNode.add_child(itemNode)
+	itemRes.droppedDown()
 
 # get tasks assigned to this CharacterResource
 func getTasks() -> Dictionary:
@@ -119,6 +208,7 @@ func getColors() -> Dictionary:
 
 # set the outfit information of this character
 func setAppearance(newOutfit: Dictionary, newColors: Dictionary) -> void:
+	## Set appearance (deferred)
 	_outfit = newOutfit
 	_colors = newColors
 	_characterNode.call_deferred("setAppearance", _outfit, _colors)

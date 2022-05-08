@@ -11,7 +11,7 @@ var connectionType: int = ConnectionTypes.LOCAL setget toss, getConnectionType
 var myName: String = "" setget toss, getMyName
 var serverName: String = "" setget toss, getServerName
 const MAX_PLAYERS: int = 20
-var listConnections: Dictionary = {}
+var listConnections: Dictionary = {} # Only lists playing connections, dedicated server is not here
 
 
 # Called when the node enters the scene tree for the first time.
@@ -71,7 +71,7 @@ func connectedOK() -> void:
 	print_debug("Connected")
 	## Send own data to server
 	rpc_id(1, "receiveNewPlayerData", myName)
-	## Enter the Lobby
+	## Load the game scene
 	TransitionHandler.loadGameScene()
 
 func connectedFail() -> void:
@@ -133,7 +133,7 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	## Save data in globals
 	connectionType = ConnectionTypes.DEDICATED_SERVER
 	serverName = srvName
-	## Enter the Lobby
+	## Load the game scene
 	TransitionHandler.loadGameScene()
 
 # Once the newly joined player sent us their data, that's when we send them all the data
