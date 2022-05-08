@@ -82,8 +82,7 @@ func getItemResource(itemId) -> ItemResource:
 
 func removeItem(itemId: int) -> void:
 	var itemNode: KinematicBody2D
-	itemNode = _items[itemId].getItemNode()
-	itemNode.queue_free()
+	_items[itemId].remove()
 	_items.erase(itemId)
 
 func clearItems() -> void:

@@ -49,7 +49,9 @@ func loadMap(mapPath: String) -> void:
 	Characters.requestCharacterData()
 	## Remove abilities from characters
 	for characterResource in Characters.getCharacterResources().values():
-		characterResource.resetCharacter()
+		characterResource.reset()
+	if hudNode != null:
+		hudNode.refreshItemButtons()
 
 func addCharacter(networkId: int) -> void:
 	## Create character resource
@@ -227,6 +229,7 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 			#print_debug(character, ": ", ability.getName())
 			# TODO: RPC should not be done directly in the game scene
 			rpc_id(character, "receiveAbility", ability.getName())
+	# TODO: I'm not sure this is the appropriate place to reset the HUD for the abilities.
 	emit_signal("clearAbilities")
 	var rolesToShow: Array = []
 	if Connections.isClientServer():

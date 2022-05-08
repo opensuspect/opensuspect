@@ -129,3 +129,9 @@ func attemptActivate(abilityName: String) -> void:
 # Placeholder function for inherited items which have abilities
 func activate(abilityName: String, properties: Dictionary) -> void:
 	pass
+
+# This function should be called whenever the item is removed from the scene.
+func remove():
+	if _holder != null:
+		_holder.dropItem(self)
+	_itemNode.queue_free()
