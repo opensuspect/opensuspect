@@ -3,14 +3,17 @@ extends Control
 onready var gameStartButton: Button = $GameStart
 onready var abilityBox: HBoxContainer = $GameUI/Abilities
 onready var itemIntBox: HBoxContainer = $GameUI/ItemInteract
+onready var itemUseBox: HBoxContainer = $GameUI/ItemUse
 
 var itemPickUpScene: PackedScene = preload("res://game/hud/item_pick_up_button.tscn")
 var itemDropScene: PackedScene = preload("res://game/hud/item_drop_button.tscn")
+var itemAbilityScene: PackedScene = preload("res://game/hud/item_ability_button.tscn")
 
 var interactable: Array = []
 var interactUi: Array = []
 var pickedUp: Array = []
 var dropUi: Array = []
+var itemUse: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -72,28 +75,31 @@ func refreshPickUpButtons() -> void:
 			continue
 		itemIntBox.add_child(buttonInstance)
 
-func removeItemButton(itemRes: ItemResource) -> void:
-	var index: int
-	index = pickedUp.find(itemRes)
-	dropUi[index].queue_free()
-	dropUi.pop_at(index)
-	pickedUp.pop_at(index)
-
 func refreshItemButtons() -> void:
 	var charaterRes: CharacterResource = Characters.getMyCharacterResource()
 	var newItemIcon: Control
+	for button in dropUi:
+		button.queue_free()
+	for buttonList in itemUse:
+		for button in buttonList:
+			button.queue_free()
+	dropUi = []
+	pickedUp = []
+	itemUse = []
 	for itemRes in charaterRes.getItems():
-		if itemRes in pickedUp:
-			continue
 		newItemIcon = itemDropScene.instance()
 		newItemIcon.setItemResource(itemRes)
 		itemIntBox.add_child(newItemIcon)
 		pickedUp.append(itemRes)
 		dropUi.append(newItemIcon)
-	for droppable in pickedUp:
-		if droppable in charaterRes.getItems():
-			continue
-		removeItemButton(droppable)
+		var itemAbilityButtons: Array = []
+		for abilityName in itemRes.itemAbilities():
+			var newAbilityButton: Control
+			newAbilityButton = itemAbilityScene.instance()
+			newAbilityButton.setupButton(itemRes, abilityName)
+			itemUseBox.add_child(newAbilityButton)
+			itemAbilityButtons.append(newAbilityButton)
+		itemUse.append(itemAbilityButtons)
 
 func itemInteract(itemRes: ItemResource, action: String) -> void:
 	if action == "entered":

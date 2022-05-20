@@ -59,11 +59,6 @@ extends Node
 # 	they are somewhat clunky
 
 # --Public Variables--
-# file path to item node scene
-const ITEM_NODE_SCENE_PATH: String = "res://game/items/item_node/item_node.tscn"
-# scene of the item node
-var itemNodeScene: PackedScene = preload(ITEM_NODE_SCENE_PATH)
-
 const ITEM_TEMPLATE_FOLDER_PATH: String = "res://game/items/"
 
 # --Private Variables--
@@ -87,8 +82,7 @@ func getItemResource(itemId) -> ItemResource:
 
 func removeItem(itemId: int) -> void:
 	var itemNode: KinematicBody2D
-	itemNode = _items[itemId].getItemNode()
-	itemNode.queue_free()
+	_items[itemId].remove()
 	_items.erase(itemId)
 
 func clearItems() -> void:
@@ -97,28 +91,28 @@ func clearItems() -> void:
 		removeItem(itemId)
 
 # --Server Functions--
-func createItemServer(itemName: String, itemPosition: Vector2):
+func createItemServer(itemName: String, itemPosition: Vector2, properties: Dictionary = {}):
 	var newId: int = -1
 	while newId == -1 or newId in _items.keys():
 		newId = randi()
-	rpc("createItemClient", itemName, itemPosition, newId)
+	rpc("createItemClient", itemName, itemPosition, newId, properties)
 
 # --Client functions--
-puppetsync func createItemClient(itemName: String, itemPosition: Vector2, newId: int):
-	_createItem(itemName, itemPosition, newId)
+puppetsync func createItemClient(itemName: String, itemPosition: Vector2, newId: int, properties: Dictionary):
+	_createItem(itemName, itemPosition, newId, properties)
 
 # --Private Functions--
 # creates a new ItemResource from this template
-func _createItem(itemName: String, itemPosition: Vector2, newId: int):
+func _createItem(itemName: String, itemPosition: Vector2, newId: int, properties: Dictionary):
 		# the item template to use when creating this item
 	var itemTemplate: ItemTemplate = getItemTemplate(itemName)
 	# initialize a new ItemResource
-	var itemResource: ItemResource = _createItemResource()
+	var itemResource: ItemResource = itemTemplate.createItemResource(properties)
 	
 	itemResource.itemId = newId
 	_items[newId] = itemResource
 	# initialize a new ItemNode
-	var itemNode: Node2D = _createItemNode()
+	var itemNode: KinematicBody2D = itemTemplate.createItemNode()
 	itemNode.position = itemPosition
 	TransitionHandler.gameScene.itemsNode.add_child(itemNode)
 	
@@ -128,20 +122,6 @@ func _createItem(itemName: String, itemPosition: Vector2, newId: int):
 	# assign item nodes and resources to each other
 	itemResource.setItemNode(itemNode)
 	itemNode.setItemResource(itemResource)
-
-func _createItemResource() -> ItemResource:
-	# initialize a new ItemResource
-	var itemResource: ItemResource = ItemResource.new()
-	# placeholder space to put whatever we need to do to initialize a general item resource
-	
-	return itemResource
-
-func _createItemNode() -> Node:
-	var itemNode: Node = itemNodeScene.instance()
-	
-	# placeholder space to put whatever we need to do to initialize a general item node
-	
-	return itemNode
 
 # loads all item templates and returns a dictionary of them keyed by itemName
 func _instanceItemTemplates() -> Dictionary:

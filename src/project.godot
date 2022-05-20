@@ -19,6 +19,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://resource_classes/character_resource.gd"
 }, {
+"base": "ItemResource",
+"class": "FlaskResource",
+"language": "GDScript",
+"path": "res://game/items/flask_resource.gd"
+}, {
+"base": "ItemTemplate",
+"class": "FlaskTemplate",
+"language": "GDScript",
+"path": "res://game/items/flask_template.gd"
+}, {
 "base": "Ability",
 "class": "GunAbility",
 "language": "GDScript",
@@ -42,6 +52,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Ability": "",
 "CharacterResource": "",
+"FlaskResource": "",
+"FlaskTemplate": "",
 "GunAbility": "",
 "ItemResource": "",
 "ItemTemplate": "",

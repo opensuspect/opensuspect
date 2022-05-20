@@ -70,13 +70,6 @@ func die():
 func isAlive() -> bool:
 	return _alive
 
-# function called to reset the character resource to default settings
-# 	probably going to be used mostly between rounds when roles and stuff are
-# 	changing
-func reset():
-	# assert false because resetting is not implemented yet
-	assert(false, "Not implemented yet")
-
 # function called when character disconnects from server
 func disconnected():
 	_characterNode.disconnected()
@@ -97,13 +90,19 @@ func setCharacterNode(newCharacterNode: Node) -> void:
 		_characterNode.setMainCharacter()
 		mainCharacter = true
 
-func resetCharacter() -> void:
+# function called to reset the character resource to default settings
+# 	probably going to be used mostly between rounds when roles and stuff are
+# 	changing
+func reset() -> void:
 	resetAbilities()
 	_team = ""
 	_role = ""
 	_nameColor = Color.white
 	_alive = true
 	_characterNode.reset()
+	var items: Array = _items.duplicate()
+	for itemRes in items:
+		dropItem(itemRes)
 
 func getCharacterName() -> String:
 	return characterName

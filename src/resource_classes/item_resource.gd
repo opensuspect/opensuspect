@@ -14,18 +14,21 @@ var textureScale: Vector2 = Vector2(1, 1)
 var hudTexture: Texture = null
 var hudTextureScale: Vector2 = Vector2(1, 1)
 # the texture, scale and rotatation used when picked up
-export var pickUpTexture: Texture = null
-export var pickUpTextureScale: Vector2 = Vector2(1, 1)
-export var pickUpRotation: float = 0
+var pickUpTexture: Texture = null
+var pickUpTextureScale: Vector2 = Vector2(1, 1)
+var pickUpRotation: float = 0
 
 # --Private Variables--
 # the item node corresponding to this resource
 var _itemNode: Node
 # the player resource holding this item
 var _holder: CharacterResource = null
-# whether or not this item is dropped
-var _dropped: bool
-
+# an array with the names of the abilities assigned to this item
+# (for the base item resource, there is no special ability though, these
+# functions are strictly placeholders for items inheriting this resource)
+var _abilities: Array = []
+# an array with the icons (textures) for the abilities
+var _abilityIcons: Dictionary = {}
 
 # --Public Functions--
 
@@ -45,10 +48,22 @@ func setId(newId: int) -> void:
 	itemId = newId
 
 func getTexture() -> Texture:
-	return texture
+	if _holder == null:
+		return texture
+	else:
+		return pickUpTexture
 
 func getTextureScale() -> Vector2:
-	return textureScale
+	if _holder == null:
+		return textureScale
+	else:
+		return pickUpTextureScale
+
+func getRotationDegrees() -> float:
+	if _holder == null:
+		return 0.0
+	else:
+		return pickUpRotation
 
 func getHudTexture() -> Texture:
 	return hudTexture
@@ -71,7 +86,7 @@ func getHolder() -> CharacterResource:
 
 # returns whether or not the item is dropped
 func isDropped() -> bool:
-	return _dropped
+	return _holder == null
 
 func canBePickedUp(characterRes: CharacterResource) -> bool:
 	var characterNode: KinematicBody2D = characterRes.getCharacterNode()
@@ -89,11 +104,34 @@ func attemptPickUp() -> void:
 
 func pickedUp(characterRes: CharacterResource) -> void:
 	_holder = characterRes
-	_itemNode.changeLook(pickUpTexture, pickUpTextureScale, pickUpRotation)
+	_itemNode.setSprite()
 
 func attemptDrop() -> void:
 	TransitionHandler.gameScene.itemDropAttempt(itemId)
 
 func droppedDown() -> void:
 	_holder = null
-	_itemNode.changeLook(texture, textureScale, 0)
+	_itemNode.setSprite()
+
+func itemAbilities() -> Array:
+	return _abilities
+
+func abilityActivateIcon(abilityName: String) -> Texture:
+	return _abilityIcons[abilityName]
+
+func canBeActivated(abilityName: String, properties: Dictionary) -> bool:
+	return false
+
+# Placeholder function for inherited items which have abilities
+func attemptActivate(abilityName: String) -> void:
+	pass
+
+# Placeholder function for inherited items which have abilities
+func activate(abilityName: String, properties: Dictionary) -> void:
+	pass
+
+# This function should be called whenever the item is removed from the scene.
+func remove():
+	if _holder != null:
+		_holder.dropItem(self)
+	_itemNode.queue_free()
