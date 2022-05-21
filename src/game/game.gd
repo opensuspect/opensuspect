@@ -10,9 +10,10 @@ var visibleRoles: Dictionary = {}
 
 var hudNode: Control = null
 onready var mapNode: Node2D = $Map
-onready var characterNode: Node2D = $Characters
+onready var charactersNode: Node2D = $Characters
+onready var corpsesNode: Node2D = $Corpses
 onready var itemsNode: Node2D = $Items
-onready var ghostNode: Node2D = $Ghosts
+onready var ghostsNode: Node2D = $Ghosts
 onready var roleScreenTimeout: Timer = $RoleScreenTimeout
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -55,6 +56,9 @@ func loadMap(mapPath: String) -> void:
 		child.queue_free()
 	## Removove items from the map
 	Items.clearItems()
+	## Remove all corpses from the map
+	for corpse in corpsesNode.get_children():
+		corpse.queue_free()
 	## Load map and place it on scene tree
 	actualMap = ResourceLoader.load(mapPath).instance()
 	mapNode.add_child(actualMap)
@@ -63,13 +67,13 @@ func loadMap(mapPath: String) -> void:
 	spawnList = []
 	for posNode in spawnPosNode.get_children():
 		spawnList.append(posNode.position)
+	## Remove abilities from characters
+	for characterResource in Characters.getCharacterResources().values():
+		characterResource.reset()
 	## Spawn characters at spawn points
 	spawnAllCharacters()
 	## Request server for character data
 	Characters.requestCharacterData()
-	## Remove abilities from characters
-	for characterResource in Characters.getCharacterResources().values():
-		characterResource.reset()
 	if hudNode != null:
 		hudNode.refreshItemButtons()
 
@@ -81,7 +85,7 @@ func addCharacter(networkId: int) -> void:
 	var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()
 	## Spawn the character
 	spawnCharacter(newCharacterResource)
-	characterNode.add_child(newCharacter) ## Add node to scene
+	charactersNode.add_child(newCharacter) ## Add node to scene
 	var myId: int = get_tree().get_network_unique_id()
 	## If own character is added
 	if networkId == myId:

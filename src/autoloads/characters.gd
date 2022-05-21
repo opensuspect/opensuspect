@@ -42,18 +42,23 @@ var _timeSincePositionSync: float = 0.0
 # returns the character resource because I think it would be more useful than
 # 	the character node - TheSecondReal0
 func createCharacter(networkId: int) -> CharacterResource:
-	## Create character node and resource
-	var characterNode: Node = _createCharacterNode(networkId)
+	## Create character resource
 	var characterResource: CharacterResource = _createCharacterResource(networkId)
-	
 	## Assign character node to resource
-	characterResource.setCharacterNode(characterNode)
-	
+	characterResource.createCharacterNode()
 	## Register character node and resource
 	_registerCharacterResource(networkId, characterResource)
-	
 	## Return character resource
 	return characterResource
+
+# create a character node, this function is used when creating a new character
+func createCharacterNode(networkId: int = -1) -> Node:
+	## instance character scene
+	var characterNode: Node = characterScene.instance()
+	# set its network id
+	characterNode.networkId = networkId
+	# here is where we would set its player name, but that is not implemented yet
+	return characterNode
 
 # get character node for the input network id
 func getCharacterNode(id: int) -> Node:
@@ -101,15 +106,6 @@ func getCharacterKeys() -> Array:
 	return _characterResources.keys()
 
 # --Private Functions--
-
-# create a character node, this function is used when creating a new character
-func _createCharacterNode(networkId: int = -1) -> Node:
-	## instance character scene
-	var characterNode: Node = characterScene.instance()
-	# set its network id
-	characterNode.networkId = networkId
-	# here is where we would set its player name, but that is not implemented yet
-	return characterNode
 
 # create a character resource, this function is used when creating a new character
 func _createCharacterResource(networkId: int = -1) -> CharacterResource:

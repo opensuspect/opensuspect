@@ -18,7 +18,9 @@ var mainCharacter: bool = false
 # --Private Variables--
 
 # the character node corresponding to this CharacterResource
-var _characterNode: KinematicBody2D
+var _characterNode: KinematicBody2D = null
+var _ghostNode: KinematicBody2D = null
+var _corpseNode: KinematicBody2D = null
 
 # Names of the apparent team and role of the character. This might not be the
 # "Real" role (that is stored on the server)
@@ -73,18 +75,27 @@ func canBeKilled() -> bool:
 	return true
 
 func die() -> void:
+	var gameScene: YSort = TransitionHandler.gameScene
 	_characterNode.die()
-	_alive = false
-	if mainCharacter:
-		becomeGhost()
-
-func becomeGhost() -> void:
-	var deadBody: KinematicBody2D = _characterNode.duplicate(7)
-	TransitionHandler.gameScene.characterNode.add_child(deadBody)
-	_characterNode.get_parent().remove_child(_characterNode)
-	TransitionHandler.gameScene.ghostNode.add_child(_characterNode)
-	_characterNode.becomeGhost()
 	resetAbilities()
+	_alive = false
+	_corpseNode = _characterNode
+	_characterNode = null
+	gameScene.charactersNode.remove_child(_corpseNode)
+	gameScene.corpsesNode.add_child(_corpseNode)
+	if mainCharacter:
+		becomeGhost(_corpseNode.getPosition())
+
+func becomeGhost(ghostPos: Vector2) -> void:
+	_ghostNode = ResourceLoader.load("res://game/character/ghost.tscn").instance()
+	_ghostNode.setNetworkId(networkId)
+	_ghostNode.setCharacterName(characterName)
+	if mainCharacter:
+		_ghostNode.setMainCharacter()
+	_ghostNode.setCharacterResource(self)
+	_ghostNode.setPosition(ghostPos)
+	_ghostNode.call_deferred("setAppearance", _outfit, _colors)
+	TransitionHandler.gameScene.ghostsNode.add_child(_ghostNode)
 	_ghost = true
 
 func isAlive() -> bool:
@@ -101,15 +112,19 @@ func canMove(node: KinematicBody2D) -> bool:
 
 # function called when character disconnects from server
 func disconnected():
-	_characterNode.disconnected()
-	_characterNode.queue_free()
+	if _characterNode != null:
+		_characterNode.disconnected()
+		_characterNode.queue_free()
+	if _ghostNode != null:
+		_ghostNode.queue_free()
 
 # get the character node that corresponds to this CharacterResource
 func getCharacterNode() -> Node:
 	return _characterNode
 
 # set the character node that corresponds to this CharacterResource
-func setCharacterNode(newCharacterNode: Node) -> void:
+func createCharacterNode() -> void:
+	var newCharacterNode: KinematicBody2D = Characters.createCharacterNode(networkId)
 	# if there is already a character node assigned to this resource
 	if _characterNode != null:
 		printerr("Assigning a new character node to a CharacterResource that already has one")
@@ -130,7 +145,16 @@ func reset() -> void:
 	_nameColor = Color.white
 	_alive = true
 	_ghost = false
-	_characterNode.reset()
+	if _characterNode != null:
+		_characterNode.reset()
+	else:
+		createCharacterNode()
+	if _ghostNode != null:
+		_ghostNode.queue_free()
+		_ghostNode = null
+	if _corpseNode != null:
+		_corpseNode.queue_free()
+		_corpseNode = null
 	var items: Array = _items.duplicate()
 	for itemRes in items:
 		dropItem(itemRes)
@@ -267,12 +291,19 @@ func setLookDirection(newLookDirection: int) -> void:
 # get the position of the character
 func getPosition() -> Vector2:
 	## Get node position
-	return _characterNode.getPosition()
+	if _characterNode != null:
+		return _characterNode.getPosition()
+	if _ghostNode != null:
+		return _ghostNode.position
+	return _corpseNode.position
 
 # set the position of the character
 func setPosition(newPos: Vector2) -> void:
 	## Set node position
-	_characterNode.setPosition(newPos)
+	if _characterNode != null:
+		_characterNode.setPosition(newPos)
+	if _ghostNode != null:
+		_ghostNode.setPosition(newPos)
 
 # get the global position of the character
 func getGlobalPosition() -> Vector2:
@@ -283,7 +314,11 @@ func setGlobalPosition(newPos: Vector2):
 	_characterNode.setPosition(newPos)
 
 func move(delta: float, movementVec: Vector2) -> Vector2:
-	return _characterNode._move(delta, movementVec)
+	if _characterNode != null:
+		return _characterNode._move(delta, movementVec)
+	elif _ghostNode != null:
+		return _ghostNode._move(delta, movementVec)
+	return Vector2(0, 0)
 
 # --Private Functions--
 

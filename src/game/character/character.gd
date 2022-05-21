@@ -165,12 +165,6 @@ func setLookDirection(newLookDirection: int) -> void:
 func die() -> void:
 	rotation_degrees = 90
 
-func becomeGhost() -> void:
-	rotation_degrees = 0
-	collision_layer = 0
-	collision_mask = 0
-	interactionArea.collision_mask = 0
-
 # --Private Functions--
 
 func _ready() -> void:
