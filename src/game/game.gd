@@ -24,6 +24,26 @@ func _ready() -> void:
 	## Game scene loaded
 	TransitionHandler.gameLoaded(self)
 
+func _process(delta: float) -> void:
+	var myCharacterRes: CharacterResource
+	myCharacterRes = Characters.getMyCharacterResource()
+	if myCharacterRes == null:
+		return
+	## Get movement vector based on keypress (not normalized)
+	var movementVec: Vector2 = getMovementInput(false)
+	var amountMoved: Vector2
+	amountMoved = myCharacterRes.move(delta, movementVec)
+
+# get the movement vector by looking at which keys are pressed
+func getMovementInput(normalized: bool = true) -> Vector2:
+	var vector: Vector2 = Vector2()
+	# get the movement vector using the move_left, move_right, move_up, 
+	# and move_down keys found in the input map
+	vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	if normalized:
+		vector = vector.normalized()
+	return vector
+
 func setHudNode(newHudNode: Control) -> void:
 	if hudNode != null:
 		assert(false, "shouldn't set the hudNode again")
@@ -92,13 +112,10 @@ func spawnCharacter(character: CharacterResource) -> void:
 	if spawnCounter > len(spawnList):
 		spawnCounter = 0
 
-func removeCharacter(networkId: int) -> void:
-	#print_debug("game: removing character", networkId)
-	var characterNode = Characters.getCharacterNode(networkId)
-	characterNode.queue_free()
+func removeCharacter(id: int) -> void:
+	Characters.getCharacterResource(id).remove()
 	## remove the resource and the node
-	Characters.removeCharacterNode(networkId)
-	Characters.removeCharacterResource(networkId)
+	Characters.removeCharacterResource(id)
 
 func _on_GameStart_pressed() -> void:
 	if not Connections.isServer():

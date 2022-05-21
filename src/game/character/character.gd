@@ -141,16 +141,6 @@ func setGlobalPosition(newPos: Vector2) -> void:
 	setLookDirection(_getLookDirFromVec(newPos - global_position))
 	global_position = newPos
 
-# get the movement vector by looking at which keys are pressed
-func getMovementVector(normalized: bool = true) -> Vector2:
-	var vector: Vector2 = Vector2()
-	# get the movement vector using the move_left, move_right, move_up, 
-	# 	and move_down keys found in the input map
-	vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	if normalized:
-		vector = vector.normalized()
-	return vector
-
 # get the direction the character is looking
 func getLookDirection() -> int:
 	return lookDirection
@@ -188,24 +178,14 @@ func _ready() -> void:
 		camera.current = true
 	nameLabel.text = characterName
 
-func _process(_delta: float) -> void:
-	var amountMoved: Vector2
-	## If this character belongs to this client
-	if networkId == get_tree().get_network_unique_id() and _characterResource.canMove(self):
-		## Move character
-		amountMoved = _move(_delta)
-
 # move the character based on which keys are pressed and return a vector
 # 	describing the movement that occurred
-func _move(_delta: float) -> Vector2:
-	## Get movement vector based on keypress (not normalized)
-	var movementVec: Vector2 = getMovementVector(false)
+func _move(delta: float, movementVec: Vector2) -> Vector2:
 	# set lookDirection to match the movementVec
 	# using the look direction setter here to make it easier to react to
 	# 	a changing look direction
 	## Sets look direction
 	setLookDirection(_getLookDirFromVec(movementVec))
-	
 	# multiply the movement vec by speed
 	movementVec *= _characterResource.getSpeed()
 	# move_and_slide() returns the actual motion that happened, store it

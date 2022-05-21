@@ -171,7 +171,6 @@ func handleDisconnect(id:int) -> void:
 	var characterResource: CharacterResource = Characters.getCharacterResource(id)
 	characterResource.disconnected() ## call this function on the player to handle in-game reprocussions
 	## remove character's node and resource
-	Characters.removeCharacterNode(id)
 	Characters.removeCharacterResource(id)
 
 func allowNewConnections(switch: bool) -> void:

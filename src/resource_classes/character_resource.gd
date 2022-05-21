@@ -59,6 +59,9 @@ func setNetworkId(newId: int) -> void:
 func getNetworkId() -> int:
 	return networkId
 
+func getNode():
+	return _characterNode
+
 # function called when character is spawned
 func spawn(coords: Vector2):
 	_characterNode.spawn()
@@ -112,6 +115,7 @@ func setCharacterNode(newCharacterNode: Node) -> void:
 		printerr("Assigning a new character node to a CharacterResource that already has one")
 		assert(false, "Should be unreachable")
 	_characterNode = newCharacterNode
+	_characterNode.setCharacterResource(self)
 	if networkId == Connections.getMyId():
 		_characterNode.setMainCharacter()
 		mainCharacter = true
@@ -130,6 +134,9 @@ func reset() -> void:
 	var items: Array = _items.duplicate()
 	for itemRes in items:
 		dropItem(itemRes)
+
+func remove() -> void:
+	_characterNode.queue_free()
 
 func getCharacterName() -> String:
 	return characterName
@@ -274,6 +281,9 @@ func getGlobalPosition() -> Vector2:
 # set the global position of the character
 func setGlobalPosition(newPos: Vector2):
 	_characterNode.setPosition(newPos)
+
+func move(delta: float, movementVec: Vector2) -> Vector2:
+	return _characterNode._move(delta, movementVec)
 
 # --Private Functions--
 
