@@ -21,6 +21,9 @@ var mainCharacter: bool = false
 var _characterNode: KinematicBody2D = null
 var _ghostNode: KinematicBody2D = null
 var _corpseNode: KinematicBody2D = null
+# Stores the coordinates of the ghosts on the server as long as
+# the server's player doesn't see the ghost.
+var _ghostCoords: Vector2 = Vector2(0, 0)
 
 # Names of the apparent team and role of the character. This might not be the
 # "Real" role (that is stored on the server)
@@ -298,6 +301,8 @@ func getPosition() -> Vector2:
 		return _characterNode.getPosition()
 	if _ghostNode != null:
 		return _ghostNode.position
+	if Connections.isClientServer():
+		return _ghostCoords
 	return _corpseNode.position
 
 # set the position of the character
@@ -305,8 +310,10 @@ func setPosition(newPos: Vector2) -> void:
 	## Set node position
 	if _characterNode != null:
 		_characterNode.setPosition(newPos)
-	if _ghostNode != null:
+	elif _ghostNode != null:
 		_ghostNode.setPosition(newPos)
+	else:
+		_ghostCoords = newPos
 
 # get the global position of the character
 func getGlobalPosition() -> Vector2:
