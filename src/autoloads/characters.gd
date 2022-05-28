@@ -165,7 +165,7 @@ func _process(delta: float) -> void:
 		broadcastDataQueue = []
 	## If client
 	elif Connections.isClient():
-		if not get_tree().get_network_unique_id() in _characterResources:
+		if not Connections.getMyId() in _characterResources:
 			return
 		## Send own character position to server
 		_sendMyCharacterDataToServer()

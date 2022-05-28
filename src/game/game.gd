@@ -75,13 +75,13 @@ func loadMap(mapPath: String) -> void:
 	spawnAllCharacters()
 	## Request server for character data
 	Characters.requestCharacterData()
-	if hudNode != null:
+	if hudNode != null and not Connections.isDedicatedServer():
 		hudNode.refreshItemButtons()
 
 func addCharacter(characterRes: CharacterResource):
 	var newCharacter: KinematicBody2D = characterRes.getCharacterNode()
 	charactersNode.add_child(newCharacter) ## Add node to scene
-	var myId: int = get_tree().get_network_unique_id()
+	var myId: int = Connections.getMyId()
 	## If own character is added
 	if characterRes.getNetworkId() == myId:
 		newCharacter.connect("itemInteraction", self, "itemInteract")
@@ -105,7 +105,7 @@ func spawnCharacter(character: CharacterResource) -> void:
 	character.spawn(spawnList[spawnCounter])
 	## Step spawn position counter
 	spawnCounter += 1
-	if spawnCounter > len(spawnList):
+	if spawnCounter >= len(spawnList):
 		spawnCounter = 0
 
 func removeCharacter(id: int) -> void:
@@ -158,7 +158,14 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 
 # -- Client functions --
 puppetsync func killCharacter(id: int) -> void:
-	var seeGhosts: bool = not Characters.getMyCharacterResource().isAlive()
+	if id == Connections.getMyId():
+		for characterRes in Characters.getCharacterResources().values():
+			if not characterRes.isAlive():
+				characterRes.becomeGhost(characterRes.getPosition())
+	var seeGhosts: bool = (
+		Connections.isDedicatedServer() or
+		not Characters.getMyCharacterResource().isAlive()
+	)
 	Characters.getCharacterResource(id).die(seeGhosts)
 
 puppet func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
