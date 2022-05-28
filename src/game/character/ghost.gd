@@ -1,5 +1,9 @@
 extends KinematicBody2D
 
+# TODO: this is mostly copied code from character.tscn.
+# Should not be used this way!!
+
+
 # network id corresponding to this character
 var networkId: int setget setNetworkId, getNetworkId
 

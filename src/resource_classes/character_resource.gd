@@ -74,7 +74,7 @@ func canBeKilled() -> bool:
 		return false
 	return true
 
-func die() -> void:
+func die(forceBecomeGhost: bool = false) -> void:
 	var gameScene: YSort = TransitionHandler.gameScene
 	_characterNode.die()
 	resetAbilities()
@@ -83,7 +83,7 @@ func die() -> void:
 	_characterNode = null
 	gameScene.charactersNode.remove_child(_corpseNode)
 	gameScene.corpsesNode.add_child(_corpseNode)
-	if mainCharacter:
+	if mainCharacter or forceBecomeGhost:
 		becomeGhost(_corpseNode.getPosition())
 
 func becomeGhost(ghostPos: Vector2) -> void:
@@ -100,6 +100,9 @@ func becomeGhost(ghostPos: Vector2) -> void:
 
 func isAlive() -> bool:
 	return _alive
+
+func isGhost() -> bool:
+	return _ghost
 
 func canMove(node: KinematicBody2D) -> bool:
 	if node != _characterNode:
@@ -139,16 +142,17 @@ func createCharacterNode() -> void:
 # 	probably going to be used mostly between rounds when roles and stuff are
 # 	changing
 func reset() -> void:
-	resetAbilities()
 	_team = ""
 	_role = ""
 	_nameColor = Color.white
 	_alive = true
 	_ghost = false
 	if _characterNode != null:
-		_characterNode.reset()
-	else:
-		createCharacterNode()
+		_characterNode.queue_free()
+		_characterNode = null
+	createCharacterNode()
+	call_deferred("setAppearance", _outfit, _colors)
+	resetAbilities()
 	if _ghostNode != null:
 		_ghostNode.queue_free()
 		_ghostNode = null
@@ -167,7 +171,6 @@ func getCharacterName() -> String:
 
 func setCharacterName(newName: String) -> void:
 	characterName = newName
-	_characterNode.setCharacterName(characterName)
 
 # get the Team of this chacter
 func getTeam() -> String:

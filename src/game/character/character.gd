@@ -8,9 +8,6 @@ extends KinematicBody2D
 # network id corresponding to this character
 var networkId: int setget setNetworkId, getNetworkId
 
-# the name of this character
-var characterName: String
-
 var mainCharacter: bool = false
 enum LookDirections {LEFT, RIGHT, UP, DOWN}
 var lookDirection: int = LookDirections.RIGHT
@@ -38,13 +35,6 @@ func setNetworkId(newId: int) -> void:
 func getNetworkId() -> int:
 	return networkId
 
-func getCharacterName() -> String:
-	return characterName
-
-func setCharacterName(newName: String) -> void:
-	assert(nameLabel==null, "You should set the character name before it's ready")
-	characterName = newName
-
 func setNameColor(newColor: Color) -> void:
 	nameLabel.add_color_override("font_color", newColor)
 
@@ -56,12 +46,6 @@ func spawn() -> void:
 func kill():
 	# assert false because killing isn't implemented yet
 	assert(false, "Not implemented yet")
-
-# function called to reset the character resource to default settings
-# 	probably going to be used mostly between rounds when roles and stuff are
-# 	changing
-func reset():
-	rotation = 0
 
 func disconnected():
 	## runs when this player disconnects from the server
@@ -113,6 +97,8 @@ func attachAbility(newAbility: Node2D) -> void:
 	abilityPoint.add_child(newAbility)
 
 func clearAbilities() -> void:
+	if abilityPoint == null:
+		return
 	for ability in abilityPoint.get_children():
 		ability.queue_free()
 
@@ -170,7 +156,7 @@ func die() -> void:
 func _ready() -> void:
 	if mainCharacter:
 		camera.current = true
-	nameLabel.text = characterName
+	nameLabel.text = _characterResource.characterName
 
 # move the character based on which keys are pressed and return a vector
 # 	describing the movement that occurred

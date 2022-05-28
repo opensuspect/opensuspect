@@ -31,7 +31,10 @@ func gameLoaded(newGameScene: Node2D) -> void:
 	enterLobby()
 	## If client-server
 	if Connections.isClientServer():
-		gameScene.addCharacter(1) ## Add own character
+		## Add own character
+		var characterRes: CharacterResource
+		characterRes = Characters.createCharacter(1, Connections.myName)
+		gameScene.addCharacter(characterRes)
 
 func loadGameScene() -> void:
 	## Switch to game scene and load HUD

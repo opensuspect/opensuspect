@@ -9,7 +9,7 @@ extends Node
 #	var networkId: int = 12345
 #
 ## have the character manager create a character using that network id
-#	Characters.createCharacter(networkId)
+#	Characters.createCharacter(networkId, name)
 #	 > returns a CharacterResource corresponding to the character that was just
 #		created
 
@@ -41,20 +41,29 @@ var _timeSincePositionSync: float = 0.0
 # create a new character for the given network id
 # returns the character resource because I think it would be more useful than
 # 	the character node - TheSecondReal0
-func createCharacter(networkId: int) -> CharacterResource:
+func createCharacter(networkId: int, name: String) -> CharacterResource:
 	## Create character resource
 	var characterResource: CharacterResource = _createCharacterResource(networkId)
 	## Assign character node to resource
 	characterResource.createCharacterNode()
 	## Register character node and resource
 	_registerCharacterResource(networkId, characterResource)
+	## Set the name of the character
+	characterResource.setCharacterName(name)
+	var myId: int = get_tree().get_network_unique_id()
+	## If own character is added
+	if networkId == myId:
+		## Apply appearance to character
+		characterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
+		## Send my character data to server
+		sendOwnCharacterData()
 	## Return character resource
 	return characterResource
 
 # create a character node, this function is used when creating a new character
-func createCharacterNode(networkId: int = -1) -> Node:
+func createCharacterNode(networkId: int = -1) -> KinematicBody2D:
 	## instance character scene
-	var characterNode: Node = characterScene.instance()
+	var characterNode: KinematicBody2D = characterScene.instance()
 	# set its network id
 	characterNode.networkId = networkId
 	# here is where we would set its player name, but that is not implemented yet

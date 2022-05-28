@@ -70,6 +70,7 @@ func loadMap(mapPath: String) -> void:
 	## Remove abilities from characters
 	for characterResource in Characters.getCharacterResources().values():
 		characterResource.reset()
+		addCharacter(characterResource)
 	## Spawn characters at spawn points
 	spawnAllCharacters()
 	## Request server for character data
@@ -77,24 +78,15 @@ func loadMap(mapPath: String) -> void:
 	if hudNode != null:
 		hudNode.refreshItemButtons()
 
-func addCharacter(networkId: int) -> void:
-	## Create character resource
-	var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)
-	newCharacterResource.setCharacterName(Connections.listConnections[networkId])
-	## Get character node reference
-	var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()
-	## Spawn the character
-	spawnCharacter(newCharacterResource)
+func addCharacter(characterRes: CharacterResource):
+	var newCharacter: KinematicBody2D = characterRes.getCharacterNode()
 	charactersNode.add_child(newCharacter) ## Add node to scene
 	var myId: int = get_tree().get_network_unique_id()
 	## If own character is added
-	if networkId == myId:
-		## Apply appearance to character
-		newCharacterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
-		print_debug(hudNode)
+	if characterRes.getNetworkId() == myId:
 		newCharacter.connect("itemInteraction", self, "itemInteract")
-		## Send my character data to server
-		Characters.sendOwnCharacterData()
+	## Spawn the character
+	spawnCharacter(characterRes)
 
 # These functions place the character on the map, but if it is a client, it will
 # be overwritten by the position syncing. It is done only so that the characters
@@ -166,7 +158,8 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 
 # -- Client functions --
 puppetsync func killCharacter(id: int) -> void:
-	Characters.getCharacterResource(id).die()
+	var seeGhosts: bool = not Characters.getMyCharacterResource().isAlive()
+	Characters.getCharacterResource(id).die(seeGhosts)
 
 puppet func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
 	var teamsRolesRes: TeamsRolesTemplate = actualMap.teamsRolesResource
