@@ -1,43 +1,16 @@
-extends KinematicBody2D
-
-
-# this script acts as the frontend for the characters/controls the character node
+extends "res://game/character/player.gd"
 
 # --Public Variables--
-
-# network id corresponding to this character
-var networkId: int setget setNetworkId, getNetworkId
-
-var mainCharacter: bool = false
-enum LookDirections {LEFT, RIGHT, UP, DOWN}
-var lookDirection: int = LookDirections.RIGHT
-onready var characterElements = $CharacterElements
-onready var skeleton = $CharacterElements/Skeleton
-onready var interactionArea = $CharacterElements/Interaction
-onready var camera = $CharacterCamera
-onready var nameLabel = $Name
 onready var abilityPoint = $CharacterElements/Abilities
-
-# --Private Variables--
-
-# the CharacterResource corresponding to this character node
-var _characterResource: CharacterResource
 
 # --Signals--
 signal player_disconnected(id)
 signal itemInteraction(item, interaction)
 
-# --Public Functions--
-
-func setNetworkId(newId: int) -> void:
-	networkId = newId
-
-func getNetworkId() -> int:
-	return networkId
-
-func setNameColor(newColor: Color) -> void:
-	nameLabel.add_color_override("font_color", newColor)
-
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+	
 # function called when character is spawned
 func spawn() -> void:
 	pass
@@ -52,17 +25,11 @@ func disconnected():
 	emit_signal("player_disconnected", networkId)
 	# TODO: drop items, etc.
 
-# get the character node that corresponds to this CharacterResource
-func getCharacterResource() -> CharacterResource:
-	return _characterResource
+func setNameColor(newColor: Color) -> void:
+	nameLabel.add_color_override("font_color", newColor)
 
-# set the character node that corresponds to this CharacterResource
-func setCharacterResource(newCharacterResource: CharacterResource) -> void:
-	# if there is already a character node assigned to this resource
-	if _characterResource != null:
-		printerr("Assigning a new CharacterResource to a character node that already has one")
-		assert(false, "Should be unreachable")
-	_characterResource = newCharacterResource
+func die() -> void:
+	rotation_degrees = 90
 
 # get the role of this character
 # string return type is PLACEHOLDER
@@ -72,23 +39,7 @@ func getRole() -> String:
 # get tasks assigned to this character node
 func getTasks() -> Dictionary:
 	return _characterResource.getTasks()
-
-# set the outfit of the character
-func setAppearance(outfit: Dictionary, colors: Dictionary) -> void:
-	var outfitPaths: Dictionary = {}
-	for partGroup in outfit: ## For each customizable group
-		var selectedLook: String = outfit[partGroup]
-		for part in Appearance.groupCustomization[partGroup]: ## For each custom sprite
-			var filePath: String = Appearance.customSpritePaths[part][selectedLook]
-			## Saves sprite file path
-			outfitPaths[part] = filePath
 	
-	## Applies appearance to its skeleton
-	skeleton.applyAppearance(outfitPaths, colors)
-
-func setMainCharacter(main: bool = true) -> void:
-	mainCharacter = main
-
 # get the outfit of the character
 func getOutfit() -> Dictionary:
 	return _characterResource.getOutfit()
@@ -107,15 +58,6 @@ func getPosition() -> Vector2:
 	## Return position
 	return position
 
-# set the position of the character
-func setPosition(newPos: Vector2) -> void:
-	## If movement occured
-	if newPos != position:
-		## Update look direction based on movement
-		setLookDirection(_getLookDirFromVec(newPos - position))
-	## Set new position
-	position = newPos
-
 # get the global position of the character
 func getGlobalPosition() -> Vector2:
 	## Return global position
@@ -130,66 +72,6 @@ func setGlobalPosition(newPos: Vector2) -> void:
 # get the direction the character is looking
 func getLookDirection() -> int:
 	return lookDirection
-
-# set the direction the character is looking
-func setLookDirection(newLookDirection: int) -> void:
-	lookDirection = newLookDirection
-	# very placeholder code just to display the look direction by
-	# 	changing where the placeholder triangle is pointing
-	# this should eventually be moved into a separate script that handles
-	# 	animations and stuff
-	# the angle to set the rotation of the triangle to
-	var xScale: int = 0
-	match lookDirection:
-		LookDirections.LEFT:
-			xScale = -1
-		LookDirections.RIGHT:
-			xScale = 1
-	if characterElements != null and xScale != 0:
-		characterElements.scale.x = xScale
-
-func die() -> void:
-	rotation_degrees = 90
-
-# --Private Functions--
-
-func _ready() -> void:
-	if mainCharacter:
-		camera.current = true
-	nameLabel.text = _characterResource.characterName
-
-# move the character based on which keys are pressed and return a vector
-# 	describing the movement that occurred
-func _move(delta: float, movementVec: Vector2) -> Vector2:
-	# set lookDirection to match the movementVec
-	# using the look direction setter here to make it easier to react to
-	# 	a changing look direction
-	## Sets look direction
-	setLookDirection(_getLookDirFromVec(movementVec))
-	# multiply the movement vec by speed
-	movementVec *= _characterResource.getSpeed()
-	# move_and_slide() returns the actual motion that happened, store it
-	# 	in amountMoved
-	## Calculate and execute actual motion
-	var amountMoved: Vector2 = move_and_slide(movementVec)
-	# return the actual movement that happened
-	return amountMoved
-
-func _getLookDirFromVec(vec: Vector2) -> int:
-	# this prioritizes looking left and right over up and down (like in
-	# 	among us and other games)
-	if vec.x == 0 and vec.y == 0:
-		return lookDirection
-	var newlookDirection: int = LookDirections.RIGHT
-	if vec.y < 0:
-		newlookDirection = LookDirections.UP
-	if vec.y > 0:
-		newlookDirection = LookDirections.DOWN
-	if vec.x < 0:
-		newlookDirection = LookDirections.LEFT
-	if vec.x > 0:
-		newlookDirection = LookDirections.RIGHT
-	return newlookDirection
 
 func _on_ItemPickup_body_entered(body):
 	if mainCharacter:
