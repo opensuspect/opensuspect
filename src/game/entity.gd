@@ -30,7 +30,7 @@ func getNetworkId() -> int:
 	return networkId
 
 func getCharacterName() -> String:
-	return characterName
+	return _characterResource.characterName
 
 # get the character node that corresponds to this CharacterResource
 func getCharacterResource() -> CharacterResource:

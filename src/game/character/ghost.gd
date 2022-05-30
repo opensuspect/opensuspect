@@ -1,4 +1,4 @@
-extends "res://game/character/player.gd"
+extends "res://game/entity.gd"
 
 # TODO: currently the ghost is just the base player, but in the future that might change, 
 # which is why I've already given it its own script.

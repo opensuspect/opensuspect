@@ -1,4 +1,4 @@
-extends "res://game/character/player.gd"
+extends "res://game/entity.gd"
 
 # --Public Variables--
 onready var abilityPoint = $CharacterElements/Abilities
