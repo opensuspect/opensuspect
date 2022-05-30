@@ -92,7 +92,6 @@ func die(forceBecomeGhost: bool = false) -> void:
 func becomeGhost(ghostPos: Vector2) -> void:
 	_ghostNode = ResourceLoader.load("res://game/character/ghost.tscn").instance()
 	_ghostNode.setNetworkId(networkId)
-	_ghostNode.setCharacterName(characterName)
 	if mainCharacter:
 		_ghostNode.setMainCharacter()
 	_ghostNode.setCharacterResource(self)

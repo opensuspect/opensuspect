@@ -7,9 +7,6 @@ extends KinematicBody2D
 # network id corresponding to this character
 var networkId: int setget setNetworkId, getNetworkId
 
-# the name of this character
-var characterName: String
-
 var mainCharacter: bool = false
 enum LookDirections {LEFT, RIGHT, UP, DOWN}
 var lookDirection: int = LookDirections.RIGHT
@@ -24,7 +21,7 @@ var _characterResource: CharacterResource
 func _ready() -> void:
 	if mainCharacter:
 		camera.current = true
-	nameLabel.text = characterName
+	nameLabel.text = _characterResource.characterName
 
 func setNetworkId(newId: int) -> void:
 	networkId = newId
@@ -34,10 +31,6 @@ func getNetworkId() -> int:
 
 func getCharacterName() -> String:
 	return characterName
-
-func setCharacterName(newName: String) -> void:
-	assert(nameLabel==null, "You should set the character name before it's ready")
-	characterName = newName
 
 # get the character node that corresponds to this CharacterResource
 func getCharacterResource() -> CharacterResource:
