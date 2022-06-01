@@ -31,6 +31,7 @@ margin_top = -225.0
 margin_right = 130.0
 margin_bottom = -180.0
 theme = ExtResource( 4 )
+custom_colors/font_color = Color( 0.694118, 0.678431, 0.678431, 1 )
 text = "Name"
 align = 1
 
