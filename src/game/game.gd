@@ -1,6 +1,7 @@
 extends Node2D
 
 var spawnList: Array = [] # Storing spawn positions for current map
+var meetingPosList: Array = [] # Storing the meeting positions to be teleporeted to
 var spawnCounter: int = 0 # A counter to take care of where characters spawn
 var actualMap: Node2D = null
 
@@ -67,7 +68,12 @@ func loadMap(mapPath: String) -> void:
 	spawnList = []
 	for posNode in spawnPosNode.get_children():
 		spawnList.append(posNode.position)
-	## Remove abilities from characters
+	## Save meeting positions from the map
+	var meetingPosNode: Node = actualMap.get_node("MeetingPosition")
+	meetingPosList = []
+	for posNode in meetingPosNode.get_children():
+		meetingPosList.append(posNode.position)
+	## Reset all characters
 	for characterResource in Characters.getCharacterResources().values():
 		characterResource.reset()
 		addCharacter(characterResource)
@@ -77,6 +83,10 @@ func loadMap(mapPath: String) -> void:
 	Characters.requestCharacterData()
 	if hudNode != null and not Connections.isDedicatedServer():
 		hudNode.refreshItemButtons()
+		if len(meetingPosList) == 0:
+			hudNode.showMeetingButton(false)
+		else:
+			hudNode.showMeetingButton(true)
 
 func addCharacter(characterRes: CharacterResource):
 	var newCharacter: KinematicBody2D = characterRes.getCharacterNode()
@@ -156,6 +166,9 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 		allCharacters[characterID].setRole(roleName)
 		allCharacters[characterID].setNameColor(textColor)
 
+func callMeeting() -> void:
+	rpc_id(1, "callMeetingServer")
+
 # -- Client functions --
 puppetsync func killCharacter(id: int) -> void:
 	if id == Connections.getMyId():
@@ -219,6 +232,10 @@ puppetsync func itemActivateClient(itemId: int, abilityName: String, properties:
 	itemRes.activate(abilityName, properties)
 	if itemRes.getHolder().getNetworkId() == get_tree().get_network_unique_id():
 		hudNode.refreshItemButtons()
+
+puppetsync func teleportCharacters(teleportList: Dictionary) -> void:
+	for characterIndex in teleportList:
+		Characters.getCharacterResource(characterIndex).setPosition(teleportList[characterIndex])
 
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
@@ -301,3 +318,20 @@ func killCharacterServer(id: int) -> void:
 			rpc("itemDropClient", id, itemRes.getId())
 	rpc("killCharacter", id)
 
+mastersync func callMeetingServer() -> void:
+	var callerId: int = get_tree().get_rpc_sender_id()
+	# TODO: do checks if the meeting can be called
+	if not Characters.getCharacterResource(callerId).isAlive():
+		return
+	var meetingCounter = randi() % len(meetingPosList)
+	var charResources: Dictionary = Characters.getCharacterResources()
+	var teleport: Dictionary = {}
+	var characterRes: CharacterResource
+	for characterIndex in charResources:
+		characterRes = charResources[characterIndex]
+		if characterRes.isAlive():
+			teleport[characterIndex] = meetingPosList[meetingCounter]
+			meetingCounter += 1
+			if meetingCounter >= len(meetingPosList):
+				meetingCounter = 0
+	rpc("teleportCharacters", teleport)

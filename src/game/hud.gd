@@ -4,6 +4,7 @@ onready var gameStartButton: Button = $GameStart
 onready var abilityBox: HBoxContainer = $GameUI/Abilities
 onready var itemIntBox: HBoxContainer = $GameUI/ItemInteract
 onready var itemUseBox: HBoxContainer = $GameUI/ItemUse
+onready var meetingCallBox: HBoxContainer = $GameUI/CallMeeting
 
 var itemPickUpScene: PackedScene = preload("res://game/hud/item_pick_up_button.tscn")
 var itemDropScene: PackedScene = preload("res://game/hud/item_drop_button.tscn")
@@ -106,3 +107,9 @@ func itemInteract(itemRes: ItemResource, action: String) -> void:
 		addItemToPickUp(itemRes)
 	if action == "exited":
 		removePickUpItem(itemRes)
+
+func showMeetingButton(show: bool = true) -> void:
+	meetingCallBox.visible = show
+
+func _on_MeetingButton_pressed():
+	TransitionHandler.gameScene.callMeeting()
