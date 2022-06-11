@@ -237,6 +237,10 @@ puppetsync func teleportCharacters(teleportList: Dictionary) -> void:
 	for characterIndex in teleportList:
 		Characters.getCharacterResource(characterIndex).setPosition(teleportList[characterIndex])
 
+puppetsync func startMeeting() -> void:
+	Scenes.overlay("res://game/ui_elements/meeting_ui.tscn")
+	
+
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
 	call_deferred("deferredTeamRoleAssignment", isLobby)
@@ -335,3 +339,4 @@ mastersync func callMeetingServer() -> void:
 			if meetingCounter >= len(meetingPosList):
 				meetingCounter = 0
 	rpc("teleportCharacters", teleport)
+	rpc("startMeeting")
