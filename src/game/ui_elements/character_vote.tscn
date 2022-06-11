@@ -44,3 +44,5 @@ margin_right = 611.0
 margin_bottom = 577.0
 theme = ExtResource( 1 )
 text = "Character Name"
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

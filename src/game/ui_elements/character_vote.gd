@@ -3,13 +3,19 @@ extends HBoxContainer
 onready var skeleton = $Character/Skeleton
 onready var nameTag = $Name
 
+var characterId: int = -1
 var characterName: String
 var outfit: Dictionary = {}
 var colors: Dictionary = {}
 
+signal voteCast
+
 func _ready():
 	nameTag.text = characterName
 	_setAppearance()
+
+func setId(newId: int) -> void:
+	characterId = newId
 
 func setName(newName: String) -> void:
 	characterName = newName
@@ -29,3 +35,9 @@ func _setAppearance() -> void:
 	
 	## Applies appearance to its skeleton
 	skeleton.applyAppearance(outfitPaths, colors)
+
+func _on_Button_pressed():
+	emit_signal("voteCast", characterId)
+
+func changeTextColor(newColor: Color) -> void:
+	nameTag.add_color_override("font_color", newColor)

@@ -169,6 +169,9 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 func callMeeting() -> void:
 	rpc_id(1, "callMeetingServer")
 
+func voteCast(voteeId: int) -> void:
+	rpc_id(1, "voteCastServer", Connections.getMyId(), voteeId)
+
 # -- Client functions --
 puppetsync func killCharacter(id: int) -> void:
 	if id == Connections.getMyId():
@@ -239,7 +242,9 @@ puppetsync func teleportCharacters(teleportList: Dictionary) -> void:
 
 puppetsync func startMeeting() -> void:
 	Scenes.overlay("res://game/ui_elements/meeting_ui.tscn")
-	
+
+puppetsync func endMeeting() -> void:
+	Scenes.back()
 
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
@@ -340,3 +345,9 @@ mastersync func callMeetingServer() -> void:
 				meetingCounter = 0
 	rpc("teleportCharacters", teleport)
 	rpc("startMeeting")
+
+mastersync func voteCastServer(voterId: int, voteeId: int) -> void:
+	var voteRes: VoteMechanicsTemplate = actualMap.voteResource
+	voteRes.receiveVote(voterId, voteeId)
+	if voteRes.allVoted():
+		rpc("endMeeting")
