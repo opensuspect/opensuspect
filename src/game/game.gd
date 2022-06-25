@@ -245,9 +245,11 @@ puppetsync func teleportCharacters(teleportList: Dictionary) -> void:
 		Characters.getCharacterResource(characterIndex).setPosition(teleportList[characterIndex])
 
 puppetsync func startMeeting() -> void:
+	Characters.getMyCharacterResource().setMeetingMode()
 	Scenes.overlay("res://game/ui_elements/meeting_ui.tscn")
 
 puppetsync func endMeeting() -> void:
+	Characters.getMyCharacterResource().endMeetingMode()
 	Scenes.back()
 
 # -- Server functions --
@@ -342,6 +344,7 @@ mastersync func callMeetingServer() -> void:
 	var characterRes: CharacterResource
 	for characterIndex in charResources:
 		characterRes = charResources[characterIndex]
+		characterRes.setMeetingMode()
 		if characterRes.isAlive():
 			teleport[characterIndex] = meetingPosList[meetingCounter]
 			meetingCounter += 1
@@ -354,4 +357,9 @@ mastersync func voteCastServer(voterId: int, voteeId: int) -> void:
 	var voteRes: VoteMechanicsTemplate = actualMap.voteResource
 	voteRes.receiveVote(voterId, voteeId)
 	if voteRes.allVoted():
+		var charResources: Dictionary = Characters.getCharacterResources()
+		var characterRes: CharacterResource
+		for characterIndex in charResources:
+			characterRes = charResources[characterIndex]
+			characterRes.endMeetingMode()
 		rpc("endMeeting")

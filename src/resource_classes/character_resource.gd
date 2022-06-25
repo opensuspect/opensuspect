@@ -122,6 +122,12 @@ func canMove() -> bool:
 		return true
 	return false
 
+func setMeetingMode() -> void:
+	_characterState = CharacterStates.MEETING
+
+func endMeetingMode() -> void:
+	_characterState = CharacterStates.NORMAL
+
 # function called when character disconnects from server
 func disconnected():
 	if _characterNode != null:
