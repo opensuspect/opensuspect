@@ -127,12 +127,6 @@ func removeCharacter(id: int) -> void:
 	## remove the resource and the node
 	Characters.removeCharacterResource(id)
 
-func _on_GameStart_pressed() -> void:
-	if not Connections.isServer():
-		assert(false, "Unreachable")
-	## Change the map
-	TransitionHandler.changeMap()
-
 func setCharacterData(id: int, characterData: Dictionary) -> void:
 	var character: CharacterResource = Characters.getCharacterResource(id)
 	## Apply character outfit and colors
