@@ -7,6 +7,11 @@ class_name CharacterResource
 # CharacterResource objects are kept track of in the Characters autoload
 
 # --Public Variables--
+enum CharacterStates {
+	NORMAL,
+	MEETING,
+	TASK
+}
 
 # network id corresponding to this character
 var networkId: int = -1 setget setNetworkId, getNetworkId
@@ -34,6 +39,7 @@ var _nameColor: Color
 # Is the character alive or not
 var _alive: bool = true
 var _ghost: bool = false
+var _characterState: int = CharacterStates.NORMAL
 
 # List of special abilities
 var _abilities: Array = []
@@ -71,6 +77,7 @@ func getNode():
 func spawn(coords: Vector2):
 	_characterNode.spawn()
 	setPosition(coords)
+	_characterState = CharacterStates.NORMAL
 
 func canBeKilled() -> bool:
 	if not isAlive():
@@ -106,8 +113,8 @@ func isAlive() -> bool:
 func isGhost() -> bool:
 	return _ghost
 
-func canMove(node: KinematicBody2D) -> bool:
-	if node != _characterNode:
+func canMove() -> bool:
+	if _characterState != CharacterStates.NORMAL:
 		return false
 	if _alive:
 		return true

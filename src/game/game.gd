@@ -27,9 +27,13 @@ func _ready() -> void:
 	TransitionHandler.gameLoaded(self)
 
 func _process(delta: float) -> void:
+	if not TransitionHandler.isPlaying():
+		return
 	var myCharacterRes: CharacterResource
 	myCharacterRes = Characters.getMyCharacterResource()
 	if myCharacterRes == null:
+		return
+	if not myCharacterRes.canMove():
 		return
 	## Get movement vector based on keypress (not normalized)
 	var movementVec: Vector2 = getMovementInput(false)
