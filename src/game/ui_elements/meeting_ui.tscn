@@ -14,17 +14,25 @@ theme = ExtResource( 1 )
 color = Color( 0.129412, 0.113725, 0.113725, 1 )
 script = ExtResource( 2 )
 
+[node name="TimeLeft" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -40.0
+margin_right = 40.0
+margin_bottom = 74.0
+text = "0:00"
+
 [node name="MainBox" type="HSplitContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 10.0
-margin_top = 10.0
+margin_top = 60.0
 margin_right = -10.0
 margin_bottom = -10.0
 
 [node name="VoteSide" type="VBoxContainer" parent="MainBox"]
 margin_right = 700.0
-margin_bottom = 1000.0
+margin_bottom = 950.0
 rect_min_size = Vector2( 700, 0 )
 
 [node name="VoteTitle" type="Label" parent="MainBox/VoteSide"]
@@ -41,5 +49,11 @@ margin_bottom = 90.0
 [node name="ChatBox" type="MarginContainer" parent="MainBox"]
 margin_left = 712.0
 margin_right = 1860.0
-margin_bottom = 1000.0
+margin_bottom = 950.0
 rect_min_size = Vector2( 500, 0 )
+
+[node name="VoteTimeOut" type="Timer" parent="."]
+wait_time = 75.0
+autostart = true
+
+[connection signal="timeout" from="VoteTimeOut" to="." method="_on_VoteTimeOut_timeout"]

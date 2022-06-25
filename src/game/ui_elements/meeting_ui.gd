@@ -1,13 +1,27 @@
 extends ColorRect
 
 onready var voteOptions: VBoxContainer = $MainBox/VoteSide/VoteOptions
+onready var timer: Timer = $VoteTimeOut
+onready var timeLabel: Label = $TimeLeft
 var characterVote: String = "res://game/ui_elements/character_vote.tscn"
 
 var votableCharacters: Dictionary = {}
 
+func _process(delta) -> void:
+	var timeLeft: float = timer.time_left
+	var mins: int = floor(timeLeft / 60)
+	var secs: int = floor(timeLeft - mins * 60)
+	var secstring: String = str(secs)
+	if secs < 10:
+		secstring = "0" + secstring
+	var timestring: String = str(mins) + ":" + secstring
+	timeLabel.text = timestring
+
 func _focus() -> void:
+	var voteRes: VoteMechanicsTemplate = TransitionHandler.gameScene.getVoteResource()
+	timer.start(voteRes.timeToVote)
 	removeOptions()
-	for characterId in Characters.getCharacterKeys():
+	for characterId in voteRes.voteOptions():
 		addCharacter(characterId)
 
 func removeOptions() -> void:
@@ -32,3 +46,6 @@ func receiveVote(votedFor: int) -> void:
 		else:
 			votableCharacters[id].changeTextColor(Color.gray)
 	TransitionHandler.gameScene.voteCast(votedFor)
+
+func _on_VoteTimeOut_timeout():
+	TransitionHandler.gameScene.voteTimeOut()

@@ -170,11 +170,14 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 		allCharacters[characterID].setRole(roleName)
 		allCharacters[characterID].setNameColor(textColor)
 
+func getVoteResource() -> VoteMechanicsTemplate:
+	return actualMap.voteResource
+
 func callMeeting() -> void:
 	rpc_id(1, "callMeetingServer")
 
 func voteCast(voteeId: int) -> void:
-	rpc_id(1, "voteCastServer", Connections.getMyId(), voteeId)
+	rpc_id(1, "voteCastServer", voteeId)
 
 # -- Client functions --
 puppetsync func killCharacter(id: int) -> void:
@@ -341,6 +344,8 @@ mastersync func callMeetingServer() -> void:
 	var meetingCounter = randi() % len(meetingPosList)
 	var charResources: Dictionary = Characters.getCharacterResources()
 	var teleport: Dictionary = {}
+	var voteRes: VoteMechanicsTemplate = actualMap.voteResource
+	voteRes.initialize()
 	var characterRes: CharacterResource
 	for characterIndex in charResources:
 		characterRes = charResources[characterIndex]
@@ -353,7 +358,8 @@ mastersync func callMeetingServer() -> void:
 	rpc("teleportCharacters", teleport)
 	rpc("startMeeting")
 
-mastersync func voteCastServer(voterId: int, voteeId: int) -> void:
+mastersync func voteCastServer(voteeId: int) -> void:
+	var voterId: int = get_tree().get_rpc_sender_id()
 	var voteRes: VoteMechanicsTemplate = actualMap.voteResource
 	voteRes.receiveVote(voterId, voteeId)
 	if voteRes.allVoted():
@@ -362,4 +368,17 @@ mastersync func voteCastServer(voterId: int, voteeId: int) -> void:
 		for characterIndex in charResources:
 			characterRes = charResources[characterIndex]
 			characterRes.endMeetingMode()
+		voteRes.voteStop()
 		rpc("endMeeting")
+
+func voteTimeOut() -> void:
+	var voteRes: VoteMechanicsTemplate = actualMap.voteResource
+	if not voteRes.active:
+		return
+	var charResources: Dictionary = Characters.getCharacterResources()
+	var characterRes: CharacterResource
+	for characterIndex in charResources:
+		characterRes = charResources[characterIndex]
+		characterRes.endMeetingMode()
+	voteRes.voteStop()
+	rpc("endMeeting")
