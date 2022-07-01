@@ -8,3 +8,5 @@ script = ExtResource( 1 )
 teamsRolesResource = ExtResource( 2 )
 
 [node name="SpawnPositions" type="Node2D" parent="."]
+
+[node name="MeetingPosition" type="Node2D" parent="."]

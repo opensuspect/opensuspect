@@ -31,7 +31,10 @@ func gameLoaded(newGameScene: Node2D) -> void:
 	enterLobby()
 	## If client-server
 	if Connections.isClientServer():
-		gameScene.addCharacter(1) ## Add own character
+		## Add own character
+		var characterRes: CharacterResource
+		characterRes = Characters.createCharacter(1, Connections.myName)
+		gameScene.addCharacter(characterRes)
 
 func loadGameScene() -> void:
 	## Switch to game scene and load HUD
@@ -39,6 +42,7 @@ func loadGameScene() -> void:
 	Scenes.switchBase("res://game/game.tscn", "res://game/hud.tscn")
 
 func gameStarted() -> void:
+	print_debug("Game started")
 	currentState = States.MAP
 	Scenes.back()
 
@@ -47,6 +51,7 @@ puppetsync func startGame() -> void:
 	gameScene.loadMap("res://game/maps/chemlab/chemlab.tscn")
 	## Overlay role assignment scene
 	Scenes.overlay("res://game/role_assignment.tscn")
+	currentState = States.ASSIGNMENT
 	## If server, assign roles
 	if Connections.isServer():
 		gameScene.teamRoleAssignment(false)
@@ -54,6 +59,7 @@ puppetsync func startGame() -> void:
 puppetsync func enterLobby() -> void:
 	## Load lobby map
 	gameScene.loadMap("res://game/maps/lobby/lobby.tscn")
+	currentState = States.LOBBY
 	## If server, assign roles
 	if Connections.isServer():
 		gameScene.teamRoleAssignment(true)
@@ -69,13 +75,11 @@ func changeMap() -> void:
 	## Are we in the lobby
 	if currentState == States.LOBBY:
 		rpc("startGame")				## Start the game
-		currentState = States.ASSIGNMENT
 		## No new connections allowed
 		Connections.allowNewConnections(false)
 	## Are we in the game
 	elif currentState == States.MAP:
 		rpc("enterLobby")				## Return to the lobby
-		currentState = States.LOBBY
 		## New connections allowed
 		Connections.allowNewConnections(true)
 	else:

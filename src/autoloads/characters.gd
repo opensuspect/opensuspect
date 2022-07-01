@@ -9,7 +9,7 @@ extends Node
 #	var networkId: int = 12345
 #
 ## have the character manager create a character using that network id
-#	Characters.createCharacter(networkId)
+#	Characters.createCharacter(networkId, name)
 #	 > returns a CharacterResource corresponding to the character that was just
 #		created
 
@@ -24,10 +24,6 @@ var characterScene: PackedScene = preload(CHARACTER_SCENE_PATH)
 
 # _characterNodes and _characterResources are private variables because only this 
 # 	script should be editing them
-
-# stores character nodes keyed by network id
-# {<network id>: <character node>}
-var _characterNodes: Dictionary = {}
 
 # stores character resources keyed by network id
 # {<network id>: <character resource>}
@@ -45,44 +41,37 @@ var _timeSincePositionSync: float = 0.0
 # create a new character for the given network id
 # returns the character resource because I think it would be more useful than
 # 	the character node - TheSecondReal0
-func createCharacter(networkId: int) -> CharacterResource:
-	## Create character node and resource
-	var characterNode: Node = _createCharacterNode(networkId)
+func createCharacter(networkId: int, name: String) -> CharacterResource:
+	## Create character resource
 	var characterResource: CharacterResource = _createCharacterResource(networkId)
-	
-	## Assign character nodes and resources to each other
-	characterNode.setCharacterResource(characterResource)
-	characterResource.setCharacterNode(characterNode)
-	
+	## Assign character node to resource
+	characterResource.createCharacterNode()
 	## Register character node and resource
-	_registerCharacterNode(networkId, characterNode)
 	_registerCharacterResource(networkId, characterResource)
-	
+	## Set the name of the character
+	characterResource.setCharacterName(name)
+	var myId: int = get_tree().get_network_unique_id()
+	## If own character is added
+	if networkId == myId:
+		## Apply appearance to character
+		characterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
+		## Send my character data to server
+		sendOwnCharacterData()
 	## Return character resource
 	return characterResource
 
+# create a character node, this function is used when creating a new character
+func createCharacterNode(networkId: int = -1) -> KinematicBody2D:
+	## instance character scene
+	var characterNode: KinematicBody2D = characterScene.instance()
+	# set its network id
+	characterNode.networkId = networkId
+	# here is where we would set its player name, but that is not implemented yet
+	return characterNode
+
 # get character node for the input network id
 func getCharacterNode(id: int) -> Node:
-	# if there is no character node corresponding to this network id
-	if not id in _characterNodes:
-		# throw an error
-		printerr("Trying to get a nonexistant character node with network id ", id)
-		# crash the game (if running in debug mode) to assist with debugging
-		assert(false, "Should be unreachable")
-		# if running in release mode, return null
-		return null
-	return _characterNodes[id]
-
-func removeCharacterNode(id: int) -> void:
-	# if there is no character node corresponding to this network id
-	if not id in _characterNodes:
-		# throw an error
-		printerr("Trying to get a nonexistant character node with network id ", id)
-		# crash the game (if running in debug mode) to assist with debugging
-		assert(false, "Should be unreachable")
-		# if running in release mode, return
-		return
-	_characterNodes.erase(id)
+	return getCharacterResource(id).getNode()
 
 # get character resource for the input network id
 func getCharacterResource(id: int) -> CharacterResource:
@@ -108,13 +97,16 @@ func removeCharacterResource(id: int) -> void:
 	_characterResources.erase(id)
 
 func getMyCharacterNode() -> Node:
-	return _characterNodes[get_tree().get_network_unique_id()]
+	var id: int = get_tree().get_network_unique_id()
+	if not id in _characterResources:
+		return null
+	return getMyCharacterResource().getNode()
 
 func getMyCharacterResource() -> CharacterResource:
-	return _characterResources[get_tree().get_network_unique_id()]
-
-func getCharacterNodes() -> Dictionary:
-	return _characterNodes
+	var id: int = get_tree().get_network_unique_id()
+	if not id in _characterResources:
+		return null
+	return _characterResources[id]
 
 func getCharacterResources() -> Dictionary:
 	return _characterResources
@@ -124,15 +116,6 @@ func getCharacterKeys() -> Array:
 
 # --Private Functions--
 
-# create a character node, this function is used when creating a new character
-func _createCharacterNode(networkId: int = -1) -> Node:
-	## instance character scene
-	var characterNode: Node = characterScene.instance()
-	# set its network id
-	characterNode.networkId = networkId
-	# here is where we would set its player name, but that is not implemented yet
-	return characterNode
-
 # create a character resource, this function is used when creating a new character
 func _createCharacterResource(networkId: int = -1) -> CharacterResource:
 	## instance a new CharacterResource object
@@ -141,16 +124,6 @@ func _createCharacterResource(networkId: int = -1) -> CharacterResource:
 	characterResource.networkId = networkId
 	# here is where we would set its player name, but that is not implemented yet
 	return characterResource
-
-# add a character node to the characterNodes dictionary
-func _registerCharacterNode(id: int, characterNode: Node) -> void:
-	# if there is already a character node for this network id
-	if id in _characterNodes:
-		# throw an error
-		printerr("Registering a character node that already exists, network id: ", id)
-		assert(false, "Should be unreachable")
-	## Register character node for id
-	_characterNodes[id] = characterNode
 
 # add a character resource to the characterResources dictionary
 func _registerCharacterResource(id: int, characterResource: CharacterResource) -> void:
@@ -192,7 +165,7 @@ func _process(delta: float) -> void:
 		broadcastDataQueue = []
 	## If client
 	elif Connections.isClient():
-		if not get_tree().get_network_unique_id() in _characterResources:
+		if not Connections.getMyId() in _characterResources:
 			return
 		## Send own character position to server
 		_sendMyCharacterDataToServer()

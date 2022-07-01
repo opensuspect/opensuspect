@@ -90,7 +90,9 @@ puppet func receiveBulkPlayerData(connections: Dictionary) -> void:
 	## For all players
 	for player in listConnections:
 		## Create a character
-		gameScene.addCharacter(player)
+		var characterRes: CharacterResource
+		characterRes = Characters.createCharacter(player, listConnections[player])
+		gameScene.addCharacter(characterRes)
 
 puppet func setServerName(serverNewName: String) -> void:
 	serverName = serverNewName
@@ -103,7 +105,9 @@ puppet func receivePlayerData(id: int, name: String) -> void:
 		listConnections[id] = name
 		var gameScene: Node = TransitionHandler.gameScene
 		## Create a character
-		gameScene.addCharacter(id)
+		var characterRes: CharacterResource
+		characterRes = Characters.createCharacter(id, name)
+		gameScene.addCharacter(characterRes)
 	#print_debug("Connected clients: ", listConnections)
 
 # -------------- Server side code --------------
@@ -119,6 +123,7 @@ func createGame(portNumber: int, playerName: String) -> void:
 	connectionType = ConnectionTypes.CLIENT_SERVER
 	## Save data in globals
 	listConnections[1] = playerName
+	myName = playerName
 	serverName = playerName + "'s Server"
 	## Load the game scene
 	TransitionHandler.loadGameScene()
@@ -150,7 +155,9 @@ master func receiveNewPlayerData(newPlayerName: String) -> void:
 	rpc("receivePlayerData", senderId, newPlayerName)
 	## Add a character to the map 
 	var gameScene: Node = TransitionHandler.gameScene
-	gameScene.addCharacter(senderId)
+	var characterRes: CharacterResource
+	characterRes = Characters.createCharacter(senderId, newPlayerName)
+	gameScene.addCharacter(characterRes)
 
 func connectedNewPlayer(id: int) -> void:
 	pass
@@ -171,7 +178,6 @@ func handleDisconnect(id:int) -> void:
 	var characterResource: CharacterResource = Characters.getCharacterResource(id)
 	characterResource.disconnected() ## call this function on the player to handle in-game reprocussions
 	## remove character's node and resource
-	Characters.removeCharacterNode(id)
 	Characters.removeCharacterResource(id)
 
 func allowNewConnections(switch: bool) -> void:

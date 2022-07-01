@@ -37,13 +37,14 @@ func activate() -> void:
 	var myPosition: Vector2 = _owner.getGlobalPosition()
 	var otherPosition: Vector2
 	var distance: float
-	var characterDict: Dictionary = Characters.getCharacterResources()
 	var mindist: float = INF
 	var clostestId: int = -1
 
 	for character in gunRangeNode.get_overlapping_bodies():
 		var id: int = character.getNetworkId()
 		if id == Connections.getMyId():
+			continue
+		if not character.getCharacterResource().canBeKilled():
 			continue
 		otherPosition = character.getGlobalPosition()
 		distance = myPosition.distance_squared_to(otherPosition)

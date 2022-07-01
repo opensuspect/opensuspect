@@ -11,13 +11,10 @@
 shader = ExtResource( 7 )
 
 [node name="GunHud" type="Control"]
-anchor_left = 0.75
-anchor_top = 0.75
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_right = 150.0
+margin_bottom = 150.0
+rect_min_size = Vector2( 150, 150 )
 mouse_filter = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 __meta__ = {
 "_editor_description_": "GUI that indicates whether a kill is ready to be executed."
 }
@@ -25,25 +22,23 @@ __meta__ = {
 [node name="KillButton" type="TextureButton" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_scale = Vector2( 0.25, 0.25 )
+margin_top = 30.0
+rect_scale = Vector2( 1, 0.65 )
 mouse_filter = 1
 texture_normal = ExtResource( 3 )
 texture_pressed = ExtResource( 2 )
 texture_disabled = ExtResource( 6 )
+expand = true
 
 [node name="ReloadButton" type="TextureButton" parent="."]
 visible = false
 material = SubResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 45.0
-margin_top = -16.0
-margin_right = 365.0
-margin_bottom = 304.0
-rect_scale = Vector2( 0.5, 0.5 )
 mouse_filter = 1
 texture_normal = ExtResource( 5 )
 texture_pressed = ExtResource( 4 )
+expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
