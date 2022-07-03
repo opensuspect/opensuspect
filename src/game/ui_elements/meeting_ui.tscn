@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
 [ext_resource path="res://game/ui_elements/meeting_ui.gd" type="Script" id=2]
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui_small.tres" type="Theme" id=3]
 [ext_resource path="res://ui_elements/assets/themes/suspect_font_label.tres" type="DynamicFont" id=4]
 [ext_resource path="res://game/ui_elements/chat_box.gd" type="Script" id=5]
+[ext_resource path="res://ui_elements/assets/themes/suspect_font_main.tres" type="DynamicFont" id=6]
 
 [node name="MeetingUI" type="ColorRect"]
 anchor_right = 1.0
@@ -62,16 +63,17 @@ margin_top = 20.0
 margin_right = 1128.0
 margin_bottom = 930.0
 
-[node name="ChatHistory" type="TextEdit" parent="MainBox/ChatBox/ChatContainer"]
+[node name="ChatHistory" type="RichTextLabel" parent="MainBox/ChatBox/ChatContainer"]
 margin_right = 1108.0
 margin_bottom = 808.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 3 )
-custom_fonts/font = ExtResource( 4 )
+custom_fonts/bold_font = ExtResource( 6 )
+custom_fonts/normal_font = ExtResource( 4 )
+bbcode_enabled = true
+bbcode_text = "Start chatting!"
 text = "Start chatting!"
-readonly = true
-wrap_enabled = true
 
 [node name="InputContainer" type="HSplitContainer" parent="MainBox/ChatBox/ChatContainer"]
 margin_top = 820.0

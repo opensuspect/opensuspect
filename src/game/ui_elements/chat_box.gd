@@ -2,7 +2,7 @@ extends MarginContainer
 
 export var removeLineBreaks: bool = true
 
-onready var chatHistory: TextEdit = $ChatContainer/ChatHistory
+onready var chatHistory: RichTextLabel = $ChatContainer/ChatHistory
 onready var lineEdit: LineEdit = $ChatContainer/InputContainer/LineEdit
 
 # chars considered empty (spaces, tabs, etc.)
@@ -14,14 +14,14 @@ func _ready() -> void:
 	TransitionHandler.gameScene.connect("chatMessageReceived", self, "displayMessage")
 
 func clearMessages() -> void:
-	chatHistory.text = "Start chatting"
+	chatHistory.bbcode_text = "Start chatting"
 
 # ---------- RECEIVING MESSAGES -----------
 
 func displayMessage(text: String, from: int) -> void:
 	var senderName: String = Characters.getCharacterResource(from).getCharacterName()
-	var usedText: String = senderName + ": " + text
-	chatHistory.text += "\n" + usedText
+	var usedText: String = "[b]" + senderName + "[/b]: " + text
+	chatHistory.bbcode_text += "\n" + usedText
 
 
 
