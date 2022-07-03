@@ -2,23 +2,26 @@ extends MarginContainer
 
 export var removeLineBreaks: bool = true
 
-onready var textEdit: TextEdit = $VBoxContainer/TextEdit
-onready var lineEdit: LineEdit = $VBoxContainer/HBoxContainer/LineEdit
+onready var chatHistory: TextEdit = $ChatContainer/ChatHistory
+onready var lineEdit: LineEdit = $ChatContainer/InputContainer/LineEdit
 
 # chars considered empty (spaces, tabs, etc.)
 var emptyChars: Array = [" ", "	", "\n", "\r", "\r\n"]
 # chars that translate to line breaks
 var breakChars: Array = ["\n", "\r", "\r\n"]
 
+func _ready() -> void:
+	TransitionHandler.gameScene.connect("chatMessageReceived", self, "displayMessage")
 
-
+func clearMessages() -> void:
+	chatHistory.text = "Start chatting"
 
 # ---------- RECEIVING MESSAGES -----------
 
 func displayMessage(text: String, from: int) -> void:
 	var senderName: String = Characters.getCharacterResource(from).getCharacterName()
 	var usedText: String = senderName + ": " + text
-	textEdit.text += "\n" + usedText
+	chatHistory.text += "\n" + usedText
 
 
 
@@ -30,9 +33,10 @@ func sendMessage(text: String) -> void:
 	if isEmpty(text):
 		return
 	var processedText: String = processText(text)
+	#TODO: maybe first show the message gray and make it white once came back from server
+	#displayMessage(processedText, Connections.getMyId())
+	Connections.queueDataToSend("meeting-chat", processedText, -1)
 	
-	# TODO: send message through backend system
-	displayMessage(processedText, Connections.getMyId())
 
 # process message text to remove any illegal characters
 # 	this would also be where we could implement a censoring system if we wanted to

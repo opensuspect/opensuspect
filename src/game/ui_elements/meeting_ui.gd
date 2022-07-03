@@ -3,6 +3,7 @@ extends ColorRect
 onready var voteOptions: VBoxContainer = $MainBox/VoteSide/VoteOptions
 onready var timer: Timer = $VoteTimeOut
 onready var timeLabel: Label = $TimeLeft
+onready var chatbox: MarginContainer = $MainBox/ChatBox
 var characterVote: String = "res://game/ui_elements/character_vote.tscn"
 
 var votableCharacters: Dictionary = {}
@@ -21,6 +22,7 @@ func _focus() -> void:
 	var voteRes: VoteMechanicsTemplate = TransitionHandler.gameScene.getVoteResource()
 	timer.start(voteRes.timeToVote)
 	removeOptions()
+	chatbox.clearMessages()
 	for characterId in voteRes.voteOptions():
 		addCharacter(characterId)
 

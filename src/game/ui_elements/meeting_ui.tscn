@@ -56,13 +56,13 @@ margin_bottom = 950.0
 rect_min_size = Vector2( 500, 0 )
 script = ExtResource( 5 )
 
-[node name="VBoxContainer" type="VSplitContainer" parent="MainBox/ChatBox"]
+[node name="ChatContainer" type="VSplitContainer" parent="MainBox/ChatBox"]
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 1128.0
 margin_bottom = 930.0
 
-[node name="TextEdit" type="TextEdit" parent="MainBox/ChatBox/VBoxContainer"]
+[node name="ChatHistory" type="TextEdit" parent="MainBox/ChatBox/ChatContainer"]
 margin_right = 1108.0
 margin_bottom = 808.0
 size_flags_horizontal = 3
@@ -73,18 +73,18 @@ text = "Start chatting!"
 readonly = true
 wrap_enabled = true
 
-[node name="HBoxContainer" type="HSplitContainer" parent="MainBox/ChatBox/VBoxContainer"]
+[node name="InputContainer" type="HSplitContainer" parent="MainBox/ChatBox/ChatContainer"]
 margin_top = 820.0
 margin_right = 1108.0
 margin_bottom = 910.0
 size_flags_vertical = 0
 
-[node name="LineEdit" type="LineEdit" parent="MainBox/ChatBox/VBoxContainer/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="MainBox/ChatBox/ChatContainer/InputContainer"]
 margin_right = 967.0
 margin_bottom = 90.0
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="MainBox/ChatBox/VBoxContainer/HBoxContainer"]
+[node name="Button" type="Button" parent="MainBox/ChatBox/ChatContainer/InputContainer"]
 margin_left = 979.0
 margin_right = 1108.0
 margin_bottom = 90.0
@@ -95,6 +95,6 @@ text = "Send"
 wait_time = 75.0
 autostart = true
 
-[connection signal="text_entered" from="MainBox/ChatBox/VBoxContainer/HBoxContainer/LineEdit" to="MainBox/ChatBox" method="_on_LineEdit_text_entered"]
-[connection signal="pressed" from="MainBox/ChatBox/VBoxContainer/HBoxContainer/Button" to="MainBox/ChatBox" method="_on_Button_pressed"]
+[connection signal="text_entered" from="MainBox/ChatBox/ChatContainer/InputContainer/LineEdit" to="MainBox/ChatBox" method="_on_LineEdit_text_entered"]
+[connection signal="pressed" from="MainBox/ChatBox/ChatContainer/InputContainer/Button" to="MainBox/ChatBox" method="_on_Button_pressed"]
 [connection signal="timeout" from="VoteTimeOut" to="." method="_on_VoteTimeOut_timeout"]
