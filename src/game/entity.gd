@@ -106,6 +106,8 @@ func _getLookDirFromVec(vec: Vector2) -> int:
 
 # set the outfit of the character
 func setAppearance(outfit: Dictionary, colors: Dictionary) -> void:
+	if outfit.empty() or colors.empty():
+		return
 	var outfitPaths: Dictionary = {}
 	for partGroup in outfit: ## For each customizable group
 		var selectedLook: String = outfit[partGroup]

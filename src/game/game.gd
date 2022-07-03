@@ -127,11 +127,14 @@ func removeCharacter(id: int) -> void:
 	## remove the resource and the node
 	Characters.removeCharacterResource(id)
 
-func setCharacterData(id: int, characterData: Dictionary) -> void:
+func setCharacterData(characterData: Dictionary) -> void:
+	var id = characterData["sender"]
 	var character: CharacterResource = Characters.getCharacterResource(id)
 	## Apply character outfit and colors
-	if characterData.has("outfit") and characterData.has("colors"):
-		character.setAppearance(characterData["outfit"], characterData["colors"])
+	if characterData["key"] == "outfit":
+		character.setOutfit(characterData["value"])
+	if characterData["key"] == "colors":
+		character.setColors(characterData["value"])
 
 func abilityActivate(parameters: Dictionary) -> void:
 	# TODO: RPC should not be done directly the game scene!

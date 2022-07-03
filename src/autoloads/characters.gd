@@ -143,12 +143,9 @@ func sendOwnCharacterData() -> void:
 	## Get own character resource
 	var characterRes: CharacterResource
 	characterRes = Characters.getCharacterResource(id)
-	## Get own character outfit data
-	var characterData: Dictionary = {}
-	characterData["outfit"] = characterRes.getOutfit()
-	characterData["colors"] = characterRes.getColors()
 	## Save data to be sent to the server
-	Connections.queueDataToSend(characterData)
+	Connections.queueDataToSend("outfit", characterRes.getOutfit(), -1)
+	Connections.queueDataToSend("colors", characterRes.getColors(), -1)
 
 ## --Server Functions--
 
@@ -156,21 +153,17 @@ master func sendAllCharacterCustomizations() -> void:
 	## Get all character resourcse
 	var characterRes: Dictionary = {}
 	characterRes = getCharacterResources()
+	var senderId: int = get_tree().get_rpc_sender_id()
 	## For each character
 	for player in characterRes:
 		## Collect character outfit data
 		## and prepare to send back to sender
-		var characterData: Dictionary = {}
 		var outfit: Dictionary = characterRes[player].getOutfit()
 		var colors: Dictionary = characterRes[player].getColors()
 		if len(outfit) > 0:
-			characterData["outfit"] = outfit
+			Connections.queueDataToBroadcast("outfit", outfit, senderId, player)
 		if len(colors) > 0:
-			characterData["colors"] = colors
-		if len(characterData) > 0:
-			var senderId: int = get_tree().get_rpc_sender_id()
-			var dataSend: Dictionary = {"to": senderId, "id": player, "data": characterData}
-			Connections.queueDataToBroadcast(dataSend)
+			Connections.queueDataToBroadcast("colors", colors, senderId, player)
 	#print_debug(characterRes)
 	#print_debug(broadcastDataQueue)
 

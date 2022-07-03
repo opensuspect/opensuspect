@@ -148,8 +148,12 @@ puppet func receivePlayerData(id: int, name: String) -> void:
 		gameScene.addCharacter(characterRes)
 	#print_debug("Connected clients: ", listConnections)
 
-func queueDataToSend(newData: Dictionary) -> void:
-	sendToServerQueue.append(newData)
+func queueDataToSend(key: String, value, recipient: int) -> void:
+	sendToServerQueue.append({
+		"key": key,
+		"value": value,
+		"recipient": recipient
+	})
 
 func _sendQueuedDataToServer() -> void:
 	#print("sending my position to server")
@@ -159,6 +163,8 @@ func _sendQueuedDataToServer() -> void:
 	rpc_id(1, "_receiveCharacterDataFromClient", myPosition, sendToServerQueue)
 	sendToServerQueue = []
 
+# characterData = 	[	{"key": key1, "value": value1, "recipient": to1, "sender": from},
+#						{"key": key2, "value": value2, "recipient": to2, "sender": from}]
 puppet func _receiveAllCharacterData(positions: Dictionary, characterData: Array) -> void:
 	var myId: int = get_tree().get_network_unique_id()
 	## Loop through all characters
@@ -171,13 +177,13 @@ puppet func _receiveAllCharacterData(positions: Dictionary, characterData: Array
 		Characters.getCharacterResource(characterId).setPosition(positions[characterId])
 	## Decompose character data
 	#if len(characterData) > 0:
-	#	print_debug(characterData)
+	#print_debug(characterData)
 	var gameScene: Node = TransitionHandler.gameScene
 	for data in characterData:
 		## If recipient is me
-		if data["to"] == myId or data["to"] == -1:
+		if data["recipient"] == myId or data["recipient"] == -1:
 			## Apply data
-			gameScene.setCharacterData(data["id"], data["data"])
+			gameScene.setCharacterData(data)
 
 # -------------- Server side code --------------
 
@@ -261,22 +267,24 @@ master func _receiveCharacterDataFromClient(newPos: Vector2, characterData: Arra
 	## Handle additional received data
 	_receiveDataServer(sender, characterData)
 
+# characterData = 	[	{"key": key1, "value": value1, "recipient": to1},
+#						{"key": key2, "value": value2, "recipient": to2}]
 func _receiveDataServer(senderId: int, characterData: Array) -> void:
 	var gameScene: Node2D = TransitionHandler.gameScene
 	## Decompose and compile received data
 	if len(characterData) == 0:
 		return
-	var compiledData: Dictionary = {}
 	for element in characterData:
-		for key in element:
-			compiledData[key] = element[key]
+		broadcastDataQueue.append(element)
+		element["sender"] = senderId
+		gameScene.setCharacterData(element)
 	# Here the server could check and modify the data if necessary
 	## Sets character data for the character requested
-	gameScene.setCharacterData(senderId, compiledData)
-	## Save data for broadcast
-	var dataSend: Dictionary = {"to": -1, "id": senderId, "data": compiledData}
-	broadcastDataQueue.append(dataSend)
-	#print_debug(broadcastDataQueue)
 
-func queueDataToBroadcast(newData: Dictionary) -> void:
-	broadcastDataQueue.append(newData)
+func queueDataToBroadcast(key: String, value, recipient: int, sender: int = 1) -> void:
+	broadcastDataQueue.append({
+		"key": key,
+		"value": value,
+		"recipient": recipient,
+		"sender": sender
+	})
