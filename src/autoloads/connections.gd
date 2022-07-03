@@ -13,12 +13,50 @@ var serverName: String = "" setget toss, getServerName
 const MAX_PLAYERS: int = 20
 var listConnections: Dictionary = {} # Only lists playing connections, dedicated server is not here
 
+# Variables used to sync data between clients and server on a regular basis
+var broadcastDataQueue: Array = []
+var sendToServerQueue: Array = []
+
+var _dataSyncsPerSecond: int = 30
+var _timeSinceDataSync: float = 0.0
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	get_tree().connect("connected_to_server", self, "connectedOK")
 	get_tree().connect("connection_failed", self, "connectedFail")
 	get_tree().connect("server_disconnected", self, "disconnectedFromServer")
+
+func _process(delta: float) -> void:
+	if not TransitionHandler.isPlaying():
+		return
+	_timeSinceDataSync += delta
+	## Only proceed if enough time passed
+	if _timeSinceDataSync < 1.0 / _dataSyncsPerSecond:
+		return
+	## Reset position sync timer
+	_timeSinceDataSync = 0.0
+	## If server
+	if Connections.isClientServer() or Connections.isDedicatedServer():
+		## Collect all character positions
+		var positions: Dictionary = Characters.gatherCharacterPositions()
+		## Apply received character Data
+		if len(sendToServerQueue) > 0:
+			_receiveDataServer(1, sendToServerQueue)
+			sendToServerQueue = []
+		## Broadcast all character positions and data
+		#if len(broadcastDataQueue) > 0:
+			#print_debug(broadcastDataQueue)
+		rpc("_receiveAllCharacterData", positions, broadcastDataQueue)
+		broadcastDataQueue = []
+	## If client
+	elif Connections.isClient():
+		if Characters.getMyCharacterResource() == null:
+			return
+		## Send own character position and queued data to server
+		_sendQueuedDataToServer()
+	else:
+		assert(false, "Unreachable")
 
 func toss(_newValue) -> void:
 	pass
@@ -110,6 +148,37 @@ puppet func receivePlayerData(id: int, name: String) -> void:
 		gameScene.addCharacter(characterRes)
 	#print_debug("Connected clients: ", listConnections)
 
+func queueDataToSend(newData: Dictionary) -> void:
+	sendToServerQueue.append(newData)
+
+func _sendQueuedDataToServer() -> void:
+	#print("sending my position to server")
+	## Send own character position
+	## and custom data to server
+	var myPosition: Vector2 = Characters.getMyCharacterResource().getPosition()
+	rpc_id(1, "_receiveCharacterDataFromClient", myPosition, sendToServerQueue)
+	sendToServerQueue = []
+
+puppet func _receiveAllCharacterData(positions: Dictionary, characterData: Array) -> void:
+	var myId: int = get_tree().get_network_unique_id()
+	## Loop through all characters
+	for characterId in positions:
+		# if this position is for this client's character
+		if characterId == myId:
+			# don't update its position
+			continue
+		## Set the position for the character
+		Characters.getCharacterResource(characterId).setPosition(positions[characterId])
+	## Decompose character data
+	#if len(characterData) > 0:
+	#	print_debug(characterData)
+	var gameScene: Node = TransitionHandler.gameScene
+	for data in characterData:
+		## If recipient is me
+		if data["to"] == myId or data["to"] == -1:
+			## Apply data
+			gameScene.setCharacterData(data["id"], data["data"])
+
 # -------------- Server side code --------------
 
 func createGame(portNumber: int, playerName: String) -> void:
@@ -182,3 +251,32 @@ func handleDisconnect(id:int) -> void:
 
 func allowNewConnections(switch: bool) -> void:
 	get_tree().refuse_new_network_connections = not switch
+
+# receive a client's position
+# master keyword means that this function will only be run on the server when RPCed
+master func _receiveCharacterDataFromClient(newPos: Vector2, characterData: Array) -> void:
+	var sender: int = get_tree().get_rpc_sender_id()
+	## Set character position
+	Characters.updateCharacterPosition(sender, newPos)
+	## Handle additional received data
+	_receiveDataServer(sender, characterData)
+
+func _receiveDataServer(senderId: int, characterData: Array) -> void:
+	var gameScene: Node2D = TransitionHandler.gameScene
+	## Decompose and compile received data
+	if len(characterData) == 0:
+		return
+	var compiledData: Dictionary = {}
+	for element in characterData:
+		for key in element:
+			compiledData[key] = element[key]
+	# Here the server could check and modify the data if necessary
+	## Sets character data for the character requested
+	gameScene.setCharacterData(senderId, compiledData)
+	## Save data for broadcast
+	var dataSend: Dictionary = {"to": -1, "id": senderId, "data": compiledData}
+	broadcastDataQueue.append(dataSend)
+	#print_debug(broadcastDataQueue)
+
+func queueDataToBroadcast(newData: Dictionary) -> void:
+	broadcastDataQueue.append(newData)

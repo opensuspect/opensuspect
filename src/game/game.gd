@@ -84,7 +84,7 @@ func loadMap(mapPath: String) -> void:
 	## Spawn characters at spawn points
 	spawnAllCharacters()
 	## Request server for character data
-	Characters.requestCharacterData()
+	Characters.requestCharacterCustomizations()
 	if hudNode != null and not Connections.isDedicatedServer():
 		hudNode.refreshItemButtons()
 		if len(meetingPosList) == 0:
