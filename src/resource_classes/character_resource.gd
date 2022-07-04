@@ -235,6 +235,8 @@ func getAbility(abilityName: String) -> Ability:
 	return null
 
 func canPickUpItem(itemRes) -> bool:
+	if not isAlive():
+		return false
 	if len(_items) > 0:
 		return false
 	return itemRes.canBePickedUp(self)
