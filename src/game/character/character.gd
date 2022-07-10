@@ -2,11 +2,13 @@ extends "res://game/entity.gd"
 
 # --Public Variables--
 onready var abilityPoint = $CharacterElements/Abilities
-onready var interactionArea = $CharacterElements/Interaction
+onready var itemIntArea = $CharacterElements/ItemInteraction
+
 
 # --Signals--
 signal player_disconnected(id)
 signal itemInteraction(item, interaction)
+signal taskInteraction(taskArea, interaction)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -85,3 +87,11 @@ func _on_ItemPickup_body_exited(body):
 		# This pickup area should ONLY interact with items.
 		var itemRes: ItemResource = body.getItemResource()
 		emit_signal("itemInteraction", itemRes, "exited")
+
+func _on_TaskInteraction_area_entered(area):
+	if mainCharacter:
+		emit_signal("taskInteraction", area, "entered")
+
+func _on_TaskInteraction_area_exited(area):
+	if mainCharacter:
+		emit_signal("taskInteraction", area, "exited")

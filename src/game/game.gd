@@ -99,6 +99,7 @@ func addCharacter(characterRes: CharacterResource):
 	## If own character is added
 	if characterRes.getNetworkId() == myId:
 		newCharacter.connect("itemInteraction", self, "itemInteract")
+		newCharacter.connect("taskInteraction", self, "taskInteract")
 	## Spawn the character
 	spawnCharacter(characterRes)
 
@@ -148,6 +149,12 @@ func itemDropAttempt(itemId: int) -> void:
 
 func itemActivateAttempt(itemId: int, abilityName: String, properties: Dictionary) -> void:
 	rpc_id(1, "itemActivateServer", itemId, abilityName, properties)
+
+func taskInteract(interactArea: Area2D, action: String) -> void:
+	assert(interactArea in actualMap.taskNodes.interactAreas, "Task interact area not registered to task?")
+	var taskRes: TaskResource
+	taskRes = actualMap.taskNodes.interactAreas[interactArea]
+	hudNode.taskInteract(taskRes, action)
 
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()

@@ -2,6 +2,7 @@ extends Control
 
 onready var gameStartButton: Button = $GameStart
 onready var abilityBox: HBoxContainer = $GameUI/Abilities
+onready var taskIntBox: HBoxContainer = $GameUI/TaskInteract
 onready var itemIntBox: HBoxContainer = $GameUI/ItemInteract
 onready var itemUseBox: HBoxContainer = $GameUI/ItemUse
 onready var meetingCallBox: HBoxContainer = $GameUI/CallMeeting
@@ -9,6 +10,7 @@ onready var meetingCallBox: HBoxContainer = $GameUI/CallMeeting
 var itemPickUpScene: PackedScene = preload("res://game/hud/item_pick_up_button.tscn")
 var itemDropScene: PackedScene = preload("res://game/hud/item_drop_button.tscn")
 var itemAbilityScene: PackedScene = preload("res://game/hud/item_ability_button.tscn")
+var taskInteractScene: PackedScene = preload("res://game/hud/task_interact_button.tscn")
 
 var interactable: Array = []
 var interactUi: Array = []
@@ -107,6 +109,26 @@ func itemInteract(itemRes: ItemResource, action: String) -> void:
 		addItemToPickUp(itemRes)
 	if action == "exited":
 		removePickUpItem(itemRes)
+
+func addTaskToInteract(taskRes: TaskResource) -> void:
+	var newItemIcon: Control = taskInteractScene.instance()
+	newItemIcon.setupButton(taskRes)
+	taskIntBox.add_child(newItemIcon)
+	interactable.append(taskRes)
+	interactUi.append(newItemIcon)
+
+func removeTaskInteract(taskRes: TaskResource) -> void:
+	var index: int
+	index = interactable.find(taskRes)
+	interactUi[index].queue_free()
+	interactUi.pop_at(index)
+	interactable.pop_at(index)
+
+func taskInteract(taskRes: TaskResource, action: String) -> void:
+	if action == "entered":
+		addTaskToInteract(taskRes)
+	if action == "exited":
+		removeTaskInteract(taskRes)
 
 func showMeetingButton(show: bool = true) -> void:
 	meetingCallBox.visible = show
