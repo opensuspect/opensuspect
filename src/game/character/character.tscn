@@ -47,7 +47,7 @@ scale = Vector2( 0.2, 0.2 )
 
 [node name="Interaction" type="Area2D" parent="CharacterElements"]
 collision_layer = 0
-collision_mask = 512
+collision_mask = 1536
 
 [node name="InteractionRange" type="CollisionShape2D" parent="CharacterElements/Interaction"]
 rotation = 1.5708

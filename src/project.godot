@@ -50,6 +50,11 @@ _global_script_classes=[ {
 "path": "res://resource_classes/item_template.gd"
 }, {
 "base": "Resource",
+"class": "TaskResource",
+"language": "GDScript",
+"path": "res://resource_classes/task_template.gd"
+}, {
+"base": "Resource",
 "class": "TeamsRolesTemplate",
 "language": "GDScript",
 "path": "res://resource_classes/teams_roles_template.gd"
@@ -68,6 +73,7 @@ _global_script_class_icons={
 "GunAbility": "",
 "ItemResource": "",
 "ItemTemplate": "",
+"TaskResource": "",
 "TeamsRolesTemplate": "",
 "VoteMechanicsTemplate": ""
 }
@@ -139,8 +145,10 @@ move_down={
 
 2d_physics/layer_1="PlayersCollide"
 2d_physics/layer_2="ItemsCollide"
+2d_physics/layer_3="TaskCollide"
 2d_physics/layer_9="AbilityRange"
 2d_physics/layer_10="ItemPickup"
+2d_physics/layer_11="TaskActivate"
 
 [physics]
 

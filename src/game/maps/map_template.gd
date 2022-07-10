@@ -1,4 +1,4 @@
-extends Node2D
+extends YSort
 
 export var teamsRolesResource: Resource
 export var voteResource: Resource
