@@ -9,6 +9,8 @@ var characterVote: String = "res://game/ui_elements/character_vote.tscn"
 var votableCharacters: Dictionary = {}
 
 func _process(delta) -> void:
+	if timer.is_stopped():
+		return
 	var timeLeft: float = timer.time_left
 	var mins: int = floor(timeLeft / 60)
 	var secs: int = floor(timeLeft - mins * 60)
@@ -20,7 +22,11 @@ func _process(delta) -> void:
 
 func _focus() -> void:
 	var voteRes: VoteMechanicsTemplate = TransitionHandler.gameScene.getVoteResource()
-	timer.start(voteRes.timeToVote)
+	if voteRes.getVoteTime() > 0:
+		timer.start(voteRes.getVoteTime())
+	else:
+		timer.stop()
+		timeLabel.text = "No time limit"
 	removeOptions()
 	chatbox.clearMessages()
 	for characterId in voteRes.voteOptions():
