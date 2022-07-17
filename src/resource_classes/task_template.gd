@@ -5,6 +5,7 @@ export var buttonSprite: Texture
 export var taskPopUpName: String
 
 var taskPopUpPath: String
+var taskUiNode: Node = null
 var taskObjectNode: YSort setget nothing, getTaskObjectNode
 
 func getTaskObjectNode() -> YSort:
@@ -31,5 +32,10 @@ func init(newNode: YSort) -> void:
 		assert(false, "invalid task UI name")
 
 func interact() -> void:
-	print_debug("Task activated")
-	Scenes.overlay(taskPopUpPath)
+	Scenes.overlay(taskPopUpPath, self)
+
+func activateUi(uiNode: Node) -> void:
+	taskUiNode = uiNode
+
+func deactivateUi() -> void:
+	taskUiNode = null

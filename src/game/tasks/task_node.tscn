@@ -10,3 +10,5 @@ taskResource = ExtResource( 2 )
 [node name="InteractionArea" type="Area2D" parent="."]
 collision_layer = 4
 collision_mask = 1024
+
+[node name="Object" type="Node2D" parent="."]

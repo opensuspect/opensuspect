@@ -13,6 +13,7 @@ height = 92.0
 height = 92.0
 
 [node name="ChemicalCabinet" type="WindowDialog"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 25.0
@@ -69,6 +70,7 @@ texture = ExtResource( 5 )
 position = Vector2( 0, 50 )
 shape = SubResource( 2 )
 
+[connection signal="hide" from="." to="." method="_on_ChemicalCabinet_hide"]
 [connection signal="popup_hide" from="." to="." method="_on_ChemicalCabinet_popup_hide"]
 [connection signal="input_event" from="Control/DoorClosed/HandleLeft" to="." method="_on_HandleLeft_input_event"]
 [connection signal="mouse_entered" from="Control/DoorClosed/HandleLeft" to="." method="_on_HandleLeft_mouse_entered"]
