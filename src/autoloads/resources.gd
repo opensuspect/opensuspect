@@ -115,6 +115,8 @@ func _listFilesInDirectory(path: String, types: PoolStringArray) -> Array:
 			file = file.rstrip("." + cleanString(IMPORT_TYPE)) # Cleanly strip out the input extension
 			if _matchFileType(file, types): # Check if the file matches the correct filetype
 				files.append(file) # If it does, add it to the files array
+		elif file.get_extension() in types:
+			files.append(file)
 	return(files) # Return the files array
 
 func _matchFileType(file: String, types: PoolStringArray) -> bool:

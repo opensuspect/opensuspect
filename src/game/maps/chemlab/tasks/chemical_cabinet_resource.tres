@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://game/maps/chemlab/tasks/chemical_cabinet_resource.gd" type="Script" id=1]
+[ext_resource path="res://game/maps/chemlab/tasks/assets/cabinet-cabinet.png" type="Texture" id=2]
+
+[resource]
+script = ExtResource( 1 )
+buttonSprite = ExtResource( 2 )
+taskPopUpName = "chemical_cabinet_ui"

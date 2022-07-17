@@ -1,9 +1,9 @@
 extends WindowDialog
 
-onready var leftHandle: Node = $DoorClosed/HandleLeft
-onready var rightHandle: Node = $DoorClosed/HandleRight
-onready var doorOpened: Node = $DoorOpened
-onready var doorClosed: Node = $DoorClosed
+onready var leftHandle: Node = $Control/DoorClosed/HandleLeft
+onready var rightHandle: Node = $Control/DoorClosed/HandleRight
+onready var doorOpened: Node = $Control/DoorOpened
+onready var doorClosed: Node = $Control/DoorClosed
 onready var handle_maxy: int = leftHandle.position.y
 onready var handle_miny: int = leftHandle.position.y - 50
 

@@ -48,7 +48,7 @@ func gameStarted() -> void:
 
 puppetsync func startGame() -> void:
 	## Load game map (laboratory)
-	gameScene.loadMap("res://game/maps/chemlab/chemlab.tscn")
+	gameScene.loadMap("chemlab")
 	## Overlay role assignment scene
 	Scenes.overlay("res://game/role_assignment.tscn")
 	currentState = States.ASSIGNMENT
@@ -58,7 +58,7 @@ puppetsync func startGame() -> void:
 
 puppetsync func enterLobby() -> void:
 	## Load lobby map
-	gameScene.loadMap("res://game/maps/lobby/lobby.tscn")
+	gameScene.loadMap("lobby")
 	currentState = States.LOBBY
 	## If server, assign roles
 	if Connections.isServer():

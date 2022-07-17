@@ -6,3 +6,4 @@
 [resource]
 script = ExtResource( 1 )
 buttonSprite = ExtResource( 2 )
+taskPopUpName = ""

@@ -4,6 +4,7 @@ var spawnList: Array = [] # Storing spawn positions for current map
 var meetingPosList: Array = [] # Storing the meeting positions to be teleporeted to
 var spawnCounter: int = 0 # A counter to take care of where characters spawn
 var actualMap: Node2D = null
+var actualMapName: String = ""
 
 var roles: Dictionary = {} # Stores the roles of all the players
 # Stores the roles of the players based on what the current player sees
@@ -55,7 +56,7 @@ func setHudNode(newHudNode: Control) -> void:
 		assert(false, "shouldn't set the hudNode again")
 	hudNode = newHudNode
 
-func loadMap(mapPath: String) -> void:
+func loadMap(mapName: String) -> void:
 	## Remove previous map if applicable
 	for child in mapNode.get_children():
 		child.queue_free()
@@ -65,7 +66,9 @@ func loadMap(mapPath: String) -> void:
 	for corpse in corpsesNode.get_children():
 		corpse.queue_free()
 	## Load map and place it on scene tree
+	var mapPath: String = "res://game/maps/" + mapName + "/" + mapName + ".tscn"
 	actualMap = ResourceLoader.load(mapPath).instance()
+	actualMapName = mapName
 	mapNode.add_child(actualMap)
 	## Save spawn positions from the map
 	var spawnPosNode: Node = actualMap.get_node("SpawnPositions")
@@ -152,7 +155,7 @@ func itemActivateAttempt(itemId: int, abilityName: String, properties: Dictionar
 
 func taskInteract(interactArea: Area2D, action: String) -> void:
 	assert(interactArea in actualMap.taskNodes.interactAreas, "Task interact area not registered to task?")
-	var taskRes: TaskResource
+	var taskRes: Resource # TaskResource
 	taskRes = actualMap.taskNodes.interactAreas[interactArea]
 	hudNode.taskInteract(taskRes, action)
 
