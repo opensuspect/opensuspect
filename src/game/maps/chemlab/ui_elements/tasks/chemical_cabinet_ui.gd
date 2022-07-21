@@ -1,4 +1,4 @@
-extends WindowDialog
+extends "res://game/ui_elements/task_ui_base.gd"
 
 onready var leftHandle: Node = $Control/DoorClosed/HandleLeft
 onready var rightHandle: Node = $Control/DoorClosed/HandleRight
@@ -13,13 +13,6 @@ var right_in: bool = false
 var right_grab: bool = false
 var prev_mouse_coord: Vector2
 var maxrot = PI/3
-
-signal stateChanged
-signal action
-signal deactivate
-
-func _ready() -> void:
-	pass
 
 func attachNewResource(newRes: Resource) -> void:
 	var newState: Dictionary = newRes.activateUi(self)
@@ -92,10 +85,3 @@ func _on_HandleRight_input_event(viewport, event, shape_idx) -> void:
 		prev_mouse_coord = event.position
 	elif right_grab:
 		handleMove(event, rightHandle, false)
-
-func _on_ChemicalCabinet_popup_hide() -> void:
-	#TODO what is this for?!
-	emit_signal("deactivate")
-
-func _on_ChemicalCabinet_hide() -> void:
-	emit_signal("deactivate")
