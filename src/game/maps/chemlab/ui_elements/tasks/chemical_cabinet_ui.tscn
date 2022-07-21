@@ -13,7 +13,6 @@ height = 92.0
 height = 92.0
 
 [node name="ChemicalCabinet" type="WindowDialog"]
-visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 25.0

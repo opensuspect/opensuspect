@@ -1,21 +1,20 @@
 extends TaskResource
 class_name ChemCabResource
 
-var doorOpen: bool = false
-
-func activateUi(uiNode: Node) -> void:
-	.activateUi(uiNode)
-	if doorOpen:
-		uiNode.doorOpen()
-	else:
-		uiNode.doorClose()
+func init(newNode: YSort) -> void:
+	.init(newNode)
+	taskState["door"] = false
 
 func deactivateUi() -> void:
 	.deactivateUi()
 
+func stateChanged(newState: Dictionary) -> void:
+	.stateChanged(newState)
+	if "door" in newState:
+		setDoor(newState["door"])
+
 func setDoor(doorState: bool) -> void:
-	doorOpen = doorState
-	if doorOpen:
+	if doorState:
 		taskObjectNode.object.doorOpen()
 	else:
 		taskObjectNode.object.doorClose()

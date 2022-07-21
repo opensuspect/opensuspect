@@ -8,6 +8,8 @@ var taskPopUpPath: String
 var taskUiNode: Node = null
 var taskObjectNode: YSort setget nothing, getTaskObjectNode
 
+var taskState: Dictionary = {}
+
 func getTaskObjectNode() -> YSort:
 	return taskObjectNode
 
@@ -34,8 +36,22 @@ func init(newNode: YSort) -> void:
 func interact() -> void:
 	Scenes.overlay(taskPopUpPath, self)
 
-func activateUi(uiNode: Node) -> void:
+func activateUi(uiNode: Node) -> Dictionary:
 	taskUiNode = uiNode
+	taskUiNode.connect("stateChanged", self, "stateChanged")
+	taskUiNode.connect("action", self, "action")
+	taskUiNode.connect("deactivate", self, "deactivateUi")
+	return taskState.duplicate()
 
 func deactivateUi() -> void:
+	taskUiNode.disconnect("stateChanged", self, "stateChanged")
+	taskUiNode.disconnect("action", self, "action")
+	taskUiNode.disconnect("deactivate", self, "deactivateUi")
 	taskUiNode = null
+
+func stateChanged(newState: Dictionary) -> void:
+	for key in newState:
+		taskState[key] = newState[key]
+
+func action(actions: Dictionary) -> void:
+	pass

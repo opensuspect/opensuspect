@@ -14,14 +14,17 @@ var right_grab: bool = false
 var prev_mouse_coord: Vector2
 var maxrot = PI/3
 
-var taskResource: ChemCabResource
+signal stateChanged
+signal action
+signal deactivate
 
 func _ready() -> void:
 	pass
 
 func attachNewResource(newRes: Resource) -> void:
-	taskResource = newRes
-	taskResource.activateUi(self)
+	var newState: Dictionary = newRes.activateUi(self)
+	doorClosed.visible = not newState["door"]
+	doorOpened.visible = newState["door"]
 
 func _on_HandleLeft_mouse_entered() -> void:
 	left_in = true
@@ -46,12 +49,12 @@ func doorChange(status: bool) -> void:
 func doorClose() -> void:
 	doorClosed.visible = true
 	doorOpened.visible = false
-	taskResource.setDoor(false)
+	emit_signal("stateChanged", {"door": false})
 
 func doorOpen() -> void:
 	doorClosed.visible = false
 	doorOpened.visible = true
-	taskResource.setDoor(true)
+	emit_signal("stateChanged", {"door": true})
 
 func doorHandleCheck() -> void:
 	if rightHandle.rotation <= -maxrot * 0.9 and leftHandle.rotation >= maxrot * 0.9:
@@ -92,11 +95,7 @@ func _on_HandleRight_input_event(viewport, event, shape_idx) -> void:
 
 func _on_ChemicalCabinet_popup_hide() -> void:
 	#TODO what is this for?!
-	taskResource.deactivateUi()
-	taskResource = null
+	emit_signal("deactivate")
 
 func _on_ChemicalCabinet_hide() -> void:
-	if taskResource == null:
-		return
-	taskResource.deactivateUi()
-	taskResource = null
+	emit_signal("deactivate")
