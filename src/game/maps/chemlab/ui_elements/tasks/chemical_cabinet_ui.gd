@@ -18,6 +18,10 @@ func attachNewResource(newRes: Resource) -> void:
 	var newState: Dictionary = newRes.activateUi(self)
 	doorClosed.visible = not newState["door"]
 	doorOpened.visible = newState["door"]
+	leftHandle.position.y = handle_maxy - newState["left handle pos"]
+	leftHandle.rotation = newState["left handle rot"]
+	rightHandle.position.y = handle_maxy - newState["right handle pos"]
+	rightHandle.rotation = newState["right handle rot"]
 
 func _on_HandleLeft_mouse_entered() -> void:
 	left_in = true
@@ -28,10 +32,18 @@ func _on_HandleRight_mouse_entered() -> void:
 func _on_HandleLeft_mouse_exited() -> void:
 	left_in = false
 	left_grab = false
+	var newState: Dictionary = {}
+	newState["left handle pos"] = handle_maxy - leftHandle.position.y
+	newState["left handle rot"] = leftHandle.rotation
+	emit_signal("stateChanged", newState)
 
 func _on_HandleRight_mouse_exited() -> void:
 	right_in = false
 	right_grab = false
+	var newState: Dictionary = {}
+	newState["right handle pos"] = handle_maxy - rightHandle.position.y
+	newState["right handle rot"] = rightHandle.rotation
+	emit_signal("stateChanged", newState)
 
 func doorChange(status: bool) -> void:
 	if status:
@@ -47,7 +59,13 @@ func doorClose() -> void:
 func doorOpen() -> void:
 	doorClosed.visible = false
 	doorOpened.visible = true
-	emit_signal("stateChanged", {"door": true})
+	var newState: Dictionary =  {}
+	newState["door"] = true
+	newState["left handle pos"] = handle_maxy - leftHandle.position.y
+	newState["left handle rot"] = leftHandle.rotation
+	newState["right handle pos"] = handle_maxy - rightHandle.position.y
+	newState["right handle rot"] = rightHandle.rotation
+	emit_signal("stateChanged", newState)
 
 func doorHandleCheck() -> void:
 	if rightHandle.rotation <= -maxrot * 0.9 and leftHandle.rotation >= maxrot * 0.9:

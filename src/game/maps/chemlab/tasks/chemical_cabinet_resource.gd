@@ -4,6 +4,10 @@ class_name ChemCabResource
 func init(newNode: YSort) -> void:
 	.init(newNode)
 	taskState["door"] = false
+	taskState["left handle pos"] = 0
+	taskState["left handle rot"] = 0
+	taskState["right handle pos"] = 0
+	taskState["right handle rot"] = 0
 
 func deactivateUi() -> void:
 	.deactivateUi()

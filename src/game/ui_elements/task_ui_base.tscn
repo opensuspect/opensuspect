@@ -22,4 +22,4 @@ anchor_bottom = 0.5
 margin_right = 40.0
 margin_bottom = 40.0
 
-[connection signal="hide" from="." to="." method="_on_ChemicalCabinet_hide"]
+[connection signal="hide" from="." to="." method="_on_TaskUi_hide"]
