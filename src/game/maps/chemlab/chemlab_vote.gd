@@ -7,3 +7,6 @@ func allVoted() -> bool:
 		if not characterId in voteTally:
 			return false
 	return true
+
+func getVoteTime() -> float:
+	return 90.9
