@@ -47,8 +47,6 @@ func _process(delta: float) -> void:
 		## Broadcast all character positions and data
 		#if len(broadcastDataQueue) > 0:
 			#print_debug(broadcastDataQueue)
-		if not broadcastDataQueue.empty():
-			print_debug(len(broadcastDataQueue))
 		rpc("_receiveAllGameData", positions, broadcastDataQueue)
 		broadcastDataQueue = []
 	## If client
@@ -185,7 +183,6 @@ puppet func _receiveAllGameData(positions: Dictionary, gameData: Array) -> void:
 		## If recipient is me
 		if data["recipient"] == myId or data["recipient"] == -1:
 			## Apply data
-			print_debug(data)
 			gameScene.setGameData(data)
 
 # -------------- Server side code --------------
@@ -272,31 +269,33 @@ master func _receiveGameDataFromClient(newPos: Vector2, gameData: Array) -> void
 
 # gameData = 	[	{"key": key1, "value": value1, "recipient": to1},
 #					{"key": key2, "value": value2, "recipient": to2}]
-func _receiveDataServer(senderId: int, gameData: Array) -> void:
+func _receiveDataServer(senderId: int, allGameData: Array) -> void:
 	var gameScene: Node2D = TransitionHandler.gameScene
 	## Loop through all recieved data entries
-	for element in gameData:
+	for gameData in allGameData:
 		## Validate and set game data
 		var validatedData: Dictionary = {}
 		## Add the sender's ID to the data package
-		element["sender"] = senderId
-		validatedData = gameScene.setGameData(element)
+		gameData["sender"] = senderId
+		## The game scene keeps the data element intact if valid, and changes it
+		## to something valid if it isn't
+		validatedData = gameScene.setGameData(gameData)
 		## If the data was thrown away, do nothing
 		if validatedData.empty():
 			continue
 		## If the data is not valid
-		print_debug("validatedData != element: ", validatedData != element)
-		if validatedData != element:
+		if validatedData != gameData["value"]:
+			gameData["value"] = validatedData
 			## If the data was not intended for broadcast
-			if validatedData["recipient"] != -1:
+			if gameData["recipient"] != -1:
 				## Add the data to the broadcast queue
 				# will be sent out twice: once to the orig. sender and then the intended recipient
-				broadcastDataQueue.append(validatedData.duplicate())
+				broadcastDataQueue.append(gameData.duplicate())
 			## Change the sender to the server
-			validatedData["sender"] = 1
-			validatedData["recipient"] = senderId
+			gameData["sender"] = 1
+			gameData["recipient"] = senderId
 		## Add the data to the broadcast queue
-		broadcastDataQueue.append(validatedData)
+		broadcastDataQueue.append(gameData)
 	# Here the server could check and modify the data if necessary
 	## Sets character data for the character requested
 

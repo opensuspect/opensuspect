@@ -61,7 +61,8 @@ func action(actions: Dictionary) -> void:
 	emit_signal("action", self, actions)
 
 func stateRemoteChange(newState: Dictionary) -> bool:
-	taskState = newState
+	for key in newState:
+		taskState[key] = newState[key]
 	if taskUiNode != null:
 		taskUiNode.changedTaskState(taskState)
 	return true

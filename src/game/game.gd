@@ -143,15 +143,15 @@ func setGameData(gameData: Dictionary) -> Dictionary:
 	## Apply character outfit and colors
 	if gameData["key"] == "outfit":
 		character.setOutfit(gameData["value"])
-		return gameData
+		return gameData["value"]
 	if gameData["key"] == "colors":
 		character.setColors(gameData["value"])
-		return gameData
+		return gameData["value"]
 	if gameData["key"] == "meeting-chat":
 		emit_signal("chatMessageReceived", gameData["value"], id)
-		return gameData
+		return gameData["value"]
 	if gameData["key"] == "taskChanged":
-		actualMap.taskNodes.taskRemoteChanged(gameData["value"])
+		return actualMap.taskNodes.taskRemoteChanged(gameData["value"])
 	return {}
 
 func abilityActivate(parameters: Dictionary) -> void:
