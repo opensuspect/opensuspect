@@ -9,3 +9,6 @@ func attachNewResource(newRes: Resource) -> void:
 
 func _on_TaskUi_hide() -> void:
 	emit_signal("deactivate")
+
+func changedTaskState(newState: Dictionary) -> void:
+	pass

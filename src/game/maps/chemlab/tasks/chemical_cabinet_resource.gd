@@ -22,3 +22,9 @@ func setDoor(doorState: bool) -> void:
 		taskObjectNode.object.doorOpen()
 	else:
 		taskObjectNode.object.doorClose()
+
+func stateRemoteChange(newState: Dictionary) -> bool:
+	.stateRemoteChange(newState)
+	if "door" in newState:
+		setDoor(newState["door"])
+	return true

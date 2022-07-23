@@ -47,7 +47,9 @@ func _process(delta: float) -> void:
 		## Broadcast all character positions and data
 		#if len(broadcastDataQueue) > 0:
 			#print_debug(broadcastDataQueue)
-		rpc("_receiveAllCharacterData", positions, broadcastDataQueue)
+		if not broadcastDataQueue.empty():
+			print_debug(len(broadcastDataQueue))
+		rpc("_receiveAllGameData", positions, broadcastDataQueue)
 		broadcastDataQueue = []
 	## If client
 	elif Connections.isClient():
@@ -160,12 +162,12 @@ func _sendQueuedDataToServer() -> void:
 	## Send own character position
 	## and custom data to server
 	var myPosition: Vector2 = Characters.getMyCharacterResource().getPosition()
-	rpc_id(1, "_receiveCharacterDataFromClient", myPosition, sendToServerQueue)
+	rpc_id(1, "_receiveGameDataFromClient", myPosition, sendToServerQueue)
 	sendToServerQueue = []
 
-# characterData = 	[	{"key": key1, "value": value1, "recipient": to1, "sender": from},
-#						{"key": key2, "value": value2, "recipient": to2, "sender": from}]
-puppet func _receiveAllCharacterData(positions: Dictionary, characterData: Array) -> void:
+# gameData = 	[	{"key": key1, "value": value1, "recipient": to1, "sender": from},
+#					{"key": key2, "value": value2, "recipient": to2, "sender": from}]
+puppet func _receiveAllGameData(positions: Dictionary, gameData: Array) -> void:
 	var myId: int = get_tree().get_network_unique_id()
 	## Loop through all characters
 	for characterId in positions:
@@ -176,14 +178,15 @@ puppet func _receiveAllCharacterData(positions: Dictionary, characterData: Array
 		## Set the position for the character
 		Characters.getCharacterResource(characterId).setPosition(positions[characterId])
 	## Decompose character data
-	#if len(characterData) > 0:
-	#print_debug(characterData)
+	#if len(gameData) > 0:
+	#print_debug(gameData)
 	var gameScene: Node = TransitionHandler.gameScene
-	for data in characterData:
+	for data in gameData:
 		## If recipient is me
 		if data["recipient"] == myId or data["recipient"] == -1:
 			## Apply data
-			gameScene.setCharacterData(data)
+			print_debug(data)
+			gameScene.setGameData(data)
 
 # -------------- Server side code --------------
 
@@ -260,24 +263,40 @@ func allowNewConnections(switch: bool) -> void:
 
 # receive a client's position
 # master keyword means that this function will only be run on the server when RPCed
-master func _receiveCharacterDataFromClient(newPos: Vector2, characterData: Array) -> void:
+master func _receiveGameDataFromClient(newPos: Vector2, gameData: Array) -> void:
 	var sender: int = get_tree().get_rpc_sender_id()
 	## Set character position
 	Characters.updateCharacterPosition(sender, newPos)
 	## Handle additional received data
-	_receiveDataServer(sender, characterData)
+	_receiveDataServer(sender, gameData)
 
-# characterData = 	[	{"key": key1, "value": value1, "recipient": to1},
-#						{"key": key2, "value": value2, "recipient": to2}]
-func _receiveDataServer(senderId: int, characterData: Array) -> void:
+# gameData = 	[	{"key": key1, "value": value1, "recipient": to1},
+#					{"key": key2, "value": value2, "recipient": to2}]
+func _receiveDataServer(senderId: int, gameData: Array) -> void:
 	var gameScene: Node2D = TransitionHandler.gameScene
-	## Decompose and compile received data
-	if len(characterData) == 0:
-		return
-	for element in characterData:
-		broadcastDataQueue.append(element)
+	## Loop through all recieved data entries
+	for element in gameData:
+		## Validate and set game data
+		var validatedData: Dictionary = {}
+		## Add the sender's ID to the data package
 		element["sender"] = senderId
-		gameScene.setCharacterData(element)
+		validatedData = gameScene.setGameData(element)
+		## If the data was thrown away, do nothing
+		if validatedData.empty():
+			continue
+		## If the data is not valid
+		print_debug("validatedData != element: ", validatedData != element)
+		if validatedData != element:
+			## If the data was not intended for broadcast
+			if validatedData["recipient"] != -1:
+				## Add the data to the broadcast queue
+				# will be sent out twice: once to the orig. sender and then the intended recipient
+				broadcastDataQueue.append(validatedData.duplicate())
+			## Change the sender to the server
+			validatedData["sender"] = 1
+			validatedData["recipient"] = senderId
+		## Add the data to the broadcast queue
+		broadcastDataQueue.append(validatedData)
 	# Here the server could check and modify the data if necessary
 	## Sets character data for the character requested
 

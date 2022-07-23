@@ -132,17 +132,27 @@ func removeCharacter(id: int) -> void:
 	## remove the resource and the node
 	Characters.removeCharacterResource(id)
 
-#TODO: figure out a better name for this and related functions. Thanks.
-func setCharacterData(characterData: Dictionary) -> void:
-	var id = characterData["sender"]
+# Sets and validates game data received from other players or the server.
+# Returns the same dictionary it received if the validation is successful.
+# If a different dictionary is returned, the server will rebroadcast the
+# properly set data as its own so the invalid data sender will receive the
+# corrected data properly.
+func setGameData(gameData: Dictionary) -> Dictionary:
+	var id = gameData["sender"]
 	var character: CharacterResource = Characters.getCharacterResource(id)
 	## Apply character outfit and colors
-	if characterData["key"] == "outfit":
-		character.setOutfit(characterData["value"])
-	elif characterData["key"] == "colors":
-		character.setColors(characterData["value"])
-	elif characterData["key"] == "meeting-chat":
-		emit_signal("chatMessageReceived", characterData["value"], id)
+	if gameData["key"] == "outfit":
+		character.setOutfit(gameData["value"])
+		return gameData
+	if gameData["key"] == "colors":
+		character.setColors(gameData["value"])
+		return gameData
+	if gameData["key"] == "meeting-chat":
+		emit_signal("chatMessageReceived", gameData["value"], id)
+		return gameData
+	if gameData["key"] == "taskChanged":
+		actualMap.taskNodes.taskRemoteChanged(gameData["value"])
+	return {}
 
 func abilityActivate(parameters: Dictionary) -> void:
 	# TODO: RPC should not be done directly the game scene!

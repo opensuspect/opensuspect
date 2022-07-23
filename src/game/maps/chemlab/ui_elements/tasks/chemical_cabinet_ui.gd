@@ -16,12 +16,7 @@ var maxrot = PI/3
 
 func attachNewResource(newRes: Resource) -> void:
 	var newState: Dictionary = newRes.activateUi(self)
-	doorClosed.visible = not newState["door"]
-	doorOpened.visible = newState["door"]
-	leftHandle.position.y = handle_maxy - newState["left handle pos"]
-	leftHandle.rotation = newState["left handle rot"]
-	rightHandle.position.y = handle_maxy - newState["right handle pos"]
-	rightHandle.rotation = newState["right handle rot"]
+	changedTaskState(newState)
 
 func _on_HandleLeft_mouse_entered() -> void:
 	left_in = true
@@ -103,3 +98,11 @@ func _on_HandleRight_input_event(viewport, event, shape_idx) -> void:
 		prev_mouse_coord = event.position
 	elif right_grab:
 		handleMove(event, rightHandle, false)
+
+func changedTaskState(newState: Dictionary) -> void:
+	doorClosed.visible = not newState["door"]
+	doorOpened.visible = newState["door"]
+	leftHandle.position.y = handle_maxy - newState["left handle pos"]
+	leftHandle.rotation = newState["left handle rot"]
+	rightHandle.position.y = handle_maxy - newState["right handle pos"]
+	rightHandle.rotation = newState["right handle rot"]

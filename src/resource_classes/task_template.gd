@@ -10,6 +10,9 @@ var taskObjectNode: YSort setget nothing, getTaskObjectNode
 
 var taskState: Dictionary = {}
 
+signal stateChanged
+signal action
+
 func getTaskObjectNode() -> YSort:
 	return taskObjectNode
 
@@ -52,6 +55,13 @@ func deactivateUi() -> void:
 func stateChanged(newState: Dictionary) -> void:
 	for key in newState:
 		taskState[key] = newState[key]
+	emit_signal("stateChanged", self, taskState)
 
 func action(actions: Dictionary) -> void:
-	pass
+	emit_signal("action", self, actions)
+
+func stateRemoteChange(newState: Dictionary) -> bool:
+	taskState = newState
+	if taskUiNode != null:
+		taskUiNode.changedTaskState(taskState)
+	return true
