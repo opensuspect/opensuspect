@@ -57,7 +57,7 @@ _global_script_classes=[ {
 "base": "Resource",
 "class": "TaskResource",
 "language": "GDScript",
-"path": "res://resource_classes/task_template.gd"
+"path": "res://resource_classes/task_resource.gd"
 }, {
 "base": "Resource",
 "class": "TeamsRolesTemplate",

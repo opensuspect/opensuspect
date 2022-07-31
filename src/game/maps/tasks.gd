@@ -5,10 +5,12 @@ var interactAreas: Dictionary = {}
 
 func _ready():
 	var taskRes: TaskResource
+	TransitionHandler.gameScene.setTaskHandler(self)
 	for taskNode in get_children():
 		taskRes = taskNode.taskResource
 		taskResources[taskNode.name] = taskRes
 		interactAreas[taskNode.interactArea] = taskRes
+		taskRes.init(taskNode)
 		taskRes.connect("stateChanged", self, "taskChanged")
 		taskRes.connect("action", self, "taskActionAttempt")
 

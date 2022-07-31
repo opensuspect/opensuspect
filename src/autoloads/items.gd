@@ -97,14 +97,23 @@ func createItemServer(itemName: String, itemPosition: Vector2, properties: Dicti
 		newId = randi()
 	rpc("createItemClient", itemName, itemPosition, newId, properties)
 
+func createTaskItemServer(itemName: String, taskName: String, position: String, properties: Dictionary = {}):
+	var newId: int = -1
+	while newId == -1 or newId in _items.keys():
+		newId = randi()
+	rpc("createTaskItemClient", itemName, taskName, position, newId, properties)
+
 # --Client functions--
 puppetsync func createItemClient(itemName: String, itemPosition: Vector2, newId: int, properties: Dictionary):
 	_createItem(itemName, itemPosition, newId, properties)
 
+puppetsync func createTaskItemClient(itemName: String, taskName: String, position: String, newId: int, properties: Dictionary):
+	_createTaskItem(itemName, taskName, position, newId, properties)
+
 # --Private Functions--
 # creates a new ItemResource from this template
 func _createItem(itemName: String, itemPosition: Vector2, newId: int, properties: Dictionary):
-		# the item template to use when creating this item
+	# the item template to use when creating this item
 	var itemTemplate: ItemTemplate = getItemTemplate(itemName)
 	# initialize a new ItemResource
 	var itemResource: ItemResource = itemTemplate.createItemResource(properties)
@@ -122,6 +131,21 @@ func _createItem(itemName: String, itemPosition: Vector2, newId: int, properties
 	# assign item nodes and resources to each other
 	itemResource.setItemNode(itemNode)
 	itemNode.setItemResource(itemResource)
+
+func _createTaskItem(itemName: String, taskName: String, position: String, newId: int, properties: Dictionary):
+	# the item template to use when creating this item
+	var itemTemplate: ItemTemplate = getItemTemplate(itemName)
+	# initialize a new ItemResource
+	var itemResource: ItemResource = itemTemplate.createItemResource(properties)
+	itemResource.itemId = newId
+	_items[newId] = itemResource
+	itemTemplate.configureItemResource(itemResource)
+	# get the relevant task resource
+	var taskHandler = TransitionHandler.gameScene.taskHandler
+	var taskRes: TaskResource = taskHandler.taskResources[taskName]
+	## Attach the task to the item and the item to the task
+	itemResource.putInTask(taskRes)
+	taskRes.addItem(itemResource, position)
 
 # loads all item templates and returns a dictionary of them keyed by itemName
 func _instanceItemTemplates() -> Dictionary:

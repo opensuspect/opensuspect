@@ -7,8 +7,10 @@ export var taskPopUpName: String
 var taskPopUpPath: String
 var taskUiNode: Node = null
 var taskObjectNode: YSort setget nothing, getTaskObjectNode
+var name: String setget nothing, getName
 
 var taskState: Dictionary = {}
+var items: Dictionary = {}
 
 signal stateChanged
 signal action
@@ -16,12 +18,19 @@ signal action
 func getTaskObjectNode() -> YSort:
 	return taskObjectNode
 
-func nothing(taskObjectNode: YSort) -> void:
+func getName() -> String:
+	return name
+
+func nothing(anything) -> void:
 	assert(false, "Can't change this on the fly")
+
+func getItemResources() -> Dictionary:
+	return items.duplicate()
 
 func init(newNode: YSort) -> void:
 	assert(taskObjectNode == null)
 	taskObjectNode = newNode
+	name = taskObjectNode.name
 	var universalTaskUis: Dictionary
 	var mapTaskUis: Dictionary
 	var mapName: String = TransitionHandler.gameScene.actualMapName
@@ -35,6 +44,9 @@ func init(newNode: YSort) -> void:
 		taskPopUpPath = universalTaskUis[taskPopUpName]["path"]
 	else:
 		assert(false, "invalid task UI name")
+
+func addItem(itemRes: Resource, position: String) -> void:
+	items[position] = itemRes
 
 func interact() -> void:
 	Scenes.overlay(taskPopUpPath, self)

@@ -2,6 +2,8 @@ extends Resource
 class_name ItemResource
 
 # --Public Variables--
+const ITEM_TASK_ICON_SCENE_PATH: String = "res://game/items/item_node/item_task_icon.tscn"
+var itemTaskIconScene: PackedScene = preload(ITEM_TASK_ICON_SCENE_PATH)
 # the name of the item (for ex. "Wrench")
 var itemName: String setget setName, getName
 # the random id of the item
@@ -13,6 +15,7 @@ var textureScale: Vector2 = Vector2(1, 1)
 # the texture and scale used on the HUD for the item
 var hudTexture: Texture = null
 var hudTextureScale: Vector2 = Vector2(1, 1)
+var taskTextureScale: Vector2 = Vector2(1, 1)
 # the texture, scale and rotatation used when picked up
 var pickUpTexture: Texture = null
 var pickUpTextureScale: Vector2 = Vector2(1, 1)
@@ -20,9 +23,11 @@ var pickUpRotation: float = 0
 
 # --Private Variables--
 # the item node corresponding to this resource
-var _itemNode: Node
+var _itemNode: Node = null
 # the player resource holding this item
 var _holder: CharacterResource = null
+# the task resource holding this item
+var _task: TaskResource = null
 # an array with the names of the abilities assigned to this item
 # (for the base item resource, there is no special ability though, these
 # functions are strictly placeholders for items inheriting this resource)
@@ -71,6 +76,9 @@ func getHudTexture() -> Texture:
 func getHudTextureScale() -> Vector2:
 	return hudTextureScale
 
+func getTaskScale() -> Vector2:
+	return taskTextureScale
+
 func setItemNode(newItemNode: Node):
 	if _itemNode != null:
 		assert(false, "Assigning an item node to an item resource that already has one")
@@ -79,6 +87,17 @@ func setItemNode(newItemNode: Node):
 # returns the item node corresponding to this item resource
 func getItemNode() -> Node:
 	return _itemNode
+
+func putInTask(taskRes: Resource) -> void:
+	_task = taskRes
+
+func getTask() -> Resource:
+	return _task
+
+func createTaskButton() -> Node2D:
+	var button: Node2D = itemTaskIconScene.instance()
+	button.setTexture(hudTexture, taskTextureScale)
+	return button
 
 # returns which character resource is holding this item (null if dropped)
 func getHolder() -> CharacterResource:

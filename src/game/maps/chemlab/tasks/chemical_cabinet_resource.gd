@@ -1,6 +1,8 @@
 extends TaskResource
 class_name ChemCabResource
 
+export var itemsContained: Dictionary = {"Powder Bottle": 10}
+
 func init(newNode: YSort) -> void:
 	.init(newNode)
 	taskState["door"] = false
@@ -8,6 +10,18 @@ func init(newNode: YSort) -> void:
 	taskState["left handle rot"] = 0
 	taskState["right handle pos"] = 0
 	taskState["right handle rot"] = 0
+	if not Connections.isServer():
+		return
+	var position: String
+	var shelfIndex: int = 0
+	for itemName in itemsContained:
+		if itemName == "":
+			continue
+		if shelfIndex > 2:
+			break
+		for index in range(itemsContained[itemName]):
+			position = str(shelfIndex) + "-" + str(index)
+			Items.createTaskItemServer(itemName, name, position)
 
 func deactivateUi() -> void:
 	.deactivateUi()

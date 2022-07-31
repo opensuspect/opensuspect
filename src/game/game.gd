@@ -5,6 +5,7 @@ var meetingPosList: Array = [] # Storing the meeting positions to be teleporeted
 var spawnCounter: int = 0 # A counter to take care of where characters spawn
 var actualMap: Node2D = null
 var actualMapName: String = ""
+var taskHandler: Node = null
 
 var roles: Dictionary = {} # Stores the roles of all the players
 # Stores the roles of the players based on what the current player sees
@@ -56,6 +57,9 @@ func setHudNode(newHudNode: Control) -> void:
 	if hudNode != null:
 		assert(false, "shouldn't set the hudNode again")
 	hudNode = newHudNode
+
+func setTaskHandler(newTaskHandler: Node) -> void:
+	taskHandler = newTaskHandler
 
 func loadMap(mapName: String) -> void:
 	## Remove previous map if applicable

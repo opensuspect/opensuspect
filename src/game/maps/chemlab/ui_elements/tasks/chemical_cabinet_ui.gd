@@ -1,5 +1,6 @@
 extends "res://game/ui_elements/task_ui_base.gd"
 
+onready var cabinet: Node = $Control/Cabinet
 onready var leftHandle: Node = $Control/DoorClosed/HandleLeft
 onready var rightHandle: Node = $Control/DoorClosed/HandleRight
 onready var doorOpened: Node = $Control/DoorOpened
@@ -14,9 +15,20 @@ var right_grab: bool = false
 var prev_mouse_coord: Vector2
 var maxrot = PI/3
 
-func attachNewResource(newRes: Resource) -> void:
+func attachNewResource(newRes: TaskResource) -> void:
 	var newState: Dictionary = newRes.activateUi(self)
 	changedTaskState(newState)
+	var itemButtons: Dictionary = resetItems(newRes, cabinet)
+	for itemLoc in itemButtons:
+		var itemButton: Node2D = itemButtons[itemLoc]
+		var shelf: int = int(itemLoc.split("-")[0])
+		var place: int = int(itemLoc.split("-")[1])
+		if shelf == 0:
+			itemButton.position.y = -225 + (place % 2) * 10
+			if place < 5:
+				itemButton.position.x = -340 + place * 50
+			else:
+				itemButton.position.x = -120 + place * 50
 
 func _on_HandleLeft_mouse_entered() -> void:
 	left_in = true
@@ -106,3 +118,4 @@ func changedTaskState(newState: Dictionary) -> void:
 	leftHandle.rotation = newState["left handle rot"]
 	rightHandle.position.y = handle_maxy - newState["right handle pos"]
 	rightHandle.rotation = newState["right handle rot"]
+

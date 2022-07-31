@@ -16,9 +16,10 @@ var itemNodeScene: PackedScene = preload(ITEM_NODE_SCENE_PATH)
 export var texture: Texture
 # scale to be applied to the texture
 export var textureScale: Vector2 = Vector2(1, 1)
-# the texture and scale used on the HUD for the item
+# the texture and scale used on the HUD for the item, and the scale used when the item is in a task
 export var hudTexture: Texture = null
 export var hudTextureScale: Vector2 = Vector2(1, 1)
+export var taskTextureScale: Vector2 = Vector2(1, 1)
 # the texture, scale and rotatation used when picked up
 export var pickUpTexture: Texture = null
 export var pickUpTextureScale: Vector2 = Vector2(1, 1)
@@ -33,8 +34,8 @@ func configureItemResource(itemResource: ItemResource):
 	# transfer over general item info to itemResource
 	var propertyList: Array = [
 		"itemName", "texture", "textureScale", "hudTexture",
-		"hudTextureScale", "pickUpTexture", "pickUpTextureScale",
-		"pickUpRotation"]
+		"hudTextureScale", "taskTextureScale", "pickUpTexture",
+		"pickUpTextureScale", "pickUpRotation"]
 	for property in propertyList:
 		itemResource.set(property, get(property))
 

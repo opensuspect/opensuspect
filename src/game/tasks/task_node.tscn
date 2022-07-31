@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://game/tasks/task_node.gd" type="Script" id=1]
-[ext_resource path="res://resource_classes/task_template.tres" type="Resource" id=2]
+[ext_resource path="res://resource_classes/task_resource.tres" type="Resource" id=2]
 
 [node name="YSort" type="YSort"]
 script = ExtResource( 1 )

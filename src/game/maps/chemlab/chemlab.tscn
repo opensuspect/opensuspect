@@ -13,12 +13,18 @@ resource_local_to_scene = true
 script = ExtResource( 6 )
 buttonSprite = ExtResource( 7 )
 taskPopUpName = "chemical_cabinet_ui"
+itemsContained = {
+"Powder Bottle": 10
+}
 
 [sub_resource type="Resource" id=2]
 resource_local_to_scene = true
 script = ExtResource( 6 )
 buttonSprite = ExtResource( 7 )
 taskPopUpName = "chemical_cabinet_ui"
+itemsContained = {
+"Powder Bottle": 10
+}
 
 [node name="ChemLab" instance=ExtResource( 1 )]
 teamsRolesResource = ExtResource( 2 )
