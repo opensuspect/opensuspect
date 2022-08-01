@@ -117,26 +117,23 @@ func _createItem(itemName: String, itemPosition: Vector2, newId: int, properties
 	var itemTemplate: ItemTemplate = getItemTemplate(itemName)
 	# initialize a new ItemResource
 	var itemResource: ItemResource = itemTemplate.createItemResource(properties)
-	
+	itemResource.setTemplate(itemTemplate)
 	itemResource.itemId = newId
 	_items[newId] = itemResource
-	# initialize a new ItemNode
-	var itemNode: KinematicBody2D = itemTemplate.createItemNode()
-	itemNode.position = itemPosition
-	TransitionHandler.gameScene.itemsNode.add_child(itemNode)
-	
 	# have the item template configure the item resource
 	itemTemplate.configureItemResource(itemResource)
-	
-	# assign item nodes and resources to each other
-	itemResource.setItemNode(itemNode)
-	itemNode.setItemResource(itemResource)
+	# initialize a new ItemNode
+	itemResource.createItemNode()
+	var itemNode: KinematicBody2D = itemResource.getItemNode()
+	itemNode.position = itemPosition
+	TransitionHandler.gameScene.itemsNode.add_child(itemNode)
 
 func _createTaskItem(itemName: String, taskName: String, position: String, newId: int, properties: Dictionary):
 	# the item template to use when creating this item
 	var itemTemplate: ItemTemplate = getItemTemplate(itemName)
 	# initialize a new ItemResource
 	var itemResource: ItemResource = itemTemplate.createItemResource(properties)
+	itemResource.setTemplate(itemTemplate)
 	itemResource.itemId = newId
 	_items[newId] = itemResource
 	itemTemplate.configureItemResource(itemResource)

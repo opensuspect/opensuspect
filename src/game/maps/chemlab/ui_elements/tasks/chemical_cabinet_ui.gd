@@ -17,7 +17,6 @@ var maxrot = PI/3
 
 func attachNewResource(newRes: TaskResource) -> void:
 	var newState: Dictionary = newRes.activateUi(self)
-	changedTaskState(newState)
 	var itemButtons: Dictionary = resetItems(newRes, cabinet)
 	for itemLoc in itemButtons:
 		var itemButton: Node2D = itemButtons[itemLoc]
@@ -29,6 +28,7 @@ func attachNewResource(newRes: TaskResource) -> void:
 				itemButton.position.x = -340 + place * 50
 			else:
 				itemButton.position.x = -120 + place * 50
+	changedTaskState(newState)
 
 func _on_HandleLeft_mouse_entered() -> void:
 	left_in = true
@@ -61,6 +61,8 @@ func doorChange(status: bool) -> void:
 func doorClose() -> void:
 	doorClosed.visible = true
 	doorOpened.visible = false
+	for itemButton in cabinet.get_children():
+		itemButton.setButtonVisibility(false)
 	emit_signal("stateChanged", {"door": false})
 
 func doorOpen() -> void:
@@ -72,6 +74,8 @@ func doorOpen() -> void:
 	newState["left handle rot"] = leftHandle.rotation
 	newState["right handle pos"] = handle_maxy - rightHandle.position.y
 	newState["right handle rot"] = rightHandle.rotation
+	for itemButton in cabinet.get_children():
+		itemButton.setButtonVisibility(true)
 	emit_signal("stateChanged", newState)
 
 func doorHandleCheck() -> void:
@@ -111,9 +115,16 @@ func _on_HandleRight_input_event(viewport, event, shape_idx) -> void:
 	elif right_grab:
 		handleMove(event, rightHandle, false)
 
+func itemsPickedOut(itemRes: Resource) -> void:
+	for itemButton in cabinet.get_children():
+		if itemButton.getItemId() == itemRes.getId():
+			itemButton.queue_free()
+
 func changedTaskState(newState: Dictionary) -> void:
 	doorClosed.visible = not newState["door"]
 	doorOpened.visible = newState["door"]
+	for itemButton in cabinet.get_children():
+		itemButton.setButtonVisibility(doorOpened.visible)
 	leftHandle.position.y = handle_maxy - newState["left handle pos"]
 	leftHandle.rotation = newState["left handle rot"]
 	rightHandle.position.y = handle_maxy - newState["right handle pos"]

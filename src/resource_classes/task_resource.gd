@@ -18,8 +18,14 @@ signal action
 func getTaskObjectNode() -> YSort:
 	return taskObjectNode
 
+func getTaskUiNode() -> Node:
+	return taskUiNode
+
 func getName() -> String:
 	return name
+
+func getTaskPosition() -> Vector2:
+	return taskObjectNode.position
 
 func nothing(anything) -> void:
 	assert(false, "Can't change this on the fly")
@@ -71,6 +77,27 @@ func stateChanged(newState: Dictionary) -> void:
 
 func action(actions: Dictionary) -> void:
 	emit_signal("action", self, actions)
+
+func attemptItemPickOut(itemId: int) -> void:
+	var playerCharacter: CharacterResource = Characters.getMyCharacterResource()
+	for itemLoc in items:
+		var itemRes = items[itemLoc]
+		if itemRes.getId() == itemId:
+			if not playerCharacter.canPickUpItem(itemRes):
+				return
+			## Tell the server to attempt picking the item up
+			TransitionHandler.gameScene.itemPickUpAttempt(itemId)
+			return
+
+func canItemBePickedOut(intemId: int) -> bool:
+	return true
+
+func removeItem(itemRes: Resource) -> void:
+	for itemLoc in items:
+		if items[itemLoc] == itemRes:
+			itemRes.removeFromTask()
+			items.erase(itemLoc)
+			return
 
 func stateRemoteChange(newState: Dictionary) -> bool:
 	for key in newState:

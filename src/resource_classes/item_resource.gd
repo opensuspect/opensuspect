@@ -22,6 +22,8 @@ var pickUpTextureScale: Vector2 = Vector2(1, 1)
 var pickUpRotation: float = 0
 
 # --Private Variables--
+# the template this item was created through
+var _itemTemplate = null
 # the item node corresponding to this resource
 var _itemNode: Node = null
 # the player resource holding this item
@@ -36,6 +38,9 @@ var _abilities: Array = []
 var _abilityIcons: Dictionary = {}
 
 # --Public Functions--
+func setTemplate(itemTemplate) -> void:
+	assert(_itemTemplate == null)
+	_itemTemplate = itemTemplate
 
 # returns the name of this item (for ex. "Wrench")
 func getName() -> String:
@@ -79,6 +84,12 @@ func getHudTextureScale() -> Vector2:
 func getTaskScale() -> Vector2:
 	return taskTextureScale
 
+func createItemNode():
+	if _itemNode != null:
+		assert(false, "Assigning an item node to an item resource that already has one")
+	_itemNode = _itemTemplate.createItemNode()
+	_itemNode.setItemResource(self)
+
 func setItemNode(newItemNode: Node):
 	if _itemNode != null:
 		assert(false, "Assigning an item node to an item resource that already has one")
@@ -93,6 +104,9 @@ func putInTask(taskRes: Resource) -> void:
 
 func getTask() -> Resource:
 	return _task
+
+func removeFromTask() -> void:
+	_task = null
 
 func createTaskButton() -> Node2D:
 	var button: Node2D = itemTaskIconScene.instance()
@@ -111,7 +125,17 @@ func canBePickedUp(characterRes: CharacterResource) -> bool:
 	var characterNode: KinematicBody2D = characterRes.getCharacterNode()
 	if _holder != null:
 		return false
-	if not _itemNode in characterNode.itemIntArea.get_overlapping_bodies():
+	if (
+		_itemNode != null and
+		not _itemNode in characterNode.itemIntArea.get_overlapping_bodies()
+	):
+		return false
+	if (
+		_task != null and
+		(not _task.canItemBePickedOut(itemId) or
+		not _task.getTaskObjectNode().interactArea in
+		characterNode.taskIntArea.get_overlapping_areas())
+	):
 		return false
 	return true
 
@@ -153,4 +177,5 @@ func activate(abilityName: String, properties: Dictionary) -> void:
 func remove():
 	if _holder != null:
 		_holder.dropItem(self)
-	_itemNode.queue_free()
+	if _itemNode != null:
+		_itemNode.queue_free()

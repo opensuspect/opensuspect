@@ -44,7 +44,6 @@ func createItemResource(properties: Dictionary) -> ItemResource:
 	# initialize a new ItemResource
 	var itemResource: ItemResource = ItemResource.new()
 	# placeholder space to put whatever we need to do to initialize a general item resource
-	
 	return itemResource
 
 func createItemNode() -> Node:

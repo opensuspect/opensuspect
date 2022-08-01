@@ -42,3 +42,8 @@ func stateRemoteChange(newState: Dictionary) -> bool:
 	if "door" in newState:
 		setDoor(newState["door"])
 	return true
+
+func removeItem(itemRes: Resource) -> void:
+	.removeItem(itemRes)
+	if taskUiNode != null:
+		taskUiNode.itemsPickedOut(itemRes)

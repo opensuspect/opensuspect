@@ -24,7 +24,6 @@ visible = false
 texture = ExtResource( 4 )
 
 [node name="DoorClosed" type="Sprite" parent="Control" index="2"]
-visible = false
 texture = ExtResource( 2 )
 
 [node name="HandleLeft" type="Area2D" parent="Control/DoorClosed" index="0"]
