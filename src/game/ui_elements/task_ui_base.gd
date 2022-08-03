@@ -5,7 +5,10 @@ signal action
 signal deactivate
 
 func attachNewResource(newRes: TaskResource) -> void:
-	var newState: Dictionary = newRes.activateUi(self)
+	var newState: Dictionary = _attachNewResource(newRes)
+
+func _attachNewResource(newRes: TaskResource) -> Dictionary:
+	return newRes.activateUi(self)
 
 func _on_TaskUi_hide() -> void:
 	emit_signal("deactivate")

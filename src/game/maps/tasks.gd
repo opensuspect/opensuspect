@@ -6,6 +6,9 @@ var interactAreas: Dictionary = {}
 func _ready():
 	var taskRes: TaskResource
 	TransitionHandler.gameScene.setTaskHandler(self)
+	var myCharacter: CharacterResource = null
+	if not Connections.isDedicatedServer():
+		myCharacter = Characters.getMyCharacterResource()
 	for taskNode in get_children():
 		taskRes = taskNode.taskResource
 		taskResources[taskNode.name] = taskRes
@@ -13,6 +16,9 @@ func _ready():
 		taskRes.init(taskNode)
 		taskRes.connect("stateChanged", self, "taskChanged")
 		taskRes.connect("action", self, "taskActionAttempt")
+		if myCharacter != null:
+			taskRes.connect("activateUi", myCharacter, "setTaskMode")
+			taskRes.connect("deactivateUi", myCharacter, "endTaskMode")
 
 func taskChanged(taskRes: TaskResource, newState: Dictionary) -> void:
 	var taskData: Dictionary = {}

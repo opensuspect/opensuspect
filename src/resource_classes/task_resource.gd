@@ -12,6 +12,8 @@ var name: String setget nothing, getName
 var taskState: Dictionary = {}
 var items: Dictionary = {}
 
+signal activateUi
+signal deactivateUi
 signal stateChanged
 signal action
 
@@ -62,6 +64,7 @@ func activateUi(uiNode: Node) -> Dictionary:
 	taskUiNode.connect("stateChanged", self, "stateChanged")
 	taskUiNode.connect("action", self, "action")
 	taskUiNode.connect("deactivate", self, "deactivateUi")
+	emit_signal("activateUi")
 	return taskState.duplicate()
 
 func deactivateUi() -> void:
@@ -69,6 +72,7 @@ func deactivateUi() -> void:
 	taskUiNode.disconnect("action", self, "action")
 	taskUiNode.disconnect("deactivate", self, "deactivateUi")
 	taskUiNode = null
+	emit_signal("deactivateUi")
 
 func stateChanged(newState: Dictionary) -> void:
 	for key in newState:

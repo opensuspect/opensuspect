@@ -128,6 +128,12 @@ func setMeetingMode() -> void:
 func endMeetingMode() -> void:
 	_characterState = CharacterStates.NORMAL
 
+func setTaskMode() -> void:
+	_characterState = CharacterStates.MEETING
+
+func endTaskMode() -> void:
+	_characterState = CharacterStates.NORMAL
+
 # function called when character disconnects from server
 func disconnected():
 	if _characterNode != null:

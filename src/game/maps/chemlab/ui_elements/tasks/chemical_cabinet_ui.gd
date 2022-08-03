@@ -16,7 +16,7 @@ var prev_mouse_coord: Vector2
 var maxrot = PI/3
 
 func attachNewResource(newRes: TaskResource) -> void:
-	var newState: Dictionary = newRes.activateUi(self)
+	var newState: Dictionary = _attachNewResource(newRes)
 	var itemButtons: Dictionary = resetItems(newRes, cabinet)
 	for itemLoc in itemButtons:
 		var itemButton: Node2D = itemButtons[itemLoc]
