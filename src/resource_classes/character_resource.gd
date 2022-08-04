@@ -113,6 +113,9 @@ func isAlive() -> bool:
 func isGhost() -> bool:
 	return _ghost
 
+func isMainCharacter() -> bool:
+	return mainCharacter
+
 func canMove() -> bool:
 	if _characterState != CharacterStates.NORMAL:
 		return false
@@ -248,12 +251,12 @@ func canPickUpItem(itemRes) -> bool:
 func pickUpItem(itemRes) -> void:
 	var itemNode: KinematicBody2D = itemRes.getItemNode()
 	if itemNode == null:
-		assert(itemRes.getTask() != null, "If there is a node, there should be a task")
+		assert(itemRes.getTask() != null, "If there is no node, there should be a task")
 		var taskRes = itemRes.getTask()
 		itemRes.createItemNode()
 		itemNode = itemRes.getItemNode()
 		itemNode.position = taskRes.getTaskPosition()
-		taskRes.removeItem(itemRes)
+		taskRes.removeItem(itemRes, self)
 	if TransitionHandler.gameScene.itemsNode.is_a_parent_of(itemNode):
 		TransitionHandler.gameScene.itemsNode.remove_child(itemNode)
 	_characterNode.skeleton.putItemInHand(itemNode)

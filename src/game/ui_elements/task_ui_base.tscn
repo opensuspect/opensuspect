@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://game/ui_elements/task_ui_base.gd" type="Script" id=1]
+[ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=2]
 
 [node name="TaskUi" type="ColorRect"]
 anchor_right = 1.0
@@ -22,4 +23,15 @@ anchor_bottom = 0.5
 margin_right = 40.0
 margin_bottom = 40.0
 
+[node name="CloseButton" type="Button" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -200.0
+margin_top = 22.0
+margin_right = -22.0
+margin_bottom = 106.0
+theme = ExtResource( 2 )
+text = "Exit"
+
 [connection signal="hide" from="." to="." method="_on_TaskUi_hide"]
+[connection signal="pressed" from="CloseButton" to="." method="_on_CloseButton_pressed"]

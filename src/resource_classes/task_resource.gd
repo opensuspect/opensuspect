@@ -96,7 +96,7 @@ func attemptItemPickOut(itemId: int) -> void:
 func canItemBePickedOut(intemId: int) -> bool:
 	return true
 
-func removeItem(itemRes: Resource) -> void:
+func removeItem(itemRes: Resource, characterRes: Resource) -> void:
 	for itemLoc in items:
 		if items[itemLoc] == itemRes:
 			itemRes.removeFromTask()

@@ -29,3 +29,7 @@ func resetItems(taskRes: TaskResource, itemPlace: Node2D) -> Dictionary:
 		itemButtons[itemLoc] = itemButton
 		itemPlace.add_child(itemButton)
 	return itemButtons
+
+
+func _on_CloseButton_pressed():
+	Scenes.back()

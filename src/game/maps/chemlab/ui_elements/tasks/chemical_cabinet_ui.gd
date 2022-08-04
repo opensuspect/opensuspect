@@ -5,6 +5,7 @@ onready var leftHandle: Node = $Control/DoorClosed/HandleLeft
 onready var rightHandle: Node = $Control/DoorClosed/HandleRight
 onready var doorOpened: Node = $Control/DoorOpened
 onready var doorClosed: Node = $Control/DoorClosed
+onready var autoExitTimer: Timer = $Control/AutoExitTimer
 onready var handle_maxy: int = leftHandle.position.y
 onready var handle_miny: int = leftHandle.position.y - 50
 
@@ -123,10 +124,21 @@ func itemsPickedOut(itemRes: Resource) -> void:
 func changedTaskState(newState: Dictionary) -> void:
 	doorClosed.visible = not newState["door"]
 	doorOpened.visible = newState["door"]
+	var canPickOut: bool
+	var itemId: int
 	for itemButton in cabinet.get_children():
-		itemButton.setButtonVisibility(doorOpened.visible)
+		itemId = itemButton.getItemId()
+		canPickOut = (
+			Characters.getMyCharacterResource().canPickUpItem(Items.getItemResource(itemId))
+		)
+		itemButton.setButtonVisibility(canPickOut)
 	leftHandle.position.y = handle_maxy - newState["left handle pos"]
 	leftHandle.rotation = newState["left handle rot"]
 	rightHandle.position.y = handle_maxy - newState["right handle pos"]
 	rightHandle.rotation = newState["right handle rot"]
 
+func closeWindow() -> void:
+	autoExitTimer.start()
+
+func _on_AutoExitTimer_timeout():
+	Scenes.back()

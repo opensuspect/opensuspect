@@ -53,9 +53,14 @@ texture = ExtResource( 5 )
 position = Vector2( 0, 45 )
 shape = SubResource( 2 )
 
+[node name="AutoExitTimer" type="Timer" parent="Control" index="3"]
+wait_time = 0.5
+one_shot = true
+
 [connection signal="input_event" from="Control/DoorClosed/HandleLeft" to="." method="_on_HandleLeft_input_event"]
 [connection signal="mouse_entered" from="Control/DoorClosed/HandleLeft" to="." method="_on_HandleLeft_mouse_entered"]
 [connection signal="mouse_exited" from="Control/DoorClosed/HandleLeft" to="." method="_on_HandleLeft_mouse_exited"]
 [connection signal="input_event" from="Control/DoorClosed/HandleRight" to="." method="_on_HandleRight_input_event"]
 [connection signal="mouse_entered" from="Control/DoorClosed/HandleRight" to="." method="_on_HandleRight_mouse_entered"]
 [connection signal="mouse_exited" from="Control/DoorClosed/HandleRight" to="." method="_on_HandleRight_mouse_exited"]
+[connection signal="timeout" from="Control/AutoExitTimer" to="." method="_on_AutoExitTimer_timeout"]
