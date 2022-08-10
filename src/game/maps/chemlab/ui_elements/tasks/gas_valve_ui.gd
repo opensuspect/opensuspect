@@ -18,6 +18,9 @@ var prevMouseCoord: Vector2
 func attachNewResource(newRes: TaskResource) -> void:
 	var newState: Dictionary = _attachNewResource(newRes)
 	setHighPressNeedle(newRes.getHighPressure())
+	setLowPressNeedle(newRes.getLowPressure())
+	setMainValve(newState["main valve"])
+	setReductorValve(newState["reductor valve"])
 
 func mainValveOpen():
 	emitStateChange()

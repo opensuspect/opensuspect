@@ -8,6 +8,8 @@ resource_local_to_scene = true
 script = ExtResource( 1 )
 buttonSprite = ExtResource( 2 )
 taskPopUpName = "chemical_cabinet_ui"
+inputVariables = [  ]
+outputVariables = [  ]
 itemsContained = {
 "Powder Bottle": 10
 }

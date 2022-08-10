@@ -3,6 +3,8 @@ class_name TaskResource
 
 export var buttonSprite: Texture
 export var taskPopUpName: String
+export var inputVariables: Array
+export var outputVariables: Array
 
 var taskPopUpPath: String
 var taskUiNode: Node = null
@@ -16,6 +18,7 @@ signal activateUi
 signal deactivateUi
 signal stateChanged
 signal action
+signal outputChanged
 
 func getTaskObjectNode() -> YSort:
 	return taskObjectNode
@@ -109,3 +112,6 @@ func stateRemoteChange(newState: Dictionary) -> bool:
 	if taskUiNode != null:
 		taskUiNode.changedTaskState(taskState)
 	return true
+
+func inputChanged(name: String, value) -> void:
+	pass

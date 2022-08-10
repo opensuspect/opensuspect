@@ -36,9 +36,6 @@ func init(newNode: YSort) -> void:
 	_handleTimer.connect("timeout", self, "_handleReset")
 	taskObjectNode.add_child(_handleTimer)
 
-func deactivateUi() -> void:
-	.deactivateUi()
-
 func stateChanged(newState: Dictionary) -> void:
 	.stateChanged(newState)
 	if "door" in newState:

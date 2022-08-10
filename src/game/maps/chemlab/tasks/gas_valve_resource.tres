@@ -7,4 +7,6 @@
 resource_local_to_scene = true
 script = ExtResource( 1 )
 buttonSprite = ExtResource( 2 )
-taskPopUpName = "chemical_cabinet_ui"
+taskPopUpName = "gas_valve_ui"
+inputVariables = [  ]
+outputVariables = [  ]
