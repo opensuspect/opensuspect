@@ -5,8 +5,8 @@
 [ext_resource path="res://game/maps/chemlab/tasks/gas_valve_resource.tres" type="Resource" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
-radius = 47.0
-height = 484.0
+radius = 31.9998
+height = 148.0
 
 [node name="GasValve" instance=ExtResource( 1 )]
 taskResource = ExtResource( 3 )
@@ -16,5 +16,5 @@ rotation = 1.5708
 shape = SubResource( 1 )
 
 [node name="BaseSprite" type="Sprite" parent="Object" index="0"]
-position = Vector2( 0, -153 )
+position = Vector2( 0, -90 )
 texture = ExtResource( 2 )
