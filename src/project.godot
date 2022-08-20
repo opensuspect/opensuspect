@@ -40,6 +40,11 @@ _global_script_classes=[ {
 "path": "res://game/items/flask_template.gd"
 }, {
 "base": "TaskResource",
+"class": "GasPressChResource",
+"language": "GDScript",
+"path": "res://game/maps/chemlab/tasks/gas_pressure_check_resource.gd"
+}, {
+"base": "TaskResource",
 "class": "GasValveResource",
 "language": "GDScript",
 "path": "res://game/maps/chemlab/tasks/gas_valve_resource.gd"
@@ -81,6 +86,7 @@ _global_script_class_icons={
 "ChemlabVote": "",
 "FlaskResource": "",
 "FlaskTemplate": "",
+"GasPressChResource": "",
 "GasValveResource": "",
 "GunAbility": "",
 "ItemResource": "",

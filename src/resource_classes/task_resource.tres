@@ -4,6 +4,7 @@
 [ext_resource path="res://icon.png" type="Texture" id=2]
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource( 1 )
 buttonSprite = ExtResource( 2 )
 taskPopUpName = ""

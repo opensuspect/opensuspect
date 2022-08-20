@@ -1,0 +1,3 @@
+extends TaskResource
+class_name GasPressChResource
+

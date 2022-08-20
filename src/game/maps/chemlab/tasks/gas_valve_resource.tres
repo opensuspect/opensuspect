@@ -9,4 +9,4 @@ script = ExtResource( 1 )
 buttonSprite = ExtResource( 2 )
 taskPopUpName = "gas_valve_ui"
 inputVariables = [  ]
-outputVariables = [  ]
+outputVariables = [ "hydrogen pressure" ]

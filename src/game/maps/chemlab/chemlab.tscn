@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://game/maps/map_template.tscn" type="PackedScene" id=1]
 [ext_resource path="res://game/maps/chemlab/chemlab_teams_roles.tres" type="Resource" id=2]
@@ -10,6 +10,8 @@
 [ext_resource path="res://game/maps/chemlab/tasks/gas_valve.tscn" type="PackedScene" id=8]
 [ext_resource path="res://game/maps/chemlab/tasks/assets/gas-valve-object.png" type="Texture" id=9]
 [ext_resource path="res://game/maps/chemlab/tasks/gas_valve_resource.gd" type="Script" id=10]
+[ext_resource path="res://game/maps/chemlab/tasks/gas_pressure_check_resource.tres" type="Resource" id=11]
+[ext_resource path="res://game/maps/chemlab/tasks/gas_pressure_check.tscn" type="PackedScene" id=12]
 
 [sub_resource type="Resource" id=1]
 resource_local_to_scene = true
@@ -39,7 +41,7 @@ script = ExtResource( 10 )
 buttonSprite = ExtResource( 9 )
 taskPopUpName = "gas_valve_ui"
 inputVariables = [  ]
-outputVariables = [ "pb gas pressure" ]
+outputVariables = [ "Propan-Butangas" ]
 
 [sub_resource type="Resource" id=4]
 resource_local_to_scene = true
@@ -47,7 +49,15 @@ script = ExtResource( 10 )
 buttonSprite = ExtResource( 9 )
 taskPopUpName = "gas_valve_ui"
 inputVariables = [  ]
-outputVariables = [ "hydrogen pressure" ]
+outputVariables = [ "Hydrogen" ]
+
+[sub_resource type="Resource" id=5]
+resource_local_to_scene = true
+script = ExtResource( 10 )
+buttonSprite = ExtResource( 9 )
+taskPopUpName = "gas_valve_ui"
+inputVariables = [  ]
+outputVariables = [ "Argongas" ]
 
 [node name="ChemLab" instance=ExtResource( 1 )]
 teamsRolesResource = ExtResource( 2 )
@@ -93,10 +103,18 @@ taskResource = SubResource( 1 )
 position = Vector2( 293, 462 )
 taskResource = SubResource( 2 )
 
-[node name="GasValve" parent="TaskNodes" index="2" instance=ExtResource( 8 )]
-position = Vector2( 1551, 753 )
+[node name="GasValvePB" parent="TaskNodes" index="2" instance=ExtResource( 8 )]
+position = Vector2( 1554, 774 )
 taskResource = SubResource( 3 )
 
-[node name="GasValve2" parent="TaskNodes" index="3" instance=ExtResource( 8 )]
+[node name="GasValveH2" parent="TaskNodes" index="3" instance=ExtResource( 8 )]
 position = Vector2( 1580, 166 )
 taskResource = SubResource( 4 )
+
+[node name="GasValveAr" parent="TaskNodes" index="4" instance=ExtResource( 8 )]
+position = Vector2( 1760, 439 )
+taskResource = SubResource( 5 )
+
+[node name="GasPressureCheck" parent="TaskNodes" index="5" instance=ExtResource( 12 )]
+position = Vector2( 1367, 456 )
+taskResource = ExtResource( 11 )

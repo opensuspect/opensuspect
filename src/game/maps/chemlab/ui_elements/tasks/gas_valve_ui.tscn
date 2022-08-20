@@ -13,7 +13,7 @@ extents = Vector2( 21, 173.5 )
 [sub_resource type="CircleShape2D" id=2]
 radius = 146.168
 
-[node name="TaskUi" instance=ExtResource( 1 )]
+[node name="GasValveUi" instance=ExtResource( 1 )]
 script = ExtResource( 6 )
 
 [node name="Pipes" type="Sprite" parent="Control" index="0"]

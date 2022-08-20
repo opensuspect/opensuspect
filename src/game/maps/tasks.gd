@@ -32,7 +32,7 @@ func _ready():
 				print("There is an output ", output, ", that isn't an input for any task")
 				continue
 			for connectedTaskRes in tasksWithInput[output]:
-				taskRes.connect("outputChanged", connectedTaskRes, "inputChanged")
+				connectedTaskRes.setInputProvider(output, taskRes)
 
 func taskChanged(taskRes: TaskResource, newState: Dictionary) -> void:
 	var taskData: Dictionary = {}

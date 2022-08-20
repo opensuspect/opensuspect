@@ -37,3 +37,9 @@ func getLowPressure() -> float:
 		(taskState["reductor valve"] - 360) / (360 * 4)
 	)
 	return pressure
+
+func returnOutput(outputName: String):
+	if not outputName in outputVariables:
+		assert (false, "The required output can not be provided")
+		return null
+	return getLowPressure()

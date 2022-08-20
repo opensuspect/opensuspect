@@ -6,6 +6,11 @@ export var taskPopUpName: String
 export var inputVariables: Array
 export var outputVariables: Array
 
+# inputProviders will be a dictionary in which the keys will be set from the
+# array elements of inputVariables, and the values will be set to the resource
+# instance providing an output matching the input required here.
+var _inputProviders: Dictionary = {}
+
 var taskPopUpPath: String
 var taskUiNode: Node = null
 var taskObjectNode: YSort setget nothing, getTaskObjectNode
@@ -18,7 +23,6 @@ signal activateUi
 signal deactivateUi
 signal stateChanged
 signal action
-signal outputChanged
 
 func getTaskObjectNode() -> YSort:
 	return taskObjectNode
@@ -113,5 +117,20 @@ func stateRemoteChange(newState: Dictionary) -> bool:
 		taskUiNode.changedTaskState(taskState)
 	return true
 
-func inputChanged(name: String, value) -> void:
-	pass
+func setInputProvider(inputName: String, providerRes: TaskResource) -> void:
+	if inputName in _inputProviders:
+		assert (false, "Can't change the input provider once it has been set.")
+		return
+	_inputProviders[inputName] = providerRes
+
+func getInput(inputName: String):
+	if not inputName in _inputProviders:
+		assert (false, "trying to access a non-existent input")
+		return
+	return _inputProviders[inputName].returnOutput(inputName)
+
+func returnOutput(outputName: String):
+	if not outputName in outputVariables:
+		assert (false, "The required output can not be provided")
+		return null
+	return taskState[outputName]
