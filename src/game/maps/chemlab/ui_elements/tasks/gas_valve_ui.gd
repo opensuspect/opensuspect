@@ -31,6 +31,10 @@ func emitStateChange():
 	newState["reductor valve"] = reductorValve.rotation_degrees
 	emit_signal("stateChanged", newState)
 
+func changedTaskState(newState: Dictionary) -> void:
+	setMainValve(newState["main valve"])
+	setReductorValve(newState["reductor valve"])
+
 func setHighPressNeedle(pressure: float) -> void:
 	var minRot: float = 77
 	var maxRot: float = 350

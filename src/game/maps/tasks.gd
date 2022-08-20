@@ -50,6 +50,9 @@ func taskRemoteChanged(receivedData: Dictionary) -> Dictionary:
 	taskRes = taskResources[receivedData["name"]]
 	newState = receivedData["newState"]
 	if taskRes.stateRemoteChange(newState):
+		for output in taskRes.outputVariables:
+			for connectedTaskRes in tasksWithInput[output]:
+				connectedTaskRes.stateRemoteChange({})
 		return receivedData
 	return {"name": receivedData["name"], "newState": taskRes.taskState}
 	

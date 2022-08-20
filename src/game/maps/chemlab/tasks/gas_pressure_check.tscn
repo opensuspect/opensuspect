@@ -1,24 +1,15 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://game/tasks/task_node.tscn" type="PackedScene" id=1]
 [ext_resource path="res://game/maps/chemlab/tasks/assets/gas-pressure-check-object.png" type="Texture" id=2]
-[ext_resource path="res://resource_classes/task_resource.gd" type="Script" id=3]
-[ext_resource path="res://icon.png" type="Texture" id=4]
-
-[sub_resource type="Resource" id=2]
-resource_local_to_scene = true
-script = ExtResource( 3 )
-buttonSprite = ExtResource( 4 )
-taskPopUpName = ""
-inputVariables = [  ]
-outputVariables = [  ]
+[ext_resource path="res://game/maps/chemlab/tasks/gas_pressure_check_resource.tres" type="Resource" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 33.0
 height = 148.0
 
 [node name="GasPressureCheck" instance=ExtResource( 1 )]
-taskResource = SubResource( 2 )
+taskResource = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" index="0"]
 rotation = 1.5708

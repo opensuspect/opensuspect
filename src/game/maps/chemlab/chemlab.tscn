@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://game/maps/map_template.tscn" type="PackedScene" id=1]
 [ext_resource path="res://game/maps/chemlab/chemlab_teams_roles.tres" type="Resource" id=2]
@@ -10,7 +10,6 @@
 [ext_resource path="res://game/maps/chemlab/tasks/gas_valve.tscn" type="PackedScene" id=8]
 [ext_resource path="res://game/maps/chemlab/tasks/assets/gas-valve-object.png" type="Texture" id=9]
 [ext_resource path="res://game/maps/chemlab/tasks/gas_valve_resource.gd" type="Script" id=10]
-[ext_resource path="res://game/maps/chemlab/tasks/gas_pressure_check_resource.tres" type="Resource" id=11]
 [ext_resource path="res://game/maps/chemlab/tasks/gas_pressure_check.tscn" type="PackedScene" id=12]
 
 [sub_resource type="Resource" id=1]
@@ -117,4 +116,3 @@ taskResource = SubResource( 5 )
 
 [node name="GasPressureCheck" parent="TaskNodes" index="5" instance=ExtResource( 12 )]
 position = Vector2( 1367, 456 )
-taskResource = ExtResource( 11 )

@@ -6,7 +6,6 @@ func init(newNode: YSort) -> void:
 	taskState["main valve"] = 0
 	taskState["reductor valve"] = 0
 	taskState["base pressure"] = 2.0
-	taskState["output pressure"] = 0
 
 func stateChanged(newState: Dictionary) -> void:
 	.stateChanged(newState)
@@ -15,10 +14,9 @@ func stateChanged(newState: Dictionary) -> void:
 
 func stateRemoteChange(newState: Dictionary) -> bool:
 	.stateRemoteChange(newState)
-	taskUiNode.setHighPressNeedle(getHighPressure())
-	taskUiNode.setLowPressNeedle(getLowPressure())
-	taskUiNode.setMainValve(taskState["main valve"])
-	taskUiNode.setReductorValve(taskState["reductor valve"])
+	if taskUiNode != null:
+		taskUiNode.setHighPressNeedle(getHighPressure())
+		taskUiNode.setLowPressNeedle(getLowPressure())
 	return true
 
 func getHighPressure() -> float:
