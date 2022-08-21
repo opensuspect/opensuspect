@@ -16,6 +16,16 @@ func _on_TaskUi_hide() -> void:
 func changedTaskState(newState: Dictionary) -> void:
 	pass
 
+func changedItemButtons(itemButtons: Array) -> void:
+	var canPickOut: bool
+	var itemId: int
+	for itemButton in itemButtons:
+		itemId = itemButton.getItemId()
+		canPickOut = (
+			Characters.getMyCharacterResource().canPickUpItem(Items.getItemResource(itemId))
+		)
+		itemButton.setButtonVisibility(canPickOut)
+
 func resetItems(taskRes: TaskResource, itemPlace: Node2D) -> Dictionary:
 	for item in itemPlace.get_children():
 		item.queue_free()

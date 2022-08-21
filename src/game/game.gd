@@ -57,6 +57,8 @@ func setHudNode(newHudNode: Control) -> void:
 	if hudNode != null:
 		assert(false, "shouldn't set the hudNode again")
 	hudNode = newHudNode
+	if actualMap != null:
+		actualMap.setHudNode(hudNode)
 
 func setTaskHandler(newTaskHandler: Node) -> void:
 	taskHandler = newTaskHandler
@@ -73,6 +75,7 @@ func loadMap(mapName: String) -> void:
 	## Load map and place it on scene tree
 	var mapPath: String = "res://game/maps/" + mapName + "/" + mapName + ".tscn"
 	actualMap = ResourceLoader.load(mapPath).instance()
+	actualMap.setHudNode(hudNode)
 	actualMapName = mapName
 	mapNode.add_child(actualMap)
 	## Save spawn positions from the map
@@ -107,7 +110,7 @@ func addCharacter(characterRes: CharacterResource):
 	## If own character is added
 	if characterRes.getNetworkId() == myId:
 		newCharacter.connect("itemInteraction", self, "itemInteract")
-		newCharacter.connect("taskInteraction", self, "taskInteract")
+		newCharacter.connect("taskInteraction", actualMap, "taskInteract")
 	## Spawn the character
 	spawnCharacter(characterRes)
 
@@ -143,12 +146,16 @@ func removeCharacter(id: int) -> void:
 # corrected data properly.
 func setGameData(gameData: Dictionary) -> Dictionary:
 	var id = gameData["sender"]
-	var character: CharacterResource = Characters.getCharacterResource(id)
+	var character: CharacterResource = null
+	if id != 1 or not Connections.isDedicatedServer():
+		character = Characters.getCharacterResource(id)
 	## Apply character outfit and colors
 	if gameData["key"] == "outfit":
+		assert(character != null, "A dedicated server should not try to change its outfit")
 		character.setOutfit(gameData["value"])
 		return gameData["value"]
 	if gameData["key"] == "colors":
+		assert(character != null, "A dedicated server should not try to change its character colors")
 		character.setColors(gameData["value"])
 		return gameData["value"]
 	if gameData["key"] == "meeting-chat":
@@ -173,12 +180,6 @@ func itemDropAttempt(itemId: int) -> void:
 
 func itemActivateAttempt(itemId: int, abilityName: String, properties: Dictionary) -> void:
 	rpc_id(1, "itemActivateServer", itemId, abilityName, properties)
-
-func taskInteract(interactArea: Area2D, action: String) -> void:
-	assert(interactArea in actualMap.taskNodes.interactAreas, "Task interact area not registered to task?")
-	var taskRes: Resource # TaskResource
-	taskRes = actualMap.taskNodes.interactAreas[interactArea]
-	hudNode.taskInteract(taskRes, action)
 
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()

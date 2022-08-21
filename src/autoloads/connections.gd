@@ -131,6 +131,7 @@ puppet func receiveBulkPlayerData(connections: Dictionary) -> void:
 		var characterRes: CharacterResource
 		characterRes = Characters.createCharacter(player, listConnections[player])
 		gameScene.addCharacter(characterRes)
+	TransitionHandler.previouslyConnectedDataReceived()
 
 puppet func setServerName(serverNewName: String) -> void:
 	serverName = serverNewName
@@ -166,6 +167,8 @@ func _sendQueuedDataToServer() -> void:
 # gameData = 	[	{"key": key1, "value": value1, "recipient": to1, "sender": from},
 #					{"key": key2, "value": value2, "recipient": to2, "sender": from}]
 puppet func _receiveAllGameData(positions: Dictionary, gameData: Array) -> void:
+	if not TransitionHandler.isPlaying():
+		return
 	var myId: int = get_tree().get_network_unique_id()
 	## Loop through all characters
 	for characterId in positions:

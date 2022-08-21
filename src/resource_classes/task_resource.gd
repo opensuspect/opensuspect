@@ -90,7 +90,7 @@ func action(actions: Dictionary) -> void:
 	emit_signal("action", self, actions)
 
 func attemptItemPickOut(itemId: int) -> void:
-	var playerCharacter: CharacterResource = Characters.getMyCharacterResource()
+	var playerCharacter = Characters.getMyCharacterResource()
 	for itemLoc in items:
 		var itemRes = items[itemLoc]
 		if itemRes.getId() == itemId:
@@ -115,6 +115,7 @@ func stateRemoteChange(newState: Dictionary) -> bool:
 		taskState[key] = newState[key]
 	if taskUiNode != null:
 		taskUiNode.changedTaskState(taskState)
+		taskUiNode.changedItemButtons([])
 	return true
 
 func setInputProvider(inputName: String, providerRes: TaskResource) -> void:

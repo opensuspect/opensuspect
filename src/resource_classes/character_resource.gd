@@ -132,7 +132,7 @@ func endMeetingMode() -> void:
 	_characterState = CharacterStates.NORMAL
 
 func setTaskMode() -> void:
-	_characterState = CharacterStates.MEETING
+	_characterState = CharacterStates.TASK
 
 func endTaskMode() -> void:
 	_characterState = CharacterStates.NORMAL
