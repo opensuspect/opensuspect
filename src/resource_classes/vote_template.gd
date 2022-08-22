@@ -3,7 +3,9 @@ class_name VoteMechanicsTemplate
 
 var active: bool = false
 var voteTally: Dictionary = {}
-var timeToVote: float = 90.9
+
+func getVoteTime() -> float:
+	return 0.0
 
 func voteOptions() -> Array:
 	return Characters.getCharacterKeys()

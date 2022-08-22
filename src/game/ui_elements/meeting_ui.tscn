@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
 [ext_resource path="res://game/ui_elements/meeting_ui.gd" type="Script" id=2]
+[ext_resource path="res://ui_elements/assets/themes/suspect_ui_small.tres" type="Theme" id=3]
+[ext_resource path="res://ui_elements/assets/themes/suspect_font_label.tres" type="DynamicFont" id=4]
+[ext_resource path="res://game/ui_elements/chat_box.gd" type="Script" id=5]
+[ext_resource path="res://ui_elements/assets/themes/suspect_font_main.tres" type="DynamicFont" id=6]
 
 [node name="MeetingUI" type="ColorRect"]
 anchor_right = 1.0
@@ -51,9 +55,48 @@ margin_left = 712.0
 margin_right = 1860.0
 margin_bottom = 950.0
 rect_min_size = Vector2( 500, 0 )
+script = ExtResource( 5 )
+
+[node name="ChatContainer" type="VSplitContainer" parent="MainBox/ChatBox"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 1128.0
+margin_bottom = 930.0
+
+[node name="ChatHistory" type="RichTextLabel" parent="MainBox/ChatBox/ChatContainer"]
+margin_right = 1108.0
+margin_bottom = 808.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 3 )
+custom_fonts/bold_font = ExtResource( 6 )
+custom_fonts/normal_font = ExtResource( 4 )
+bbcode_enabled = true
+bbcode_text = "Start chatting!"
+text = "Start chatting!"
+
+[node name="InputContainer" type="HSplitContainer" parent="MainBox/ChatBox/ChatContainer"]
+margin_top = 820.0
+margin_right = 1108.0
+margin_bottom = 910.0
+size_flags_vertical = 0
+
+[node name="LineEdit" type="LineEdit" parent="MainBox/ChatBox/ChatContainer/InputContainer"]
+margin_right = 967.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="MainBox/ChatBox/ChatContainer/InputContainer"]
+margin_left = 979.0
+margin_right = 1108.0
+margin_bottom = 90.0
+size_flags_horizontal = 0
+text = "Send"
 
 [node name="VoteTimeOut" type="Timer" parent="."]
 wait_time = 75.0
 autostart = true
 
+[connection signal="text_entered" from="MainBox/ChatBox/ChatContainer/InputContainer/LineEdit" to="MainBox/ChatBox" method="_on_LineEdit_text_entered"]
+[connection signal="pressed" from="MainBox/ChatBox/ChatContainer/InputContainer/Button" to="MainBox/ChatBox" method="_on_Button_pressed"]
 [connection signal="timeout" from="VoteTimeOut" to="." method="_on_VoteTimeOut_timeout"]

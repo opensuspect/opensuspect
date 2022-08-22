@@ -21,6 +21,7 @@ onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 signal teamsRolesAssigned
 signal abilityAssigned
 signal clearAbilities
+signal chatMessageReceived
 
 func _ready() -> void:
 	## Game scene loaded
@@ -84,7 +85,7 @@ func loadMap(mapPath: String) -> void:
 	## Spawn characters at spawn points
 	spawnAllCharacters()
 	## Request server for character data
-	Characters.requestCharacterData()
+	Characters.requestCharacterCustomizations()
 	if hudNode != null and not Connections.isDedicatedServer():
 		hudNode.refreshItemButtons()
 		if len(meetingPosList) == 0:
@@ -127,11 +128,17 @@ func removeCharacter(id: int) -> void:
 	## remove the resource and the node
 	Characters.removeCharacterResource(id)
 
-func setCharacterData(id: int, characterData: Dictionary) -> void:
+#TODO: figure out a better name for this and related functions. Thanks.
+func setCharacterData(characterData: Dictionary) -> void:
+	var id = characterData["sender"]
 	var character: CharacterResource = Characters.getCharacterResource(id)
 	## Apply character outfit and colors
-	if characterData.has("outfit") and characterData.has("colors"):
-		character.setAppearance(characterData["outfit"], characterData["colors"])
+	if characterData["key"] == "outfit":
+		character.setOutfit(characterData["value"])
+	elif characterData["key"] == "colors":
+		character.setColors(characterData["value"])
+	elif characterData["key"] == "meeting-chat":
+		emit_signal("chatMessageReceived", characterData["value"], id)
 
 func abilityActivate(parameters: Dictionary) -> void:
 	# TODO: RPC should not be done directly the game scene!

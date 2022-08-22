@@ -284,6 +284,14 @@ func getOutfit() -> Dictionary:
 func getColors() -> Dictionary:
 	return _colors
 
+func setOutfit(newOutfit: Dictionary) -> void:
+	_outfit = newOutfit
+	_characterNode.call_deferred("setAppearance", _outfit, _colors)
+
+func setColors(newColors: Dictionary) -> void:
+	_colors = newColors
+	_characterNode.call_deferred("setAppearance", _outfit, _colors)
+
 # set the outfit information of this character
 func setAppearance(newOutfit: Dictionary, newColors: Dictionary) -> void:
 	## Set appearance (deferred)
