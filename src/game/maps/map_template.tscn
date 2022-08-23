@@ -1,12 +1,16 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://game/maps/map_template.gd" type="Script" id=1]
 [ext_resource path="res://resource_classes/teams_roles_template.tres" type="Resource" id=2]
+[ext_resource path="res://game/maps/tasks.gd" type="Script" id=3]
 
-[node name="MapTemplate" type="Node2D"]
+[node name="MapTemplate" type="YSort"]
 script = ExtResource( 1 )
 teamsRolesResource = ExtResource( 2 )
 
 [node name="SpawnPositions" type="Node2D" parent="."]
 
 [node name="MeetingPosition" type="Node2D" parent="."]
+
+[node name="TaskNodes" type="YSort" parent="."]
+script = ExtResource( 3 )

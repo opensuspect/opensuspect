@@ -4,6 +4,8 @@ var spawnList: Array = [] # Storing spawn positions for current map
 var meetingPosList: Array = [] # Storing the meeting positions to be teleporeted to
 var spawnCounter: int = 0 # A counter to take care of where characters spawn
 var actualMap: Node2D = null
+var actualMapName: String = ""
+var taskHandler: Node = null
 
 var roles: Dictionary = {} # Stores the roles of all the players
 # Stores the roles of the players based on what the current player sees
@@ -55,8 +57,13 @@ func setHudNode(newHudNode: Control) -> void:
 	if hudNode != null:
 		assert(false, "shouldn't set the hudNode again")
 	hudNode = newHudNode
+	if actualMap != null:
+		actualMap.setHudNode(hudNode)
 
-func loadMap(mapPath: String) -> void:
+func setTaskHandler(newTaskHandler: Node) -> void:
+	taskHandler = newTaskHandler
+
+func loadMap(mapName: String) -> void:
 	## Remove previous map if applicable
 	for child in mapNode.get_children():
 		child.queue_free()
@@ -66,7 +73,10 @@ func loadMap(mapPath: String) -> void:
 	for corpse in corpsesNode.get_children():
 		corpse.queue_free()
 	## Load map and place it on scene tree
+	var mapPath: String = "res://game/maps/" + mapName + "/" + mapName + ".tscn"
 	actualMap = ResourceLoader.load(mapPath).instance()
+	actualMap.setHudNode(hudNode)
+	actualMapName = mapName
 	mapNode.add_child(actualMap)
 	## Save spawn positions from the map
 	var spawnPosNode: Node = actualMap.get_node("SpawnPositions")
@@ -100,6 +110,7 @@ func addCharacter(characterRes: CharacterResource):
 	## If own character is added
 	if characterRes.getNetworkId() == myId:
 		newCharacter.connect("itemInteraction", self, "itemInteract")
+		newCharacter.connect("taskInteraction", actualMap, "taskInteract")
 	## Spawn the character
 	spawnCharacter(characterRes)
 
@@ -128,17 +139,31 @@ func removeCharacter(id: int) -> void:
 	## remove the resource and the node
 	Characters.removeCharacterResource(id)
 
-#TODO: figure out a better name for this and related functions. Thanks.
-func setCharacterData(characterData: Dictionary) -> void:
-	var id = characterData["sender"]
-	var character: CharacterResource = Characters.getCharacterResource(id)
+# Sets and validates game data received from other players or the server.
+# Returns the same dictionary it received if the validation is successful.
+# If a different dictionary is returned, the server will rebroadcast the
+# properly set data as its own so the invalid data sender will receive the
+# corrected data properly.
+func setGameData(gameData: Dictionary) -> Dictionary:
+	var id = gameData["sender"]
+	var character: CharacterResource = null
+	if id != 1 or not Connections.isDedicatedServer():
+		character = Characters.getCharacterResource(id)
 	## Apply character outfit and colors
-	if characterData["key"] == "outfit":
-		character.setOutfit(characterData["value"])
-	elif characterData["key"] == "colors":
-		character.setColors(characterData["value"])
-	elif characterData["key"] == "meeting-chat":
-		emit_signal("chatMessageReceived", characterData["value"], id)
+	if gameData["key"] == "outfit":
+		assert(character != null, "A dedicated server should not try to change its outfit")
+		character.setOutfit(gameData["value"])
+		return gameData["value"]
+	if gameData["key"] == "colors":
+		assert(character != null, "A dedicated server should not try to change its character colors")
+		character.setColors(gameData["value"])
+		return gameData["value"]
+	if gameData["key"] == "meeting-chat":
+		emit_signal("chatMessageReceived", gameData["value"], id)
+		return gameData["value"]
+	if gameData["key"] == "taskChanged":
+		return actualMap.taskNodes.taskRemoteChanged(gameData["value"])
+	return {}
 
 func abilityActivate(parameters: Dictionary) -> void:
 	# TODO: RPC should not be done directly the game scene!

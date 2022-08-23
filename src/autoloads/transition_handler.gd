@@ -25,8 +25,6 @@ func showMainMenu() -> void:
 func gameLoaded(newGameScene: Node2D) -> void:
 	## Save reference to game scene
 	gameScene = newGameScene
-	## Set scene to lobby
-	currentState = States.LOBBY
 	## Enter lobby
 	enterLobby()
 	## If client-server
@@ -46,9 +44,13 @@ func gameStarted() -> void:
 	currentState = States.MAP
 	Scenes.back()
 
+func previouslyConnectedDataReceived() -> void:
+	print_debug("Received data for currently connected all players")
+	currentState = States.LOBBY
+
 puppetsync func startGame() -> void:
 	## Load game map (laboratory)
-	gameScene.loadMap("res://game/maps/chemlab/chemlab.tscn")
+	gameScene.loadMap("chemlab")
 	## Overlay role assignment scene
 	Scenes.overlay("res://game/role_assignment.tscn")
 	currentState = States.ASSIGNMENT
@@ -58,8 +60,12 @@ puppetsync func startGame() -> void:
 
 puppetsync func enterLobby() -> void:
 	## Load lobby map
-	gameScene.loadMap("res://game/maps/lobby/lobby.tscn")
-	currentState = States.LOBBY
+	gameScene.loadMap("lobby")
+	## If the connections have not been received yet we aren't actually in the
+	## lobby state... unless we are the server.
+	if len(Connections.listConnections) > 1 or Connections.isServer():
+		## Switch to Lobby state
+		currentState = States.LOBBY
 	## If server, assign roles
 	if Connections.isServer():
 		gameScene.teamRoleAssignment(true)

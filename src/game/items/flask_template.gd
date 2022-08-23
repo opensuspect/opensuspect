@@ -21,6 +21,6 @@ func configureItemResource(itemResource: ItemResource):
 		"pickUpRotation", "textureFull", "hudTextureFull",
 		"pickUpTextureFull"]
 	for property in propertyList:
-		itemResource.set(property, get(property))
+		itemResource.set(property, .get(property))
 	itemResource._abilities = ["Pour"]
 	itemResource._abilityIcons = {"Pour": abilityTexture}

@@ -73,7 +73,7 @@ func getCharacterResource(id: int) -> CharacterResource:
 		# throw an error
 		printerr("Trying to get a nonexistant character resource with network id ", id)
 		# crash the game (if running in debug mode) to assist with debugging
-		assert(false, "Should be unreachable")
+		assert(false, "Thre should be no use case when we look for a non-existent character id")
 		# if running in release mode, return null
 		return null
 	return _characterResources[id]
@@ -84,7 +84,7 @@ func removeCharacterResource(id: int) -> void:
 		# throw an error
 		printerr("Trying to get a nonexistant character resource with network id ", id)
 		# crash the game (if running in debug mode) to assist with debugging
-		assert(false, "Should be unreachable")
+		assert(false, "Thre should be no use case when we remove a non-existent character id")
 		# if running in release mode, return
 		return
 	_characterResources.erase(id)
