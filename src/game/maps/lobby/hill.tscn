@@ -16,5 +16,6 @@ textures = [ ExtResource( 2 ) ]
 
 [node name="Sprite" parent="." index="0"]
 use_parent_material = true
-position = Vector2( 0, -199.71 )
+position = Vector2( 0, -500 )
+scale = Vector2( 2.5, 2.5 )
 texture = ExtResource( 2 )

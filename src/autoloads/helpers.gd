@@ -49,3 +49,9 @@ func is_valid_file_name(file_name: String, ext: String = "") -> bool:
 	if file_name.split(".").size() < 2:
 		return false
 	return true
+
+func pick_random(array: Array):
+	var random_index : int = 0
+	if len(array) > 0:
+		random_index = randi() % len(array)
+	return array[random_index]

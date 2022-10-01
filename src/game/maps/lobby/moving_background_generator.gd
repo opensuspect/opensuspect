@@ -8,7 +8,7 @@ onready var pool_manager: PoolManager = $PoolManager
 const despawn_threshold: float = 5.0
 
 # The path to the object that will be spawned in this generator
-export (String) var object_to_spawn_path := "res://assets/maps/lobby/tree.tscn"
+export (String) var object_to_spawn_path := "res://game/maps/lobby/tree.tscn"
 # The size of the child pool manager's object pool
 export (int) var pool_size := 10
 # The local coordinates that spawned objects will scroll to
