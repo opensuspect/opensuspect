@@ -2,7 +2,7 @@
 
 [ext_resource path="res://game/maps/chemlab/assets/tileset.tres" type="TileSet" id=1]
 
-[node name="Node2D" type="Node2D"]
+[node name="TiledMap" type="YSort"]
 
 [node name="Floor" type="TileMap" parent="."]
 tile_set = ExtResource( 1 )
