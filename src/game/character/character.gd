@@ -3,7 +3,6 @@ extends "res://game/entity.gd"
 # --Public Variables--
 onready var abilityPoint = $CharacterElements/Abilities
 onready var itemIntArea = $CharacterElements/ItemInteraction
-onready var taskIntArea = $CharacterElements/TaskInteraction
 
 # --Signals--
 signal player_disconnected(id)

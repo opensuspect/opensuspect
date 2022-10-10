@@ -1,15 +1,27 @@
-[gd_resource type="TileSet" load_steps=26 format=2]
+[gd_resource type="TileSet" load_steps=37 format=2]
 
 [ext_resource path="res://game/maps/chemlab/assets/tileset.png" type="Texture" id=1]
+
+[sub_resource type="OccluderPolygon2D" id=36]
+polygon = PoolVector2Array( 0, 0, 0, 80, 200, 80, 200, 60, 20, 60, 20, 20, 180, 20, 180, 60, 200, 60, 200, 0 )
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 
+[sub_resource type="OccluderPolygon2D" id=37]
+polygon = PoolVector2Array( 20, 20, 180, 20, 180, 80, 200, 80, 200, 0, 0, 0, 0, 80, 180, 80, 180, 60, 20, 60 )
+
 [sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 
+[sub_resource type="OccluderPolygon2D" id=27]
+polygon = PoolVector2Array( 200, 0, 0, 0, 0, 20, 200, 20 )
+
 [sub_resource type="ConvexPolygonShape2D" id=3]
 points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
+
+[sub_resource type="OccluderPolygon2D" id=28]
+polygon = PoolVector2Array( 200, 0, 0, 0, 0, 20, 200, 20 )
 
 [sub_resource type="ConvexPolygonShape2D" id=4]
 points = PoolVector2Array( 0, 60, 200, 60, 200, 200, 0, 200 )
@@ -47,8 +59,14 @@ points = PoolVector2Array( 0, 160, 200, 160, 200, 200, 0, 200 )
 [sub_resource type="ConvexPolygonShape2D" id=15]
 points = PoolVector2Array( 140, 180, 40, 180, 40, 100, 140, 100 )
 
+[sub_resource type="OccluderPolygon2D" id=38]
+polygon = PoolVector2Array( 0, 200, 20, 200, 20, 20, 80, 20, 80, 200, 100, 200, 100, 0, 0, 0 )
+
 [sub_resource type="ConvexPolygonShape2D" id=16]
 points = PoolVector2Array( 100, 200, 0, 200, 0, 60, 100, 60 )
+
+[sub_resource type="OccluderPolygon2D" id=39]
+polygon = PoolVector2Array( 20, 20, 80, 20, 80, 200, 100, 200, 100, 0, 0, 0, 0, 200, 20, 200 )
 
 [sub_resource type="ConvexPolygonShape2D" id=17]
 points = PoolVector2Array( 0, 60, 100, 60, 100, 200, 0, 200 )
@@ -56,17 +74,32 @@ points = PoolVector2Array( 0, 60, 100, 60, 100, 200, 0, 200 )
 [sub_resource type="ConvexPolygonShape2D" id=18]
 points = PoolVector2Array( 0, 60, 100, 60, 100, 160, 0, 160 )
 
+[sub_resource type="OccluderPolygon2D" id=40]
+polygon = PoolVector2Array( 180, 60, 180, 80, 20, 80, 20, 200, 0, 200, 0, 0, 200, 0, 200, 80, 180, 80, 180, 20, 20, 20, 20, 60 )
+
 [sub_resource type="ConvexPolygonShape2D" id=19]
 points = PoolVector2Array( 100, 200, 0, 200, 0, 60, 200, 60, 200, 100, 100, 100 )
+
+[sub_resource type="OccluderPolygon2D" id=32]
+polygon = PoolVector2Array( 0, 100, 100, 100, 100, 120, 0, 120 )
 
 [sub_resource type="ConvexPolygonShape2D" id=20]
 points = PoolVector2Array( 0, 160, 100, 160, 100, 200, 0, 200 )
 
+[sub_resource type="OccluderPolygon2D" id=41]
+polygon = PoolVector2Array( 0, 200, 20, 200, 20, 20, 80, 20, 80, 200, 100, 200, 100, 0, 0, 0 )
+
 [sub_resource type="ConvexPolygonShape2D" id=21]
 points = PoolVector2Array( 100, 200, 0, 200, 0, 60, 100, 60 )
 
+[sub_resource type="OccluderPolygon2D" id=42]
+polygon = PoolVector2Array( 0, 0, 0, 80, 180, 80, 180, 60, 20, 60, 20, 20, 180, 20, 180, 80, 200, 80, 200, 0 )
+
 [sub_resource type="ConvexPolygonShape2D" id=22]
 points = PoolVector2Array( 200, 100, 0, 100, 0, 60, 200, 60 )
+
+[sub_resource type="OccluderPolygon2D" id=35]
+polygon = PoolVector2Array( 100, 200, 0, 200, 0, 0, 100, 0 )
 
 [sub_resource type="ConvexPolygonShape2D" id=23]
 points = PoolVector2Array( 0, 0, 100, 0, 100, 200, 0, 200 )
@@ -124,6 +157,7 @@ points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 3/region = Rect2( 600, 0, 200, 200 )
 3/tile_mode = 0
 3/occluder_offset = Vector2( 0, 0 )
+3/occluder = SubResource( 40 )
 3/navigation_offset = Vector2( 0, 0 )
 3/shape_offset = Vector2( 0, 0 )
 3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
@@ -145,6 +179,7 @@ points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 4/region = Rect2( 800, 0, 200, 200 )
 4/tile_mode = 0
 4/occluder_offset = Vector2( 0, 0 )
+4/occluder = SubResource( 42 )
 4/navigation_offset = Vector2( 0, 0 )
 4/shape_offset = Vector2( 0, 0 )
 4/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
@@ -166,6 +201,7 @@ points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 5/region = Rect2( 1000, 0, 200, 200 )
 5/tile_mode = 0
 5/occluder_offset = Vector2( 0, 0 )
+5/occluder = SubResource( 35 )
 5/navigation_offset = Vector2( 0, 0 )
 5/shape_offset = Vector2( 0, 0 )
 5/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
@@ -250,6 +286,7 @@ points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 10/region = Rect2( 800, 200, 200, 200 )
 10/tile_mode = 0
 10/occluder_offset = Vector2( 0, 0 )
+10/occluder = SubResource( 36 )
 10/navigation_offset = Vector2( 0, 0 )
 10/shape_offset = Vector2( 0, 0 )
 10/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
@@ -271,6 +308,7 @@ points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 11/region = Rect2( 1000, 200, 200, 200 )
 11/tile_mode = 0
 11/occluder_offset = Vector2( 0, 0 )
+11/occluder = SubResource( 37 )
 11/navigation_offset = Vector2( 0, 0 )
 11/shape_offset = Vector2( 0, 0 )
 11/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
@@ -320,6 +358,7 @@ points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 14/region = Rect2( 400, 400, 200, 200 )
 14/tile_mode = 0
 14/occluder_offset = Vector2( 0, 0 )
+14/occluder = SubResource( 27 )
 14/navigation_offset = Vector2( 0, 0 )
 14/shape_offset = Vector2( 0, 0 )
 14/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
@@ -341,6 +380,7 @@ points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 15/region = Rect2( 600, 400, 200, 200 )
 15/tile_mode = 0
 15/occluder_offset = Vector2( 0, 0 )
+15/occluder = SubResource( 28 )
 15/navigation_offset = Vector2( 0, 0 )
 15/shape_offset = Vector2( 0, 0 )
 15/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
@@ -593,6 +633,7 @@ points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 27/region = Rect2( 600, 800, 200, 200 )
 27/tile_mode = 0
 27/occluder_offset = Vector2( 0, 0 )
+27/occluder = SubResource( 38 )
 27/navigation_offset = Vector2( 0, 0 )
 27/shape_offset = Vector2( 0, 0 )
 27/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
@@ -614,6 +655,7 @@ points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 28/region = Rect2( 800, 800, 200, 200 )
 28/tile_mode = 0
 28/occluder_offset = Vector2( 0, 0 )
+28/occluder = SubResource( 39 )
 28/navigation_offset = Vector2( 0, 0 )
 28/shape_offset = Vector2( 0, 0 )
 28/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
@@ -656,6 +698,7 @@ points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 30/region = Rect2( 0, 1000, 200, 200 )
 30/tile_mode = 0
 30/occluder_offset = Vector2( 0, 0 )
+30/occluder = SubResource( 32 )
 30/navigation_offset = Vector2( 0, 0 )
 30/shape_offset = Vector2( 0, 0 )
 30/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
@@ -677,6 +720,7 @@ points = PoolVector2Array( 200, 200, 0, 200, 0, 60, 200, 60 )
 31/region = Rect2( 200, 1000, 200, 200 )
 31/tile_mode = 0
 31/occluder_offset = Vector2( 0, 0 )
+31/occluder = SubResource( 41 )
 31/navigation_offset = Vector2( 0, 0 )
 31/shape_offset = Vector2( 0, 0 )
 31/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )

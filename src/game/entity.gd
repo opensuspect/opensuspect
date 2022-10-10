@@ -12,6 +12,7 @@ enum LookDirections {LEFT, RIGHT, UP, DOWN}
 var lookDirection: int = LookDirections.RIGHT
 onready var characterElements = $CharacterElements
 onready var camera = $CharacterCamera
+onready var lightMasking: Light2D = $MaskingLight
 onready var nameLabel = $Name
 onready var skeleton = $CharacterElements/Skeleton
 
@@ -21,6 +22,7 @@ var _characterResource: CharacterResource
 func _ready() -> void:
 	if mainCharacter:
 		camera.current = true
+		lightMasking.enabled = true
 	nameLabel.text = _characterResource.characterName
 
 func setNetworkId(newId: int) -> void:

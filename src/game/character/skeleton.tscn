@@ -2112,7 +2112,7 @@ graph_offset = Vector2( -226, 209.32 )
 [sub_resource type="AnimationNodeStateMachinePlayback" id=17]
 
 [node name="Skeleton" type="Node2D"]
-light_mask = 3
+light_mask = 2
 material = SubResource( 1 )
 script = ExtResource( 13 )
 __meta__ = {
@@ -2344,7 +2344,7 @@ __meta__ = {
 }
 
 [node name="LeftArm" type="Polygon2D" parent="."]
-light_mask = 3
+light_mask = 2
 use_parent_material = true
 texture = ExtResource( 1 )
 skeleton = NodePath("../Skeleton")
@@ -2358,7 +2358,7 @@ __meta__ = {
 }
 
 [node name="LeftLeg" type="Polygon2D" parent="."]
-light_mask = 3
+light_mask = 2
 use_parent_material = true
 texture = ExtResource( 5 )
 skeleton = NodePath("../Skeleton")
@@ -2372,7 +2372,7 @@ __meta__ = {
 }
 
 [node name="Pants" type="Polygon2D" parent="."]
-light_mask = 3
+light_mask = 2
 use_parent_material = true
 texture = ExtResource( 4 )
 skeleton = NodePath("../Skeleton")
@@ -2386,7 +2386,7 @@ __meta__ = {
 }
 
 [node name="RightLeg" type="Polygon2D" parent="."]
-light_mask = 3
+light_mask = 2
 use_parent_material = true
 texture = ExtResource( 10 )
 skeleton = NodePath("../Skeleton")
@@ -2400,6 +2400,7 @@ __meta__ = {
 }
 
 [node name="Body" type="Polygon2D" parent="."]
+light_mask = 2
 use_parent_material = true
 texture = ExtResource( 14 )
 skeleton = NodePath("../Skeleton")
@@ -2410,6 +2411,7 @@ bones = [ "Hip", PoolRealArray( 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 internal_vertex_count = 96
 
 [node name="Clothes" type="Polygon2D" parent="."]
+light_mask = 2
 use_parent_material = true
 texture = ExtResource( 2 )
 skeleton = NodePath("../Skeleton")
@@ -2420,6 +2422,7 @@ bones = [ "Hip", PoolRealArray( 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 internal_vertex_count = 96
 
 [node name="Mouth" type="Polygon2D" parent="."]
+light_mask = 2
 use_parent_material = true
 texture = ExtResource( 11 )
 skeleton = NodePath("../Skeleton")
@@ -2430,6 +2433,7 @@ bones = [ "Hip", PoolRealArray( 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 internal_vertex_count = 96
 
 [node name="FacialHair" type="Polygon2D" parent="."]
+light_mask = 2
 use_parent_material = true
 texture = ExtResource( 3 )
 skeleton = NodePath("../Skeleton")
@@ -2440,6 +2444,7 @@ bones = [ "Hip", PoolRealArray( 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 internal_vertex_count = 96
 
 [node name="FaceWear" type="Polygon2D" parent="."]
+light_mask = 2
 use_parent_material = true
 texture = ExtResource( 8 )
 skeleton = NodePath("../Skeleton")
@@ -2450,6 +2455,7 @@ bones = [ "Hip", PoolRealArray( 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 internal_vertex_count = 96
 
 [node name="HatHair" type="Polygon2D" parent="."]
+light_mask = 2
 use_parent_material = true
 texture = ExtResource( 15 )
 skeleton = NodePath("../Skeleton")
@@ -2555,7 +2561,7 @@ position = Vector2( 40, 5 )
 rest = Transform2D( 1, 0, 0, 1, 40, 5 )
 
 [node name="RightArm" type="Polygon2D" parent="."]
-light_mask = 3
+light_mask = 2
 use_parent_material = true
 texture = ExtResource( 9 )
 skeleton = NodePath("../Skeleton")
