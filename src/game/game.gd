@@ -1,8 +1,11 @@
 extends Node2D
 
 var spawnList: Array = [] # Storing spawn positions for current map
+var meetingPosList: Array = [] # Storing the meeting positions to be teleporeted to
 var spawnCounter: int = 0 # A counter to take care of where characters spawn
 var actualMap: Node2D = null
+var actualMapName: String = ""
+var taskHandler: Node = null
 
 var roles: Dictionary = {} # Stores the roles of all the players
 # Stores the roles of the players based on what the current player sees
@@ -10,65 +13,106 @@ var visibleRoles: Dictionary = {}
 
 var hudNode: Control = null
 onready var mapNode: Node2D = $Map
-onready var characterNode: Node2D = $Characters
+onready var charactersNode: Node2D = $Characters
+onready var corpsesNode: Node2D = $Corpses
 onready var itemsNode: Node2D = $Items
+onready var ghostsNode: Node2D = $Ghosts
 onready var roleScreenTimeout: Timer = $RoleScreenTimeout
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-onready var gamestartButton: Button = $CanvasLayer/GameStart
 
 signal teamsRolesAssigned
 signal abilityAssigned
 signal clearAbilities
+signal chatMessageReceived
 
 func _ready() -> void:
 	## Game scene loaded
 	TransitionHandler.gameLoaded(self)
 
+func _process(delta: float) -> void:
+	if not TransitionHandler.isPlaying():
+		return
+	var myCharacterRes: CharacterResource
+	myCharacterRes = Characters.getMyCharacterResource()
+	if myCharacterRes == null:
+		return
+	if not myCharacterRes.canMove():
+		return
+	## Get movement vector based on keypress (not normalized)
+	var movementVec: Vector2 = getMovementInput(false)
+	var amountMoved: Vector2
+	amountMoved = myCharacterRes.move(delta, movementVec)
+
+# get the movement vector by looking at which keys are pressed
+func getMovementInput(normalized: bool = true) -> Vector2:
+	var vector: Vector2 = Vector2()
+	# get the movement vector using the move_left, move_right, move_up, 
+	# and move_down keys found in the input map
+	vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	if normalized:
+		vector = vector.normalized()
+	return vector
+
 func setHudNode(newHudNode: Control) -> void:
 	if hudNode != null:
 		assert(false, "shouldn't set the hudNode again")
 	hudNode = newHudNode
+	if actualMap != null:
+		actualMap.setHudNode(hudNode)
 
-func loadMap(mapPath: String) -> void:
+func setTaskHandler(newTaskHandler: Node) -> void:
+	taskHandler = newTaskHandler
+
+func loadMap(mapName: String) -> void:
 	## Remove previous map if applicable
 	for child in mapNode.get_children():
 		child.queue_free()
 	## Removove items from the map
 	Items.clearItems()
+	## Remove all corpses from the map
+	for corpse in corpsesNode.get_children():
+		corpse.queue_free()
 	## Load map and place it on scene tree
+	var mapPath: String = "res://game/maps/" + mapName + "/" + mapName + ".tscn"
 	actualMap = ResourceLoader.load(mapPath).instance()
+	actualMap.setHudNode(hudNode)
+	actualMapName = mapName
 	mapNode.add_child(actualMap)
 	## Save spawn positions from the map
 	var spawnPosNode: Node = actualMap.get_node("SpawnPositions")
 	spawnList = []
 	for posNode in spawnPosNode.get_children():
 		spawnList.append(posNode.position)
+	## Save meeting positions from the map
+	var meetingPosNode: Node = actualMap.get_node("MeetingPosition")
+	meetingPosList = []
+	for posNode in meetingPosNode.get_children():
+		meetingPosList.append(posNode.position)
+	## Reset all characters
+	for characterResource in Characters.getCharacterResources().values():
+		characterResource.reset()
+		addCharacter(characterResource)
 	## Spawn characters at spawn points
 	spawnAllCharacters()
 	## Request server for character data
-	Characters.requestCharacterData()
-	## Remove abilities from characters
-	for characterResource in Characters.getCharacterResources().values():
-		characterResource.resetCharacter()
+	Characters.requestCharacterCustomizations()
+	if hudNode != null and not Connections.isDedicatedServer():
+		hudNode.refreshItemButtons()
+		if len(meetingPosList) == 0:
+			hudNode.showMeetingButton(false)
+		else:
+			hudNode.showMeetingButton(true)
 
-func addCharacter(networkId: int) -> void:
-	## Create character resource
-	var newCharacterResource: CharacterResource = Characters.createCharacter(networkId)
-	newCharacterResource.setCharacterName(Connections.listConnections[networkId])
-	## Get character node reference
-	var newCharacter: KinematicBody2D = newCharacterResource.getCharacterNode()
-	## Spawn the character
-	spawnCharacter(newCharacterResource)
-	characterNode.add_child(newCharacter) ## Add node to scene
-	var myId: int = get_tree().get_network_unique_id()
+func addCharacter(characterRes: CharacterResource):
+	var newCharacter: KinematicBody2D = characterRes.getCharacterNode()
+	charactersNode.add_child(newCharacter) ## Add node to scene
+	var myId: int = Connections.getMyId()
 	## If own character is added
-	if networkId == myId:
-		## Apply appearance to character
-		newCharacterResource.setAppearance(Appearance.currentOutfit, Appearance.currentColors)
-		print_debug(hudNode)
+	if characterRes.getNetworkId() == myId:
 		newCharacter.connect("itemInteraction", self, "itemInteract")
-		## Send my character data to server
-		Characters.sendOwnCharacterData()
+		newCharacter.connect("taskInteraction", actualMap, "taskInteract")
+	## Spawn the character
+	spawnCharacter(characterRes)
 
 # These functions place the character on the map, but if it is a client, it will
 # be overwritten by the position syncing. It is done only so that the characters
@@ -87,39 +131,39 @@ func spawnCharacter(character: CharacterResource) -> void:
 	character.spawn(spawnList[spawnCounter])
 	## Step spawn position counter
 	spawnCounter += 1
-	if spawnCounter > len(spawnList):
+	if spawnCounter >= len(spawnList):
 		spawnCounter = 0
 
-func removeCharacter(networkId: int) -> void:
-	#print_debug("game: removing character", networkId)
-	var characterNode = Characters.getCharacterNode(networkId)
-	characterNode.queue_free()
+func removeCharacter(id: int) -> void:
+	Characters.getCharacterResource(id).remove()
 	## remove the resource and the node
-	Characters.removeCharacterNode(networkId)
-	Characters.removeCharacterResource(networkId)
+	Characters.removeCharacterResource(id)
 
-func showStartButton(buttonShow: bool = true) -> void:
-	## Switch visibility of game start button
-	gamestartButton.visible = buttonShow
-
-func _on_GameStart_pressed() -> void:
-	if not Connections.isServer():
-		assert(false, "Unreachable")
-	## Change the map
-	TransitionHandler.changeMap()
-	## Change button text
-	if TransitionHandler.getCurrentState() == TransitionHandler.States.LOBBY:
-		gamestartButton.text = "Start game"
-	elif TransitionHandler.getCurrentState() == TransitionHandler.States.MAP:
-		gamestartButton.text = "Back to lobby"
-	else:
-		assert(false, "Unreachable")
-
-func setCharacterData(id: int, characterData: Dictionary) -> void:
-	var character: CharacterResource = Characters.getCharacterResource(id)
+# Sets and validates game data received from other players or the server.
+# Returns the same dictionary it received if the validation is successful.
+# If a different dictionary is returned, the server will rebroadcast the
+# properly set data as its own so the invalid data sender will receive the
+# corrected data properly.
+func setGameData(gameData: Dictionary) -> Dictionary:
+	var id = gameData["sender"]
+	var character: CharacterResource = null
+	if id != 1 or not Connections.isDedicatedServer():
+		character = Characters.getCharacterResource(id)
 	## Apply character outfit and colors
-	if characterData.has("outfit") and characterData.has("colors"):
-		character.setAppearance(characterData["outfit"], characterData["colors"])
+	if gameData["key"] == "outfit":
+		assert(character != null, "A dedicated server should not try to change its outfit")
+		character.setOutfit(gameData["value"])
+		return gameData["value"]
+	if gameData["key"] == "colors":
+		assert(character != null, "A dedicated server should not try to change its character colors")
+		character.setColors(gameData["value"])
+		return gameData["value"]
+	if gameData["key"] == "meeting-chat":
+		emit_signal("chatMessageReceived", gameData["value"], id)
+		return gameData["value"]
+	if gameData["key"] == "taskChanged":
+		return actualMap.taskNodes.taskRemoteChanged(gameData["value"])
+	return {}
 
 func abilityActivate(parameters: Dictionary) -> void:
 	# TODO: RPC should not be done directly the game scene!
@@ -128,11 +172,14 @@ func abilityActivate(parameters: Dictionary) -> void:
 func itemInteract(itemRes: ItemResource, action: String) -> void:
 	hudNode.itemInteract(itemRes, action)
 
-func itemPickUpAttempt(itemId) -> void:
+func itemPickUpAttempt(itemId: int) -> void:
 	rpc_id(1, "itemPickUpServer", itemId)
 
-func itemDropAttempt(itemId) -> void:
+func itemDropAttempt(itemId: int) -> void:
 	rpc_id(1, "itemDropServer", itemId)
+
+func itemActivateAttempt(itemId: int, abilityName: String, properties: Dictionary) -> void:
+	rpc_id(1, "itemActivateServer", itemId, abilityName, properties)
 
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
@@ -149,9 +196,26 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 		allCharacters[characterID].setRole(roleName)
 		allCharacters[characterID].setNameColor(textColor)
 
+func getVoteResource() -> VoteMechanicsTemplate:
+	return actualMap.voteResource
+
+func callMeeting() -> void:
+	rpc_id(1, "callMeetingServer")
+
+func voteCast(voteeId: int) -> void:
+	rpc_id(1, "voteCastServer", voteeId)
+
 # -- Client functions --
 puppetsync func killCharacter(id: int) -> void:
-	Characters.getCharacterResource(id).die()
+	if id == Connections.getMyId():
+		for characterRes in Characters.getCharacterResources().values():
+			if not characterRes.isAlive():
+				characterRes.becomeGhost(characterRes.getPosition())
+	var seeGhosts: bool = (
+		Connections.isDedicatedServer() or
+		not Characters.getMyCharacterResource().isAlive()
+	)
+	Characters.getCharacterResource(id).die(seeGhosts)
 
 puppet func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
 	var teamsRolesRes: TeamsRolesTemplate = actualMap.teamsRolesResource
@@ -199,6 +263,24 @@ puppetsync func itemDropClient(characterId: int, itemId: int) -> void:
 		hudNode.refreshItemButtons()
 		hudNode.refreshPickUpButtons()
 
+puppetsync func itemActivateClient(itemId: int, abilityName: String, properties: Dictionary) -> void:
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	itemRes.activate(abilityName, properties)
+	if itemRes.getHolder().getNetworkId() == get_tree().get_network_unique_id():
+		hudNode.refreshItemButtons()
+
+puppetsync func teleportCharacters(teleportList: Dictionary) -> void:
+	for characterIndex in teleportList:
+		Characters.getCharacterResource(characterIndex).setPosition(teleportList[characterIndex])
+
+puppetsync func startMeeting() -> void:
+	Characters.getMyCharacterResource().setMeetingMode()
+	Scenes.overlay("res://game/ui_elements/meeting_ui.tscn")
+
+puppetsync func endMeeting() -> void:
+	Characters.getMyCharacterResource().endMeetingMode()
+	Scenes.back()
+
 # -- Server functions --
 func teamRoleAssignment(isLobby: bool) -> void:
 	call_deferred("deferredTeamRoleAssignment", isLobby)
@@ -218,6 +300,7 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 			#print_debug(character, ": ", ability.getName())
 			# TODO: RPC should not be done directly in the game scene
 			rpc_id(character, "receiveAbility", ability.getName())
+	# TODO: I'm not sure this is the appropriate place to reset the HUD for the abilities.
 	emit_signal("clearAbilities")
 	var rolesToShow: Array = []
 	if Connections.isClientServer():
@@ -261,11 +344,67 @@ mastersync func itemDropServer(itemId: int) -> void:
 		#TODO: think about whether we should enforce server-side coordinates for the items to be dropped.
 		rpc("itemDropClient", playerId, itemId)
 
+mastersync func itemActivateServer(itemId: int, abilityName: String, properties: Dictionary) -> void:
+	var playerId: int = get_tree().get_rpc_sender_id()
+	var itemRes: ItemResource = Items.getItemResource(itemId)
+	if itemRes.canBeActivated(abilityName, properties):
+		rpc("itemActivateClient", itemId, abilityName, properties)
+
 func killCharacterServer(id: int) -> void:
 	var characterRes: CharacterResource = Characters.getCharacterResource(id)
+	if not characterRes.canBeKilled():
+		return
+	# TODO: is this something that the server needs to do one by one for every item
+	# held by the killed character?
 	for itemRes in characterRes.getItems():
 		itemRes = itemRes as ItemResource
 		if characterRes.canDropItem(itemRes):
 			rpc("itemDropClient", id, itemRes.getId())
 	rpc("killCharacter", id)
 
+mastersync func callMeetingServer() -> void:
+	var callerId: int = get_tree().get_rpc_sender_id()
+	# TODO: do checks if the meeting can be called
+	if not Characters.getCharacterResource(callerId).isAlive():
+		return
+	var meetingCounter = randi() % len(meetingPosList)
+	var charResources: Dictionary = Characters.getCharacterResources()
+	var teleport: Dictionary = {}
+	var voteRes: VoteMechanicsTemplate = actualMap.voteResource
+	voteRes.initialize()
+	var characterRes: CharacterResource
+	for characterIndex in charResources:
+		characterRes = charResources[characterIndex]
+		characterRes.setMeetingMode()
+		if characterRes.isAlive():
+			teleport[characterIndex] = meetingPosList[meetingCounter]
+			meetingCounter += 1
+			if meetingCounter >= len(meetingPosList):
+				meetingCounter = 0
+	rpc("teleportCharacters", teleport)
+	rpc("startMeeting")
+
+mastersync func voteCastServer(voteeId: int) -> void:
+	var voterId: int = get_tree().get_rpc_sender_id()
+	var voteRes: VoteMechanicsTemplate = actualMap.voteResource
+	voteRes.receiveVote(voterId, voteeId)
+	if voteRes.allVoted():
+		var charResources: Dictionary = Characters.getCharacterResources()
+		var characterRes: CharacterResource
+		for characterIndex in charResources:
+			characterRes = charResources[characterIndex]
+			characterRes.endMeetingMode()
+		voteRes.voteStop()
+		rpc("endMeeting")
+
+func voteTimeOut() -> void:
+	var voteRes: VoteMechanicsTemplate = actualMap.voteResource
+	if not voteRes.active:
+		return
+	var charResources: Dictionary = Characters.getCharacterResources()
+	var characterRes: CharacterResource
+	for characterIndex in charResources:
+		characterRes = charResources[characterIndex]
+		characterRes.endMeetingMode()
+	voteRes.voteStop()
+	rpc("endMeeting")

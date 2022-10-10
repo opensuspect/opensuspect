@@ -1,11 +1,66 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://game/maps/map_template.tscn" type="PackedScene" id=1]
 [ext_resource path="res://game/maps/chemlab/chemlab_teams_roles.tres" type="Resource" id=2]
 [ext_resource path="res://game/maps/chemlab/storage_room.tscn" type="PackedScene" id=3]
+[ext_resource path="res://game/maps/chemlab/chemlab_vote.tres" type="Resource" id=4]
+[ext_resource path="res://game/maps/chemlab/tasks/chemical_cabinet.tscn" type="PackedScene" id=5]
+[ext_resource path="res://game/maps/chemlab/tasks/chemical_cabinet_resource.gd" type="Script" id=6]
+[ext_resource path="res://game/maps/chemlab/tasks/assets/cabinet-cabinet.png" type="Texture" id=7]
+[ext_resource path="res://game/maps/chemlab/tasks/gas_valve.tscn" type="PackedScene" id=8]
+[ext_resource path="res://game/maps/chemlab/tasks/assets/gas-valve-object.png" type="Texture" id=9]
+[ext_resource path="res://game/maps/chemlab/tasks/gas_valve_resource.gd" type="Script" id=10]
+[ext_resource path="res://game/maps/chemlab/tasks/gas_pressure_check.tscn" type="PackedScene" id=12]
+
+[sub_resource type="Resource" id=1]
+resource_local_to_scene = true
+script = ExtResource( 6 )
+buttonSprite = ExtResource( 7 )
+taskPopUpName = "chemical_cabinet_ui"
+inputVariables = [  ]
+outputVariables = [  ]
+itemsContained = {
+"Powder Bottle": 10
+}
+
+[sub_resource type="Resource" id=2]
+resource_local_to_scene = true
+script = ExtResource( 6 )
+buttonSprite = ExtResource( 7 )
+taskPopUpName = "chemical_cabinet_ui"
+inputVariables = [  ]
+outputVariables = [  ]
+itemsContained = {
+"Powder Bottle": 10
+}
+
+[sub_resource type="Resource" id=3]
+resource_local_to_scene = true
+script = ExtResource( 10 )
+buttonSprite = ExtResource( 9 )
+taskPopUpName = "gas_valve_ui"
+inputVariables = [  ]
+outputVariables = [ "Propan-Butangas" ]
+
+[sub_resource type="Resource" id=4]
+resource_local_to_scene = true
+script = ExtResource( 10 )
+buttonSprite = ExtResource( 9 )
+taskPopUpName = "gas_valve_ui"
+inputVariables = [  ]
+outputVariables = [ "Hydrogen" ]
+
+[sub_resource type="Resource" id=5]
+resource_local_to_scene = true
+script = ExtResource( 10 )
+buttonSprite = ExtResource( 9 )
+taskPopUpName = "gas_valve_ui"
+inputVariables = [  ]
+outputVariables = [ "Argongas" ]
 
 [node name="ChemLab" instance=ExtResource( 1 )]
 teamsRolesResource = ExtResource( 2 )
+voteResource = ExtResource( 4 )
 
 [node name="Polygon2D" type="Polygon2D" parent="." index="0"]
 color = Color( 0.411765, 0.0862745, 0.262745, 1 )
@@ -26,3 +81,38 @@ position = Vector2( 600, 700 )
 
 [node name="StorageRoom" parent="." index="2" instance=ExtResource( 3 )]
 position = Vector2( 1000, 300 )
+
+[node name="1" type="Node2D" parent="MeetingPosition" index="0"]
+position = Vector2( 2000, 0 )
+
+[node name="2" type="Node2D" parent="MeetingPosition" index="1"]
+position = Vector2( 2200, 200 )
+
+[node name="3" type="Node2D" parent="MeetingPosition" index="2"]
+position = Vector2( 2000, 400 )
+
+[node name="4" type="Node2D" parent="MeetingPosition" index="3"]
+position = Vector2( 1800, 200 )
+
+[node name="ChemicalCabinet" parent="TaskNodes" index="0" instance=ExtResource( 5 )]
+position = Vector2( -43, 488 )
+taskResource = SubResource( 1 )
+
+[node name="ChemicalCabinet2" parent="TaskNodes" index="1" instance=ExtResource( 5 )]
+position = Vector2( 293, 462 )
+taskResource = SubResource( 2 )
+
+[node name="GasValvePB" parent="TaskNodes" index="2" instance=ExtResource( 8 )]
+position = Vector2( 1554, 774 )
+taskResource = SubResource( 3 )
+
+[node name="GasValveH2" parent="TaskNodes" index="3" instance=ExtResource( 8 )]
+position = Vector2( 1580, 166 )
+taskResource = SubResource( 4 )
+
+[node name="GasValveAr" parent="TaskNodes" index="4" instance=ExtResource( 8 )]
+position = Vector2( 1760, 439 )
+taskResource = SubResource( 5 )
+
+[node name="GasPressureCheck" parent="TaskNodes" index="5" instance=ExtResource( 12 )]
+position = Vector2( 1367, 456 )

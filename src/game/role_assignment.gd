@@ -21,6 +21,8 @@ func _ready():
 	TransitionHandler.gameScene.connect("teamsRolesAssigned", self, "showTeamsRoles")
 
 func showTeamsRoles(roles: Dictionary, rolesToShow: Array) -> void:
+	if Connections.isDedicatedServer():
+		return
 	## Get current player's role and team
 	var id: int = get_tree().get_network_unique_id()
 	teamNameField.text = roles[id]["team"]

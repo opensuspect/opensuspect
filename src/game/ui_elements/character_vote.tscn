@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
+[ext_resource path="res://game/character/assets/shaders/skin_color_key.shader" type="Shader" id=2]
+[ext_resource path="res://game/character/skeleton.tscn" type="PackedScene" id=3]
+[ext_resource path="res://game/ui_elements/character_vote.gd" type="Script" id=4]
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+shader = ExtResource( 2 )
+shader_param/skin_mask_color = Color( 1, 0, 1, 1 )
+shader_param/skin_color = Color( 0.760784, 0.647059, 0.560784, 1 )
+shader_param/hair_mask_color = Color( 0, 1, 1, 1 )
+shader_param/hair_color = Color( 0.592157, 0.709804, 0.333333, 1 )
+shader_param/fhair_mask_color = Color( 0, 1, 0, 1 )
+shader_param/fhair_color = Color( 0.368627, 0.298039, 0.298039, 1 )
+shader_param/tolerance = 0.1
+
+[node name="CharacterVote" type="HBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 4 )
+
+[node name="Button" type="Button" parent="."]
+margin_right = 127.0
+margin_bottom = 1080.0
+theme = ExtResource( 1 )
+text = "Vote"
+
+[node name="Character" type="MarginContainer" parent="."]
+margin_left = 131.0
+margin_right = 301.0
+margin_bottom = 1080.0
+rect_min_size = Vector2( 170, 120 )
+
+[node name="Skeleton" parent="Character" instance=ExtResource( 3 )]
+material = SubResource( 1 )
+scale = Vector2( 0.2, 0.1 )
+
+[node name="Name" type="Label" parent="."]
+margin_left = 305.0
+margin_top = 503.0
+margin_right = 611.0
+margin_bottom = 577.0
+theme = ExtResource( 1 )
+text = "Character Name"
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

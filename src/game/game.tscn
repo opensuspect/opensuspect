@@ -9,7 +9,11 @@ script = ExtResource( 1 )
 
 [node name="Characters" type="YSort" parent="."]
 
+[node name="Corpses" type="YSort" parent="."]
+
 [node name="Items" type="YSort" parent="."]
+
+[node name="Ghosts" type="YSort" parent="."]
 
 [node name="RoleScreenTimeout" type="Timer" parent="."]
 wait_time = 5.0

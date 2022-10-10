@@ -10,8 +10,8 @@ func _ready():
 	itemIcon.texture = item.getHudTexture()
 	itemIcon.scale = item.getHudTextureScale()
 
-func setItemResource(new_item: ItemResource) -> void:
-	item = new_item
+func setItemResource(newItem: ItemResource) -> void:
+	item = newItem
 
 func _on_Button_button_down():
 	item.attemptDrop()
