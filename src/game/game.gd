@@ -48,6 +48,9 @@ func _physics_process(delta: float) -> void:
 		if otherCharacter == myCharacterRes:
 			continue
 		otherPosition = otherCharacter.getGlobalPosition()
+		if (otherPosition - myPosition).length_squared() > 4e5:
+			otherCharacter.getCharacterNode().fadeInOut(false)
+			continue
 		var otherVisible: bool = false
 		for offset in [
 			Vector2(-10, 0), Vector2(10, 0), Vector2(0, -10), Vector2(0, 10)
@@ -57,7 +60,7 @@ func _physics_process(delta: float) -> void:
 			if obstacleFinder.get_collider() == null:
 				otherVisible = true
 				break
-		otherCharacter.getCharacterNode().visible = otherVisible
+		otherCharacter.getCharacterNode().fadeInOut(otherVisible)
 
 func _process(delta: float) -> void:
 	if not TransitionHandler.isPlaying():

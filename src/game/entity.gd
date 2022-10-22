@@ -10,9 +10,12 @@ var networkId: int setget setNetworkId, getNetworkId
 var mainCharacter: bool = false
 enum LookDirections {LEFT, RIGHT, UP, DOWN}
 var lookDirection: int = LookDirections.RIGHT
+var shouldBeVisible: bool = true
+var fading: bool = false
+const fadingSpeed: int = 5
+
 onready var characterElements = $CharacterElements
 onready var camera = $CharacterCamera
-onready var lightMasking: Light2D = $MaskingLight
 onready var nameLabel = $Name
 onready var skeleton = $CharacterElements/Skeleton
 
@@ -22,8 +25,26 @@ var _characterResource: CharacterResource
 func _ready() -> void:
 	if mainCharacter:
 		camera.current = true
-		lightMasking.enabled = true
 	nameLabel.text = _characterResource.characterName
+
+func _process(delta: float) -> void:
+	if not fading:
+		return
+	var alpha: float
+	alpha = modulate[3]
+	if shouldBeVisible:
+		if alpha == 0:
+			visible = true
+		alpha += fadingSpeed * delta
+	else:
+		alpha -= fadingSpeed * delta
+	alpha = max(min(1, alpha), 0)
+	modulate = Color(1, 1, 1, alpha)
+	if alpha == 0 and not shouldBeVisible:
+		visible = false
+		fading = false
+	if alpha == 1 and shouldBeVisible:
+		fading = false
 
 func setNetworkId(newId: int) -> void:
 	networkId = newId
@@ -89,6 +110,12 @@ func setLookDirection(newLookDirection: int) -> void:
 			xScale = 1
 	if characterElements != null and xScale != 0:
 		characterElements.scale.x = xScale
+
+func fadeInOut(fadeIn: bool):
+	if fadeIn == shouldBeVisible:
+		return
+	shouldBeVisible = fadeIn
+	fading = true
 
 func _getLookDirFromVec(vec: Vector2) -> int:
 	# this prioritizes looking left and right over up and down (like in

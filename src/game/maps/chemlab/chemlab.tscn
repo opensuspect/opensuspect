@@ -94,7 +94,7 @@ position = Vector2( 1344, 2780 )
 position = Vector2( 1564, 3020 )
 
 [node name="StorageRoom" parent="." index="2" instance=ExtResource( 3 )]
-position = Vector2( 1761, 546 )
+position = Vector2( 298, 2441 )
 
 [node name="1" type="Node2D" parent="MeetingPosition" index="0"]
 position = Vector2( 3674, 1581 )
