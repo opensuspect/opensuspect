@@ -2,17 +2,25 @@ extends HBoxContainer
 
 onready var skeleton = $Character/Skeleton
 onready var nameTag = $Name
+onready var voteButton = $Button
 
 var characterId: int = -1
 var characterName: String
 var outfit: Dictionary = {}
 var colors: Dictionary = {}
+var active: bool = true
 
 signal voteCast
 
 func _ready():
 	nameTag.text = characterName
+	voteButton.disabled = not active
 	_setAppearance()
+
+func setActive(canVote: bool) -> void:
+	active = canVote
+	if voteButton != null:
+		voteButton.disabled = not active
 
 func setId(newId: int) -> void:
 	characterId = newId

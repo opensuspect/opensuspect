@@ -196,9 +196,6 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 		allCharacters[characterID].setRole(roleName)
 		allCharacters[characterID].setNameColor(textColor)
 
-func getVoteResource() -> VoteMechanicsTemplate:
-	return actualMap.voteResource
-
 func callMeeting() -> void:
 	rpc_id(1, "callMeetingServer")
 
@@ -211,6 +208,7 @@ puppetsync func killCharacter(id: int) -> void:
 		for characterRes in Characters.getCharacterResources().values():
 			if not characterRes.isAlive():
 				characterRes.becomeGhost(characterRes.getPosition())
+		hudNode.showMeetingButton(false)
 	var seeGhosts: bool = (
 		Connections.isDedicatedServer() or
 		not Characters.getMyCharacterResource().isAlive()
@@ -274,11 +272,13 @@ puppetsync func teleportCharacters(teleportList: Dictionary) -> void:
 		Characters.getCharacterResource(characterIndex).setPosition(teleportList[characterIndex])
 
 puppetsync func startMeeting() -> void:
-	Characters.getMyCharacterResource().setMeetingMode()
-	Scenes.overlay("res://game/ui_elements/meeting_ui.tscn")
+	if not Connections.isDedicatedServer():
+		Characters.getMyCharacterResource().setMeetingMode()
+	Scenes.overlay("res://game/ui_elements/meeting_ui.tscn", actualMap.voteResource)
 
 puppetsync func endMeeting() -> void:
-	Characters.getMyCharacterResource().endMeetingMode()
+	if not Connections.isDedicatedServer():
+		Characters.getMyCharacterResource().endMeetingMode()
 	Scenes.back()
 
 # -- Server functions --

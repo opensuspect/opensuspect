@@ -7,6 +7,7 @@ onready var chatbox: MarginContainer = $MainBox/ChatBox
 var characterVote: String = "res://game/ui_elements/character_vote.tscn"
 
 var votableCharacters: Dictionary = {}
+var voteResource: VoteMechanicsTemplate
 
 func _process(delta) -> void:
 	if timer.is_stopped():
@@ -21,16 +22,18 @@ func _process(delta) -> void:
 	timeLabel.text = timestring
 
 func _focus() -> void:
-	var voteRes: VoteMechanicsTemplate = TransitionHandler.gameScene.getVoteResource()
-	if voteRes.getVoteTime() > 0:
-		timer.start(voteRes.getVoteTime())
+	if voteResource.getVoteTime() > 0:
+		timer.start(voteResource.getVoteTime())
 	else:
 		timer.stop()
 		timeLabel.text = "No time limit"
 	removeOptions()
 	chatbox.clearMessages()
-	for characterId in voteRes.voteOptions():
+	for characterId in voteResource.voteOptions():
 		addCharacter(characterId)
+
+func attachNewResource(newRes: VoteMechanicsTemplate) -> void:
+	voteResource = newRes
 
 func removeOptions() -> void:
 	for childNode in votableCharacters.values():
@@ -44,6 +47,13 @@ func addCharacter(characterId: int) -> void:
 	newVoteItem.setId(characterId)
 	newVoteItem.setName(characterRes.getCharacterName())
 	newVoteItem.setAppearance(characterRes.getOutfit(), characterRes.getColors())
+	if (
+		Connections.isDedicatedServer() or
+		not Connections.getMyId() in voteResource.votees()
+	):
+		newVoteItem.setActive(false)
+	else:
+		newVoteItem.setActive(true)
 	newVoteItem.connect("voteCast", self, "receiveVote")
 	voteOptions.add_child(newVoteItem)
 
