@@ -106,7 +106,6 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Helpers="*res://autoloads/helpers.gd"
 Resources="*res://autoloads/resources.gd"
 Appearance="*res://autoloads/appearance.gd"
 Characters="*res://autoloads/characters.gd"
