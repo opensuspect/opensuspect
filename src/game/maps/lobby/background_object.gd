@@ -7,4 +7,9 @@ onready var sprite: Sprite = $Sprite
 export (Array, Texture) var textures
 
 func _ready() -> void:
-	$Sprite.texture = Helpers.pick_random(textures)
+	var random_index : int = 0
+	if len(textures) > 0:
+		random_index = randi() % len(textures)
+		$Sprite.texture = textures[random_index]
+	else:
+		printerr("You should have at least one texture in the textures array")
