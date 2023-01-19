@@ -277,7 +277,7 @@ func _receiveDataServer(senderId: int, allGameData: Array) -> void:
 	## Loop through all recieved data entries
 	for gameData in allGameData:
 		## Validate and set game data
-		var validatedData: Dictionary = {}
+		var validatedData
 		## Add the sender's ID to the data package
 		gameData["sender"] = senderId
 		## The game scene keeps the data element intact if valid, and changes it
