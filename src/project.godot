@@ -161,6 +161,9 @@ move_down={
 
 [layer_names]
 
+2d_render/layer_1="Background objects"
+2d_render/layer_2="Characters"
+2d_render/layer_3="Items"
 2d_physics/layer_1="PlayersCollide"
 2d_physics/layer_2="ItemsCollide"
 2d_physics/layer_3="TaskCollide"
@@ -168,6 +171,7 @@ move_down={
 2d_physics/layer_10="ItemPickup"
 2d_physics/layer_11="TaskActivate"
 2d_physics/layer_12="PlaceholderForUi"
+2d_physics/layer_16="VisionOccluder"
 
 [physics]
 
@@ -176,6 +180,7 @@ common/enable_pause_aware_picking=true
 [rendering]
 
 quality/driver/driver_name="GLES2"
+2d/snapping/use_gpu_pixel_snap=true
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
 environment/default_environment="res://default_env.tres"

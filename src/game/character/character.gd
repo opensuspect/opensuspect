@@ -4,6 +4,7 @@ extends "res://game/entity.gd"
 onready var abilityPoint = $CharacterElements/Abilities
 onready var itemIntArea = $CharacterElements/ItemInteraction
 onready var taskIntArea = $CharacterElements/TaskInteraction
+onready var obstacleFinder = $ObstacleFinder
 
 # --Signals--
 signal player_disconnected(id)
