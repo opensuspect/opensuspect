@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
+[ext_resource path="res://game/maps/chemlab/ui_elements/gun_hud.gd" type="Script" id=1]
 [ext_resource path="res://game/maps/chemlab/ui_elements/gun/kill_icon_pressed.png" type="Texture" id=2]
 [ext_resource path="res://game/maps/chemlab/ui_elements/gun/kill_icon_normal.png" type="Texture" id=3]
 [ext_resource path="res://game/maps/chemlab/ui_elements/gun/reload_icon_pressed.png" type="Texture" id=4]
@@ -15,6 +16,7 @@ margin_right = 150.0
 margin_bottom = 150.0
 rect_min_size = Vector2( 150, 150 )
 mouse_filter = 2
+script = ExtResource( 1 )
 __meta__ = {
 "_editor_description_": "GUI that indicates whether a kill is ready to be executed."
 }
@@ -25,6 +27,7 @@ anchor_bottom = 1.0
 margin_top = 30.0
 rect_scale = Vector2( 1, 0.65 )
 mouse_filter = 1
+disabled = true
 texture_normal = ExtResource( 3 )
 texture_pressed = ExtResource( 2 )
 texture_disabled = ExtResource( 6 )
@@ -42,3 +45,6 @@ expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[connection signal="pressed" from="KillButton" to="." method="_on_KillButton_pressed"]
+[connection signal="pressed" from="ReloadButton" to="." method="_on_ReloadButton_pressed"]

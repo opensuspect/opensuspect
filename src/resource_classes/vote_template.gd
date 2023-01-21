@@ -10,6 +10,9 @@ func getVoteTime() -> float:
 func voteOptions() -> Array:
 	return Characters.getCharacterKeys()
 
+func votees() -> Array:
+	return Characters.getCharacterKeys()
+
 func receiveVote(voterId: int, voteeId: int) -> void:
 	voteTally[voterId] = voteeId
 
