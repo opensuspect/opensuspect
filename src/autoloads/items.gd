@@ -147,9 +147,10 @@ func _createTaskItem(itemName: String, taskName: String, position: String, newId
 # loads all item templates and returns a dictionary of them keyed by itemName
 func _instanceItemTemplates() -> Dictionary:
 	var itemTemplateDict: Dictionary = {}
-	var templates: Array = Helpers.load_files_in_dir_with_exts(ITEM_TEMPLATE_FOLDER_PATH, [".tres", ".res"])
-	
-	for template in templates:
+	var templateFiles: Dictionary = Resources.listDirectory(ITEM_TEMPLATE_FOLDER_PATH, ["tres", "res"])
+
+	for templateFile in templateFiles.values():
+		var template: Resource = load(templateFile["path"])
 		# if the loaded resource is not an item template, ignore it
 		if not template is ItemTemplate:
 			continue
