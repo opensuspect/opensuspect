@@ -186,6 +186,7 @@ move_down={
 2d_physics/layer_10="ItemPickup"
 2d_physics/layer_11="TaskActivate"
 2d_physics/layer_12="PlaceholderForUi"
+2d_physics/layer_13="MiscMapInteraction"
 
 [physics]
 

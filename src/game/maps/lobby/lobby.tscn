@@ -263,7 +263,7 @@ position = Vector2( 139.749, 11.2959 )
 [node name="FadeTrigger" type="Area2D" parent="walls/BottomWall" index="5"]
 position = Vector2( -0.280945, -70.3152 )
 collision_layer = 0
-collision_mask = 2
+collision_mask = 4096
 
 [node name="FaderCollision" type="CollisionShape2D" parent="walls/BottomWall/FadeTrigger" index="0"]
 shape = SubResource( 2 )
