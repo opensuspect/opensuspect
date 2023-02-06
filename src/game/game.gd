@@ -29,6 +29,39 @@ func _ready() -> void:
 	## Game scene loaded
 	TransitionHandler.gameLoaded(self)
 
+func _physics_process(delta: float) -> void:
+	if not TransitionHandler.isPlaying():
+		return
+	var myCharacterRes: CharacterResource
+	myCharacterRes = Characters.getMyCharacterResource()
+	if myCharacterRes == null:
+		return
+	## Cast rays to every player from the main player
+	var myCharacterNode: KinematicBody2D = myCharacterRes.getCharacterNode()
+	var obstacleFinder: RayCast2D = myCharacterNode.obstacleFinder
+	var myPosition: Vector2 = myCharacterRes.getGlobalPosition()
+	var otherPosition: Vector2
+	if myCharacterNode == null:
+		print_debug("There is no character node related to the resource")
+		return
+	for otherCharacter in Characters.getCharacterResources().values():
+		if otherCharacter == myCharacterRes:
+			continue
+		otherPosition = otherCharacter.getGlobalPosition()
+		if (otherPosition - myPosition).length_squared() > 4e5:
+			otherCharacter.getCharacterNode().fadeInOut(false)
+			continue
+		var otherVisible: bool = false
+		for offset in [
+			Vector2(-10, 0), Vector2(10, 0), Vector2(0, -10), Vector2(0, 10)
+		]:
+			obstacleFinder.cast_to = otherPosition - myPosition + offset
+			obstacleFinder.force_raycast_update()
+			if obstacleFinder.get_collider() == null:
+				otherVisible = true
+				break
+		otherCharacter.getCharacterNode().fadeInOut(otherVisible)
+
 func _process(delta: float) -> void:
 	if not TransitionHandler.isPlaying():
 		return
@@ -36,6 +69,7 @@ func _process(delta: float) -> void:
 	myCharacterRes = Characters.getMyCharacterResource()
 	if myCharacterRes == null:
 		return
+	## Charater movement here
 	if not myCharacterRes.canMove():
 		return
 	## Get movement vector based on keypress (not normalized)
@@ -196,9 +230,6 @@ func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 		allCharacters[characterID].setRole(roleName)
 		allCharacters[characterID].setNameColor(textColor)
 
-func getVoteResource() -> VoteMechanicsTemplate:
-	return actualMap.voteResource
-
 func callMeeting() -> void:
 	rpc_id(1, "callMeetingServer")
 
@@ -211,6 +242,7 @@ puppetsync func killCharacter(id: int) -> void:
 		for characterRes in Characters.getCharacterResources().values():
 			if not characterRes.isAlive():
 				characterRes.becomeGhost(characterRes.getPosition())
+		hudNode.showMeetingButton(false)
 	var seeGhosts: bool = (
 		Connections.isDedicatedServer() or
 		not Characters.getMyCharacterResource().isAlive()
@@ -274,11 +306,13 @@ puppetsync func teleportCharacters(teleportList: Dictionary) -> void:
 		Characters.getCharacterResource(characterIndex).setPosition(teleportList[characterIndex])
 
 puppetsync func startMeeting() -> void:
-	Characters.getMyCharacterResource().setMeetingMode()
-	Scenes.overlay("res://game/ui_elements/meeting_ui.tscn")
+	if not Connections.isDedicatedServer():
+		Characters.getMyCharacterResource().setMeetingMode()
+	Scenes.overlay("res://game/ui_elements/meeting_ui.tscn", actualMap.voteResource)
 
 puppetsync func endMeeting() -> void:
-	Characters.getMyCharacterResource().endMeetingMode()
+	if not Connections.isDedicatedServer():
+		Characters.getMyCharacterResource().endMeetingMode()
 	Scenes.back()
 
 # -- Server functions --

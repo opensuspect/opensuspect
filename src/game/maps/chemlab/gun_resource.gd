@@ -4,12 +4,12 @@ class_name GunAbility
 var gunRangeScene: PackedScene = preload("res://game/maps/chemlab/gun.tscn")
 var gunUiScene: PackedScene = preload("res://game/maps/chemlab/ui_elements/gun_hud.tscn")
 var gunRangeNode: Area2D = null
-var killButton: TextureButton = null
-var reloadButton: TextureButton = null
 
 var chamberCapacity: int = 1
 var chamberAmmo: int = 1
 var reloadTime: int = 10
+
+var killableCharacters: Array = []
 
 signal action
 
@@ -20,15 +20,30 @@ func registerOwner(newOwner) -> void:
 	.registerOwner(newOwner)
 	gunRangeNode = gunRangeScene.instance()
 	newOwner.getCharacterNode().attachAbility(gunRangeNode)
+	gunRangeNode.connect("bodyEntered", self, "characterEnteredZone")
+	gunRangeNode.connect("bodyExited", self, "characterExitedZone")
 	connect("action", TransitionHandler.gameScene, "abilityActivate")
 
 func createAbilityHudNode() -> Node:
 	_abilityHudNode = gunUiScene.instance()
-	killButton = _abilityHudNode.get_child(0)
-	reloadButton = _abilityHudNode.get_child(1)
-	killButton.connect("button_down", self, "activate")
-	reloadButton.connect("button_down", self, "secondaryActivate")
+	_abilityHudNode.connect("killButtonPressed", self, "activate")
+	_abilityHudNode.connect("reoladButtonPressed", self, "secondaryActivate")
+	_abilityHudNode.activateKillButton(len(killableCharacters) > 0)
 	return _abilityHudNode
+
+func characterEnteredZone(characterRes: CharacterResource) -> void:
+	if not characterRes == _owner and not characterRes in killableCharacters:
+		killableCharacters.append(characterRes)
+		if _abilityHudNode != null:
+			_abilityHudNode.activateKillButton(true)
+
+func characterExitedZone(characterRes: CharacterResource) -> void:
+	if characterRes in killableCharacters:
+		var characterIndex: int = killableCharacters.find(characterRes)
+		killableCharacters.pop_at(characterIndex)
+	if len(killableCharacters) == 0:
+		if _abilityHudNode != null:
+			_abilityHudNode.activateKillButton(false)
 
 func activate() -> void:
 	if chamberAmmo < 1:
@@ -68,22 +83,28 @@ func execute(properties: Dictionary) -> void:
 	var action: String = properties["action"]
 	if action == "kill":
 		chamberAmmo -= 1
-		if not killButton == null and chamberAmmo < 1:
-			killButton.hide()
-			reloadButton.show()
+		if chamberAmmo < 1 and _owner.mainCharacter:
+			_abilityHudNode.showReloadButton()
 		if Connections.isServer():
 			TransitionHandler.gameScene.killCharacterServer(properties["target"])
 	if action == "reload":
 		chamberAmmo = chamberCapacity
-		if killButton != null:
-			reloadButton.hide()
-			killButton.show()
+		if _owner.mainCharacter:
+			_abilityHudNode.showKillButton()
+		var killableCharCopy = killableCharacters.duplicate()
+		for characterRes in killableCharCopy:
+			if not characterRes.isAlive():
+				var characterIndex: int = killableCharacters.find(characterRes)
+				killableCharacters.pop_at(characterIndex)
+		if len(killableCharacters) == 0:
+			if _owner.mainCharacter and _abilityHudNode != null:
+				_abilityHudNode.activateKillButton(false)
 
 func canExecute(properties: Dictionary) -> bool:
 	if properties["action"] == "kill":
 		if chamberAmmo < 1:
 			return false
-		for character in gunRangeNode.get_overlapping_bodies():
+		for character in killableCharacters:
 			if character.getNetworkId() == properties["target"]:
 				return true
 	elif properties["action"] == "reload":
