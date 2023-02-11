@@ -34,22 +34,22 @@ func _physics_process(delta: float) -> void:
 		return
 	var myCharacterRes: CharacterResource
 	myCharacterRes = Characters.getMyCharacterResource()
-	if myCharacterRes == null:
+	if myCharacterRes == null or not myCharacterRes.isAlive():
 		return
 	## Cast rays to every player from the main player
 	var myCharacterNode: KinematicBody2D = myCharacterRes.getCharacterNode()
 	var obstacleFinder: RayCast2D = myCharacterNode.obstacleFinder
 	var myPosition: Vector2 = myCharacterRes.getGlobalPosition()
 	var otherPosition: Vector2
-	if myCharacterNode == null:
-		print_debug("There is no character node related to the resource")
-		return
 	for otherCharacter in Characters.getCharacterResources().values():
 		if otherCharacter == myCharacterRes:
 			continue
 		otherPosition = otherCharacter.getGlobalPosition()
 		if (otherPosition - myPosition).length_squared() > 4e5:
-			otherCharacter.getCharacterNode().fadeInOut(false)
+			if otherCharacter.isAlive():
+				otherCharacter.getCharacterNode().fadeInOut(false)
+				continue
+			otherCharacter.getCorpseNode().fadeInOut(false)
 			continue
 		var otherVisible: bool = false
 		for offset in [
@@ -60,7 +60,10 @@ func _physics_process(delta: float) -> void:
 			if obstacleFinder.get_collider() == null:
 				otherVisible = true
 				break
-		otherCharacter.getCharacterNode().fadeInOut(otherVisible)
+		if otherCharacter.isAlive():
+			otherCharacter.getCharacterNode().fadeInOut(otherVisible)
+		else:
+			otherCharacter.getCorpseNode().fadeInOut(otherVisible)
 
 func _process(delta: float) -> void:
 	if not TransitionHandler.isPlaying():
@@ -240,7 +243,9 @@ func voteCast(voteeId: int) -> void:
 puppetsync func killCharacter(id: int) -> void:
 	if id == Connections.getMyId():
 		for characterRes in Characters.getCharacterResources().values():
-			if not characterRes.isAlive():
+			if characterRes.isAlive():
+				characterRes.getCharacterNode().fadeInOut(true)
+			else:
 				characterRes.becomeGhost(characterRes.getPosition())
 		hudNode.showMeetingButton(false)
 	var seeGhosts: bool = (
