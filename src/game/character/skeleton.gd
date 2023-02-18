@@ -12,10 +12,13 @@ var colorMapDir: Dictionary = {
 
 var _itemsInHand: Array = []
 
+# --Public Variables--
 onready var handNode: Node2D = $Skeleton/Hip/RightShoulder/RArm1/RArm2/RHand
 
 # Set the list of colormaps from the color map directory
 onready var colorShaders = Resources.list(colorMapDir, extensions)
+onready var animationTre: AnimationTree = $AnimationPlayer/AnimationTree
+onready var stateMachine: AnimationNodeStateMachinePlayback = animationTre["parameters/playback"]
 
 # Dictionary mapping each asset to a node path
 var nodeStructure: Dictionary = {

@@ -93,9 +93,11 @@ func _moveCommand(delta: float, movementVec: Vector2) -> Vector2:
 		_direction = movementVec.normalized()
 		_speed += _acceleration * delta
 		_speed = min(_speed, _maxSpeed)
+		skeleton.stateMachine.travel("Walk")
 	else:
 		_speed -= _acceleration * delta
 		_speed = max(0, _speed)
+		skeleton.stateMachine.travel("Idle")
 	# move_and_slide() returns the actual motion that happened, store it
 	# 	in amountMoved
 	## Calculate and execute actual motion

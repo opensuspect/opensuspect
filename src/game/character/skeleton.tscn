@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://game/character/assets/textures/left_arm/white_shirt-red_sweater.png" type="Texture" id=1]
 [ext_resource path="res://game/character/assets/textures/clothes/white_shirt-red_sweater.png" type="Texture" id=2]
@@ -478,6 +478,36 @@ tracks/14/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, -20 ), Vector2( 0, 0 ), Vector2( 0, -20 ) ]
 }
 
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "Idle"
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "RESET"
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "Walk"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=8]
+xfade_time = 0.5
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=9]
+xfade_time = 0.3
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=10]
+
+[sub_resource type="AnimationNodeStateMachine" id=11]
+states/Idle/node = SubResource( 5 )
+states/Idle/position = Vector2( 204, 69 )
+states/RESET/node = SubResource( 6 )
+states/RESET/position = Vector2( 349, 161 )
+states/Walk/node = SubResource( 7 )
+states/Walk/position = Vector2( 533, 69 )
+transitions = [ "Idle", "Walk", SubResource( 8 ), "Walk", "RESET", SubResource( 9 ), "RESET", "Idle", SubResource( 10 ) ]
+start_node = "Idle"
+graph_offset = Vector2( -117, -24 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=12]
+
 [node name="Skeleton" type="Node2D"]
 light_mask = 2
 material = SubResource( 1 )
@@ -609,9 +639,17 @@ bones = [ "Hip", PoolRealArray( 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 internal_vertex_count = 96
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+playback_process_mode = 0
 anims/Idle = SubResource( 2 )
 anims/RESET = SubResource( 3 )
 anims/Walk = SubResource( 4 )
+
+[node name="AnimationTree" type="AnimationTree" parent="AnimationPlayer"]
+tree_root = SubResource( 11 )
+anim_player = NodePath("..")
+active = true
+process_mode = 0
+parameters/playback = SubResource( 12 )
 
 [node name="Skeleton" type="Skeleton2D" parent="."]
 position = Vector2( 420, 850 )
