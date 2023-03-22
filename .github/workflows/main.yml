@@ -21,6 +21,10 @@ jobs:
     container:
       image: barichello/godot-ci:3.5.1
     steps:
+      - name: Setup
+        run: |
+          mkdir -v -p ~/.local/share/godot/templates
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
       - name: Checkout
         uses: actions/checkout@v2
         with:
