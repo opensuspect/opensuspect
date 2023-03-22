@@ -10,7 +10,7 @@ on:
   pull_request:
     branches: [ main ]
 env:
-  GODOT_VERSION: 3.3.4
+  GODOT_VERSION: 3.5.1
   EXPORT_NAME: opensus
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -19,7 +19,7 @@ jobs:
     name: Export
     runs-on: ubuntu-latest
     container:
-      image: barichello/godot-ci:3.3.4
+      image: barichello/godot-ci:3.5.1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
