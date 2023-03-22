@@ -130,12 +130,14 @@ func _on_item_selected(index) -> void:
 	## Sample character appearance set
 	character.setAppearance(selectedOutfit, selectedColors)
 
+func _on_Popup_hide():
+	$Darken.hide()
+
 func _on_Delete_pressed():
 	$Darken.show()
 	$DeleteConfirm.popup_centered()
 
 func _on_Confirm_pressed():
-	$Darken.hide()
 	$DeleteConfirm.hide()
 	_deleteConfig(selectionName)
 	selectButton.disabled = true
@@ -143,5 +145,4 @@ func _on_Confirm_pressed():
 	listItems()
 
 func _on_Cancel_pressed():
-	$Darken.hide()
 	$DeleteConfirm.hide()

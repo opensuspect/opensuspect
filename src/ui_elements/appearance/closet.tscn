@@ -218,5 +218,6 @@ __meta__ = {
 [connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Back" to="." method="_on_Back_pressed"]
 [connection signal="item_selected" from="MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList" to="." method="_on_item_selected"]
+[connection signal="popup_hide" from="DeleteConfirm" to="." method="_on_Popup_hide"]
 [connection signal="pressed" from="DeleteConfirm/MarginContainer/VBoxContainer/Confirm" to="." method="_on_Confirm_pressed"]
 [connection signal="pressed" from="DeleteConfirm/MarginContainer/VBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
