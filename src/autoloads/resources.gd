@@ -116,7 +116,6 @@ func _listFilesInDirectory(path: String, types: PoolStringArray) -> Array:
 			if _matchFileType(file, types): # Check if the file matches the correct filetype
 				files.append(file) # If it does, add it to the files array
 		elif file.get_extension() in types:
-			print_debug(file.get_extension())
 			files.append(file)
 	return(files) # Return the files array
 

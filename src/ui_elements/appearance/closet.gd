@@ -6,6 +6,7 @@ onready var character: Control = $MenuMargin/HBoxContainer/CharacterBox/CenterCh
 onready var items: ItemList = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
 
 onready var selectButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Select
+onready var deleteButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Delete
 onready var nameLabel: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Label
 onready var infoMessage: CenterContainer = $MenuMargin/HBoxContainer/ClosetBox/Panel/CenterContainer
 
@@ -14,6 +15,7 @@ var configList: Array
 
 var selectedOutfit: Dictionary
 var selectedColors: Dictionary
+var selectionName: String
 
 const NAMESPACE = "appearance"
 
@@ -28,20 +30,22 @@ func listItems() -> void:
 	_clearObjects()
 	## If saved data exists
 	if GameData.exists(NAMESPACE):
-		## Hide Info
-		infoMessage.hide()
 		## Clear everything
 		configData.clear()
 		configList.clear()
 		## Load save data
 		configData = GameData.read(NAMESPACE)
-		## Populate UI
-		_populateItems()
+		if configData.size() > 0:
+			## Hide Info
+			infoMessage.hide()
+			## Populate UI
+			_populateItems()
 
 # --Private Functions--
 
 func _ready() -> void:
 	selectButton.disabled = true ## Disable selection button
+	deleteButton.disabled = true ## Disable selection button
 	Appearance.updateConfig() ## Update sample character
 	_configureItemList() ## Configure list of saves
 	listItems() ## Show list
@@ -93,6 +97,15 @@ func _selectConfig(namespace: String) -> void:
 	selectedOutfit = config["Outfit"]
 	selectedColors = config["Colors"]
 
+func _deleteConfig(name: String) -> bool:
+	if not GameData.exists(NAMESPACE):
+		return false
+	if configData.erase(name):
+		GameData.write(NAMESPACE, configData)
+		listItems()
+		return true
+	return false
+
 # --Signal Functions--
 
 func _on_Back_pressed() -> void:
@@ -112,5 +125,23 @@ func _on_item_selected(index) -> void:
 	_selectConfig(namespace)
 	## Enables selection button
 	selectButton.disabled = false
+	deleteButton.disabled = false
+	selectionName = namespace
 	## Sample character appearance set
 	character.setAppearance(selectedOutfit, selectedColors)
+
+func _on_Delete_pressed():
+	$Darken.show()
+	$DeleteConfirm.popup_centered()
+
+func _on_Confirm_pressed():
+	$Darken.hide()
+	$DeleteConfirm.hide()
+	_deleteConfig(selectionName)
+	selectButton.disabled = true
+	deleteButton.disabled = true
+	listItems()
+
+func _on_Cancel_pressed():
+	$Darken.hide()
+	$DeleteConfirm.hide()
