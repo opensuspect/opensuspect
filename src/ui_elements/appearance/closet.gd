@@ -7,6 +7,7 @@ onready var items: ItemList = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
 
 onready var selectButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Select
 onready var nameLabel: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Label
+onready var infoMessage: CenterContainer = $MenuMargin/HBoxContainer/ClosetBox/Panel/CenterContainer
 
 var configData: Dictionary
 var configList: Array
@@ -27,6 +28,8 @@ func listItems() -> void:
 	_clearObjects()
 	## If saved data exists
 	if GameData.exists(NAMESPACE):
+		## Hide Info
+		infoMessage.hide()
 		## Clear everything
 		configData.clear()
 		configList.clear()

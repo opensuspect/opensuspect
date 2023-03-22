@@ -133,6 +133,7 @@ func _on_Random_pressed() -> void:
 	## If customOutfit [TRUE] in appearance.gd
 	if Appearance.customOutfit:
 		$RandomConfirm.popup_centered() ## Show confirmation popup
+		$Darken.show()
 	else: ## If customOutfit [FALSE] in appearance.gd
 		_deselectItems()
 		Appearance.randomizeConfig() ## Randomize character appearance
@@ -156,6 +157,7 @@ func _on_Popup_hide() -> void:
 # Close the save popup
 func _on_Cancel_pressed() -> void:
 	$SavePopup.hide()
+	$Darken.hide()
 	$RandomConfirm.hide()
 
 func _on_Character_mouse_entered() -> void:
@@ -166,4 +168,5 @@ func _on_Character_mouse_exited() -> void:
 
 func _on_Confirm_pressed():
 	$RandomConfirm.hide() ## Hide confirmation popup
+	$Darken.hide()
 	Appearance.randomizeConfig() ## Randomize appearance
