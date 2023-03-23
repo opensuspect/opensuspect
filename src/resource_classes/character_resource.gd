@@ -149,6 +149,9 @@ func disconnected():
 func getCharacterNode() -> Node:
 	return _characterNode
 
+func getCorpseNode() -> Node:
+	return _corpseNode
+
 # set the character node that corresponds to this CharacterResource
 func createCharacterNode() -> void:
 	var newCharacterNode: KinematicBody2D = Characters.createCharacterNode(networkId)
@@ -353,9 +356,11 @@ func setPosition(newPos: Vector2) -> void:
 	else:
 		_ghostCoords = newPos
 
-# get the global position of the character
+# get the global position of the character or the corpse if dead
 func getGlobalPosition() -> Vector2:
-	return _characterNode.getGlobalPosition()
+	if _characterNode != null:
+		return _characterNode.getGlobalPosition()
+	return _corpseNode.getGlobalPosition()
 
 # set the global position of the character
 func setGlobalPosition(newPos: Vector2):
