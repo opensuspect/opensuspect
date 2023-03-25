@@ -11,9 +11,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 2 )
 script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="MenuMargin" type="MarginContainer" parent="."]
 anchor_right = 1.0
@@ -291,5 +288,6 @@ __meta__ = {
 [connection signal="text_entered" from="SavePopup/MarginContainer/HBoxContainer/Center/VBox/Name" to="SavePopup" method="_on_Name_text_entered"]
 [connection signal="pressed" from="SavePopup/MarginContainer/HBoxContainer/Center/VBox/HBox/Save" to="SavePopup" method="_on_Save_pressed"]
 [connection signal="pressed" from="SavePopup/MarginContainer/HBoxContainer/Center/VBox/HBox/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="popup_hide" from="RandomConfirm" to="." method="_on_Popup_hide"]
 [connection signal="pressed" from="RandomConfirm/MarginContainer/VBoxContainer/Confirm" to="." method="_on_Confirm_pressed"]
 [connection signal="pressed" from="RandomConfirm/MarginContainer/VBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

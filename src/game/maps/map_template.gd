@@ -3,11 +3,13 @@ extends YSort
 export var teamsRolesResource: Resource
 export var voteResource: Resource
 onready var taskNodes: YSort = $TaskNodes
+onready var playerCamera: Camera2D = $CustomCamera
 
 var hudNode: Control = null
 
 func _ready():
 	teamsRolesResource.init()
+	playerCamera.make_current()
 
 func setHudNode(newHudNode: Control):
 	assert(hudNode == null, "This should only be set once")

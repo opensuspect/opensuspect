@@ -22,13 +22,15 @@ func _process(delta: float) -> void:
 		current = true
 	if Connections.isDedicatedServer():
 		return
+	var player: KinematicBody2D = Characters.getMyCharacterNode()
+	if player == null:
+		return
 	# Change the camera's dimensions in case the window is resized
 	camera_dimensions = get_viewport().get_visible_rect().size * zoom_factor
 	# Weird behavior occurs if the camera dimensions are greater than the bounds
 	# set by the Position2D nodes
 	camera_dimensions.x = clamp(camera_dimensions.x, 0, limit_max.global_position.x - limit_min.global_position.x)
 	camera_dimensions.y = clamp(camera_dimensions.y, 0, limit_max.global_position.y - limit_min.global_position.y)
-	var player: KinematicBody2D = Characters.getMyCharacterNode()
 	_track_player(player, delta)
 
 func _track_player(player: KinematicBody2D, delta: float) -> void:

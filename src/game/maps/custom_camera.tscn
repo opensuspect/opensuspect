@@ -1,10 +1,8 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://game/maps/lobby/custom_camera.gd" type="Script" id=1]
+[ext_resource path="res://game/maps/custom_camera.gd" type="Script" id=1]
 
 [node name="CustomCamera" type="Camera2D"]
-current = true
-zoom = Vector2( 0.5, 0.5 )
 editor_draw_limits = true
 editor_draw_drag_margin = true
 script = ExtResource( 1 )

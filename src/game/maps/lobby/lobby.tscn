@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://game/maps/map_template.tscn" type="PackedScene" id=1]
 [ext_resource path="res://game/maps/lobby/booth.tscn" type="PackedScene" id=2]
@@ -13,11 +13,9 @@
 [ext_resource path="res://game/maps/lobby/wall_side.tscn" type="PackedScene" id=11]
 [ext_resource path="res://game/maps/lobby/window_wall_wide_outside.tscn" type="PackedScene" id=12]
 [ext_resource path="res://game/maps/lobby/curtain.tscn" type="PackedScene" id=13]
-[ext_resource path="res://game/maps/lobby/custom_camera.tscn" type="PackedScene" id=14]
 [ext_resource path="res://game/maps/lobby/moving_background_generator.tscn" type="PackedScene" id=15]
 [ext_resource path="res://game/maps/lobby/wall_narrow.tscn" type="PackedScene" id=16]
 [ext_resource path="res://game/maps/lobby/wall_door.tscn" type="PackedScene" id=17]
-[ext_resource path="res://game/maps/lobby/lobby.gd" type="Script" id=18]
 
 [sub_resource type="TileSet" id=1]
 0/name = "carpet.png 0"
@@ -54,7 +52,6 @@ extents = Vector2( 375, 10 )
 
 [node name="Lobby" instance=ExtResource( 1 )]
 scale = Vector2( 2.5, 2.5 )
-script = ExtResource( 18 )
 
 [node name="Sky" type="Node2D" parent="." index="0"]
 position = Vector2( 0, 30 )
@@ -131,16 +128,7 @@ initial_spawn_position_min = Vector2( -1000, 0 )
 initial_spawn_position_max = Vector2( 0, 0 )
 background_path = NodePath("../../Sky/SkyRect")
 
-[node name="CustomCamera" parent="." index="2" instance=ExtResource( 14 )]
-zoom_factor = 0.65
-
-[node name="LimitMin" parent="CustomCamera" index="0"]
-position = Vector2( -298.049, -163.487 )
-
-[node name="LimitMax" parent="CustomCamera" index="1"]
-position = Vector2( 299.294, 117.634 )
-
-[node name="Ground" type="TileMap" parent="." index="3"]
+[node name="Ground" type="TileMap" parent="." index="2"]
 position = Vector2( -1529, -1600 )
 scale = Vector2( 0.2, 0.2 )
 tile_set = SubResource( 1 )
@@ -152,7 +140,7 @@ __meta__ = {
 "_editor_description_": "Tiles that make up the train floor."
 }
 
-[node name="Props" type="YSort" parent="." index="4"]
+[node name="Props" type="YSort" parent="." index="3"]
 position = Vector2( -10.4373, 11.3287 )
 scale = Vector2( 0.8, 0.8 )
 z_index = -1
@@ -193,7 +181,7 @@ scale = Vector2( 0.075, 0.075 )
 position = Vector2( -122.17, -142.384 )
 scale = Vector2( 0.085, 0.085 )
 
-[node name="walls" type="YSort" parent="." index="5"]
+[node name="walls" type="YSort" parent="." index="4"]
 scale = Vector2( 0.8, 0.8 )
 
 [node name="TopWall" type="YSort" parent="walls" index="0"]
@@ -298,7 +286,7 @@ position = Vector2( 0, 44.5359 )
 [node name="WallSide4" parent="walls/RightWall" index="3" instance=ExtResource( 11 )]
 position = Vector2( 0, -7.33086 )
 
-[node name="SunLight" type="Light2D" parent="." index="6"]
+[node name="SunLight" type="Light2D" parent="." index="5"]
 position = Vector2( 4.00452, -5.17251 )
 texture = ExtResource( 5 )
 texture_scale = 10.0
@@ -321,6 +309,15 @@ position = Vector2( 55, -18 )
 
 [node name="6" type="Node2D" parent="SpawnPositions" index="5"]
 position = Vector2( 104, 19 )
+
+[node name="CustomCamera" parent="." index="9"]
+zoom_factor = 0.65
+
+[node name="LimitMin" parent="CustomCamera" index="0"]
+position = Vector2( -298, -163 )
+
+[node name="LimitMax" parent="CustomCamera" index="1"]
+position = Vector2( 300, 118 )
 
 [connection signal="body_entered" from="walls/BottomWall/FadeTrigger" to="walls/BottomWall" method="_on_FadeTrigger_body_entered"]
 [connection signal="body_exited" from="walls/BottomWall/FadeTrigger" to="walls/BottomWall" method="_on_FadeTrigger_body_exited"]
