@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://resource_classes/ability.gd"
 }, {
+"base": "IPoolable",
+"class": "BackgroundObject",
+"language": "GDScript",
+"path": "res://game/maps/lobby/background_object.gd"
+}, {
 "base": "Resource",
 "class": "CharacterResource",
 "language": "GDScript",
@@ -54,6 +59,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://game/maps/chemlab/gun_resource.gd"
 }, {
+"base": "Node2D",
+"class": "IPoolable",
+"language": "GDScript",
+"path": "res://game/maps/lobby/ipoolable.gd"
+}, {
 "base": "Resource",
 "class": "ItemResource",
 "language": "GDScript",
@@ -63,6 +73,11 @@ _global_script_classes=[ {
 "class": "ItemTemplate",
 "language": "GDScript",
 "path": "res://resource_classes/item_template.gd"
+}, {
+"base": "Node",
+"class": "PoolManager",
+"language": "GDScript",
+"path": "res://game/maps/lobby/poolmanager.gd"
 }, {
 "base": "Resource",
 "class": "TaskResource",
@@ -81,6 +96,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Ability": "",
+"BackgroundObject": "",
 "CharacterResource": "",
 "ChemCabResource": "",
 "ChemlabVote": "",
@@ -89,8 +105,10 @@ _global_script_class_icons={
 "GasPressChResource": "",
 "GasValveResource": "",
 "GunAbility": "",
+"IPoolable": "",
 "ItemResource": "",
 "ItemTemplate": "",
+"PoolManager": "",
 "TaskResource": "",
 "TeamsRolesTemplate": "",
 "VoteMechanicsTemplate": ""
@@ -171,6 +189,7 @@ move_down={
 2d_physics/layer_10="ItemPickupRange"
 2d_physics/layer_11="TaskActivateRange"
 2d_physics/layer_12="PlaceholderForUi"
+2d_physics/layer_13="MiscMapInteraction"
 2d_physics/layer_16="VisionOccluder"
 
 [physics]

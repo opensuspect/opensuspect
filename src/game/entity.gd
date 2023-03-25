@@ -15,7 +15,6 @@ var fading: bool = false
 const fadingSpeed: int = 5
 
 onready var characterElements = $CharacterElements
-onready var camera = $CharacterCamera
 onready var nameLabel = $Name
 onready var skeleton = $CharacterElements/Skeleton
 
@@ -23,8 +22,6 @@ onready var skeleton = $CharacterElements/Skeleton
 var _characterResource: CharacterResource
 
 func _ready() -> void:
-	if mainCharacter:
-		camera.current = true
 	nameLabel.text = _characterResource.characterName
 
 func _process(delta: float) -> void:

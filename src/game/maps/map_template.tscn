@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://game/maps/map_template.gd" type="Script" id=1]
 [ext_resource path="res://resource_classes/teams_roles_template.tres" type="Resource" id=2]
 [ext_resource path="res://game/maps/tasks.gd" type="Script" id=3]
+[ext_resource path="res://game/maps/custom_camera.tscn" type="PackedScene" id=4]
 
 [node name="MapTemplate" type="YSort"]
 script = ExtResource( 1 )
@@ -14,3 +15,7 @@ teamsRolesResource = ExtResource( 2 )
 
 [node name="TaskNodes" type="YSort" parent="."]
 script = ExtResource( 3 )
+
+[node name="CustomCamera" parent="." instance=ExtResource( 4 )]
+
+[editable path="CustomCamera"]
