@@ -1,11 +1,11 @@
 extends Control
 
-onready var gameStartButton: Button = $GameStart
-onready var abilityBox: HBoxContainer = $GameUI/Abilities
-onready var taskIntBox: HBoxContainer = $GameUI/TaskInteract
-onready var itemIntBox: HBoxContainer = $GameUI/ItemInteract
-onready var itemUseBox: HBoxContainer = $GameUI/ItemUse
-onready var meetingCallBox: HBoxContainer = $GameUI/CallMeeting
+@onready var gameStartButton: Button = $GameStart
+@onready var abilityBox: HBoxContainer = $GameUI/Abilities
+@onready var taskIntBox: HBoxContainer = $GameUI/TaskInteract
+@onready var itemIntBox: HBoxContainer = $GameUI/ItemInteract
+@onready var itemUseBox: HBoxContainer = $GameUI/ItemUse
+@onready var meetingCallBox: HBoxContainer = $GameUI/CallMeeting
 
 var itemPickUpScene: PackedScene = preload("res://game/hud/item_pick_up_button.tscn")
 var itemDropScene: PackedScene = preload("res://game/hud/item_drop_button.tscn")
@@ -25,8 +25,8 @@ func _ready():
 	else:
 		showStartButton(false)
 	TransitionHandler.gameScene.setHudNode(self)
-	TransitionHandler.gameScene.connect("abilityAssigned", self, "addAbility")
-	TransitionHandler.gameScene.connect("clearAbilities", self, "clearAbilities")
+	TransitionHandler.gameScene.connect("abilityAssigned", Callable(self, "addAbility"))
+	TransitionHandler.gameScene.connect("clearAbilities", Callable(self, "clearAbilities"))
 
 func showStartButton(buttonShow: bool = true) -> void:
 	## Switch visibility of game start button
@@ -34,7 +34,7 @@ func showStartButton(buttonShow: bool = true) -> void:
 
 func _on_GameStart_pressed() -> void:
 	if not Connections.isServer():
-		assert(false, "Unreachable")
+		assert(false) #,"Unreachable")
 	## Change the map
 	TransitionHandler.changeMap()
 	## Change button text
@@ -43,7 +43,7 @@ func _on_GameStart_pressed() -> void:
 	elif TransitionHandler.getCurrentState() == TransitionHandler.States.ASSIGNMENT:
 		gameStartButton.text = "Back to lobby"
 	else:
-		assert(false, "Unreachable")
+		assert(false) #,"Unreachable")
 
 func addAbility(buttontext: String, abilityResource: Ability) -> void:
 	var newButton: Node = abilityResource.createAbilityHudNode()
@@ -54,7 +54,7 @@ func clearAbilities() -> void:
 		element.queue_free()
 
 func addItemToPickUp(itemRes: ItemResource) -> void:
-	var newItemIcon: Control = itemPickUpScene.instance()
+	var newItemIcon: Control = itemPickUpScene.instantiate()
 	newItemIcon.setItemResource(itemRes)
 	if Characters.getMyCharacterResource().canPickUpItem(itemRes):
 		itemIntBox.add_child(newItemIcon)
@@ -74,7 +74,7 @@ func hidePickUpButtons() -> void:
 
 func refreshPickUpButtons() -> void:
 	for buttonInstance in interactUi:
-		if itemIntBox.is_a_parent_of(buttonInstance):
+		if itemIntBox.is_ancestor_of(buttonInstance):
 			continue
 		itemIntBox.add_child(buttonInstance)
 
@@ -90,7 +90,7 @@ func refreshItemButtons() -> void:
 	pickedUp = []
 	itemUse = []
 	for itemRes in charaterRes.getItems():
-		newItemIcon = itemDropScene.instance()
+		newItemIcon = itemDropScene.instantiate()
 		newItemIcon.setItemResource(itemRes)
 		itemIntBox.add_child(newItemIcon)
 		pickedUp.append(itemRes)
@@ -98,7 +98,7 @@ func refreshItemButtons() -> void:
 		var itemAbilityButtons: Array = []
 		for abilityName in itemRes.itemAbilities():
 			var newAbilityButton: Control
-			newAbilityButton = itemAbilityScene.instance()
+			newAbilityButton = itemAbilityScene.instantiate()
 			newAbilityButton.setupButton(itemRes, abilityName)
 			itemUseBox.add_child(newAbilityButton)
 			itemAbilityButtons.append(newAbilityButton)
@@ -111,7 +111,7 @@ func itemInteract(itemRes: ItemResource, action: String) -> void:
 		removePickUpItem(itemRes)
 
 func addTaskToInteract(taskRes: TaskResource) -> void:
-	var newItemIcon: Control = taskInteractScene.instance()
+	var newItemIcon: Control = taskInteractScene.instantiate()
 	newItemIcon.setupButton(taskRes)
 	taskIntBox.add_child(newItemIcon)
 	interactable.append(taskRes)

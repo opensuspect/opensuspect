@@ -1,15 +1,15 @@
 extends Control
 
-onready var skin = $MarginContainer/VBoxContainer/SkinColor
-onready var fhair = $MarginContainer/VBoxContainer/FHairColor
-onready var hair = $MarginContainer/VBoxContainer/HairColor
+@onready var skin = $MarginContainer/VBoxContainer/SkinColor
+@onready var fhair = $MarginContainer/VBoxContainer/FHairColor
+@onready var hair = $MarginContainer/VBoxContainer/HairColor
 
 signal setColor(shader, colorMap, position)
 
 # --Private Functions--
 
 func _draw():
-	Appearance.connect("appearanceChanged", self, "_setCursorPos") # Signal from appearance to set skeleton config
+	Appearance.connect("appearanceChanged", Callable(self, "_setCursorPos")) # Signal from appearance to set skeleton config
 	_setCursorPos()
 
 # Sets the cursor position for all color pickers

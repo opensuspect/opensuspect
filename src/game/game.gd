@@ -12,13 +12,13 @@ var roles: Dictionary = {} # Stores the roles of all the players
 var visibleRoles: Dictionary = {}
 
 var hudNode: Control = null
-onready var mapNode: Node2D = $Map
-onready var charactersNode: Node2D = $Characters
-onready var corpsesNode: Node2D = $Corpses
-onready var itemsNode: Node2D = $Items
-onready var ghostsNode: Node2D = $Ghosts
-onready var roleScreenTimeout: Timer = $RoleScreenTimeout
-onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+@onready var mapNode: Node2D = $Map
+@onready var charactersNode: Node2D = $Characters
+@onready var corpsesNode: Node2D = $Corpses
+@onready var itemsNode: Node2D = $Items
+@onready var ghostsNode: Node2D = $Ghosts
+@onready var roleScreenTimeout: Timer = $RoleScreenTimeout
+@onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 signal teamsRolesAssigned
 signal abilityAssigned
@@ -37,7 +37,7 @@ func _physics_process(delta: float) -> void:
 	if myCharacterRes == null or not myCharacterRes.isAlive():
 		return
 	## Cast rays to every player from the main player
-	var myCharacterNode: KinematicBody2D = myCharacterRes.getCharacterNode()
+	var myCharacterNode: CharacterBody2D = myCharacterRes.getCharacterNode()
 	var obstacleFinder: RayCast2D = myCharacterNode.obstacleFinder
 	var myPosition: Vector2 = myCharacterRes.getGlobalPosition()
 	var otherPosition: Vector2
@@ -55,7 +55,7 @@ func _physics_process(delta: float) -> void:
 		for offset in [
 			Vector2(-10, 0), Vector2(10, 0), Vector2(0, -10), Vector2(0, 10)
 		]:
-			obstacleFinder.cast_to = otherPosition - myPosition + offset
+			obstacleFinder.target_position = otherPosition - myPosition + offset
 			obstacleFinder.force_raycast_update()
 			if obstacleFinder.get_collider() == null:
 				otherVisible = true
@@ -92,7 +92,7 @@ func getMovementInput(normalized: bool = true) -> Vector2:
 
 func setHudNode(newHudNode: Control) -> void:
 	if hudNode != null:
-		assert(false, "shouldn't set the hudNode again")
+		assert(false) #,"shouldn't set the hudNode again")
 	hudNode = newHudNode
 	if actualMap != null:
 		actualMap.setHudNode(hudNode)
@@ -111,7 +111,7 @@ func loadMap(mapName: String) -> void:
 		corpse.queue_free()
 	## Load map and place it on scene tree
 	var mapPath: String = "res://game/maps/" + mapName + "/" + mapName + ".tscn"
-	actualMap = ResourceLoader.load(mapPath).instance()
+	actualMap = ResourceLoader.load(mapPath).instantiate()
 	actualMap.setHudNode(hudNode)
 	actualMapName = mapName
 	mapNode.add_child(actualMap)
@@ -141,13 +141,13 @@ func loadMap(mapName: String) -> void:
 			hudNode.showMeetingButton(true)
 
 func addCharacter(characterRes: CharacterResource):
-	var newCharacter: KinematicBody2D = characterRes.getCharacterNode()
+	var newCharacter: CharacterBody2D = characterRes.getCharacterNode()
 	charactersNode.add_child(newCharacter) ## Add node to scene
 	var myId: int = Connections.getMyId()
 	## If own character is added
 	if characterRes.getNetworkId() == myId:
-		newCharacter.connect("itemInteraction", self, "itemInteract")
-		newCharacter.connect("taskInteraction", actualMap, "taskInteract")
+		newCharacter.connect("itemInteraction", Callable(self, "itemInteract"))
+		newCharacter.connect("taskInteraction", Callable(actualMap, "taskInteract"))
 	## Spawn the character
 	spawnCharacter(characterRes)
 
@@ -188,11 +188,11 @@ func setGameData(gameData: Dictionary) -> Dictionary:
 		character = Characters.getCharacterResource(id)
 	## Apply character outfit and colors
 	if gameData["key"] == "outfit":
-		assert(character != null, "A dedicated server should not try to change its outfit")
+		assert(character != null) #,"A dedicated server should not try to change its outfit")
 		character.setOutfit(gameData["value"])
 		return gameData["value"]
 	if gameData["key"] == "colors":
-		assert(character != null, "A dedicated server should not try to change its character colors")
+		assert(character != null) #,"A dedicated server should not try to change its character colors")
 		character.setColors(gameData["value"])
 		return gameData["value"]
 	if gameData["key"] == "meeting-chat":
@@ -240,7 +240,7 @@ func voteCast(voteeId: int) -> void:
 	rpc_id(1, "voteCastServer", voteeId)
 
 # -- Client functions --
-puppetsync func killCharacter(id: int) -> void:
+@rpc("call_local") func killCharacter(id: int) -> void:
 	if id == Connections.getMyId():
 		for characterRes in Characters.getCharacterResources().values():
 			if characterRes.isAlive():
@@ -254,10 +254,10 @@ puppetsync func killCharacter(id: int) -> void:
 	)
 	Characters.getCharacterResource(id).die(seeGhosts)
 
-puppet func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
+@rpc func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
 	var teamsRolesRes: TeamsRolesTemplate = actualMap.teamsRolesResource
 	roles = newRoles
-	var id: int = get_tree().get_network_unique_id()
+	var id: int = get_tree().get_unique_id()
 	var myTeam: String = newRoles[id]["team"]
 	var myRole: String = newRoles[id]["role"]
 	visibleRoles = teamsRolesRes.getVisibleTeamRole(newRoles, myTeam, myRole)
@@ -268,7 +268,7 @@ puppet func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
 		emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
 		roleScreenTimeout.start()
 
-puppet func receiveAbility(newAbilityName: String) -> void:
+@rpc func receiveAbility(newAbilityName: String) -> void:
 	var teamsRolesRes: TeamsRolesTemplate = actualMap.teamsRolesResource
 	var myCharacter: CharacterResource = Characters.getMyCharacterResource()
 	var newAbility: Ability = teamsRolesRes.getAbilityByName(newAbilityName)
@@ -277,45 +277,45 @@ puppet func receiveAbility(newAbilityName: String) -> void:
 	myCharacter.addAbility(newAbility)
 	emit_signal("abilityAssigned", newAbilityName, newAbility)
 
-puppet func executeAbility(parameters: Dictionary) -> void:
+@rpc func executeAbility(parameters: Dictionary) -> void:
 	var abilityName: String = parameters["ability"]
 	var myCharacter: CharacterResource = Characters.getMyCharacterResource()
 	if myCharacter.isAbility(abilityName):
 		var abilityInstance: Ability = myCharacter.getAbility(abilityName)
 		abilityInstance.execute(parameters)
 
-puppetsync func itemPickUpClient(characterId: int, itemId: int) -> void:
+@rpc("call_local") func itemPickUpClient(characterId: int, itemId: int) -> void:
 	var characterRes: CharacterResource = Characters.getCharacterResource(characterId)
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	characterRes.pickUpItem(itemRes)
-	if characterId == get_tree().get_network_unique_id():
+	if characterId == get_tree().get_unique_id():
 		hudNode.hidePickUpButtons()
 		hudNode.refreshItemButtons()
 
-puppetsync func itemDropClient(characterId: int, itemId: int) -> void:
+@rpc("call_local") func itemDropClient(characterId: int, itemId: int) -> void:
 	var characterRes: CharacterResource = Characters.getCharacterResource(characterId)
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	characterRes.dropItem(itemRes)
-	if characterId == get_tree().get_network_unique_id():
+	if characterId == get_tree().get_unique_id():
 		hudNode.refreshItemButtons()
 		hudNode.refreshPickUpButtons()
 
-puppetsync func itemActivateClient(itemId: int, abilityName: String, properties: Dictionary) -> void:
+@rpc("call_local") func itemActivateClient(itemId: int, abilityName: String, properties: Dictionary) -> void:
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	itemRes.activate(abilityName, properties)
-	if itemRes.getHolder().getNetworkId() == get_tree().get_network_unique_id():
+	if itemRes.getHolder().getNetworkId() == get_tree().get_unique_id():
 		hudNode.refreshItemButtons()
 
-puppetsync func teleportCharacters(teleportList: Dictionary) -> void:
+@rpc("call_local") func teleportCharacters(teleportList: Dictionary) -> void:
 	for characterIndex in teleportList:
 		Characters.getCharacterResource(characterIndex).setPosition(teleportList[characterIndex])
 
-puppetsync func startMeeting() -> void:
+@rpc("call_local") func startMeeting() -> void:
 	if not Connections.isDedicatedServer():
 		Characters.getMyCharacterResource().setMeetingMode()
 	Scenes.overlay("res://game/ui_elements/meeting_ui.tscn", actualMap.voteResource)
 
-puppetsync func endMeeting() -> void:
+@rpc("call_local") func endMeeting() -> void:
 	if not Connections.isDedicatedServer():
 		Characters.getMyCharacterResource().endMeetingMode()
 	Scenes.back()
@@ -343,7 +343,7 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 	emit_signal("clearAbilities")
 	var rolesToShow: Array = []
 	if Connections.isClientServer():
-		var id: int = get_tree().get_network_unique_id()
+		var id: int = get_tree().get_unique_id()
 		var myTeam: String = roles[id]["team"]
 		var myRole: String = roles[id]["role"]
 		visibleRoles = teamsRolesRes.getVisibleTeamRole(roles, myTeam, myRole)
@@ -358,8 +358,8 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 		emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
 		roleScreenTimeout.start()
 
-remotesync func abilityActServer(parameters: Dictionary):
-	var abilityPlayer: int = get_tree().get_rpc_sender_id()
+@rpc("any_peer", "call_local") func abilityActServer(parameters: Dictionary):
+	var abilityPlayer: int = get_tree().get_remote_sender_id()
 	var abilityName: String = parameters["ability"]
 	var abilityCharacter: CharacterResource = Characters.getCharacterResource(abilityPlayer)
 	if abilityCharacter.isAbility(abilityName):
@@ -368,23 +368,26 @@ remotesync func abilityActServer(parameters: Dictionary):
 			rpc_id(abilityPlayer, "executeAbility", parameters)
 			abilityInstance.execute(parameters)
 
-mastersync func itemPickUpServer(itemId: int) -> void:
-	var playerId: int = get_tree().get_rpc_sender_id()
+The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
+@rpc("call_local") func itemPickUpServer(itemId: int) -> void:
+	var playerId: int = get_tree().get_remote_sender_id()
 	var characterRes: CharacterResource = Characters.getCharacterResource(playerId)
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	if characterRes.canPickUpItem(itemRes):
 		rpc("itemPickUpClient", playerId, itemId)
 
-mastersync func itemDropServer(itemId: int) -> void:
-	var playerId: int = get_tree().get_rpc_sender_id()
+The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
+@rpc("call_local") func itemDropServer(itemId: int) -> void:
+	var playerId: int = get_tree().get_remote_sender_id()
 	var characterRes: CharacterResource = Characters.getCharacterResource(playerId)
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	if characterRes.canDropItem(itemRes):
 		#TODO: think about whether we should enforce server-side coordinates for the items to be dropped.
 		rpc("itemDropClient", playerId, itemId)
 
-mastersync func itemActivateServer(itemId: int, abilityName: String, properties: Dictionary) -> void:
-	var playerId: int = get_tree().get_rpc_sender_id()
+The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
+@rpc("call_local") func itemActivateServer(itemId: int, abilityName: String, properties: Dictionary) -> void:
+	var playerId: int = get_tree().get_remote_sender_id()
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	if itemRes.canBeActivated(abilityName, properties):
 		rpc("itemActivateClient", itemId, abilityName, properties)
@@ -401,8 +404,9 @@ func killCharacterServer(id: int) -> void:
 			rpc("itemDropClient", id, itemRes.getId())
 	rpc("killCharacter", id)
 
-mastersync func callMeetingServer() -> void:
-	var callerId: int = get_tree().get_rpc_sender_id()
+The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
+@rpc("call_local") func callMeetingServer() -> void:
+	var callerId: int = get_tree().get_remote_sender_id()
 	# TODO: do checks if the meeting can be called
 	if not Characters.getCharacterResource(callerId).isAlive():
 		return
@@ -423,8 +427,9 @@ mastersync func callMeetingServer() -> void:
 	rpc("teleportCharacters", teleport)
 	rpc("startMeeting")
 
-mastersync func voteCastServer(voteeId: int) -> void:
-	var voterId: int = get_tree().get_rpc_sender_id()
+The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
+@rpc("call_local") func voteCastServer(voteeId: int) -> void:
+	var voterId: int = get_tree().get_remote_sender_id()
 	var voteRes: VoteMechanicsTemplate = actualMap.voteResource
 	voteRes.receiveVote(voterId, voteeId)
 	if voteRes.allVoted():

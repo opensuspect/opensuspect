@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://game/character/assets/shaders/skin_color_key.shader" type="Shader" id=1]
+[ext_resource path="res://game/character/assets/shaders/skin_color_key.gdshader" type="Shader" id=1]
 [ext_resource path="res://game/character/skeleton.tscn" type="PackedScene" id=2]
 
 [sub_resource type="ShaderMaterial" id=1]
@@ -16,6 +16,6 @@ shader_param/tolerance = 0.1
 
 [node name="MenuPlayer" type="Node2D"]
 
-[node name="Skeleton" parent="." instance=ExtResource( 2 )]
+[node name="Skeleton3D" parent="." instance=ExtResource( 2 )]
 material = SubResource( 1 )
 position = Vector2( -384, -512 )

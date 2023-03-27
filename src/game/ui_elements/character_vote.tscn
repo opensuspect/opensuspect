@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
-[ext_resource path="res://game/character/assets/shaders/skin_color_key.shader" type="Shader" id=2]
+[ext_resource path="res://game/character/assets/shaders/skin_color_key.gdshader" type="Shader" id=2]
 [ext_resource path="res://game/character/skeleton.tscn" type="PackedScene" id=3]
 [ext_resource path="res://game/ui_elements/character_vote.gd" type="Script" id=4]
 
@@ -22,26 +22,26 @@ anchor_bottom = 1.0
 script = ExtResource( 4 )
 
 [node name="Button" type="Button" parent="."]
-margin_right = 127.0
-margin_bottom = 1080.0
+offset_right = 127.0
+offset_bottom = 1080.0
 theme = ExtResource( 1 )
 text = "Vote"
 
 [node name="Character" type="MarginContainer" parent="."]
-margin_left = 131.0
-margin_right = 301.0
-margin_bottom = 1080.0
-rect_min_size = Vector2( 170, 120 )
+offset_left = 131.0
+offset_right = 301.0
+offset_bottom = 1080.0
+custom_minimum_size = Vector2( 170, 120 )
 
-[node name="Skeleton" parent="Character" instance=ExtResource( 3 )]
+[node name="Skeleton3D" parent="Character" instance=ExtResource( 3 )]
 material = SubResource( 1 )
 scale = Vector2( 0.2, 0.1 )
 
 [node name="Name" type="Label" parent="."]
-margin_left = 305.0
-margin_top = 503.0
-margin_right = 611.0
-margin_bottom = 577.0
+offset_left = 305.0
+offset_top = 503.0
+offset_right = 611.0
+offset_bottom = 577.0
 theme = ExtResource( 1 )
 text = "Character Name"
 

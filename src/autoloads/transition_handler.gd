@@ -8,8 +8,8 @@ enum States {
 	MAP				# On a game map
 }
 
-var currentState: int = States.MENU setget toss, getCurrentState
-var gameScene: Node2D setget toss, getGameScene
+var currentState: int = States.MENU: get = getCurrentState, set = toss
+var gameScene: Node2D: get = getGameScene, set = toss
 
 func isPlaying() -> bool:
 	return currentState == States.LOBBY or currentState == States.MAP
@@ -48,7 +48,7 @@ func previouslyConnectedDataReceived() -> void:
 	print_debug("Received data for currently connected all players")
 	currentState = States.LOBBY
 
-puppetsync func startGame() -> void:
+@rpc("call_local") func startGame() -> void:
 	## Load game map (laboratory)
 	gameScene.loadMap("chemlab")
 	## Overlay role assignment scene
@@ -58,7 +58,7 @@ puppetsync func startGame() -> void:
 	if Connections.isServer():
 		gameScene.teamRoleAssignment(false)
 
-puppetsync func enterLobby() -> void:
+@rpc("call_local") func enterLobby() -> void:
 	## Load lobby map
 	gameScene.loadMap("lobby")
 	## If the connections have not been received yet we aren't actually in the
@@ -89,4 +89,4 @@ func changeMap() -> void:
 		## New connections allowed
 		Connections.allowNewConnections(true)
 	else:
-		assert(false, "unreachable")
+		assert(false) #,"unreachable")

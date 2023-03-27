@@ -1,8 +1,8 @@
 extends HBoxContainer
 
-onready var skeleton = $Character/Skeleton
-onready var nameTag = $Name
-onready var voteButton = $Button
+@onready var skeleton = $Character/Skeleton3D
+@onready var nameTag = $Name
+@onready var voteButton = $Button
 
 var characterId: int = -1
 var characterName: String
@@ -48,4 +48,4 @@ func _on_Button_pressed():
 	emit_signal("voteCast", characterId)
 
 func changeTextColor(newColor: Color) -> void:
-	nameTag.add_color_override("font_color", newColor)
+	nameTag.add_theme_color_override("font_color", newColor)

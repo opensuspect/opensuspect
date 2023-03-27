@@ -8,10 +8,10 @@ var teamRoleColors: Dictionary = {} # A list of team, role, color pairings
 func init():
 	teamNames = ["Agents"]
 	roleNames = {"Agents": ["Agent"]}
-	teamRoleColors = {["Agents", "Agent"]: Color.white}
+	teamRoleColors = {["Agents", "Agent"]: Color.WHITE}
 
 func getRoleColor(team: String, role: String) -> Color:
-	var textColor: Color = Color.white
+	var textColor: Color = Color.WHITE
 	var searchBase: Array = [team, role]
 	if searchBase in teamRoleColors:
 		textColor = teamRoleColors[searchBase]

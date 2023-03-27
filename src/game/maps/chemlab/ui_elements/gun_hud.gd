@@ -1,7 +1,7 @@
 extends Control
 
-onready var killButton: TextureButton = $KillButton
-onready var reloadButton: TextureButton = $ReloadButton
+@onready var killButton: TextureButton = $KillButton
+@onready var reloadButton: TextureButton = $ReloadButton
 
 var activeKill: bool = false
 

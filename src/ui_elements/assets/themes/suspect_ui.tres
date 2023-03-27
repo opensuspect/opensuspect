@@ -1,10 +1,10 @@
 [gd_resource type="Theme" load_steps=24 format=2]
 
-[ext_resource path="res://ui_elements/assets/themes/suspect_font_label.tres" type="DynamicFont" id=1]
-[ext_resource path="res://ui_elements/assets/themes/suspect_font_main.tres" type="DynamicFont" id=2]
-[ext_resource path="res://ui_elements/assets/themes/suspect_font_label_small.tres" type="DynamicFont" id=3]
-[ext_resource path="res://ui_elements/assets/themes/suspect_font_main_small.tres" type="DynamicFont" id=4]
-[ext_resource path="res://ui_elements/assets/fonts/PTSansNarrow-Regular.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://ui_elements/assets/themes/suspect_font_label.tres" type="FontFile" id=1]
+[ext_resource path="res://ui_elements/assets/themes/suspect_font_main.tres" type="FontFile" id=2]
+[ext_resource path="res://ui_elements/assets/themes/suspect_font_label_small.tres" type="FontFile" id=3]
+[ext_resource path="res://ui_elements/assets/themes/suspect_font_main_small.tres" type="FontFile" id=4]
+[ext_resource path="res://ui_elements/assets/fonts/PTSansNarrow-Regular.ttf" type="FontFile" id=5]
 
 [sub_resource type="StyleBoxFlat" id=5]
 content_margin_left = 8.0
@@ -199,7 +199,7 @@ border_width_right = 4
 border_width_bottom = 4
 border_color = Color( 0.858824, 0.160784, 0.129412, 1 )
 
-[sub_resource type="DynamicFont" id=22]
+[sub_resource type="FontFile" id=22]
 size = 32
 font_data = ExtResource( 5 )
 

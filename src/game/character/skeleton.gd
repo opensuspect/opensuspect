@@ -12,10 +12,10 @@ var colorMapDir: Dictionary = {
 
 var _itemsInHand: Array = []
 
-onready var handNode: Node2D = $Skeleton/Hip/RightShoulder/RArm1/RArm2/RHand
+@onready var handNode: Node2D = $Skeleton3D/Hip/RightShoulder/RArm1/RArm2/RHand
 
 # Set the list of colormaps from the color map directory
-onready var colorShaders = Resources.list(colorMapDir, extensions)
+@onready var colorShaders = Resources.list(colorMapDir, extensions)
 
 # Dictionary mapping each asset to a node path
 var nodeStructure: Dictionary = {
@@ -36,10 +36,10 @@ var nodeStructure: Dictionary = {
 
 # Apply config from appearance's variables
 func applyAppearance(outfitPaths: Dictionary, colors: Dictionary) -> void:
-	assert(not outfitPaths.empty(), "Missing outfit data")
-	assert(not colors.empty(), "Missing colors data")
+	assert(not outfitPaths.is_empty()) #,"Missing outfit data")
+	assert(not colors.is_empty()) #,"Missing colors data")
 	## If received data valid
-	if not outfitPaths.empty() and not colors.empty():
+	if not outfitPaths.is_empty() and not colors.is_empty():
 		_applyOutfit(outfitPaths) ## Apply Outfit
 		_applyColors(colors) ## Apply colors
 
@@ -75,4 +75,4 @@ func _applyColors(colors: Dictionary) -> void:
 		colors[shaderName]["Red"],
 		colors[shaderName]["Green"],
 		colors[shaderName]["Blue"])
-		self.material.set_shader_param(shaderName, colorsForShader) ## Applies the colors to the given shader
+		self.material.set_shader_parameter(shaderName, colorsForShader) ## Applies the colors to the given shader

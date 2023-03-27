@@ -1,13 +1,13 @@
 extends "res://game/ui_elements/task_ui_base.gd"
 
-onready var cabinet: Node = $Control/Cabinet
-onready var leftHandle: Node = $Control/DoorClosed/HandleLeft
-onready var rightHandle: Node = $Control/DoorClosed/HandleRight
-onready var doorOpened: Node = $Control/DoorOpened
-onready var doorClosed: Node = $Control/DoorClosed
-onready var autoExitTimer: Timer = $Control/AutoExitTimer
-onready var handle_maxy: int = leftHandle.position.y
-onready var handle_miny: int = leftHandle.position.y - 50
+@onready var cabinet: Node = $Control/Cabinet
+@onready var leftHandle: Node = $Control/DoorClosed/HandleLeft
+@onready var rightHandle: Node = $Control/DoorClosed/HandleRight
+@onready var doorOpened: Node = $Control/DoorOpened
+@onready var doorClosed: Node = $Control/DoorClosed
+@onready var autoExitTimer: Timer = $Control/AutoExitTimer
+@onready var handle_maxy: int = leftHandle.position.y
+@onready var handle_miny: int = leftHandle.position.y - 50
 
 var left_in: bool = false
 var left_grab: bool = false
@@ -131,7 +131,7 @@ func changedTaskState(newState: Dictionary) -> void:
 func changedItemButtons(itemButtons: Array) -> void:
 	if len(itemButtons) == 0:
 		itemButtons = cabinet.get_children()
-	.changedItemButtons(itemButtons)
+	super.changedItemButtons(itemButtons)
 
 func closeWindow() -> void:
 	autoExitTimer.start()

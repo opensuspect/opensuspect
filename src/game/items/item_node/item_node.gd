@@ -1,10 +1,10 @@
-extends KinematicBody2D
+extends CharacterBody2D
 
 # --Private Variables--
 # the item resource corresponding to this item node
 var _itemResource: ItemResource
 
-onready var _sprite: Sprite = $Sprite
+@onready var _sprite: Sprite2D = $Sprite2D
 
 # --Public Variables--
 
@@ -14,7 +14,7 @@ func getName() -> String:
 
 func setItemResource(newItemResource: ItemResource):
 	if _itemResource != null:
-		assert(false, "Assigning an item resource to an item node that already has one")
+		assert(false) #,"Assigning an item resource to an item node that already has one")
 	_itemResource = newItemResource
 	if _itemResource.getTexture() != null:
 		call_deferred("setSprite")

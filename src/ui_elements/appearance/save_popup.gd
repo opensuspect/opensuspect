@@ -1,6 +1,6 @@
 extends PopupPanel
 
-onready var inputName = $MarginContainer/HBoxContainer/Center/VBox/Name
+@onready var inputName = $MarginContainer/HBoxContainer/Center/VBox/Name
 
 var configData: Dictionary
 
@@ -33,9 +33,9 @@ func _saveData():
 	GameData.write(NAMESPACE, configData)
 
 func _on_Save_pressed():
-	if not inputName.text.empty():
+	if not inputName.text.is_empty():
 		saveConfig(inputName.text)
 
 func _on_Name_text_entered(new_text):
-	if not new_text.empty():
+	if not new_text.is_empty():
 		saveConfig(new_text)

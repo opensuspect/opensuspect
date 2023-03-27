@@ -1,9 +1,9 @@
 extends ColorRect
 
-onready var voteOptions: VBoxContainer = $MainBox/VoteSide/VoteOptions
-onready var timer: Timer = $VoteTimeOut
-onready var timeLabel: Label = $TimeLeft
-onready var chatbox: MarginContainer = $MainBox/ChatBox
+@onready var voteOptions: VBoxContainer = $MainBox/VoteSide/VoteOptions
+@onready var timer: Timer = $VoteTimeOut
+@onready var timeLabel: Label = $TimeLeft
+@onready var chatbox: MarginContainer = $MainBox/ChatBox
 var characterVote: String = "res://game/ui_elements/character_vote.tscn"
 
 var votableCharacters: Dictionary = {}
@@ -41,7 +41,7 @@ func removeOptions() -> void:
 	votableCharacters = {}
 
 func addCharacter(characterId: int) -> void:
-	var newVoteItem: HBoxContainer = ResourceLoader.load(characterVote).instance()
+	var newVoteItem: HBoxContainer = ResourceLoader.load(characterVote).instantiate()
 	var characterRes: CharacterResource = Characters.getCharacterResource(characterId)
 	votableCharacters[characterId] = newVoteItem
 	newVoteItem.setId(characterId)
@@ -54,15 +54,15 @@ func addCharacter(characterId: int) -> void:
 		newVoteItem.setActive(false)
 	else:
 		newVoteItem.setActive(true)
-	newVoteItem.connect("voteCast", self, "receiveVote")
+	newVoteItem.connect("voteCast", Callable(self, "receiveVote"))
 	voteOptions.add_child(newVoteItem)
 
 func receiveVote(votedFor: int) -> void:
 	for id in votableCharacters:
 		if id == votedFor:
-			votableCharacters[id].changeTextColor(Color.yellow)
+			votableCharacters[id].changeTextColor(Color.YELLOW)
 		else:
-			votableCharacters[id].changeTextColor(Color.gray)
+			votableCharacters[id].changeTextColor(Color.GRAY)
 	TransitionHandler.gameScene.voteCast(votedFor)
 
 func _on_VoteTimeOut_timeout():

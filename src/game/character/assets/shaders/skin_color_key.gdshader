@@ -2,12 +2,12 @@ shader_type canvas_item;
 
 // Each pair of colors is defining a mask color and a default color that will
 // replace the mask color.
-uniform vec4 skin_mask_color: hint_color = vec4(1.0, 0.0, 1.0, 1.0);
-uniform vec4 skin_color: hint_color = vec4(1.0);
-uniform vec4 hair_mask_color: hint_color = vec4(0.0, 1.0, 1.0, 1.0);
-uniform vec4 hair_color: hint_color = vec4(1.0);
-uniform vec4 fhair_mask_color: hint_color = vec4(0.0, 1.0, 0.0, 1.0);
-uniform vec4 fhair_color: hint_color = vec4(1.0);
+uniform vec4 skin_mask_color: source_color = vec4(1.0, 0.0, 1.0, 1.0);
+uniform vec4 skin_color: source_color = vec4(1.0);
+uniform vec4 hair_mask_color: source_color = vec4(0.0, 1.0, 1.0, 1.0);
+uniform vec4 hair_color: source_color = vec4(1.0);
+uniform vec4 fhair_mask_color: source_color = vec4(0.0, 1.0, 0.0, 1.0);
+uniform vec4 fhair_color: source_color = vec4(1.0);
 // A distance between two colors to be still considered the same color
 uniform float tolerance: hint_range(0.0, 1.0) = 0.5;
 

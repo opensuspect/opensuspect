@@ -1,8 +1,8 @@
-extends YSort
+extends Node2D
 
-onready var fade_trigger: Area2D = $FadeTrigger
-onready var players: YSort = get_tree().get_root().get_node("Main/players")
-onready var main_player: KinematicBody2D
+@onready var fade_trigger: Area2D = $FadeTrigger
+@onready var players: Node2D = get_tree().get_root().get_node("Main/players")
+@onready var main_player: CharacterBody2D
 
 const fade_speed: float = 5.0
 var fading_in: bool
@@ -24,7 +24,7 @@ func _on_FadeTrigger_body_entered(body: Node) -> void:
 func _on_FadeTrigger_body_exited(body: Node) -> void:
 	_check_fade(body)
 
-func _check_fade(body: KinematicBody2D) -> void:
+func _check_fade(body: CharacterBody2D) -> void:
 	"""Fade the bottom wall in or out if the main player is moving away from or towards it."""
 	if body.mainCharacter:
 		if body.getLookDirection() == body.LookDirections.DOWN:

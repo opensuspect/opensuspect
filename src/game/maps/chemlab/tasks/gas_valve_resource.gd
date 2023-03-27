@@ -1,19 +1,19 @@
 extends TaskResource
 class_name GasValveResource
 
-func init(newNode: YSort) -> void:
-	.init(newNode)
+func init(newNode: Node2D) -> void:
+	super.init(newNode)
 	taskState["main valve"] = 0
 	taskState["reductor valve"] = 0
 	taskState["base pressure"] = 2.0
 
 func stateChanged(newState: Dictionary) -> void:
-	.stateChanged(newState)
+	super.stateChanged(newState)
 	taskUiNode.setHighPressNeedle(getHighPressure())
 	taskUiNode.setLowPressNeedle(getLowPressure())
 
 func stateRemoteChange(newState: Dictionary) -> bool:
-	.stateRemoteChange(newState)
+	super.stateRemoteChange(newState)
 	if taskUiNode != null:
 		taskUiNode.setHighPressNeedle(getHighPressure())
 		taskUiNode.setLowPressNeedle(getLowPressure())

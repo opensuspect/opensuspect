@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://game/tasks/task_node.tscn" type="PackedScene" id=1]
-[ext_resource path="res://game/maps/chemlab/tasks/assets/gas-valve-object.png" type="Texture" id=2]
+[ext_resource path="res://game/maps/chemlab/tasks/assets/gas-valve-object.png" type="Texture2D" id=2]
 [ext_resource path="res://game/maps/chemlab/tasks/gas_valve_resource.tres" type="Resource" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
@@ -15,6 +15,6 @@ taskResource = ExtResource( 3 )
 rotation = 1.5708
 shape = SubResource( 1 )
 
-[node name="BaseSprite" type="Sprite" parent="Object" index="0"]
+[node name="BaseSprite" type="Sprite2D" parent="Object" index="0"]
 position = Vector2( 0, -90 )
 texture = ExtResource( 2 )

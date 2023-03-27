@@ -1,12 +1,12 @@
 extends Control
 
-export var colorMapPath: String = "res://game/character/assets/colormaps/skin_color.png"
+@export var colorMapPath: String = "res://game/character/assets/colormaps/skin_color.png"
 
 signal colorOnClick(colorMap, position) # Send the color of the clicked position
 
 var windowDimensions: Vector2
 var imageScale: Vector2 # Scale of the image
-var colorMapImage: StreamTexture
+var colorMapImage: CompressedTexture2D
 
 var selectedColor: Color
 var selectedColorPosition: Vector2
@@ -63,8 +63,8 @@ func _checkValidPos(position) -> bool:
 		return(true)
 
 func _setPreview(pos: Vector2, color: Color) -> void:
-	var offset = ($Preview.rect_size / 2)
-	$Preview.rect_position = pos - offset
+	var offset = ($Preview.size / 2)
+	$Preview.position = pos - offset
 	$Preview.color = color
 
 # --Signal Functions--

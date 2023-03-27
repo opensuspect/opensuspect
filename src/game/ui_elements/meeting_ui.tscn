@@ -3,17 +3,17 @@
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
 [ext_resource path="res://game/ui_elements/meeting_ui.gd" type="Script" id=2]
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui_small.tres" type="Theme" id=3]
-[ext_resource path="res://ui_elements/assets/themes/suspect_font_label.tres" type="DynamicFont" id=4]
+[ext_resource path="res://ui_elements/assets/themes/suspect_font_label.tres" type="FontFile" id=4]
 [ext_resource path="res://game/ui_elements/chat_box.gd" type="Script" id=5]
-[ext_resource path="res://ui_elements/assets/themes/suspect_font_main.tres" type="DynamicFont" id=6]
+[ext_resource path="res://ui_elements/assets/themes/suspect_font_main.tres" type="FontFile" id=6]
 
 [node name="MeetingUI" type="ColorRect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 20.0
-margin_top = 40.0
-margin_right = -20.0
-margin_bottom = -20.0
+offset_left = 20.0
+offset_top = 40.0
+offset_right = -20.0
+offset_bottom = -20.0
 theme = ExtResource( 1 )
 color = Color( 0.129412, 0.113725, 0.113725, 1 )
 script = ExtResource( 2 )
@@ -21,75 +21,75 @@ script = ExtResource( 2 )
 [node name="TimeLeft" type="Label" parent="."]
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -40.0
-margin_right = 40.0
-margin_bottom = 74.0
+offset_left = -40.0
+offset_right = 40.0
+offset_bottom = 74.0
 text = "0:00"
 
 [node name="MainBox" type="HSplitContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 60.0
-margin_right = -10.0
-margin_bottom = -10.0
+offset_left = 10.0
+offset_top = 60.0
+offset_right = -10.0
+offset_bottom = -10.0
 
 [node name="VoteSide" type="VBoxContainer" parent="MainBox"]
-margin_right = 700.0
-margin_bottom = 950.0
-rect_min_size = Vector2( 700, 0 )
+offset_right = 700.0
+offset_bottom = 950.0
+custom_minimum_size = Vector2( 700, 0 )
 
 [node name="VoteTitle" type="Label" parent="MainBox/VoteSide"]
-margin_right = 700.0
-margin_bottom = 74.0
+offset_right = 700.0
+offset_bottom = 74.0
 text = "Vote"
 align = 1
 
 [node name="VoteOptions" type="VBoxContainer" parent="MainBox/VoteSide"]
-margin_top = 90.0
-margin_right = 700.0
-margin_bottom = 90.0
+offset_top = 90.0
+offset_right = 700.0
+offset_bottom = 90.0
 
 [node name="ChatBox" type="MarginContainer" parent="MainBox"]
-margin_left = 712.0
-margin_right = 1860.0
-margin_bottom = 950.0
-rect_min_size = Vector2( 500, 0 )
+offset_left = 712.0
+offset_right = 1860.0
+offset_bottom = 950.0
+custom_minimum_size = Vector2( 500, 0 )
 script = ExtResource( 5 )
 
 [node name="ChatContainer" type="VSplitContainer" parent="MainBox/ChatBox"]
-margin_left = 20.0
-margin_top = 20.0
-margin_right = 1128.0
-margin_bottom = 930.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 1128.0
+offset_bottom = 930.0
 
 [node name="ChatHistory" type="RichTextLabel" parent="MainBox/ChatBox/ChatContainer"]
-margin_right = 1108.0
-margin_bottom = 808.0
+offset_right = 1108.0
+offset_bottom = 808.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 3 )
-custom_fonts/bold_font = ExtResource( 6 )
-custom_fonts/normal_font = ExtResource( 4 )
+theme_override_fonts/bold_font = ExtResource( 6 )
+theme_override_fonts/normal_font = ExtResource( 4 )
 bbcode_enabled = true
-bbcode_text = "Start chatting!"
+text = "Start chatting!"
 text = "Start chatting!"
 
 [node name="InputContainer" type="HSplitContainer" parent="MainBox/ChatBox/ChatContainer"]
-margin_top = 820.0
-margin_right = 1108.0
-margin_bottom = 910.0
+offset_top = 820.0
+offset_right = 1108.0
+offset_bottom = 910.0
 size_flags_vertical = 0
 
 [node name="LineEdit" type="LineEdit" parent="MainBox/ChatBox/ChatContainer/InputContainer"]
-margin_right = 967.0
-margin_bottom = 90.0
+offset_right = 967.0
+offset_bottom = 90.0
 size_flags_horizontal = 3
 
 [node name="Button" type="Button" parent="MainBox/ChatBox/ChatContainer/InputContainer"]
-margin_left = 979.0
-margin_right = 1108.0
-margin_bottom = 90.0
+offset_left = 979.0
+offset_right = 1108.0
+offset_bottom = 90.0
 size_flags_horizontal = 0
 text = "Send"
 
@@ -97,6 +97,6 @@ text = "Send"
 wait_time = 75.0
 autostart = true
 
-[connection signal="text_entered" from="MainBox/ChatBox/ChatContainer/InputContainer/LineEdit" to="MainBox/ChatBox" method="_on_LineEdit_text_entered"]
+[connection signal="text_submitted" from="MainBox/ChatBox/ChatContainer/InputContainer/LineEdit" to="MainBox/ChatBox" method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="MainBox/ChatBox/ChatContainer/InputContainer/Button" to="MainBox/ChatBox" method="_on_Button_pressed"]
 [connection signal="timeout" from="VoteTimeOut" to="." method="_on_VoteTimeOut_timeout"]

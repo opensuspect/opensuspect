@@ -19,95 +19,95 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 2 )
-custom_constants/margin_right = 32
-custom_constants/margin_top = 32
-custom_constants/margin_left = 32
-custom_constants/margin_bottom = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_bottom = 32
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MenuMargin"]
-margin_left = 32.0
-margin_top = 32.0
-margin_right = 1888.0
-margin_bottom = 1102.0
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 1888.0
+offset_bottom = 1102.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CharacterBox" type="VBoxContainer" parent="MenuMargin/HBoxContainer"]
-margin_right = 496.0
-margin_bottom = 1070.0
+offset_right = 496.0
+offset_bottom = 1070.0
 size_flags_horizontal = 3
 
 [node name="CenterCharacter" type="CenterContainer" parent="MenuMargin/HBoxContainer/CharacterBox"]
-margin_right = 496.0
-margin_bottom = 640.0
+offset_right = 496.0
+offset_bottom = 640.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MenuCharacter" parent="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter" instance=ExtResource( 1 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 20.0
-margin_right = 476.0
-margin_bottom = 640.0
-rect_min_size = Vector2( 456, 640 )
-custom_constants/margin_right = 0
-custom_constants/margin_top = 0
-custom_constants/margin_left = 0
-custom_constants/margin_bottom = 0
+offset_left = 20.0
+offset_right = 476.0
+offset_bottom = 640.0
+custom_minimum_size = Vector2( 456, 640 )
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_bottom = 0
 
 [node name="Character" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter"]
-margin_right = 456.0
-margin_bottom = 640.0
+offset_right = 456.0
+offset_bottom = 640.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 5 )
 
 [node name="ButtonMargin" type="MarginContainer" parent="MenuMargin/HBoxContainer/CharacterBox"]
-margin_top = 656.0
-margin_right = 496.0
-margin_bottom = 1070.0
-custom_constants/margin_right = 32
+offset_top = 656.0
+offset_right = 496.0
+offset_bottom = 1070.0
+theme_override_constants/margin_right = 32
 
 [node name="Buttons" type="VBoxContainer" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin"]
-margin_left = 20.0
-margin_top = 20.0
-margin_right = 464.0
-margin_bottom = 394.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 464.0
+offset_bottom = 394.0
 size_flags_horizontal = 5
 size_flags_vertical = 4
 theme = ExtResource( 2 )
 
 [node name="Label" type="Label" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
-margin_right = 444.0
-margin_bottom = 74.0
+offset_right = 444.0
+offset_bottom = 74.0
 text = "Please select an outfit"
 
 [node name="Select" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
-margin_top = 90.0
-margin_right = 444.0
-margin_bottom = 174.0
+offset_top = 90.0
+offset_right = 444.0
+offset_bottom = 174.0
 theme = ExtResource( 2 )
 text = "Select"
 
 [node name="Delete" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
-margin_top = 190.0
-margin_right = 444.0
-margin_bottom = 274.0
+offset_top = 190.0
+offset_right = 444.0
+offset_bottom = 274.0
 theme = ExtResource( 2 )
 text = "Delete"
 
 [node name="Back" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons"]
-margin_top = 290.0
-margin_right = 444.0
-margin_bottom = 374.0
+offset_top = 290.0
+offset_right = 444.0
+offset_bottom = 374.0
 theme = ExtResource( 2 )
 text = "Back"
 
 [node name="ClosetBox" type="VBoxContainer" parent="MenuMargin/HBoxContainer"]
-margin_left = 512.0
-margin_right = 1856.0
-margin_bottom = 1070.0
+offset_left = 512.0
+offset_right = 1856.0
+offset_bottom = 1070.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 2 )
@@ -116,30 +116,30 @@ __meta__ = {
 }
 
 [node name="LabelCenter" type="CenterContainer" parent="MenuMargin/HBoxContainer/ClosetBox"]
-margin_right = 1344.0
-margin_bottom = 74.0
+offset_right = 1344.0
+offset_bottom = 74.0
 
 [node name="Label" type="Label" parent="MenuMargin/HBoxContainer/ClosetBox/LabelCenter"]
-margin_left = 469.0
-margin_right = 875.0
-margin_bottom = 74.0
+offset_left = 469.0
+offset_right = 875.0
+offset_bottom = 74.0
 theme = ExtResource( 2 )
 text = "Customization Closet"
 
 [node name="Panel" type="PanelContainer" parent="MenuMargin/HBoxContainer/ClosetBox"]
-margin_top = 90.0
-margin_right = 1344.0
-margin_bottom = 1070.0
-rect_min_size = Vector2( 1344, 0 )
+offset_top = 90.0
+offset_right = 1344.0
+offset_bottom = 1070.0
+custom_minimum_size = Vector2( 1344, 0 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 2 )
 
 [node name="ItemList" type="ItemList" parent="MenuMargin/HBoxContainer/ClosetBox/Panel"]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 1336.0
-margin_bottom = 972.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 1336.0
+offset_bottom = 972.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 2 )
@@ -148,16 +148,16 @@ __meta__ = {
 }
 
 [node name="CenterContainer" type="CenterContainer" parent="MenuMargin/HBoxContainer/ClosetBox/Panel"]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 1336.0
-margin_bottom = 972.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 1336.0
+offset_bottom = 972.0
 
 [node name="Label" type="Label" parent="MenuMargin/HBoxContainer/ClosetBox/Panel/CenterContainer"]
-margin_left = 334.0
-margin_top = 406.0
-margin_right = 993.0
-margin_bottom = 557.0
+offset_left = 334.0
+offset_top = 406.0
+offset_right = 993.0
+offset_bottom = 557.0
 text = "Save some costumes and they will
 appear here!"
 align = 1
@@ -173,42 +173,42 @@ __meta__ = {
 
 [node name="DeleteConfirm" type="PopupPanel" parent="."]
 visible = true
-margin_right = 838.0
-margin_bottom = 330.0
+offset_right = 838.0
+offset_bottom = 330.0
 
 [node name="MarginContainer" type="MarginContainer" parent="DeleteConfirm"]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 830.0
-margin_bottom = 322.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 830.0
+offset_bottom = 322.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DeleteConfirm/MarginContainer"]
-margin_left = 20.0
-margin_top = 20.0
-margin_right = 802.0
-margin_bottom = 294.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 802.0
+offset_bottom = 294.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="DeleteConfirm/MarginContainer/VBoxContainer"]
-margin_right = 782.0
-margin_bottom = 74.0
+offset_right = 782.0
+offset_bottom = 74.0
 text = "Delete this appearance?"
 
 [node name="Confirm" type="Button" parent="DeleteConfirm/MarginContainer/VBoxContainer"]
-margin_top = 90.0
-margin_right = 782.0
-margin_bottom = 174.0
+offset_top = 90.0
+offset_right = 782.0
+offset_bottom = 174.0
 text = "Confirm"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Cancel" type="Button" parent="DeleteConfirm/MarginContainer/VBoxContainer"]
-margin_top = 190.0
-margin_right = 782.0
-margin_bottom = 274.0
+offset_top = 190.0
+offset_right = 782.0
+offset_bottom = 274.0
 text = "Cancel"
 __meta__ = {
 "_edit_use_anchors_": false

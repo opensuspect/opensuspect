@@ -40,7 +40,7 @@ var colorMapDir: Dictionary = {
 }
 
 # Set the list of colormaps from the color map directory
-onready var colorShaders = Resources.list(colorMapDir, extensions)
+@onready var colorShaders = Resources.list(colorMapDir, extensions)
 
 # Define which body parts work with which customizable parts
 var groupCustomization = {
@@ -164,7 +164,7 @@ func _colorFromMapXY(colorMapPath: String, relPos: Vector2) -> Color:
 	var x = int(float(relPos.x) / COLOR_XY * maxX) # Sets the x position
 	var y = int(float(relPos.y) / COLOR_XY * maxY) # Sets the y position
 	## Reads color of pixel
-	colorMap.lock() # locks the color map for access
+	false # colorMap.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed # locks the color map for access
 	var color = colorMap.get_pixel(x, y) # Gets the color of the pixel at the co-ordinates
-	colorMap.unlock() # unlocks the color map
+	false # colorMap.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed # unlocks the color map
 	return(color) # Returns the given color

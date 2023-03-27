@@ -43,7 +43,7 @@ func createCharacter(networkId: int, name: String) -> CharacterResource:
 	_registerCharacterResource(networkId, characterResource)
 	## Set the name of the character
 	characterResource.setCharacterName(name)
-	var myId: int = get_tree().get_network_unique_id()
+	var myId: int = get_tree().get_unique_id()
 	## If own character is added
 	if networkId == myId:
 		## Apply appearance to character
@@ -54,9 +54,9 @@ func createCharacter(networkId: int, name: String) -> CharacterResource:
 	return characterResource
 
 # create a character node, this function is used when creating a new character
-func createCharacterNode(networkId: int = -1) -> KinematicBody2D:
+func createCharacterNode(networkId: int = -1) -> CharacterBody2D:
 	## instance character scene
-	var characterNode: KinematicBody2D = characterScene.instance()
+	var characterNode: CharacterBody2D = characterScene.instantiate()
 	# set its network id
 	characterNode.networkId = networkId
 	# here is where we would set its player name, but that is not implemented yet
@@ -73,7 +73,7 @@ func getCharacterResource(id: int) -> CharacterResource:
 		# throw an error
 		printerr("Trying to get a nonexistant character resource with network id ", id)
 		# crash the game (if running in debug mode) to assist with debugging
-		assert(false, "Thre should be no use case when we look for a non-existent character id")
+		assert(false) #,"Thre should be no use case when we look for a non-existent character id")
 		# if running in release mode, return null
 		return null
 	return _characterResources[id]
@@ -84,19 +84,19 @@ func removeCharacterResource(id: int) -> void:
 		# throw an error
 		printerr("Trying to get a nonexistant character resource with network id ", id)
 		# crash the game (if running in debug mode) to assist with debugging
-		assert(false, "Thre should be no use case when we remove a non-existent character id")
+		assert(false) #,"Thre should be no use case when we remove a non-existent character id")
 		# if running in release mode, return
 		return
 	_characterResources.erase(id)
 
 func getMyCharacterNode() -> Node:
-	var id: int = get_tree().get_network_unique_id()
+	var id: int = get_tree().get_unique_id()
 	if not id in _characterResources:
 		return null
 	return getMyCharacterResource().getNode()
 
 func getMyCharacterResource() -> CharacterResource:
-	var id: int = get_tree().get_network_unique_id()
+	var id: int = get_tree().get_unique_id()
 	if not id in _characterResources:
 		return null
 	return _characterResources[id]
@@ -124,7 +124,7 @@ func _registerCharacterResource(id: int, characterResource: CharacterResource) -
 	if id in _characterResources:
 		# throw an error
 		printerr("Registering a character resource that already exists, network id: ", id)
-		assert(false, "Should be unreachable")
+		assert(false) #,"Should be unreachable")
 	## Register character resource for id
 	_characterResources[id] = characterResource
 
@@ -139,7 +139,7 @@ func requestCharacterCustomizations() -> void:
 	rpc_id(1, "sendAllCharacterCustomizations")
 
 func sendOwnCharacterData() -> void:
-	var id: int = get_tree().get_network_unique_id()
+	var id: int = get_tree().get_unique_id()
 	## Get own character resource
 	var characterRes: CharacterResource
 	characterRes = Characters.getCharacterResource(id)
@@ -149,11 +149,12 @@ func sendOwnCharacterData() -> void:
 
 ## --Server Functions--
 
-master func sendAllCharacterCustomizations() -> void:
+The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
+@rpc func sendAllCharacterCustomizations() -> void:
 	## Get all character resourcse
 	var characterRes: Dictionary = {}
 	characterRes = getCharacterResources()
-	var senderId: int = get_tree().get_rpc_sender_id()
+	var senderId: int = get_tree().get_remote_sender_id()
 	## For each character
 	for player in characterRes:
 		## Collect character outfit data
@@ -171,7 +172,7 @@ master func sendAllCharacterCustomizations() -> void:
 func updateCharacterPosition(networkId: int, characterPos: Vector2) -> void:
 	#print("updating position of ", networkId, " to ", characterPos)
 	## if position is for own character, exit
-	if networkId == get_tree().get_network_unique_id():
+	if networkId == get_tree().get_unique_id():
 		# don't update its position
 		return
 	## Set the position for character

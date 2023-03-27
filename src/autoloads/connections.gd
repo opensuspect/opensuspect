@@ -7,9 +7,9 @@ enum ConnectionTypes {
 	CLIENT				# Client only, remote server
 }
 
-var connectionType: int = ConnectionTypes.LOCAL setget toss, getConnectionType
-var myName: String = "" setget toss, getMyName
-var serverName: String = "" setget toss, getServerName
+var connectionType: int = ConnectionTypes.LOCAL: get = getConnectionType, set = toss
+var myName: String = "": get = getMyName, set = toss
+var serverName: String = "": get = getServerName, set = toss
 const MAX_PLAYERS: int = 20
 var listConnections: Dictionary = {} # Only lists playing connections, dedicated server is not here
 
@@ -23,9 +23,9 @@ var _timeSinceDataSync: float = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	get_tree().connect("connected_to_server", self, "connectedOK")
-	get_tree().connect("connection_failed", self, "connectedFail")
-	get_tree().connect("server_disconnected", self, "disconnectedFromServer")
+	get_tree().connect("connected_to_server", Callable(self, "connectedOK"))
+	get_tree().connect("connection_failed", Callable(self, "connectedFail"))
+	get_tree().connect("server_disconnected", Callable(self, "disconnectedFromServer"))
 
 func _process(delta: float) -> void:
 	if not TransitionHandler.isPlaying():
@@ -56,7 +56,7 @@ func _process(delta: float) -> void:
 		## Send own character position and queued data to server
 		_sendQueuedDataToServer()
 	else:
-		assert(false, "Unreachable")
+		assert(false) #,"Unreachable")
 
 func toss(_newValue) -> void:
 	pass
@@ -71,7 +71,7 @@ func getServerName() -> String:
 	return serverName
 
 func getMyId() -> int:
-	return get_tree().get_network_unique_id()
+	return get_tree().get_unique_id()
 
 func isServer() -> bool:
 	return isDedicatedServer() or isClientServer()
@@ -95,10 +95,10 @@ func isConnectionType(type: int) -> bool:
 
 func joinGame(serverName: String, portNumber: int, playerName: String) -> void:
 	## Initialize Godot networking
-	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
+	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	peer.create_client(serverName, portNumber)
 	get_tree().network_peer = peer
-	var id: int = get_tree().get_network_peer().get_unique_id()
+	var id: int = get_tree().get_multiplayer_peer().get_unique_id()
 	## Save data in globals
 	connectionType = ConnectionTypes.CLIENT
 	myName = playerName
@@ -114,12 +114,12 @@ func connectedOK() -> void:
 
 func connectedFail() -> void:
 	print_debug("Connection failed")
-	assert(false, "Not implemented yet")
+	assert(false) #,"Not implemented yet")
 
 func disconnectedFromServer() -> void:
-	assert(false, "Not implemented yet")
+	assert(false) #,"Not implemented yet")
 
-puppet func receiveBulkPlayerData(connections: Dictionary) -> void:
+@rpc func receiveBulkPlayerData(connections: Dictionary) -> void:
 	print_debug("Receiving data from server: ", connections)
 	## Save all received data
 	listConnections = connections
@@ -133,13 +133,13 @@ puppet func receiveBulkPlayerData(connections: Dictionary) -> void:
 		gameScene.addCharacter(characterRes)
 	TransitionHandler.previouslyConnectedDataReceived()
 
-puppet func setServerName(serverNewName: String) -> void:
+@rpc func setServerName(serverNewName: String) -> void:
 	serverName = serverNewName
 	#print_debug("Server name: ", serverName)
 
-puppet func receivePlayerData(id: int, name: String) -> void:
+@rpc func receivePlayerData(id: int, name: String) -> void:
 	## If the data is not own data
-	if id != get_tree().get_network_unique_id():
+	if id != get_tree().get_unique_id():
 		## Save the data
 		listConnections[id] = name
 		var gameScene: Node = TransitionHandler.gameScene
@@ -166,10 +166,10 @@ func _sendQueuedDataToServer() -> void:
 
 # gameData = 	[	{"key": key1, "value": value1, "recipient": to1, "sender": from},
 #					{"key": key2, "value": value2, "recipient": to2, "sender": from}]
-puppet func _receiveAllGameData(positions: Dictionary, gameData: Array) -> void:
+@rpc func _receiveAllGameData(positions: Dictionary, gameData: Array) -> void:
 	if not TransitionHandler.isPlaying():
 		return
-	var myId: int = get_tree().get_network_unique_id()
+	var myId: int = get_tree().get_unique_id()
 	## Loop through all characters
 	for characterId in positions:
 		# if this position is for this client's character
@@ -193,11 +193,11 @@ puppet func _receiveAllGameData(positions: Dictionary, gameData: Array) -> void:
 func createGame(portNumber: int, playerName: String) -> void:
 	print_debug("port: ", portNumber)
 	## Initialize Godot networking
-	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
+	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	peer.create_server(portNumber, MAX_PLAYERS)
 	get_tree().network_peer = peer
-	get_tree().connect("network_peer_connected", self, "connectedNewPlayer")
-	get_tree().connect("network_peer_disconnected", self, "disconnectedPlayer")
+	get_tree().connect("peer_connected", Callable(self, "connectedNewPlayer"))
+	get_tree().connect("peer_disconnected", Callable(self, "disconnectedPlayer"))
 	connectionType = ConnectionTypes.CLIENT_SERVER
 	## Save data in globals
 	listConnections[1] = playerName
@@ -208,11 +208,11 @@ func createGame(portNumber: int, playerName: String) -> void:
 
 func createDedicated(portNumber: int, srvName: String) -> void:
 	## Initialize Godot networking
-	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
+	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	peer.create_server(portNumber, MAX_PLAYERS)
 	get_tree().network_peer = peer
-	get_tree().connect("network_peer_connected", self, "connectedNewPlayer")
-	get_tree().connect("network_peer_disconnected", self, "disconnectedPlayer")
+	get_tree().connect("peer_connected", Callable(self, "connectedNewPlayer"))
+	get_tree().connect("peer_disconnected", Callable(self, "disconnectedPlayer"))
 	## Save data in globals
 	connectionType = ConnectionTypes.DEDICATED_SERVER
 	serverName = srvName
@@ -220,10 +220,11 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	TransitionHandler.loadGameScene()
 
 # Once the newly joined player sent us their data, that's when we send them all the data
-master func receiveNewPlayerData(newPlayerName: String) -> void:
+The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
+@rpc func receiveNewPlayerData(newPlayerName: String) -> void:
 	print_debug("new player joined ", newPlayerName)
 	## Verify sender and save data
-	var senderId: int = get_tree().get_rpc_sender_id()
+	var senderId: int = get_tree().get_remote_sender_id()
 	listConnections[senderId] = newPlayerName
 	#print_debug(listConnections)
 	rpc_id(senderId, "setServerName", serverName) ## Send server name
@@ -241,7 +242,7 @@ func connectedNewPlayer(id: int) -> void:
 	pass
 
 # handling of disconnection for clients
-puppet func disconnectPlayer(id: int) -> void:
+@rpc func disconnectPlayer(id: int) -> void:
 	handleDisconnect(id) # literally just call this
 
 # this function handles when a player disconnects, and is called on the network server
@@ -259,12 +260,13 @@ func handleDisconnect(id:int) -> void:
 	Characters.removeCharacterResource(id)
 
 func allowNewConnections(switch: bool) -> void:
-	get_tree().refuse_new_network_connections = not switch
+	get_tree().refuse_new_connections = not switch
 
 # receive a client's position
 # master keyword means that this function will only be run on the server when RPCed
-master func _receiveGameDataFromClient(newPos: Vector2, gameData: Array) -> void:
-	var sender: int = get_tree().get_rpc_sender_id()
+The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
+@rpc func _receiveGameDataFromClient(newPos: Vector2, gameData: Array) -> void:
+	var sender: int = get_tree().get_remote_sender_id()
 	## Set character position
 	Characters.updateCharacterPosition(sender, newPos)
 	## Handle additional received data
@@ -284,7 +286,7 @@ func _receiveDataServer(senderId: int, allGameData: Array) -> void:
 		## to something valid if it isn't
 		validatedData = gameScene.setGameData(gameData)
 		## If the data was thrown away, do nothing
-		if validatedData.empty():
+		if validatedData.is_empty():
 			continue
 		## If the data is not valid
 		if validatedData != gameData["value"]:

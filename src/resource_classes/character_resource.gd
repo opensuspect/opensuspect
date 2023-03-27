@@ -14,7 +14,7 @@ enum CharacterStates {
 }
 
 # network id corresponding to this character
-var networkId: int = -1 setget setNetworkId, getNetworkId
+var networkId: int = -1: get = getNetworkId, set = setNetworkId
 
 # the name of this player
 var characterName: String
@@ -23,9 +23,9 @@ var mainCharacter: bool = false
 # --Private Variables--
 
 # the character node corresponding to this CharacterResource
-var _characterNode: KinematicBody2D = null
-var _ghostNode: KinematicBody2D = null
-var _corpseNode: KinematicBody2D = null
+var _characterNode: CharacterBody2D = null
+var _ghostNode: CharacterBody2D = null
+var _corpseNode: CharacterBody2D = null
 # Stores the coordinates of the ghosts on the server as long as
 # the server's player doesn't see the ghost.
 var _ghostCoords: Vector2 = Vector2(0, 0)
@@ -64,7 +64,7 @@ var _speed: float = 150
 # --Public Functions--
 
 func setNetworkId(newId: int) -> void:
-	assert(networkId == -1, "attempting to change networkID on something that has been set")
+	assert(networkId == -1) #,"attempting to change networkID on something that has been set")
 	networkId = newId
 
 func getNetworkId() -> int:
@@ -85,7 +85,7 @@ func canBeKilled() -> bool:
 	return true
 
 func die(forceBecomeGhost: bool = false) -> void:
-	var gameScene: YSort = TransitionHandler.gameScene
+	var gameScene: Node2D = TransitionHandler.gameScene
 	_characterNode.die()
 	resetAbilities()
 	_alive = false
@@ -97,7 +97,7 @@ func die(forceBecomeGhost: bool = false) -> void:
 		becomeGhost(_corpseNode.getPosition())
 
 func becomeGhost(ghostPos: Vector2) -> void:
-	_ghostNode = ResourceLoader.load("res://game/character/ghost.tscn").instance()
+	_ghostNode = ResourceLoader.load("res://game/character/ghost.tscn").instantiate()
 	_ghostNode.setNetworkId(networkId)
 	if mainCharacter:
 		_ghostNode.setMainCharacter()
@@ -154,11 +154,11 @@ func getCorpseNode() -> Node:
 
 # set the character node that corresponds to this CharacterResource
 func createCharacterNode() -> void:
-	var newCharacterNode: KinematicBody2D = Characters.createCharacterNode(networkId)
+	var newCharacterNode: CharacterBody2D = Characters.createCharacterNode(networkId)
 	# if there is already a character node assigned to this resource
 	if _characterNode != null:
 		printerr("Assigning a new character node to a CharacterResource that already has one")
-		assert(false, "Should be unreachable")
+		assert(false) #,"Should be unreachable")
 	_characterNode = newCharacterNode
 	_characterNode.setCharacterResource(self)
 	if networkId == Connections.getMyId():
@@ -171,7 +171,7 @@ func createCharacterNode() -> void:
 func reset() -> void:
 	_team = ""
 	_role = ""
-	_nameColor = Color.white
+	_nameColor = Color.WHITE
 	_alive = true
 	_ghost = false
 	if _characterNode != null:
@@ -254,15 +254,15 @@ func canPickUpItem(itemRes) -> bool:
 	return itemRes.canBePickedUp(self)
 
 func pickUpItem(itemRes) -> void:
-	var itemNode: KinematicBody2D = itemRes.getItemNode()
+	var itemNode: CharacterBody2D = itemRes.getItemNode()
 	if itemNode == null:
-		assert(itemRes.getTask() != null, "If there is no node, there should be a task")
+		assert(itemRes.getTask() != null) #,"If there is no node, there should be a task")
 		var taskRes = itemRes.getTask()
 		itemRes.createItemNode()
 		itemNode = itemRes.getItemNode()
 		itemNode.position = taskRes.getTaskPosition()
 		taskRes.removeItem(itemRes, self)
-	if TransitionHandler.gameScene.itemsNode.is_a_parent_of(itemNode):
+	if TransitionHandler.gameScene.itemsNode.is_ancestor_of(itemNode):
 		TransitionHandler.gameScene.itemsNode.remove_child(itemNode)
 	_characterNode.skeleton.putItemInHand(itemNode)
 	_items.append(itemRes)
@@ -277,7 +277,7 @@ func canDropItem(itemRes) -> bool:
 	return itemRes.canBeDropped(self)
 
 func dropItem(itemRes):
-	var itemNode: KinematicBody2D = itemRes.getItemNode()
+	var itemNode: CharacterBody2D = itemRes.getItemNode()
 	_characterNode.skeleton.removeItemFromHand(itemNode)
 	_items.pop_at(_items.find(itemRes))
 	itemNode.position = _characterNode.position
@@ -287,13 +287,13 @@ func dropItem(itemRes):
 # get tasks assigned to this CharacterResource
 func getTasks() -> Dictionary:
 	# assert false because tasks aren't implemented yet
-	assert(false, "Not implemented yet")
+	assert(false) #,"Not implemented yet")
 	return _tasks
 
 # set tasks assigned to this CharacterResource
 func setTasks(newTasks: Dictionary):
 	# assert false because tasks aren't implemented yet
-	assert(false, "Not implemented yet")
+	assert(false) #,"Not implemented yet")
 	_tasks = newTasks
 
 # get the outfit information of this character

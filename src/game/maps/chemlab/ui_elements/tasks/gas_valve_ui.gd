@@ -1,9 +1,9 @@
 extends "res://game/ui_elements/task_ui_base.gd"
 
-onready var mainValve: Area2D = $Control/MainValve
-onready var reductorValve: Area2D = $Control/ReductorValve
-onready var highPressNeedle: Sprite = $Control/HighPressureNeedle
-onready var lowPressNeedle: Sprite = $Control/LowPressureNeedle
+@onready var mainValve: Area2D = $Control/MainValve
+@onready var reductorValve: Area2D = $Control/ReductorValve
+@onready var highPressNeedle: Sprite2D = $Control/HighPressureNeedle
+@onready var lowPressNeedle: Sprite2D = $Control/LowPressureNeedle
 
 var mainValveIn: bool = false
 var mainValveGrab: bool = false
