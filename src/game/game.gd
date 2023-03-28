@@ -78,7 +78,7 @@ func _process(delta: float) -> void:
 	## Get movement vector based on keypress (not normalized)
 	var movementVec: Vector2 = getMovementInput(false)
 	var amountMoved: Vector2
-	amountMoved = myCharacterRes.move(delta, movementVec)
+	amountMoved = myCharacterRes.moveCommand(delta, movementVec)
 
 # get the movement vector by looking at which keys are pressed
 func getMovementInput(normalized: bool = true) -> Vector2:

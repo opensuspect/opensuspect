@@ -58,8 +58,9 @@ var _tasks: Dictionary
 var _outfit: Dictionary
 var _colors: Dictionary
 
-# the speed at which the character moves/how many pixels it can move every frame
-var _speed: float = 150
+# movement related variables
+var _maxSpeed: float = 450
+var _acceleration: float = 800
 
 # --Public Functions--
 
@@ -161,6 +162,7 @@ func createCharacterNode() -> void:
 		assert(false, "Should be unreachable")
 	_characterNode = newCharacterNode
 	_characterNode.setCharacterResource(self)
+	_characterNode.setMovementParams(_maxSpeed, _acceleration)
 	if networkId == Connections.getMyId():
 		_characterNode.setMainCharacter()
 		mainCharacter = true
@@ -320,12 +322,11 @@ func setAppearance(newOutfit: Dictionary, newColors: Dictionary) -> void:
 
 # get the speed of this character
 func getSpeed() -> float:
-	return _speed
+	assert(false, "not implemented")
+	return 0.0
 
-# not sure we would really want to just overwrite speed but I'm putting this
-# 	here for constincency
 func setSpeed(value: float) -> void:
-	_speed = value
+	assert(false, "not implemented")
 
 # get the direction the character is looking
 func getLookDirection() -> int:
@@ -366,11 +367,11 @@ func getGlobalPosition() -> Vector2:
 func setGlobalPosition(newPos: Vector2):
 	_characterNode.setPosition(newPos)
 
-func move(delta: float, movementVec: Vector2) -> Vector2:
+func moveCommand(delta: float, movementVec: Vector2) -> Vector2:
 	if _characterNode != null:
-		return _characterNode._move(delta, movementVec)
+		return _characterNode._moveCommand(delta, movementVec)
 	elif _ghostNode != null:
-		return _ghostNode._move(delta, movementVec)
+		return _ghostNode._moveCommand(delta, movementVec)
 	return Vector2(0, 0)
 
 # --Private Functions--
