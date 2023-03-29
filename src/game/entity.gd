@@ -5,7 +5,7 @@ extends CharacterBody2D
 # --Public Variables--
 
 # network id corresponding to this character
-var networkId: int: get = getNetworkId, set = setNetworkId
+var networkId: int : get = getNetworkId, set = setNetworkId
 
 var mainCharacter: bool = false
 enum LookDirections {LEFT, RIGHT, UP, DOWN}
@@ -18,6 +18,12 @@ const fadingSpeed: int = 5
 @onready var nameLabel = $Name
 @onready var skeleton = $CharacterElements/Skeleton3D
 
+# --Private variables--
+var _maxSpeed: float = 5
+var _acceleration: float = 1
+var _speed: float = 0
+var _direction: Vector2 = Vector2(0, 0)
+
 # the CharacterResource corresponding to this character node
 var _characterResource: CharacterResource
 
@@ -25,8 +31,10 @@ func _ready() -> void:
 	nameLabel.text = _characterResource.characterName
 
 func _process(delta: float) -> void:
-	if not fading:
-		return
+	if fading:
+		_modulate_fade(delta)
+
+func _modulate_fade(delta: float) -> void:
 	var alpha: float
 	alpha = modulate[3]
 	if shouldBeVisible:
@@ -67,18 +75,30 @@ func setCharacterResource(newCharacterResource: CharacterResource) -> void:
 func setMainCharacter(main: bool = true) -> void:
 	mainCharacter = main
 
-func _move(delta: float, movementVec: Vector2) -> Vector2:
+func setMovementParams(newMaxSpeed: float, newAcceleration: float):
+	_maxSpeed = newMaxSpeed
+	_acceleration =  newAcceleration
+
+func _moveCommand(delta: float, movementVec: Vector2) -> Vector2:
 	# set lookDirection to match the movementVec
 	# using the look direction setter here to make it easier to react to
 	# 	a changing look direction
 	## Sets look direction
 	setLookDirection(_getLookDirFromVec(movementVec))
 	# multiply the movement vec by speed
-	movementVec *= _characterResource.getSpeed()
+	if movementVec.length() > 0:
+		_direction = movementVec.normalized()
+		_speed += _acceleration * delta
+		_speed = min(_speed, _maxSpeed)
+		skeleton.stateMachine.travel("Walk")
+	else:
+		_speed -= _acceleration * delta
+		_speed = max(0, _speed)
+		skeleton.stateMachine.travel("Idle")
 	# move_and_slide() returns the actual motion that happened, store it
 	# 	in amountMoved
 	## Calculate and execute actual motion
-	set_velocity(movementVec)
+	set_velocity(_direction * _speed)
 	move_and_slide()
 	var amountMoved: Vector2 = velocity
 	# return the actual movement that happened
