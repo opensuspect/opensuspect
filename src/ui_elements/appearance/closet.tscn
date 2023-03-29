@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://d2tsyhswvh4x"]
+[gd_scene load_steps=4 format=3 uid="uid://d2tsyhswvh4x"]
 
 [ext_resource type="PackedScene" uid="uid://bker8atbpt2qy" path="res://ui_elements/menu_character.tscn" id="1"]
 [ext_resource type="Theme" uid="uid://ufvnlhnloob1" path="res://ui_elements/assets/themes/suspect_ui.tres" id="2"]
 [ext_resource type="Script" path="res://ui_elements/appearance/closet.gd" id="3"]
-[ext_resource type="Theme" path="res://ui_elements/assets/themes/hidden.tres" id="5"]
 
 [node name="Closet" type="Control"]
 layout_mode = 3
@@ -40,12 +39,6 @@ theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
-
-[node name="Character" type="Button" parent="MenuMargin/HBoxContainer/CharacterBox/MenuCharacter"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme = ExtResource("5")
 
 [node name="ButtonMargin" type="MarginContainer" parent="MenuMargin/HBoxContainer/CharacterBox"]
 layout_mode = 2
