@@ -149,7 +149,7 @@ func sendOwnCharacterData() -> void:
 
 ## --Server Functions--
 
-The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
+# The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
 @rpc func sendAllCharacterCustomizations() -> void:
 	## Get all character resourcse
 	var characterRes: Dictionary = {}

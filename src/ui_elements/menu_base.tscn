@@ -1,13 +1,20 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://cc7rhycnq6knm"]
 
-[ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
-[ext_resource path="res://ui_elements/menu_base.gd" type="Script" id=2]
-[ext_resource path="res://ui_elements/background.tscn" type="PackedScene" id=3]
+[ext_resource type="Theme" uid="uid://ufvnlhnloob1" path="res://ui_elements/assets/themes/suspect_ui.tres" id="1"]
+[ext_resource type="Script" path="res://ui_elements/menu_base.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://dcx8h7a0es3a6" path="res://ui_elements/background.tscn" id="3"]
 
 [node name="MenuBase" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource( 1 )
-script = ExtResource( 2 )
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1")
+script = ExtResource("2")
 
-[node name="Background" parent="." instance=ExtResource( 3 )]
+[node name="Background" parent="." instance=ExtResource("3")]
+anchors_preset = 0

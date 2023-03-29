@@ -19,10 +19,10 @@ var name: String: get = getName, set = nothing
 var taskState: Dictionary = {}
 var items: Dictionary = {}
 
-signal activateUi
-signal deactivateUi
-signal stateChanged
-signal action
+signal activate_ui
+signal deactivate_ui
+signal state_changed
+signal run_action
 
 func getTaskObjectNode() -> Node2D:
 	return taskObjectNode
@@ -68,26 +68,26 @@ func interact() -> void:
 
 func activateUi(uiNode: Node) -> Dictionary:
 	taskUiNode = uiNode
-	taskUiNode.connect("stateChanged", Callable(self, "stateChanged"))
-	taskUiNode.connect("action", Callable(self, "action"))
-	taskUiNode.connect("deactivate", Callable(self, "deactivateUi"))
-	emit_signal("activateUi")
+	taskUiNode.connect("state_changed", Callable(self, "stateChanged"))
+	taskUiNode.connect("run_action", Callable(self, "action"))
+	taskUiNode.connect("deactivate_ui", Callable(self, "deactivateUi"))
+	emit_signal("activate_ui")
 	return taskState.duplicate()
 
 func deactivateUi() -> void:
-	taskUiNode.disconnect("stateChanged", Callable(self, "stateChanged"))
-	taskUiNode.disconnect("action", Callable(self, "action"))
-	taskUiNode.disconnect("deactivate", Callable(self, "deactivateUi"))
+	taskUiNode.disconnect("state_changed", Callable(self, "stateChanged"))
+	taskUiNode.disconnect("run_action", Callable(self, "action"))
+	taskUiNode.disconnect("deactivate_ui", Callable(self, "deactivateUi"))
 	taskUiNode = null
-	emit_signal("deactivateUi")
+	emit_signal("deactivate_ui")
 
 func stateChanged(newState: Dictionary) -> void:
 	for key in newState:
 		taskState[key] = newState[key]
-	emit_signal("stateChanged", self, taskState)
+	emit_signal("state_changed", self, taskState)
 
 func action(actions: Dictionary) -> void:
-	emit_signal("action", self, actions)
+	emit_signal("run_action", self, actions)
 
 func attemptItemPickOut(itemId: int) -> void:
 	var playerCharacter = Characters.getMyCharacterResource()

@@ -86,15 +86,15 @@ func _updateOutfit() -> void:
 	Appearance.setOutfitPart(selectedItem, partName) ## Set outfit part to correct resource
 
 # Get the texture to use for the item's icon
-func _getTexture(directories: Dictionary, namespace: String, resource: String) -> Texture2D:
+func _getTexture(directories: Dictionary, scope: String, resource: String) -> Texture2D:
 	## Gather icons
-	var icons = iconList[namespace] # Get the icons under the given namespace
+	var icons = iconList[scope] # Get the icons under the given scope
 	var texturePath: String # Path3D to the texture
 	if icons.has(resource): ## If selected item has icon
-		texturePath = iconList[namespace][resource]["path"] # Set item texture to corresponding icon
+		texturePath = iconList[scope][resource]["path"] # Set item texture to corresponding icon
 	else: ## If no icon is present
 		assert(false) #,"The fallback should not be required, assets seem to be missing")
-		texturePath = directories[namespace][resource]["path"] ## Use item texture
+		texturePath = directories[scope][resource]["path"] ## Use item texture
 	var texture = load(texturePath) ## Load texture path as texture
 	return(texture) # Return the new texture object
 

@@ -2,7 +2,7 @@ extends Control
 
 @onready var iconCharacter: Resource = preload("res://ui_elements/icon_character.tscn")
 
-@onready var character: Control = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
+@onready var character: Control = $MenuMargin/HBoxContainer/CharacterBox/MenuCharacter
 @onready var items: ItemList = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
 
 @onready var selectButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Select
@@ -17,7 +17,7 @@ var selectedOutfit: Dictionary
 var selectedColors: Dictionary
 var selectionName: String
 
-const NAMESPACE = "appearance"
+const scope = "appearance"
 
 # Item list config variables
 const LIST_COLUMNS = 0 # Max columns
@@ -29,12 +29,12 @@ func listItems() -> void:
 	items.clear()
 	_clearObjects()
 	## If saved data exists
-	if GameData.exists(NAMESPACE):
+	if GameData.exists(scope):
 		## Clear everything
 		configData.clear()
 		configList.clear()
 		## Load save data
-		configData = GameData.read(NAMESPACE)
+		configData = GameData.read(scope)
 		if configData.size() > 0:
 			## Hide Info
 			infoMessage.hide()
@@ -78,9 +78,9 @@ func _populateItems() -> void:
 		items.set_item_tooltip(index, config)
 		index += 1
 
-func _getIconTexture(namespace) -> Texture2D:
+func _getIconTexture(scope) -> Texture2D:
 	## Selects saved config
-	_selectConfig(namespace)
+	_selectConfig(scope)
 	## Creates a character icon
 	var iconInstance = iconCharacter.instantiate()
 	self.add_child(iconInstance)
@@ -92,16 +92,16 @@ func _getIconTexture(namespace) -> Texture2D:
 	var texture = iconInstance.texture
 	return(texture)
 
-func _selectConfig(namespace: String) -> void:
-	var config = configData[namespace]
+func _selectConfig(scope: String) -> void:
+	var config = configData[scope]
 	selectedOutfit = config["Outfit"]
 	selectedColors = config["Colors"]
 
 func _deleteConfig(name: String) -> bool:
-	if not GameData.exists(NAMESPACE):
+	if not GameData.exists(scope):
 		return false
 	if configData.erase(name):
-		GameData.write(NAMESPACE, configData)
+		GameData.write(scope, configData)
 		listItems()
 		return true
 	return false
@@ -120,13 +120,13 @@ func _on_Select_pressed() -> void:
 
 func _on_item_selected(index) -> void:
 	## Selects confg with specific name
-	var namespace = configList[index]
-	nameLabel.text = namespace
-	_selectConfig(namespace)
+	var scope = configList[index]
+	nameLabel.text = scope
+	_selectConfig(scope)
 	## Enables selection button
 	selectButton.disabled = false
 	deleteButton.disabled = false
-	selectionName = namespace
+	selectionName = scope
 	## Sample character appearance set
 	character.setAppearance(selectedOutfit, selectedColors)
 

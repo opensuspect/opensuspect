@@ -1,10 +1,10 @@
 extends Node
 
 enum States {
-	MENU			# Not in game
-	WAITING			# Between states
-	LOBBY			# In the lobby where people can join
-	ASSIGNMENT		# On the assignment screen
+	MENU,			# Not in game
+	WAITING,		# Between states
+	LOBBY,			# In the lobby where people can join
+	ASSIGNMENT,		# On the assignment screen
 	MAP				# On a game map
 }
 

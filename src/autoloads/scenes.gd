@@ -70,7 +70,7 @@ func switchBase(path: String, lowest: String) -> void:
 func setBase(scene: Node, lowest: String) -> void:
 	assert(baseScene == null) #,"Please use switchBase instead.")
 	baseScene = scene
-	baseScenePath = scene.filename
+	baseScenePath = scene.scene_file_path
 	canvasNode = null
 	loadedScenes[baseScenePath] = baseScene
 	lowestScenePath = lowest
@@ -80,7 +80,7 @@ func setBase(scene: Node, lowest: String) -> void:
 func back() -> void:
 	var index = sceneOrder.size() - 1
 	if index > 0:
-		sceneOrder.remove(index)
+		sceneOrder.remove_at(index)
 		overlay(sceneOrder.back())
 	else:
 		if baseScene.has_method("_onBack"):

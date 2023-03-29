@@ -2,7 +2,7 @@ extends Node
 
 ## HOW TO USE THE RESOURCE MANAGER
 ## Example: get a list of resources in a set of directories
-## Dictionary of directories, with the namespace, followed by the directory path:
+## Dictionary of directories, with the scope, followed by the directory path:
 #	var dirs: Dictionary = {
 #	"Folder 1": "res://examples/folder1",
 #	"Folder 2": "res://examples/folder2"
@@ -37,33 +37,33 @@ const IMPORT_TYPE = "import"
 # Returns a dictionary of all resources from a given directory dictionary
 func list(directories: Dictionary, types: PackedStringArray) -> Dictionary:
 	var resources: Dictionary = {}
-	for folder in directories: # Iterate over each folder specified, by their namespace (key)
+	for folder in directories: # Iterate over each folder specified, by their scope (key)
 		var files = _listFilesInDirectory(directories[folder], types) # List files in each folder
 		# Add each file to the output dictionary
 		resources[folder] = _filesToDictionary(files, directories[folder])
-	return(resources) # Return the dictionary of namespaced resources
+	return(resources) # Return the dictionary of scoped resources
 
 func listDirectory(directory: String, types: PackedStringArray) -> Dictionary:
 	var resources: Dictionary = {}
 	var files = _listFilesInDirectory(directory, types) # List files in each folder
 	# Add each file to the output dictionary
 	resources = _filesToDictionary(files, directory)
-	return(resources) # Return the dictionary of namespaced resources
+	return(resources) # Return the dictionary of scoped resources
 
 # Returns the path of a specified resource
-func getPath(resource: String, namespace: String, directories: Dictionary, types: PackedStringArray) -> String:
+func getPath(resource: String, scope: String, directories: Dictionary, types: PackedStringArray) -> String:
 	var resources: Dictionary = list(directories, types) # Create the directory listing
 	var wantedResource = formatString(resource) # Format the string for optimal matching
 	var output = "" # Set a blank output
-	for file in resources[namespace].keys(): # Iterate through each file in the specified namespace
+	for file in resources[scope].keys(): # Iterate through each file in the specified scope
 		if file == wantedResource: # Match the file name with the wanted resource
-			output = resources[namespace][file] # Set output to the path of the file
+			output = resources[scope][file] # Set output to the path of the file
 	return(output)
 
-# Returns a random resource from a given namespace
-func getRandom(namespace: String, directories: Dictionary, types: PackedStringArray) -> Dictionary:
+# Returns a random resource from a given scope
+func getRandom(scope: String, directories: Dictionary, types: PackedStringArray) -> Dictionary:
 	var resources: Dictionary = list(directories, types) # Get a list of resources
-	var dir = resources[namespace] # Get the required directory from the given namespace
+	var dir = resources[scope] # Get the required directory from the given scope
 	var files = dir.keys() # Get an array of the files in the directory
 	var maxInt = files.size() # Get the size of the array
 	var randInt = randi() % maxInt # Select a number between 0 and the size of maxInt
@@ -75,10 +75,10 @@ func getRandom(namespace: String, directories: Dictionary, types: PackedStringAr
 # Return a random file for each directory listed
 func getRandomOfEach(directories: Dictionary, types: PackedStringArray) -> Dictionary:
 	var output: Dictionary = {}
-	for namespace in directories: # Iterate over the directories
-		var random = getRandom(namespace, directories, types) # Get a random file for the directory
-		output[namespace] = {}
-		output[namespace] = random # Set the file for this directory to be the random file
+	for scope in directories: # Iterate over the directories
+		var random = getRandom(scope, directories, types) # Get a random file for the directory
+		output[scope] = {}
+		output[scope] = random # Set the file for this directory to be the random file
 	return(output) # Return the dictionary of random files
 
 # Formats a string to remove any special characters and replace with underscores
@@ -104,8 +104,7 @@ func _ready():
 # Lists all files in a path, that have the correct file extensions
 func _listFilesInDirectory(path: String, types: PackedStringArray) -> Array:
 	var files: Array = [] # Defunes the array to be returned
-	var dir = DirAccess.new() # Makes a new directory object
-	dir.open(path) # Opens the directory given in "path"
+	var dir = DirAccess.open(path) # Opens the directory given in "path"
 	dir.list_dir_begin()  # List files in the directory from the beginning# TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 	while true:
 		var file: String = dir.get_next() # Gets the next file in the list

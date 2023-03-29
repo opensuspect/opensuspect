@@ -220,7 +220,7 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	TransitionHandler.loadGameScene()
 
 # Once the newly joined player sent us their data, that's when we send them all the data
-The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
+# The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
 @rpc func receiveNewPlayerData(newPlayerName: String) -> void:
 	print_debug("new player joined ", newPlayerName)
 	## Verify sender and save data
@@ -264,7 +264,7 @@ func allowNewConnections(switch: bool) -> void:
 
 # receive a client's position
 # master keyword means that this function will only be run on the server when RPCed
-The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
+# The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
 @rpc func _receiveGameDataFromClient(newPos: Vector2, gameData: Array) -> void:
 	var sender: int = get_tree().get_remote_sender_id()
 	## Set character position
