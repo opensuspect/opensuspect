@@ -10,7 +10,7 @@
 render_priority = 0
 shader = ExtResource("2")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_heomy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l5btt"]
 resource_local_to_scene = true
 shader = ExtResource("3")
 shader_parameter/skin_mask_color = Color(1, 0, 1, 1)
@@ -45,7 +45,7 @@ transparent_bg = true
 size = Vector2i(1536, 2048)
 
 [node name="Skeleton3D" parent="SubViewport" instance=ExtResource("4")]
-material = SubResource("ShaderMaterial_heomy")
+material = SubResource("ShaderMaterial_l5btt")
 scale = Vector2(2, 2)
 
 [node name="SpriteCamera" type="Camera2D" parent="SubViewport"]

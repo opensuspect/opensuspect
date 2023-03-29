@@ -1,116 +1,19 @@
-; Project was converted by built-in tool to Godot 4.0
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
 config_version=5
-_global_script_classes=[{
-"base": "Resource",
-"class": "Ability",
-"language": "GDScript",
-"path": "res://resource_classes/ability.gd"
-}, {
-"base": "IPoolable",
-"class": "BackgroundObject",
-"language": "GDScript",
-"path": "res://game/maps/lobby/background_object.gd"
-}, {
-"base": "Resource",
-"class": "CharacterResource",
-"language": "GDScript",
-"path": "res://resource_classes/character_resource.gd"
-}, {
-"base": "TaskResource",
-"class": "ChemCabResource",
-"language": "GDScript",
-"path": "res://game/maps/chemlab/tasks/chemical_cabinet_resource.gd"
-}, {
-"base": "VoteMechanicsTemplate",
-"class": "ChemlabVote",
-"language": "GDScript",
-"path": "res://game/maps/chemlab/chemlab_vote.gd"
-}, {
-"base": "ItemResource",
-"class": "FlaskResource",
-"language": "GDScript",
-"path": "res://game/items/flask_resource.gd"
-}, {
-"base": "ItemTemplate",
-"class": "FlaskTemplate",
-"language": "GDScript",
-"path": "res://game/items/flask_template.gd"
-}, {
-"base": "TaskResource",
-"class": "GasPressChResource",
-"language": "GDScript",
-"path": "res://game/maps/chemlab/tasks/gas_pressure_check_resource.gd"
-}, {
-"base": "TaskResource",
-"class": "GasValveResource",
-"language": "GDScript",
-"path": "res://game/maps/chemlab/tasks/gas_valve_resource.gd"
-}, {
-"base": "Ability",
-"class": "GunAbility",
-"language": "GDScript",
-"path": "res://game/maps/chemlab/gun_resource.gd"
-}, {
-"base": "Node2D",
-"class": "IPoolable",
-"language": "GDScript",
-"path": "res://game/maps/lobby/ipoolable.gd"
-}, {
-"base": "Resource",
-"class": "ItemResource",
-"language": "GDScript",
-"path": "res://resource_classes/item_resource.gd"
-}, {
-"base": "Resource",
-"class": "ItemTemplate",
-"language": "GDScript",
-"path": "res://resource_classes/item_template.gd"
-}, {
-"base": "Node",
-"class": "PoolManager",
-"language": "GDScript",
-"path": "res://game/maps/lobby/poolmanager.gd"
-}, {
-"base": "Resource",
-"class": "TaskResource",
-"language": "GDScript",
-"path": "res://resource_classes/task_resource.gd"
-}, {
-"base": "Resource",
-"class": "TeamsRolesTemplate",
-"language": "GDScript",
-"path": "res://resource_classes/teams_roles_template.gd"
-}, {
-"base": "Resource",
-"class": "VoteMechanicsTemplate",
-"language": "GDScript",
-"path": "res://resource_classes/vote_template.gd"
-}]
-_global_script_class_icons={
-"Ability": "",
-"BackgroundObject": "",
-"CharacterResource": "",
-"ChemCabResource": "",
-"ChemlabVote": "",
-"FlaskResource": "",
-"FlaskTemplate": "",
-"GasPressChResource": "",
-"GasValveResource": "",
-"GunAbility": "",
-"IPoolable": "",
-"ItemResource": "",
-"ItemTemplate": "",
-"PoolManager": "",
-"TaskResource": "",
-"TeamsRolesTemplate": "",
-"VoteMechanicsTemplate": ""
-}
 
 [application]
 
 config/name="OpenSuspect"
 config/description="Free software implementation of a social deduction game."
 run/main_scene="res://ui_elements/menu_base.tscn"
+config/features=PackedStringArray("4.0")
 boot_splash/image="res://bootsplash.png"
 config/icon="res://icon.png"
 
@@ -131,9 +34,8 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/window_width_override=1280
 window/size/window_height_override=720
-window/dpi/allow_hidpi=true
 window/energy_saving/keep_screen_on=false
-window/stretch/mode="2d"
+window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
 [global]
@@ -190,8 +92,7 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+environment/defaults/default_environment="res://default_env.tres"
 quality/driver/driver_name="GLES2"
 2d/snapping/use_gpu_pixel_snap=true
 vram_compression/import_etc=true
-textures/vram_compression/import_etc2_astc=false
-environment/defaults/default_environment="res://default_env.tres"

@@ -35,7 +35,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="MenuCharacter" parent="MenuMargin/HBoxContainer/CharacterBox" instance=ExtResource("1")]
-custom_minimum_size = Vector2(456, 583)
 layout_mode = 2
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
