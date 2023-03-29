@@ -1,16 +1,16 @@
 extends ItemResource
 class_name FlaskResource
 
-var textureFull: Texture
-var hudTextureFull: Texture = null
-var pickUpTextureFull: Texture = null
+var textureFull: Texture2D
+var hudTextureFull: Texture2D = null
+var pickUpTextureFull: Texture2D = null
 
 var isFull: bool = false
 
 func setFullness(newState: bool) -> void:
 	isFull = newState
 
-func getTexture() -> Texture:
+func getTexture() -> Texture2D:
 	if _holder == null:
 		if isFull:
 			return textureFull
@@ -19,7 +19,7 @@ func getTexture() -> Texture:
 		return pickUpTextureFull
 	return pickUpTexture
 
-func getHudTexture() -> Texture:
+func getHudTexture() -> Texture2D:
 	if isFull:
 		return hudTextureFull
 	return hudTexture
@@ -36,7 +36,7 @@ func canBeActivated(abilityName: String, properties: Dictionary) -> bool:
 	if abilityName == _abilities[0]:
 		return isFull
 	else:
-		assert(false, "Unreachable")
+		assert(false) #,"Unreachable")
 	return false
 
 func attemptActivate(abilityName: String) -> void:
@@ -56,4 +56,4 @@ func activate(abilityName: String, properties: Dictionary) -> void:
 		isFull = false
 		_itemNode.setSprite()
 	else:
-		assert(false, "Unreachable")
+		assert(false) #,"Unreachable")

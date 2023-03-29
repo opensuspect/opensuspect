@@ -29,12 +29,12 @@ extends Node
 # run on the scene either.
 
 var baseScene: Node # Always loaded scene
-var baseScenePath: String # Path of baseScene
+var baseScenePath: String # Path3D of baseScene
 
 # If the node has a canvaslayer, this variable refers to it. if it does not, this variable is null
 var canvasNode: CanvasLayer = null
 
-var lowestScenePath: String # Path to scene that won't be hidden by back
+var lowestScenePath: String # Path3D to scene that won't be hidden by back
 
 var loadedScenes: Dictionary # Loaded scenes with their paths as keys
 var sceneOrder: Array # Order of scenes, with back being the top
@@ -68,7 +68,7 @@ func switchBase(path: String, lowest: String) -> void:
 
 # Set the base scene from an already loaded scene. Only to be used if base scene hasn't been set.
 func setBase(scene: Node, lowest: String) -> void:
-	assert(baseScene == null, "Please use switchBase instead.")
+	assert(baseScene == null) #,"Please use switchBase instead.")
 	baseScene = scene
 	baseScenePath = scene.filename
 	canvasNode = null
@@ -96,7 +96,7 @@ func _input(event) -> void:
 # Deferred overlay function
 func _deferredOverlay(path: String, focus: bool, attachedResource: Resource) -> void:
 	## Loads new scene
-	var newScene = load(path).instance()
+	var newScene = load(path).instantiate()
 	if canvasNode == null:
 		canvasNode = CanvasLayer.new()
 		baseScene.add_child(canvasNode)
@@ -131,7 +131,7 @@ func _deferredSwitchBase(path: String) -> void:
 func _reloadBase() -> void:
 	if baseScene != null:
 		baseScene.free()
-	baseScene = load(baseScenePath).instance()
+	baseScene = load(baseScenePath).instantiate()
 	get_tree().get_root().add_child(baseScene)
 
 # Hide all loaded child scenes

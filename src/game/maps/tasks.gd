@@ -1,4 +1,4 @@
-extends YSort
+extends Node2D
 
 var taskResources: Dictionary = {}
 var interactAreas: Dictionary = {}
@@ -20,11 +20,11 @@ func _ready():
 				tasksWithInput[input] = []
 			tasksWithInput[input].append(taskRes)
 		taskRes.init(taskNode)
-		taskRes.connect("stateChanged", self, "taskChanged")
-		taskRes.connect("action", self, "taskActionAttempt")
+		taskRes.connect("stateChanged",Callable(self,"taskChanged"))
+		taskRes.connect("action",Callable(self,"taskActionAttempt"))
 		if myCharacter != null:
-			taskRes.connect("activateUi", myCharacter, "setTaskMode")
-			taskRes.connect("deactivateUi", myCharacter, "endTaskMode")
+			taskRes.connect("activateUi",Callable(myCharacter,"setTaskMode"))
+			taskRes.connect("deactivateUi",Callable(myCharacter,"endTaskMode"))
 	for taskName in taskResources:
 		taskRes = taskResources[taskName]
 		for output in taskRes.outputVariables:

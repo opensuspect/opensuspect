@@ -5,19 +5,19 @@ class_name ItemResource
 const ITEM_TASK_ICON_SCENE_PATH: String = "res://game/items/item_node/item_task_icon.tscn"
 var itemTaskIconScene: PackedScene = preload(ITEM_TASK_ICON_SCENE_PATH)
 # the name of the item (for ex. "Wrench")
-var itemName: String setget setName, getName
+var itemName: String : get = getName, set = setName
 # the random id of the item
-var itemId: int = -1 setget setId, getId
+var itemId: int = -1 : get = getId, set = setId
 # the texture used by the item
-var texture: Texture = null
+var texture: Texture2D = null
 # scale to be applied to the texture
 var textureScale: Vector2 = Vector2(1, 1)
 # the texture and scale used on the HUD for the item
-var hudTexture: Texture = null
+var hudTexture: Texture2D = null
 var hudTextureScale: Vector2 = Vector2(1, 1)
 var taskTextureScale: Vector2 = Vector2(1, 1)
 # the texture, scale and rotatation used when picked up
-var pickUpTexture: Texture = null
+var pickUpTexture: Texture2D = null
 var pickUpTextureScale: Vector2 = Vector2(1, 1)
 var pickUpRotation: float = 0
 
@@ -54,10 +54,10 @@ func getId() -> int:
 
 func setId(newId: int) -> void:
 	if itemId != -1:
-		assert(false, "Shouldn't change item ID ever.")
+		assert(false) #,"Shouldn't change item ID ever.")
 	itemId = newId
 
-func getTexture() -> Texture:
+func getTexture() -> Texture2D:
 	if _holder == null:
 		return texture
 	else:
@@ -75,7 +75,7 @@ func getRotationDegrees() -> float:
 	else:
 		return pickUpRotation
 
-func getHudTexture() -> Texture:
+func getHudTexture() -> Texture2D:
 	return hudTexture
 
 func getHudTextureScale() -> Vector2:
@@ -86,13 +86,13 @@ func getTaskScale() -> Vector2:
 
 func createItemNode():
 	if _itemNode != null:
-		assert(false, "Assigning an item node to an item resource that already has one")
+		assert(false) #,"Assigning an item node to an item resource that already has one")
 	_itemNode = _itemTemplate.createItemNode()
 	_itemNode.setItemResource(self)
 
 func setItemNode(newItemNode: Node):
 	if _itemNode != null:
-		assert(false, "Assigning an item node to an item resource that already has one")
+		assert(false) #,"Assigning an item node to an item resource that already has one")
 	_itemNode = newItemNode
 
 # returns the item node corresponding to this item resource
@@ -109,7 +109,7 @@ func removeFromTask() -> void:
 	_task = null
 
 func createTaskButton() -> Node2D:
-	var button: Node2D = itemTaskIconScene.instance()
+	var button: Node2D = itemTaskIconScene.instantiate()
 	button.setTexture(hudTexture, taskTextureScale)
 	return button
 
@@ -122,7 +122,7 @@ func isDropped() -> bool:
 	return _holder == null
 
 func canBePickedUp(characterRes: CharacterResource) -> bool:
-	var characterNode: KinematicBody2D = characterRes.getCharacterNode()
+	var characterNode: CharacterBody2D = characterRes.getCharacterNode()
 	if _holder != null:
 		return false
 	if (
@@ -159,7 +159,7 @@ func droppedDown() -> void:
 func itemAbilities() -> Array:
 	return _abilities
 
-func abilityActivateIcon(abilityName: String) -> Texture:
+func abilityActivateIcon(abilityName: String) -> Texture2D:
 	return _abilityIcons[abilityName]
 
 func canBeActivated(abilityName: String, properties: Dictionary) -> bool:

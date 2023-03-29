@@ -1,20 +1,20 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://game/maps/chemlab/ui_elements/gun_hud.gd" type="Script" id=1]
-[ext_resource path="res://game/maps/chemlab/ui_elements/gun/kill_icon_pressed.png" type="Texture" id=2]
-[ext_resource path="res://game/maps/chemlab/ui_elements/gun/kill_icon_normal.png" type="Texture" id=3]
-[ext_resource path="res://game/maps/chemlab/ui_elements/gun/reload_icon_pressed.png" type="Texture" id=4]
-[ext_resource path="res://game/maps/chemlab/ui_elements/gun/reload_icon_normal.png" type="Texture" id=5]
-[ext_resource path="res://game/maps/chemlab/ui_elements/gun/kill_icon_disabled.png" type="Texture" id=6]
-[ext_resource path="res://assets/common/shaders/time_indicator.shader" type="Shader" id=7]
+[ext_resource path="res://game/maps/chemlab/ui_elements/gun/kill_icon_pressed.png" type="Texture2D" id=2]
+[ext_resource path="res://game/maps/chemlab/ui_elements/gun/kill_icon_normal.png" type="Texture2D" id=3]
+[ext_resource path="res://game/maps/chemlab/ui_elements/gun/reload_icon_pressed.png" type="Texture2D" id=4]
+[ext_resource path="res://game/maps/chemlab/ui_elements/gun/reload_icon_normal.png" type="Texture2D" id=5]
+[ext_resource path="res://game/maps/chemlab/ui_elements/gun/kill_icon_disabled.png" type="Texture2D" id=6]
+[ext_resource path="res://assets/common/shaders/time_indicator.gdshader" type="Shader" id=7]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 7 )
 
 [node name="GunHud" type="Control"]
-margin_right = 150.0
-margin_bottom = 150.0
-rect_min_size = Vector2( 150, 150 )
+offset_right = 150.0
+offset_bottom = 150.0
+custom_minimum_size = Vector2( 150, 150 )
 mouse_filter = 2
 script = ExtResource( 1 )
 __meta__ = {
@@ -24,8 +24,8 @@ __meta__ = {
 [node name="KillButton" type="TextureButton" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 30.0
-rect_scale = Vector2( 1, 0.65 )
+offset_top = 30.0
+scale = Vector2( 1, 0.65 )
 mouse_filter = 1
 disabled = true
 texture_normal = ExtResource( 3 )

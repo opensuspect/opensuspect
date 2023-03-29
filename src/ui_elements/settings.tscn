@@ -13,17 +13,17 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="."]
-margin_right = 40.0
-margin_bottom = 14.0
+offset_right = 40.0
+offset_bottom = 14.0
 text = "Coming Soon!"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Back" type="Button" parent="."]
-margin_top = 88.0
-margin_right = 132.0
-margin_bottom = 172.0
+offset_top = 88.0
+offset_right = 132.0
+offset_bottom = 172.0
 text = "Back"
 __meta__ = {
 "_edit_use_anchors_": false

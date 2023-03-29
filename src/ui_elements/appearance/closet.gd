@@ -1,14 +1,14 @@
 extends Control
 
-onready var iconCharacter: Resource = preload("res://ui_elements/icon_character.tscn")
+@onready var iconCharacter: Resource = preload("res://ui_elements/icon_character.tscn")
 
-onready var character: Control = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
-onready var items: ItemList = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
+@onready var character: Control = $MenuMargin/HBoxContainer/CharacterBox/CenterCharacter/MenuCharacter
+@onready var items: ItemList = $MenuMargin/HBoxContainer/ClosetBox/Panel/ItemList
 
-onready var selectButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Select
-onready var deleteButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Delete
-onready var nameLabel: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Label
-onready var infoMessage: CenterContainer = $MenuMargin/HBoxContainer/ClosetBox/Panel/CenterContainer
+@onready var selectButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Select
+@onready var deleteButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Delete
+@onready var nameLabel: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Label
+@onready var infoMessage: CenterContainer = $MenuMargin/HBoxContainer/ClosetBox/Panel/CenterContainer
 
 var configData: Dictionary
 var configList: Array
@@ -78,11 +78,11 @@ func _populateItems() -> void:
 		items.set_item_tooltip(index, config)
 		index += 1
 
-func _getIconTexture(namespace) -> Texture:
+func _getIconTexture(namespace) -> Texture2D:
 	## Selects saved config
 	_selectConfig(namespace)
 	## Creates a character icon
-	var iconInstance = iconCharacter.instance()
+	var iconInstance = iconCharacter.instantiate()
 	self.add_child(iconInstance)
 	iconInstance.add_to_group("iconCharacter")
 	iconInstance.hide()

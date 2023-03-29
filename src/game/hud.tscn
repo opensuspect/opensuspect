@@ -2,7 +2,7 @@
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
 [ext_resource path="res://game/hud.gd" type="Script" id=2]
-[ext_resource path="res://game/hud/sprites/red_button.png" type="Texture" id=3]
+[ext_resource path="res://game/hud/sprites/red_button.png" type="Texture2D" id=3]
 
 [node name="Hud" type="Control"]
 anchor_right = 1.0
@@ -10,50 +10,50 @@ anchor_bottom = 1.0
 script = ExtResource( 2 )
 
 [node name="GameStart" type="Button" parent="."]
-margin_right = 332.0
-margin_bottom = 89.0
+offset_right = 332.0
+offset_bottom = 89.0
 theme = ExtResource( 1 )
 text = "Start game"
 
 [node name="GameUI" type="HBoxContainer" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_top = -150.0
+offset_top = -150.0
 
 [node name="TaskInteract" type="HBoxContainer" parent="GameUI"]
-margin_bottom = 150.0
+offset_bottom = 150.0
 
 [node name="ItemInteract" type="HBoxContainer" parent="GameUI"]
-margin_left = 4.0
-margin_right = 4.0
-margin_bottom = 150.0
+offset_left = 4.0
+offset_right = 4.0
+offset_bottom = 150.0
 
 [node name="ItemUse" type="HBoxContainer" parent="GameUI"]
-margin_left = 8.0
-margin_right = 8.0
-margin_bottom = 150.0
+offset_left = 8.0
+offset_right = 8.0
+offset_bottom = 150.0
 
 [node name="Abilities" type="HBoxContainer" parent="GameUI"]
-margin_left = 12.0
-margin_right = 12.0
-margin_bottom = 150.0
+offset_left = 12.0
+offset_right = 12.0
+offset_bottom = 150.0
 
 [node name="CallMeeting" type="HBoxContainer" parent="GameUI"]
 visible = false
-margin_left = 12.0
-margin_right = 12.0
-margin_bottom = 150.0
+offset_left = 12.0
+offset_right = 12.0
+offset_bottom = 150.0
 
 [node name="Control" type="Control" parent="GameUI/CallMeeting"]
-margin_bottom = 150.0
+offset_bottom = 150.0
 
 [node name="MeetingButton" type="TextureButton" parent="GameUI/CallMeeting/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 200.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 150, 150 )
-rect_scale = Vector2( 0.75, 0.75 )
+offset_right = 200.0
+offset_bottom = 50.0
+custom_minimum_size = Vector2( 150, 150 )
+scale = Vector2( 0.75, 0.75 )
 texture_normal = ExtResource( 3 )
 expand = true
 

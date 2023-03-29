@@ -1,8 +1,8 @@
 extends Node2D
 
-onready var teamNameField: Label = $LabelTeamName
-onready var roleNameField: Label = $LabelRoleName
-onready var characterList: HBoxContainer = $CharacterSprites
+@onready var teamNameField: Label = $LabelTeamName
+@onready var roleNameField: Label = $LabelRoleName
+@onready var characterList: HBoxContainer = $CharacterSprites
 
 func isDictInArray(input: Array, what: Dictionary) -> bool:
 	for element in input:
@@ -18,13 +18,13 @@ func isDictInArray(input: Array, what: Dictionary) -> bool:
 	return false
 
 func _ready():
-	TransitionHandler.gameScene.connect("teamsRolesAssigned", self, "showTeamsRoles")
+	TransitionHandler.gameScene.connect("teamsRolesAssigned",Callable(self,"showTeamsRoles"))
 
 func showTeamsRoles(roles: Dictionary, rolesToShow: Array) -> void:
 	if Connections.isDedicatedServer():
 		return
 	## Get current player's role and team
-	var id: int = get_tree().get_network_unique_id()
+	var id: int = get_tree().get_unique_id()
 	teamNameField.text = roles[id]["team"]
 	roleNameField.text = roles[id]["role"]
 	## Clear character icons from previous game
@@ -38,7 +38,7 @@ func showTeamsRoles(roles: Dictionary, rolesToShow: Array) -> void:
 		if not isDictInArray(rolesToShow, roles[character]):
 			continue
 		## Creates a character instance and adds to scene tree
-		var newCharacterIcon: Control = characterIconRes.instance()
+		var newCharacterIcon: Control = characterIconRes.instantiate()
 		characterList.add_child(newCharacterIcon)
 		## Gets player name and character outfit,
 		## and applies to the icon

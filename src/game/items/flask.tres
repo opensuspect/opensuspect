@@ -1,9 +1,9 @@
 [gd_resource type="Resource" load_steps=5 format=2]
 
 [ext_resource path="res://game/items/flask_template.gd" type="Script" id=1]
-[ext_resource path="res://game/items/assets/ingame_texture/flask-empty.png" type="Texture" id=2]
-[ext_resource path="res://game/items/assets/ingame_texture/flask-full.png" type="Texture" id=3]
-[ext_resource path="res://game/items/assets/ui_texture/flask-pour.png" type="Texture" id=4]
+[ext_resource path="res://game/items/assets/ingame_texture/flask-empty.png" type="Texture2D" id=2]
+[ext_resource path="res://game/items/assets/ingame_texture/flask-full.png" type="Texture2D" id=3]
+[ext_resource path="res://game/items/assets/ui_texture/flask-pour.png" type="Texture2D" id=4]
 
 [resource]
 script = ExtResource( 1 )

@@ -1,11 +1,11 @@
-extends KinematicBody2D
+extends CharacterBody2D
 
 # this script acts as the frontend for the characters/controls the character node
 
 # --Public Variables--
 
 # network id corresponding to this character
-var networkId: int setget setNetworkId, getNetworkId
+var networkId: int : get = getNetworkId, set = setNetworkId
 
 var mainCharacter: bool = false
 enum LookDirections {LEFT, RIGHT, UP, DOWN}
@@ -14,9 +14,9 @@ var shouldBeVisible: bool = true
 var fading: bool = false
 const fadingSpeed: int = 5
 
-onready var characterElements = $CharacterElements
-onready var nameLabel = $Name
-onready var skeleton = $CharacterElements/Skeleton
+@onready var characterElements = $CharacterElements
+@onready var nameLabel = $Name
+@onready var skeleton = $CharacterElements/Skeleton3D
 
 # --Private variables--
 var _maxSpeed: float = 5
@@ -69,7 +69,7 @@ func setCharacterResource(newCharacterResource: CharacterResource) -> void:
 	# if there is already a character node assigned to this resource
 	if _characterResource != null:
 		printerr("Assigning a new CharacterResource to a character node that already has one")
-		assert(false, "Should be unreachable")
+		assert(false) #,"Should be unreachable")
 	_characterResource = newCharacterResource
 
 func setMainCharacter(main: bool = true) -> void:
@@ -98,7 +98,9 @@ func _moveCommand(delta: float, movementVec: Vector2) -> Vector2:
 	# move_and_slide() returns the actual motion that happened, store it
 	# 	in amountMoved
 	## Calculate and execute actual motion
-	var amountMoved: Vector2 = move_and_slide(_direction * _speed)
+	set_velocity(_direction * _speed)
+	move_and_slide()
+	var amountMoved: Vector2 = velocity
 	# return the actual movement that happened
 	return amountMoved
 
@@ -152,7 +154,7 @@ func _getLookDirFromVec(vec: Vector2) -> int:
 
 # set the outfit of the character
 func setAppearance(outfit: Dictionary, colors: Dictionary) -> void:
-	if outfit.empty() or colors.empty():
+	if outfit.is_empty() or colors.is_empty():
 		return
 	var outfitPaths: Dictionary = {}
 	for partGroup in outfit: ## For each customizable group

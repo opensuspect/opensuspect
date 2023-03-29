@@ -1,12 +1,12 @@
 extends Control
 
-onready var skeleton = $Viewport/Skeleton
+@onready var skeleton = $SubViewport/Skeleton3D
 
 # --Public Functions--
 
 # Set the outline shader color
 func setOutline(color: Color) -> void:
-	$CharacterTexture.material.set_shader_param("line_color", color)
+	$CharacterTexture.material.set_shader_parameter("line_color", color)
 
 # Apply config from the appearance public variables to skeleton
 func applyFromAppearance():
@@ -24,5 +24,5 @@ func setAppearance(outfit: Dictionary, colors: Dictionary):
 
 # --Private Functions--
 func _ready():
-	Appearance.connect("appearanceChanged", self, "applyFromAppearance") # Signal from appearance to set skeleton config
+	Appearance.connect("appearanceChanged",Callable(self,"applyFromAppearance")) # Signal from appearance to set skeleton config
 	Appearance.randomizeIfUnset()

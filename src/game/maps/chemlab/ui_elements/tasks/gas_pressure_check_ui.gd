@@ -1,6 +1,6 @@
 extends "res://game/ui_elements/task_ui_base.gd"
 
-onready var pressureMeterNode: Control = $Control/PressureMeters
+@onready var pressureMeterNode: Control = $Control/PressureMeters
 var pressureLabels: Array = []
 var pressureNeedles: Array = []
 

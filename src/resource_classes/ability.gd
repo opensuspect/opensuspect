@@ -5,7 +5,7 @@ var _name: String = ""
 var _abilityHudNode: Node
 var _owner # THIS SHOULD BE CharacterResource (typcheck breaks: cyclic dependency)
 
-func _init() -> void:
+func _init():
 	_name = ""
 
 func getName() -> String:

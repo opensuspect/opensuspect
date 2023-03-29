@@ -1,10 +1,10 @@
 extends "res://game/entity.gd"
 
 # --Public Variables--
-onready var abilityPoint = $CharacterElements/Abilities
-onready var itemIntArea = $CharacterElements/ItemInteraction
-onready var taskIntArea = $CharacterElements/TaskInteraction
-onready var obstacleFinder = $ObstacleFinder
+@onready var abilityPoint = $CharacterElements/Abilities
+@onready var itemIntArea = $CharacterElements/ItemInteraction
+@onready var taskIntArea = $CharacterElements/TaskInteraction
+@onready var obstacleFinder = $ObstacleFinder
 
 # --Signals--
 signal player_disconnected(id)
@@ -22,7 +22,7 @@ func spawn() -> void:
 # PLACEHOLDER function for killing characters
 func kill():
 	# assert false because killing isn't implemented yet
-	assert(false, "Not implemented yet")
+	assert(false) #,"Not implemented yet")
 
 func disconnected():
 	## runs when this player disconnects from the server
@@ -30,7 +30,7 @@ func disconnected():
 	# TODO: drop items, etc.
 
 func setNameColor(newColor: Color) -> void:
-	nameLabel.add_color_override("font_color", newColor)
+	nameLabel.add_theme_color_override("font_color", newColor)
 
 func die() -> void:
 	rotation_degrees = 90

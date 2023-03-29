@@ -15,9 +15,9 @@ signal object_spawned(object)
 signal object_recycled(object)
 
 # Objects that are spawned and active
-var _spawned_objects: Array = [] setget , get_spawned_objects
+var _spawned_objects: Array = [] : get = get_spawned_objects
 # Objects that are recycled and inactive
-var _recycled_objects: Array = [] setget , get_recycled_objects
+var _recycled_objects: Array = [] : get = get_recycled_objects
 
 func create_pool(pool_name: String, pool_object: IPoolable, size: int = 100, manager: PoolManager = self) -> ObjectPool:
 	"""Creates a pool of objects."""
@@ -94,7 +94,7 @@ class ObjectPool extends Node:
 	var object: IPoolable
 
 	# Class constructor
-	func _init(pool_object: IPoolable, size: int) -> void:
+	func _init(pool_object: IPoolable,size: int):
 		self.object = pool_object
 		self.size = size
 		self._init_pool()

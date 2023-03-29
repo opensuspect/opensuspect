@@ -1,6 +1,6 @@
-extends Sprite
+extends Sprite2D
 
-onready var skeleton: Node2D = $Viewport/Skeleton
+@onready var skeleton: Node2D = $SubViewport/Skeleton3D
 
 var currentOutfit: Dictionary
 var currentColors: Dictionary

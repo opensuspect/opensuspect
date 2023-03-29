@@ -1,9 +1,9 @@
 extends Node2D
 
-onready var _sprite: Sprite = $ItemSprite
-onready var _button: TextureButton = $InteractButton
+@onready var _sprite: Sprite2D = $ItemSprite
+@onready var _button: TextureButton = $InteractButton
 
-var _buttonTexture: Texture
+var _buttonTexture: Texture2D
 var _textureScale: Vector2
 var _visibility: bool = true
 var _itemId: int = -1
@@ -15,21 +15,21 @@ func _ready() -> void:
 	_sprite.scale = _textureScale
 	var width: float = _buttonTexture.get_width() * _textureScale.x
 	var height: float = _buttonTexture.get_height() * _textureScale.y
-	var buttonWidth: float = _button.rect_size.x
-	var buttonHeight: float = _button.rect_size.y
+	var buttonWidth: float = _button.size.x
+	var buttonHeight: float = _button.size.y
 	_button.visible = _visibility
-	_button.rect_position.x = width / 2 - buttonWidth
-	_button.rect_position.y = height / 2 - buttonHeight
+	_button.position.x = width / 2 - buttonWidth
+	_button.position.y = height / 2 - buttonHeight
 
 func setItemId(newId: int) -> void:
 	if _itemId != -1:
-		assert(false, "Should not change the ID on the fly")
+		assert(false) #,"Should not change the ID on the fly")
 	_itemId = newId
 
 func getItemId() -> int:
 	return _itemId
 
-func setTexture(buttonTexture: Texture, textureScale: Vector2) -> void:
+func setTexture(buttonTexture: Texture2D, textureScale: Vector2) -> void:
 	_buttonTexture = buttonTexture
 	_textureScale = textureScale
 

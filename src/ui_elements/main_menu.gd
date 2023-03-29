@@ -5,12 +5,12 @@ enum MenuType {MAIN, JOIN, CREATE, SERVER}
 
 var menu: int
 
-onready var mainMenu: Control = $MainMenu
-onready var joinMenu: Control = $Join
-onready var createMenu: Control = $Create
-onready var serverMenu: Control = $Server
+@onready var mainMenu: Control = $MainMenu
+@onready var joinMenu: Control = $Join
+@onready var createMenu: Control = $Create
+@onready var serverMenu: Control = $Server
 
-onready var character = $MainMenu/CenterCharacter/MenuCharacter
+@onready var character = $MainMenu/CenterCharacter/MenuCharacter
 
 # --Interface--
 func _ready() -> void:
@@ -53,7 +53,7 @@ func setVisibleMenu(menuType: int) -> void:
 		MenuType.JOIN: joinMenu.visible = true
 		MenuType.CREATE: createMenu.visible = true
 		MenuType.SERVER: serverMenu.visible = true
-		_: assert(false, "Unreachable")
+		_: assert(false) #,"Unreachable")
 
 func hideMenus() -> void:
 	mainMenu.visible = false

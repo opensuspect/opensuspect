@@ -1,7 +1,7 @@
 extends Node2D
 
-onready var doorOpened: Node = $DoorOpened
-onready var doorClosed: Node = $DoorClosed
+@onready var doorOpened: Node = $DoorOpened
+@onready var doorClosed: Node = $DoorClosed
 
 func doorClose() -> void:
 	doorClosed.visible = true

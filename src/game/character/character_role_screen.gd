@@ -1,7 +1,7 @@
 extends Control
 
-onready var skeleton: Node2D = $Skeleton
-onready var nameLabel = $Name
+@onready var skeleton: Node2D = $Skeleton3D
+@onready var nameLabel = $Name
 
 var currentOutfit: Dictionary
 var outfitPaths: Dictionary = {}
@@ -32,4 +32,4 @@ func setName(characterName: String, fontColor: Color) -> void:
 
 func setNameDeferred() -> void:
 	nameLabel.text = _characterName
-	nameLabel.add_color_override("font_color", _fontColor)
+	nameLabel.add_theme_color_override("font_color", _fontColor)

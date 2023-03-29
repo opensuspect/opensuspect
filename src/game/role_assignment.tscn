@@ -8,13 +8,13 @@ script = ExtResource( 2 )
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 color = Color( 0.0431373, 0.0352941, 0.0352941, 1 )
-polygon = PoolVector2Array( 10, 10, 10, 1070, 1910, 1070, 1910, 10 )
+polygon = PackedVector2Array( 10, 10, 10, 1070, 1910, 1070, 1910, 10 )
 
 [node name="TitleTextLabel" type="Label" parent="."]
-margin_left = 650.0
-margin_top = 100.0
-margin_right = 1270.0
-margin_bottom = 180.0
+offset_left = 650.0
+offset_top = 100.0
+offset_right = 1270.0
+offset_bottom = 180.0
 theme = ExtResource( 1 )
 text = "Team and role assignment"
 align = 1
@@ -24,10 +24,10 @@ __meta__ = {
 }
 
 [node name="LabelTeam" type="Label" parent="."]
-margin_left = 100.0
-margin_top = 200.0
-margin_right = 300.0
-margin_bottom = 280.0
+offset_left = 100.0
+offset_top = 200.0
+offset_right = 300.0
+offset_bottom = 280.0
 theme = ExtResource( 1 )
 text = "Team:"
 align = 2
@@ -37,10 +37,10 @@ __meta__ = {
 }
 
 [node name="LabelTeamName" type="Label" parent="."]
-margin_left = 320.0
-margin_top = 200.0
-margin_right = 900.0
-margin_bottom = 280.0
+offset_left = 320.0
+offset_top = 200.0
+offset_right = 900.0
+offset_bottom = 280.0
 theme = ExtResource( 1 )
 text = "[...]"
 valign = 1
@@ -49,10 +49,10 @@ __meta__ = {
 }
 
 [node name="LabelRole" type="Label" parent="."]
-margin_left = 1020.0
-margin_top = 200.0
-margin_right = 1220.0
-margin_bottom = 280.0
+offset_left = 1020.0
+offset_top = 200.0
+offset_right = 1220.0
+offset_bottom = 280.0
 theme = ExtResource( 1 )
 text = "Role:"
 align = 2
@@ -62,10 +62,10 @@ __meta__ = {
 }
 
 [node name="LabelRoleName" type="Label" parent="."]
-margin_left = 1240.0
-margin_top = 200.0
-margin_right = 1820.0
-margin_bottom = 280.0
+offset_left = 1240.0
+offset_top = 200.0
+offset_right = 1820.0
+offset_bottom = 280.0
 theme = ExtResource( 1 )
 text = "[...]"
 valign = 1
@@ -74,10 +74,10 @@ __meta__ = {
 }
 
 [node name="CharacterSprites" type="HBoxContainer" parent="."]
-margin_left = 100.0
-margin_top = 400.0
-margin_right = 1820.0
-margin_bottom = 900.0
+offset_left = 100.0
+offset_top = 400.0
+offset_right = 1820.0
+offset_bottom = 900.0
 grow_horizontal = 0
 grow_vertical = 0
 alignment = 1

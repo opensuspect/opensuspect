@@ -35,7 +35,7 @@ const IMPORT_TYPE = "import"
 # --Public Functions--
 
 # Returns a dictionary of all resources from a given directory dictionary
-func list(directories: Dictionary, types: PoolStringArray) -> Dictionary:
+func list(directories: Dictionary, types: PackedStringArray) -> Dictionary:
 	var resources: Dictionary = {}
 	for folder in directories: # Iterate over each folder specified, by their namespace (key)
 		var files = _listFilesInDirectory(directories[folder], types) # List files in each folder
@@ -43,7 +43,7 @@ func list(directories: Dictionary, types: PoolStringArray) -> Dictionary:
 		resources[folder] = _filesToDictionary(files, directories[folder])
 	return(resources) # Return the dictionary of namespaced resources
 
-func listDirectory(directory: String, types: PoolStringArray) -> Dictionary:
+func listDirectory(directory: String, types: PackedStringArray) -> Dictionary:
 	var resources: Dictionary = {}
 	var files = _listFilesInDirectory(directory, types) # List files in each folder
 	# Add each file to the output dictionary
@@ -51,7 +51,7 @@ func listDirectory(directory: String, types: PoolStringArray) -> Dictionary:
 	return(resources) # Return the dictionary of namespaced resources
 
 # Returns the path of a specified resource
-func getPath(resource: String, namespace: String, directories: Dictionary, types: PoolStringArray) -> String:
+func getPath(resource: String, namespace: String, directories: Dictionary, types: PackedStringArray) -> String:
 	var resources: Dictionary = list(directories, types) # Create the directory listing
 	var wantedResource = formatString(resource) # Format the string for optimal matching
 	var output = "" # Set a blank output
@@ -61,7 +61,7 @@ func getPath(resource: String, namespace: String, directories: Dictionary, types
 	return(output)
 
 # Returns a random resource from a given namespace
-func getRandom(namespace: String, directories: Dictionary, types: PoolStringArray) -> Dictionary:
+func getRandom(namespace: String, directories: Dictionary, types: PackedStringArray) -> Dictionary:
 	var resources: Dictionary = list(directories, types) # Get a list of resources
 	var dir = resources[namespace] # Get the required directory from the given namespace
 	var files = dir.keys() # Get an array of the files in the directory
@@ -73,7 +73,7 @@ func getRandom(namespace: String, directories: Dictionary, types: PoolStringArra
 	return(output) # Return the output variable
 
 # Return a random file for each directory listed
-func getRandomOfEach(directories: Dictionary, types: PoolStringArray) -> Dictionary:
+func getRandomOfEach(directories: Dictionary, types: PackedStringArray) -> Dictionary:
 	var output: Dictionary = {}
 	for namespace in directories: # Iterate over the directories
 		var random = getRandom(namespace, directories, types) # Get a random file for the directory
@@ -102,11 +102,11 @@ func _ready():
 	randomize()
 
 # Lists all files in a path, that have the correct file extensions
-func _listFilesInDirectory(path: String, types: PoolStringArray) -> Array:
+func _listFilesInDirectory(path: String, types: PackedStringArray) -> Array:
 	var files: Array = [] # Defunes the array to be returned
 	var dir = Directory.new() # Makes a new directory object
 	dir.open(path) # Opens the directory given in "path"
-	dir.list_dir_begin() # List files in the directory from the beginning
+	dir.list_dir_begin()  # List files in the directory from the beginning# TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 	while true:
 		var file: String = dir.get_next() # Gets the next file in the list
 		if file == "": # If the file is "", means the end of the directory has been found
@@ -119,7 +119,7 @@ func _listFilesInDirectory(path: String, types: PoolStringArray) -> Array:
 			files.append(file)
 	return(files) # Return the files array
 
-func _matchFileType(file: String, types: PoolStringArray) -> bool:
+func _matchFileType(file: String, types: PackedStringArray) -> bool:
 	for type in types: # Iterates over each specified file extension
 		type = cleanString(type) # Format type to remove special characters
 		if file.get_extension() == type: # Checks if the file has the extension
@@ -127,7 +127,7 @@ func _matchFileType(file: String, types: PoolStringArray) -> bool:
 	return(false)
 
 # Creates a dictionary of the files in a directory
-func _filesToDictionary(files: PoolStringArray, path: String) -> Dictionary:
+func _filesToDictionary(files: PackedStringArray, path: String) -> Dictionary:
 	var output: Dictionary = {} # Defines the dictionary to output the files
 	for file in files:
 		var fileName = file.get_basename() # Get the base name of the resource

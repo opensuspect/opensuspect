@@ -7,10 +7,10 @@ func init():
 	roleNames = {"Agents": ["Agent", "Counter-intelligence"],
 				"CIA": ["Infiltrator"],
 				"Yugoslavs": ["Infiltrator"]}
-	teamRoleColors = {	["Agents", "Agent"]: Color.white,
-						["Agents", "Counter-intelligence"]: Color.yellow,
-						["CIA", "Infiltrator"]: Color.aqua,
-						["Yugoslavs", "Infiltrator"]: Color.pink}
+	teamRoleColors = {	["Agents", "Agent"]: Color.WHITE,
+						["Agents", "Counter-intelligence"]: Color.YELLOW,
+						["CIA", "Infiltrator"]: Color.AQUA,
+						["Yugoslavs", "Infiltrator"]: Color.PINK}
 	random = RandomNumberGenerator.new()
 	random.randomize()
 

@@ -6,24 +6,24 @@ class_name ItemTemplate
 
 # --Public Variables--
 # the name of the item (for ex. "Wrench")
-export var itemName: String
+@export var itemName: String
 # the texture used by the item
 # file path to item node scene
 const ITEM_NODE_SCENE_PATH: String = "res://game/items/item_node/item_node.tscn"
 # scene of the item node
 var itemNodeScene: PackedScene = preload(ITEM_NODE_SCENE_PATH)
 
-export var texture: Texture
+@export var texture: Texture2D
 # scale to be applied to the texture
-export var textureScale: Vector2 = Vector2(1, 1)
+@export var textureScale: Vector2 = Vector2(1, 1)
 # the texture and scale used on the HUD for the item, and the scale used when the item is in a task
-export var hudTexture: Texture = null
-export var hudTextureScale: Vector2 = Vector2(1, 1)
-export var taskTextureScale: Vector2 = Vector2(1, 1)
+@export var hudTexture: Texture2D = null
+@export var hudTextureScale: Vector2 = Vector2(1, 1)
+@export var taskTextureScale: Vector2 = Vector2(1, 1)
 # the texture, scale and rotatation used when picked up
-export var pickUpTexture: Texture = null
-export var pickUpTextureScale: Vector2 = Vector2(1, 1)
-export var pickUpRotation: float = 0
+@export var pickUpTexture: Texture2D = null
+@export var pickUpTextureScale: Vector2 = Vector2(1, 1)
+@export var pickUpRotation: float = 0
 
 # --Private Variables--
 
@@ -47,7 +47,7 @@ func createItemResource(properties: Dictionary) -> ItemResource:
 	return itemResource
 
 func createItemNode() -> Node:
-	var itemNode: Node = itemNodeScene.instance()
+	var itemNode: Node = itemNodeScene.instantiate()
 	
 	# placeholder space to put whatever we need to do to initialize a general item node
 	

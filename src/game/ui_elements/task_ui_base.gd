@@ -35,7 +35,7 @@ func resetItems(taskRes: TaskResource, itemPlace: Node2D) -> Dictionary:
 		var itemRes = itemsInTask[itemLoc]
 		var itemButton: Node2D = itemRes.createTaskButton()
 		itemButton.setItemId(itemRes.getId())
-		itemButton.connect("attemptPickUp", taskRes, "attemptItemPickOut")
+		itemButton.connect("attemptPickUp",Callable(taskRes,"attemptItemPickOut"))
 		itemButtons[itemLoc] = itemButton
 		itemPlace.add_child(itemButton)
 	return itemButtons

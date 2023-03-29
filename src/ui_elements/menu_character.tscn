@@ -1,10 +1,10 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://ui_elements/menu_character.gd" type="Script" id=1]
-[ext_resource path="res://game/character/assets/shaders/character_outline.shader" type="Shader" id=2]
-[ext_resource path="res://game/character/assets/shaders/skin_color_key.shader" type="Shader" id=3]
+[ext_resource path="res://game/character/assets/shaders/character_outline.gdshader" type="Shader" id=2]
+[ext_resource path="res://game/character/assets/shaders/skin_color_key.gdshader" type="Shader" id=3]
 [ext_resource path="res://game/character/skeleton.tscn" type="PackedScene" id=4]
-[ext_resource path="res://ui_elements/assets/shaders/character_outline.shader" type="Shader" id=5]
+[ext_resource path="res://ui_elements/assets/shaders/character_outline.gdshader" type="Shader" id=5]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 2 )
@@ -26,14 +26,14 @@ shader_param/line_color = Color( 0.901961, 0.886275, 0.866667, 1 )
 shader_param/line_thickness = 16.0
 
 [sub_resource type="ViewportTexture" id=5]
-viewport_path = NodePath("Viewport")
+viewport_path = NodePath("SubViewport")
 
 [node name="MenuCharacter" type="MarginContainer"]
 material = SubResource( 3 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -1152.0
-margin_bottom = -56.0
+offset_right = -1152.0
+offset_bottom = -56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
@@ -41,24 +41,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Viewport" type="Viewport" parent="."]
+[node name="SubViewport" type="SubViewport" parent="."]
 size = Vector2( 1536, 2048 )
 transparent_bg = true
 
-[node name="Skeleton" parent="Viewport" instance=ExtResource( 4 )]
+[node name="Skeleton3D" parent="SubViewport" instance=ExtResource( 4 )]
 material = SubResource( 1 )
 scale = Vector2( 2, 2 )
 
-[node name="SpriteCamera" type="Camera2D" parent="Viewport"]
+[node name="SpriteCamera" type="Camera2D" parent="SubViewport"]
 anchor_mode = 0
 current = true
-smoothing_enabled = true
+follow_smoothing_enabled = true
 editor_draw_screen = false
 
 [node name="CharacterTexture" type="TextureRect" parent="."]
 material = SubResource( 4 )
-margin_right = 768.0
-margin_bottom = 1024.0
+offset_right = 768.0
+offset_bottom = 1024.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = SubResource( 5 )

@@ -13,21 +13,21 @@ var killableCharacters: Array = []
 
 signal action
 
-func _init() -> void:
+func _init():
 	_name = "Gun"
 
 func registerOwner(newOwner) -> void:
-	.registerOwner(newOwner)
-	gunRangeNode = gunRangeScene.instance()
+	super.registerOwner(newOwner)
+	gunRangeNode = gunRangeScene.instantiate()
 	newOwner.getCharacterNode().attachAbility(gunRangeNode)
-	gunRangeNode.connect("bodyEntered", self, "characterEnteredZone")
-	gunRangeNode.connect("bodyExited", self, "characterExitedZone")
-	connect("action", TransitionHandler.gameScene, "abilityActivate")
+	gunRangeNode.connect("bodyEntered",Callable(self,"characterEnteredZone"))
+	gunRangeNode.connect("bodyExited",Callable(self,"characterExitedZone"))
+	connect("action",Callable(TransitionHandler.gameScene,"abilityActivate"))
 
 func createAbilityHudNode() -> Node:
-	_abilityHudNode = gunUiScene.instance()
-	_abilityHudNode.connect("killButtonPressed", self, "activate")
-	_abilityHudNode.connect("reoladButtonPressed", self, "secondaryActivate")
+	_abilityHudNode = gunUiScene.instantiate()
+	_abilityHudNode.connect("killButtonPressed",Callable(self,"activate"))
+	_abilityHudNode.connect("reoladButtonPressed",Callable(self,"secondaryActivate"))
 	_abilityHudNode.activateKillButton(len(killableCharacters) > 0)
 	return _abilityHudNode
 

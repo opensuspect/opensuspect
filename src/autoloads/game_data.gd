@@ -29,7 +29,7 @@ func write(namespace: String, data: Dictionary) -> String:
 	var path = _createPath(namespace, EXTENSION)
 	var save_data = File.new()
 	if save_data.open(path, File.WRITE) == OK:
-		save_data.store_line(to_json(data)) # Convert data to json and write it to file
+		save_data.store_line(JSON.new().stringify(data)) # Convert data to json and write it to file
 	save_data.close()
 	return(path)
 
@@ -40,7 +40,9 @@ func read(namespace: String) -> Dictionary:
 	var load_data = File.new()
 	if load_data.open(path, File.READ) == OK:
 		var content: String = load_data.get_as_text()
-		output = parse_json(content) # Parse json from data file
+		var test_json_conv = JSON.new()
+		test_json_conv.parse(content) # Parse json from data file
+		output = test_json_conv.get_data()
 	load_data.close()
 	return(output)
 

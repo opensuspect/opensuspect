@@ -1,10 +1,10 @@
 extends Resource
 class_name TaskResource
 
-export var buttonSprite: Texture
-export var taskPopUpName: String
-export var inputVariables: Array
-export var outputVariables: Array
+@export var buttonSprite: Texture2D
+@export var taskPopUpName: String
+@export var inputVariables: Array
+@export var outputVariables: Array
 
 # inputProviders will be a dictionary in which the keys will be set from the
 # array elements of inputVariables, and the values will be set to the resource
@@ -13,8 +13,8 @@ var _inputProviders: Dictionary = {}
 
 var taskPopUpPath: String
 var taskUiNode: Node = null
-var taskObjectNode: YSort setget nothing, getTaskObjectNode
-var name: String setget nothing, getName
+var taskObjectNode: Node2D : get = getTaskObjectNode, set = nothing
+var name: String : get = getName, set = nothing
 
 var taskState: Dictionary = {}
 var items: Dictionary = {}
@@ -24,7 +24,7 @@ signal deactivateUi
 signal stateChanged
 signal action
 
-func getTaskObjectNode() -> YSort:
+func getTaskObjectNode() -> Node2D:
 	return taskObjectNode
 
 func getTaskUiNode() -> Node:
@@ -37,12 +37,12 @@ func getTaskPosition() -> Vector2:
 	return taskObjectNode.position
 
 func nothing(anything) -> void:
-	assert(false, "Can't change this on the fly")
+	assert(false) #,"Can't change this on the fly")
 
 func getItemResources() -> Dictionary:
 	return items.duplicate()
 
-func init(newNode: YSort) -> void:
+func init(newNode: Node2D) -> void:
 	assert(taskObjectNode == null)
 	taskObjectNode = newNode
 	name = taskObjectNode.name
@@ -58,7 +58,7 @@ func init(newNode: YSort) -> void:
 	elif taskPopUpName in universalTaskUis:
 		taskPopUpPath = universalTaskUis[taskPopUpName]["path"]
 	else:
-		assert(false, "invalid task UI name")
+		assert(false) #,"invalid task UI name")
 
 func addItem(itemRes: Resource, position: String) -> void:
 	items[position] = itemRes
@@ -68,16 +68,16 @@ func interact() -> void:
 
 func activateUi(uiNode: Node) -> Dictionary:
 	taskUiNode = uiNode
-	taskUiNode.connect("stateChanged", self, "stateChanged")
-	taskUiNode.connect("action", self, "action")
-	taskUiNode.connect("deactivate", self, "deactivateUi")
+	taskUiNode.connect("stateChanged",Callable(self,"stateChanged"))
+	taskUiNode.connect("action",Callable(self,"action"))
+	taskUiNode.connect("deactivate",Callable(self,"deactivateUi"))
 	emit_signal("activateUi")
 	return taskState.duplicate()
 
 func deactivateUi() -> void:
-	taskUiNode.disconnect("stateChanged", self, "stateChanged")
-	taskUiNode.disconnect("action", self, "action")
-	taskUiNode.disconnect("deactivate", self, "deactivateUi")
+	taskUiNode.disconnect("stateChanged",Callable(self,"stateChanged"))
+	taskUiNode.disconnect("action",Callable(self,"action"))
+	taskUiNode.disconnect("deactivate",Callable(self,"deactivateUi"))
 	taskUiNode = null
 	emit_signal("deactivateUi")
 

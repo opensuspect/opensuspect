@@ -70,18 +70,18 @@ var _items: Dictionary = {}
 # --Public Functions--
 func getItemTemplate(itemName: String) -> ItemTemplate:
 	if not itemName in _itemTemplates:
-		assert(false, "Trying to get an item template that doesn't exist")
+		assert(false) #,"Trying to get an item template that doesn't exist")
 		return null
 	return _itemTemplates[itemName]
 
-func getItemNode(itemId) -> KinematicBody2D:
+func getItemNode(itemId) -> CharacterBody2D:
 	return _items[itemId].getItemNode()
 
 func getItemResource(itemId) -> ItemResource:
 	return _items[itemId]
 
 func removeItem(itemId: int) -> void:
-	var itemNode: KinematicBody2D
+	var itemNode: CharacterBody2D
 	_items[itemId].remove()
 	_items.erase(itemId)
 
@@ -104,10 +104,10 @@ func createTaskItemServer(itemName: String, taskName: String, position: String, 
 	rpc("createTaskItemClient", itemName, taskName, position, newId, properties)
 
 # --Client functions--
-puppetsync func createItemClient(itemName: String, itemPosition: Vector2, newId: int, properties: Dictionary):
+@rpc("call_local") func createItemClient(itemName: String, itemPosition: Vector2, newId: int, properties: Dictionary):
 	_createItem(itemName, itemPosition, newId, properties)
 
-puppetsync func createTaskItemClient(itemName: String, taskName: String, position: String, newId: int, properties: Dictionary):
+@rpc("call_local") func createTaskItemClient(itemName: String, taskName: String, position: String, newId: int, properties: Dictionary):
 	_createTaskItem(itemName, taskName, position, newId, properties)
 
 # --Private Functions--
@@ -124,7 +124,7 @@ func _createItem(itemName: String, itemPosition: Vector2, newId: int, properties
 	itemTemplate.configureItemResource(itemResource)
 	# initialize a new ItemNode
 	itemResource.createItemNode()
-	var itemNode: KinematicBody2D = itemResource.getItemNode()
+	var itemNode: CharacterBody2D = itemResource.getItemNode()
 	itemNode.position = itemPosition
 	TransitionHandler.gameScene.itemsNode.add_child(itemNode)
 

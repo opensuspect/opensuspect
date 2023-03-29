@@ -1,12 +1,12 @@
 extends Control
 
-onready var itemIcon: Sprite = $ItemSprite
-onready var pickUpButton: TextureButton = $Button
+@onready var itemIcon: Sprite2D = $ItemSprite
+@onready var pickUpButton: TextureButton = $Button
 
-var item: ItemResource setget setItemResource, getItemResource
+var item: ItemResource : get = getItemResource, set = setItemResource
 
 func _ready():
-	assert(item != null, "The item should be set right when this scene is instanced.")
+	assert(item != null) #,"The item should be set right when this scene is instanced.")
 	itemIcon.texture = item.getHudTexture()
 	itemIcon.scale = item.getHudTextureScale()
 

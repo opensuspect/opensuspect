@@ -1,10 +1,10 @@
 extends ItemTemplate
 class_name FlaskTemplate
 
-export var textureFull: Texture
-export var hudTextureFull: Texture = null
-export var pickUpTextureFull: Texture = null
-export var abilityTexture: Texture = null
+@export var textureFull: Texture2D
+@export var hudTextureFull: Texture2D = null
+@export var pickUpTextureFull: Texture2D = null
+@export var abilityTexture: Texture2D = null
 
 func createItemResource(properties: Dictionary) -> ItemResource:
 	# initialize a new ItemResource
@@ -21,6 +21,6 @@ func configureItemResource(itemResource: ItemResource):
 		"pickUpRotation", "textureFull", "hudTextureFull",
 		"pickUpTextureFull"]
 	for property in propertyList:
-		itemResource.set(property, .get(property))
+		itemResource.set(property, super.get(property))
 	itemResource._abilities = ["Pour"]
 	itemResource._abilityIcons = {"Pour": abilityTexture}
