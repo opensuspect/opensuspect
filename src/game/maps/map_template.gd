@@ -13,6 +13,7 @@ func _ready():
 
 func setHudNode(newHudNode: Control):
 	assert(hudNode == null) #,"This should only be set once")
+	assert(newHudNode != null)
 	hudNode = newHudNode
 
 func taskInteract(interactArea: Area2D, action: String) -> void:

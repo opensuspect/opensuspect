@@ -24,7 +24,7 @@ func showTeamsRoles(roles: Dictionary, rolesToShow: Array) -> void:
 	if Connections.isDedicatedServer():
 		return
 	## Get current player's role and team
-	var id: int = get_tree().get_unique_id()
+	var id: int = Connections.getMyId()
 	teamNameField.text = roles[id]["team"]
 	roleNameField.text = roles[id]["role"]
 	## Clear character icons from previous game

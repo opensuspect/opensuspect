@@ -1,37 +1,37 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=9 format=3 uid="uid://bnwj2ne8vfme7"]
 
-[ext_resource path="res://game/character/character.gd" type="Script" id=1]
-[ext_resource path="res://game/character/assets/shaders/skin_color_key.gdshader" type="Shader" id=2]
-[ext_resource path="res://game/character/skeleton.tscn" type="PackedScene" id=3]
-[ext_resource path="res://ui_elements/assets/themes/suspect_ui_small.tres" type="Theme" id=4]
+[ext_resource type="Script" path="res://game/character/character.gd" id="1"]
+[ext_resource type="Shader" path="res://game/character/assets/shaders/skin_color_key.gdshader" id="2"]
+[ext_resource type="PackedScene" uid="uid://basvcn5obt80h" path="res://game/character/skeleton.tscn" id="3"]
+[ext_resource type="Theme" uid="uid://dahcvlrj4jrqd" path="res://ui_elements/assets/themes/suspect_ui_small.tres" id="4"]
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qr4o8"]
 resource_local_to_scene = true
-shader = ExtResource( 2 )
-shader_param/skin_mask_color = Color( 1, 0, 1, 1 )
-shader_param/skin_color = Color( 0.760784, 0.647059, 0.560784, 1 )
-shader_param/hair_mask_color = Color( 0, 1, 1, 1 )
-shader_param/hair_color = Color( 0.592157, 0.709804, 0.333333, 1 )
-shader_param/fhair_mask_color = Color( 0, 1, 0, 1 )
-shader_param/fhair_color = Color( 0.368627, 0.298039, 0.298039, 1 )
-shader_param/tolerance = 0.1
+shader = ExtResource("2")
+shader_parameter/skin_mask_color = Color(1, 0, 1, 1)
+shader_parameter/skin_color = Color(0.760784, 0.647059, 0.560784, 1)
+shader_parameter/hair_mask_color = Color(0, 1, 1, 1)
+shader_parameter/hair_color = Color(0.592157, 0.709804, 0.333333, 1)
+shader_parameter/fhair_mask_color = Color(0, 1, 0, 1)
+shader_parameter/fhair_color = Color(0.368627, 0.298039, 0.298039, 1)
+shader_parameter/tolerance = 0.1
 
-[sub_resource type="CapsuleShape2D" id=4]
-radius = 42.0
+[sub_resource type="CapsuleShape2D" id="4"]
+radius = 30.0
 height = 60.0
 
-[sub_resource type="CapsuleShape2D" id=5]
+[sub_resource type="CapsuleShape2D" id="5"]
 radius = 13.0
 height = 60.0
 
-[sub_resource type="CapsuleShape2D" id=3]
+[sub_resource type="CapsuleShape2D" id="3"]
 radius = 13.9999
 height = 80.0003
 
 [node name="character" type="CharacterBody2D"]
 light_mask = 2
 collision_layer = 4113
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="Name" type="Label" parent="."]
 light_mask = 2
@@ -39,17 +39,17 @@ offset_left = -130.0
 offset_top = -225.0
 offset_right = 130.0
 offset_bottom = -180.0
-theme = ExtResource( 4 )
+theme = ExtResource("4")
 text = "Name"
-align = 1
+horizontal_alignment = 1
 
 [node name="CharacterElements" type="Node2D" parent="."]
 light_mask = 2
 
-[node name="Skeleton3D" parent="CharacterElements" instance=ExtResource( 3 )]
-material = SubResource( 2 )
-position = Vector2( -80, -190 )
-scale = Vector2( 0.2, 0.2 )
+[node name="Skeleton3D" parent="CharacterElements" instance=ExtResource("3")]
+material = SubResource("ShaderMaterial_qr4o8")
+position = Vector2(-80, -190)
+scale = Vector2(0.2, 0.2)
 
 [node name="Abilities" type="Node2D" parent="CharacterElements"]
 
@@ -59,7 +59,7 @@ collision_mask = 2
 
 [node name="InteractionRange" type="CollisionShape2D" parent="CharacterElements/ItemInteraction"]
 rotation = 1.5708
-shape = SubResource( 4 )
+shape = SubResource("4")
 
 [node name="TaskInteraction" type="Area2D" parent="CharacterElements"]
 collision_layer = 1024
@@ -67,15 +67,14 @@ collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterElements/TaskInteraction"]
 rotation = 1.5708
-shape = SubResource( 5 )
+shape = SubResource("5")
 
 [node name="CollisionShape3D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
-shape = SubResource( 3 )
+shape = SubResource("3")
 
 [node name="ObstacleFinder" type="RayCast2D" parent="."]
-enabled = true
-target_position = Vector2( -100, 0 )
+target_position = Vector2(-100, 0)
 collision_mask = 32768
 collide_with_areas = true
 

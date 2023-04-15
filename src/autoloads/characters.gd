@@ -43,7 +43,7 @@ func createCharacter(networkId: int, name: String) -> CharacterResource:
 	_registerCharacterResource(networkId, characterResource)
 	## Set the name of the character
 	characterResource.setCharacterName(name)
-	var myId: int = get_tree().get_unique_id()
+	var myId: int = Connections.getMyId()
 	## If own character is added
 	if networkId == myId:
 		## Apply appearance to character
@@ -90,13 +90,13 @@ func removeCharacterResource(id: int) -> void:
 	_characterResources.erase(id)
 
 func getMyCharacterNode() -> Node:
-	var id: int = get_tree().get_unique_id()
+	var id: int = Connections.getMyId()
 	if not id in _characterResources:
 		return null
 	return getMyCharacterResource().getNode()
 
 func getMyCharacterResource() -> CharacterResource:
-	var id: int = get_tree().get_unique_id()
+	var id: int = Connections.getMyId()
 	if not id in _characterResources:
 		return null
 	return _characterResources[id]
@@ -139,7 +139,7 @@ func requestCharacterCustomizations() -> void:
 	rpc_id(1, "sendAllCharacterCustomizations")
 
 func sendOwnCharacterData() -> void:
-	var id: int = get_tree().get_unique_id()
+	var id: int = Connections.getMyId()
 	## Get own character resource
 	var characterRes: CharacterResource
 	characterRes = Characters.getCharacterResource(id)
@@ -172,7 +172,7 @@ func sendOwnCharacterData() -> void:
 func updateCharacterPosition(networkId: int, characterPos: Vector2) -> void:
 	#print("updating position of ", networkId, " to ", characterPos)
 	## if position is for own character, exit
-	if networkId == get_tree().get_unique_id():
+	if networkId == Connections.getMyId():
 		# don't update its position
 		return
 	## Set the position for character

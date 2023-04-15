@@ -91,8 +91,8 @@ func getMovementInput(normalized: bool = true) -> Vector2:
 	return vector
 
 func setHudNode(newHudNode: Control) -> void:
-	if hudNode != null:
-		assert(false) #,"shouldn't set the hudNode again")
+	assert(newHudNode != null) # Don't set this to a null object!
+	assert(hudNode == null) # shouldn't set the hudNode again
 	hudNode = newHudNode
 	if actualMap != null:
 		actualMap.setHudNode(hudNode)
@@ -112,7 +112,8 @@ func loadMap(mapName: String) -> void:
 	## Load map and place it on scene tree
 	var mapPath: String = "res://game/maps/" + mapName + "/" + mapName + ".tscn"
 	actualMap = ResourceLoader.load(mapPath).instantiate()
-	actualMap.setHudNode(hudNode)
+	if hudNode != null: # this has to be done for the new maps to be loaded
+		actualMap.setHudNode(hudNode)
 	actualMapName = mapName
 	mapNode.add_child(actualMap)
 	## Save spawn positions from the map
@@ -257,7 +258,7 @@ func voteCast(voteeId: int) -> void:
 @rpc func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
 	var teamsRolesRes: TeamsRolesTemplate = actualMap.teamsRolesResource
 	roles = newRoles
-	var id: int = get_tree().get_unique_id()
+	var id: int = Connections.getMyId()
 	var myTeam: String = newRoles[id]["team"]
 	var myRole: String = newRoles[id]["role"]
 	visibleRoles = teamsRolesRes.getVisibleTeamRole(newRoles, myTeam, myRole)
@@ -288,7 +289,7 @@ func voteCast(voteeId: int) -> void:
 	var characterRes: CharacterResource = Characters.getCharacterResource(characterId)
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	characterRes.pickUpItem(itemRes)
-	if characterId == get_tree().get_unique_id():
+	if characterId == Connections.getMyId():
 		hudNode.hidePickUpButtons()
 		hudNode.refreshItemButtons()
 
@@ -296,14 +297,14 @@ func voteCast(voteeId: int) -> void:
 	var characterRes: CharacterResource = Characters.getCharacterResource(characterId)
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	characterRes.dropItem(itemRes)
-	if characterId == get_tree().get_unique_id():
+	if characterId == Connections.getMyId():
 		hudNode.refreshItemButtons()
 		hudNode.refreshPickUpButtons()
 
 @rpc("call_local") func itemActivateClient(itemId: int, abilityName: String, properties: Dictionary) -> void:
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	itemRes.activate(abilityName, properties)
-	if itemRes.getHolder().getNetworkId() == get_tree().get_unique_id():
+	if itemRes.getHolder().getNetworkId() == Connections.getMyId():
 		hudNode.refreshItemButtons()
 
 @rpc("call_local") func teleportCharacters(teleportList: Dictionary) -> void:
@@ -343,7 +344,7 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 	emit_signal("clearAbilities")
 	var rolesToShow: Array = []
 	if Connections.isClientServer():
-		var id: int = get_tree().get_unique_id()
+		var id: int = Connections.getMyId()
 		var myTeam: String = roles[id]["team"]
 		var myRole: String = roles[id]["role"]
 		visibleRoles = teamsRolesRes.getVisibleTeamRole(roles, myTeam, myRole)
@@ -368,7 +369,6 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 			rpc_id(abilityPlayer, "executeAbility", parameters)
 			abilityInstance.execute(parameters)
 
-The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
 @rpc("call_local") func itemPickUpServer(itemId: int) -> void:
 	var playerId: int = get_tree().get_remote_sender_id()
 	var characterRes: CharacterResource = Characters.getCharacterResource(playerId)
@@ -376,7 +376,6 @@ The master and mastersync rpc behavior is not officially supported anymore. Try 
 	if characterRes.canPickUpItem(itemRes):
 		rpc("itemPickUpClient", playerId, itemId)
 
-The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
 @rpc("call_local") func itemDropServer(itemId: int) -> void:
 	var playerId: int = get_tree().get_remote_sender_id()
 	var characterRes: CharacterResource = Characters.getCharacterResource(playerId)
@@ -385,7 +384,6 @@ The master and mastersync rpc behavior is not officially supported anymore. Try 
 		#TODO: think about whether we should enforce server-side coordinates for the items to be dropped.
 		rpc("itemDropClient", playerId, itemId)
 
-The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
 @rpc("call_local") func itemActivateServer(itemId: int, abilityName: String, properties: Dictionary) -> void:
 	var playerId: int = get_tree().get_remote_sender_id()
 	var itemRes: ItemResource = Items.getItemResource(itemId)
@@ -404,7 +402,6 @@ func killCharacterServer(id: int) -> void:
 			rpc("itemDropClient", id, itemRes.getId())
 	rpc("killCharacter", id)
 
-The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
 @rpc("call_local") func callMeetingServer() -> void:
 	var callerId: int = get_tree().get_remote_sender_id()
 	# TODO: do checks if the meeting can be called
@@ -427,7 +424,6 @@ The master and mastersync rpc behavior is not officially supported anymore. Try 
 	rpc("teleportCharacters", teleport)
 	rpc("startMeeting")
 
-The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
 @rpc("call_local") func voteCastServer(voteeId: int) -> void:
 	var voterId: int = get_tree().get_remote_sender_id()
 	var voteRes: VoteMechanicsTemplate = actualMap.voteResource
