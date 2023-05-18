@@ -3,14 +3,14 @@
 [ext_resource type="Script" path="res://ui_elements/menu_character.gd" id="1"]
 [ext_resource type="Shader" path="res://game/character/assets/shaders/character_outline.gdshader" id="2"]
 [ext_resource type="Shader" path="res://game/character/assets/shaders/skin_color_key.gdshader" id="3"]
-[ext_resource type="PackedScene" path="res://game/character/skeleton.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://basvcn5obt80h" path="res://game/character/skeleton.tscn" id="4"]
 [ext_resource type="Shader" path="res://ui_elements/assets/shaders/character_outline.gdshader" id="5"]
 
 [sub_resource type="ShaderMaterial" id="3"]
 render_priority = 0
 shader = ExtResource("2")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l5btt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ft5h7"]
 resource_local_to_scene = true
 shader = ExtResource("3")
 shader_parameter/skin_mask_color = Color(1, 0, 1, 1)
@@ -44,8 +44,8 @@ script = ExtResource("1")
 transparent_bg = true
 size = Vector2i(1536, 2048)
 
-[node name="Skeleton3D" parent="SubViewport" instance=ExtResource("4")]
-material = SubResource("ShaderMaterial_l5btt")
+[node name="PlayerSkeleton" parent="SubViewport" instance=ExtResource("4")]
+material = SubResource("ShaderMaterial_ft5h7")
 scale = Vector2(2, 2)
 
 [node name="SpriteCamera" type="Camera2D" parent="SubViewport"]

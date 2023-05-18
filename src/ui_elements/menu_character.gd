@@ -1,6 +1,6 @@
 extends Control
 
-@onready var skeleton = $SubViewport/Skeleton3D
+@onready var skeleton = $SubViewport/PlayerSkeleton
 
 # --Public Functions--
 
