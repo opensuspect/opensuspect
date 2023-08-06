@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://basvcn5obt80h" path="res://game/character/skeleton.tscn" id="3"]
 [ext_resource type="Theme" uid="uid://dahcvlrj4jrqd" path="res://ui_elements/assets/themes/suspect_ui_small.tres" id="4"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4hxu0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mnnbe"]
 resource_local_to_scene = true
 shader = ExtResource("2")
 shader_parameter/skin_mask_color = Color(1, 0, 1, 1)
@@ -47,7 +47,7 @@ horizontal_alignment = 1
 light_mask = 2
 
 [node name="Skeleton3D" parent="CharacterElements" instance=ExtResource("3")]
-material = SubResource("ShaderMaterial_4hxu0")
+material = SubResource("ShaderMaterial_mnnbe")
 position = Vector2(-80, -190)
 scale = Vector2(0.2, 0.2)
 

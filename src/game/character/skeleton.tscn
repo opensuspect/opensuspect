@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://basvcn5obt80h"]
+[gd_scene load_steps=27 format=3 uid="uid://basvcn5obt80h"]
 
 [ext_resource type="Texture2D" uid="uid://cg7fshy4rkq7j" path="res://game/character/assets/textures/left_arm/white_shirt-red_sweater.png" id="3_2jioo"]
 [ext_resource type="Texture2D" uid="uid://bmmucgna58f0r" path="res://game/character/assets/textures/left_leg/white_shirt-red_sweater.png" id="4_yciqx"]
@@ -305,8 +305,6 @@ states/Walk/position = Vector2(535, 69)
 transitions = ["Idle", "Walk", SubResource("8"), "Walk", "RESET", SubResource("9"), "RESET", "Idle", SubResource("10"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_i86fy")]
 graph_offset = Vector2(-141, 37)
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id="12"]
-
 [node name="PlayerSkeleton" type="Node2D"]
 light_mask = 2
 material = SubResource("1")
@@ -432,7 +430,6 @@ libraries = {
 tree_root = SubResource("11")
 anim_player = NodePath("..")
 active = true
-parameters/playback = SubResource("12")
 
 [node name="Skeleton2D" type="Skeleton2D" parent="."]
 position = Vector2(420, 850)
@@ -461,10 +458,13 @@ bone_angle = 0.0
 
 [node name="LeftShoulder" type="Bone2D" parent="Skeleton2D/Hip"]
 position = Vector2(105, -180)
+rotation = 0.00264809
 rest = Transform2D(1, 0, 0, 1, 105, -180)
 
 [node name="LArm1" type="Bone2D" parent="Skeleton2D/Hip/LeftShoulder"]
 position = Vector2(0, 90)
+rotation = -0.000749007
+scale = Vector2(1, 1)
 rest = Transform2D(1, 0, 0, 1, 0, 90)
 
 [node name="LArm2" type="Bone2D" parent="Skeleton2D/Hip/LeftShoulder/LArm1"]
@@ -480,10 +480,13 @@ bone_angle = 0.0
 
 [node name="RightShoulder" type="Bone2D" parent="Skeleton2D/Hip"]
 position = Vector2(-155, -180)
+rotation = 0.0375547
+scale = Vector2(1, 1)
 rest = Transform2D(1, 0, 0, 1, -155, -180)
 
 [node name="RArm1" type="Bone2D" parent="Skeleton2D/Hip/RightShoulder"]
 position = Vector2(0, 90)
+rotation = -0.0347124
 rest = Transform2D(1, 0, 0, 1, 0, 90)
 
 [node name="RArm2" type="Bone2D" parent="Skeleton2D/Hip/RightShoulder/RArm1"]

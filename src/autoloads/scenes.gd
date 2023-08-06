@@ -48,7 +48,7 @@ func overlay(path: String, attachedResource: Resource = null) -> void:
 		_showLoaded(path, attachedResource) # Show the scene if it has already been loaded
 	else:
 		call_deferred("_deferredOverlay", path, true, attachedResource) # Otherwise load the scene
-	if path != sceneOrder.back():
+	if len(sceneOrder) == 0 or path != sceneOrder.back():
 		sceneOrder.append(path) # Add the path to sceneOrder if it isn't already there
 
 # Preload a child scene to the base scene, but don't show it
