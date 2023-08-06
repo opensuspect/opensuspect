@@ -136,7 +136,7 @@ func _registerCharacterResource(id: int, characterResource: CharacterResource) -
 
 func requestCharacterCustomizations() -> void:
 	## Call server to send all character data
-	rpc_id(1, "sendAllCharacterCustomizations")
+	sendAllCharacterCustomizations.rpc_id(1)
 
 func sendOwnCharacterData() -> void:
 	var id: int = Connections.getMyId()
@@ -148,13 +148,12 @@ func sendOwnCharacterData() -> void:
 	Connections.queueDataToSend("colors", characterRes.getColors(), -1)
 
 ## --Server Functions--
-
-# The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
-@rpc func sendAllCharacterCustomizations() -> void:
+@rpc("any_peer", "call_remote", "reliable", 0)
+func sendAllCharacterCustomizations() -> void:
 	## Get all character resourcse
 	var characterRes: Dictionary = {}
 	characterRes = getCharacterResources()
-	var senderId: int = get_tree().get_remote_sender_id()
+	var senderId: int = get_tree().get_multiplayer().get_remote_sender_id()
 	## For each character
 	for player in characterRes:
 		## Collect character outfit data
