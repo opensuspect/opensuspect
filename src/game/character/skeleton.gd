@@ -13,7 +13,7 @@ var colorMapDir: Dictionary = {
 var _itemsInHand: Array = []
 
 # --Public Variables--
-@onready var handNode: Node2D = $Skeleton3D/Hip/RightShoulder/RArm1/RArm2/RHand
+@onready var handNode: Node2D = $Skeleton2D/Hip/RightShoulder/RArm1/RArm2/RHand
 
 # Set the list of colormaps from the color map directory
 @onready var colorShaders = Resources.list(colorMapDir, extensions)

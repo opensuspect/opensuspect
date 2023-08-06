@@ -1,7 +1,6 @@
 extends Node2D
 
 @onready var fade_trigger: Area2D = $FadeTrigger
-@onready var players: Node2D = get_tree().get_root().get_node("Main/players")
 @onready var main_player: CharacterBody2D
 
 const fade_speed: float = 5.0

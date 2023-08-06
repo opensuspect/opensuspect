@@ -43,7 +43,7 @@ func createCharacter(networkId: int, name: String) -> CharacterResource:
 	_registerCharacterResource(networkId, characterResource)
 	## Set the name of the character
 	characterResource.setCharacterName(name)
-	var myId: int = get_tree().get_unique_id()
+	var myId: int = Connections.getMyId()
 	## If own character is added
 	if networkId == myId:
 		## Apply appearance to character
@@ -90,13 +90,13 @@ func removeCharacterResource(id: int) -> void:
 	_characterResources.erase(id)
 
 func getMyCharacterNode() -> Node:
-	var id: int = get_tree().get_unique_id()
+	var id: int = Connections.getMyId()
 	if not id in _characterResources:
 		return null
 	return getMyCharacterResource().getNode()
 
 func getMyCharacterResource() -> CharacterResource:
-	var id: int = get_tree().get_unique_id()
+	var id: int = Connections.getMyId()
 	if not id in _characterResources:
 		return null
 	return _characterResources[id]
@@ -136,10 +136,10 @@ func _registerCharacterResource(id: int, characterResource: CharacterResource) -
 
 func requestCharacterCustomizations() -> void:
 	## Call server to send all character data
-	rpc_id(1, "sendAllCharacterCustomizations")
+	sendAllCharacterCustomizations.rpc_id(1)
 
 func sendOwnCharacterData() -> void:
-	var id: int = get_tree().get_unique_id()
+	var id: int = Connections.getMyId()
 	## Get own character resource
 	var characterRes: CharacterResource
 	characterRes = Characters.getCharacterResource(id)
@@ -148,13 +148,12 @@ func sendOwnCharacterData() -> void:
 	Connections.queueDataToSend("colors", characterRes.getColors(), -1)
 
 ## --Server Functions--
-
-# The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
-@rpc func sendAllCharacterCustomizations() -> void:
+@rpc("any_peer", "call_remote", "reliable", 0)
+func sendAllCharacterCustomizations() -> void:
 	## Get all character resourcse
 	var characterRes: Dictionary = {}
 	characterRes = getCharacterResources()
-	var senderId: int = get_tree().get_remote_sender_id()
+	var senderId: int = get_tree().get_multiplayer().get_remote_sender_id()
 	## For each character
 	for player in characterRes:
 		## Collect character outfit data
@@ -172,7 +171,7 @@ func sendOwnCharacterData() -> void:
 func updateCharacterPosition(networkId: int, characterPos: Vector2) -> void:
 	#print("updating position of ", networkId, " to ", characterPos)
 	## if position is for own character, exit
-	if networkId == get_tree().get_unique_id():
+	if networkId == Connections.getMyId():
 		# don't update its position
 		return
 	## Set the position for character

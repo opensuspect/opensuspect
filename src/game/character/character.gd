@@ -11,10 +11,6 @@ signal player_disconnected(id)
 signal itemInteraction(item, interaction)
 signal taskInteraction(taskArea, interaction)
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-	
 # function called when character is spawned
 func spawn() -> void:
 	pass

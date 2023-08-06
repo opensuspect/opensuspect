@@ -157,8 +157,7 @@ func _setColorInfo(color: Color, position: Vector2) -> Dictionary:
 
 # Returns the color from the given color map, at the given relative co-ordinates
 func _colorFromMapXY(colorMapPath: String, relPos: Vector2) -> Color:
-	var colorMapTexture = Image.new()
-	var colorMap = colorMapTexture.load_from_file(colorMapPath) ## Loads the color map from given path
+	var colorMap = Image.load_from_file(colorMapPath) ## Loads the color map from given path
 	## Normalize coordinates
 	var maxX = colorMap.get_width() # Get width of the color map
 	var maxY = colorMap.get_height() # Get height of the color map

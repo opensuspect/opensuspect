@@ -8,31 +8,31 @@ extends Node2D
 const despawn_threshold: float = 5.0
 
 # The path to the object that will be spawned in this generator
-@export (String) var object_to_spawn_path := "res://game/maps/lobby/tree.tscn"
+@export var object_to_spawn_path: String = "res://game/maps/lobby/tree.tscn"
 # The size of the child pool manager's object pool
-@export (int) var pool_size := 10
+@export var pool_size: int = 10
 # The local coordinates that spawned objects will scroll to
-@export (Vector2) var scroll_target := Vector2.LEFT * 1000
+@export var scroll_target: Vector2 = Vector2.LEFT * 1000
 # The minimum distance that an object will spawn away from the camera
-@export (int) var distance_min := 100
+@export var distance_min: int = 100
 # The maximum distance that an object will spawn away from the camera
-@export (int) var distance_max := 200
+@export var distance_max: int = 200
 # The minimum time between object spawns
-@export (float) var spawn_delay_min := 0.5
+@export var spawn_delay_min: float = 0.5
 # The maximum time between object spawns
-@export (float) var spawn_delay_max := 1.0
+@export var spawn_delay_max: float = 1.0
 # Whether to initially spawn objects so they appear in the scene before scrolling
-@export (bool) var initial_spawn := true
+@export var initial_spawn: bool = true
 # Number of objects to initially spawn
-@export (int) var num_initial_spawn := 10
+@export var num_initial_spawn: int = 10
 # The minimum local spawn position of the prespawned object(s)
-@export (Vector2) var initial_spawn_position_min := Vector2.LEFT * 500
+@export var initial_spawn_position_min: Vector2 = Vector2.LEFT * 500
 # The maximum local spawn position of the prespawned object(s)
-@export (Vector2) var initial_spawn_position_max := Vector2.RIGHT * 500
+@export var initial_spawn_position_max: Vector2 = Vector2.RIGHT * 500
 # The path to the background which will be used to blend objects
-@export (NodePath) var background_path
+@export var background_path: NodePath
 # The distance that the background is away from the camera
-@export (float) var background_distance := 4096
+@export var background_distance: float = 4096
 
 # The scene of the object that will be spawned
 @onready var object_to_spawn: PackedScene = load(object_to_spawn_path)
@@ -62,7 +62,7 @@ func _physics_process(delta: float) -> void:
 		var instance: BackgroundObject = spawned_objects[index]
 		instance.global_position = instance.global_position.move_toward(scroll_target, scroll_speeds[index] * delta)
 		if (scroll_target - instance.global_position).length() <= despawn_threshold:
-			scroll_speeds.remove(index)
+			scroll_speeds.pop_at(index)
 			pool_manager.recycle(instance)
 
 func _spawn_object(global_spawn_position: Vector2) -> void:

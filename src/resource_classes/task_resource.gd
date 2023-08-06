@@ -12,9 +12,12 @@ class_name TaskResource
 var _inputProviders: Dictionary = {}
 
 var taskPopUpPath: String
-var taskUiNode: Node = null
-var taskObjectNode: Node2D: get = getTaskObjectNode, set = nothing
-var name: String: get = getName, set = nothing
+var _taskUiNode: Node = null
+var taskUiNode: Node: get = getTaskUiNode, set = toss
+var _taskObjectNode: Node2D
+var taskObjectNode: Node2D: get = getTaskObjectNode, set = toss
+var _name: String
+var name: String: get = getName, set = toss
 
 var taskState: Dictionary = {}
 var items: Dictionary = {}
@@ -25,18 +28,18 @@ signal state_changed
 signal run_action
 
 func getTaskObjectNode() -> Node2D:
-	return taskObjectNode
+	return _taskObjectNode
 
 func getTaskUiNode() -> Node:
-	return taskUiNode
+	return _taskUiNode
 
 func getName() -> String:
-	return name
+	return _name
 
 func getTaskPosition() -> Vector2:
 	return taskObjectNode.position
 
-func nothing(anything) -> void:
+func toss(anything) -> void:
 	assert(false) #,"Can't change this on the fly")
 
 func getItemResources() -> Dictionary:
@@ -44,8 +47,8 @@ func getItemResources() -> Dictionary:
 
 func init(newNode: Node2D) -> void:
 	assert(taskObjectNode == null)
-	taskObjectNode = newNode
-	name = taskObjectNode.name
+	_taskObjectNode = newNode
+	_name = taskObjectNode.name
 	var universalTaskUis: Dictionary
 	var mapTaskUis: Dictionary
 	var mapName: String = TransitionHandler.gameScene.actualMapName
@@ -67,7 +70,7 @@ func interact() -> void:
 	Scenes.overlay(taskPopUpPath, self)
 
 func activateUi(uiNode: Node) -> Dictionary:
-	taskUiNode = uiNode
+	_taskUiNode = uiNode
 	taskUiNode.connect("state_changed", Callable(self, "stateChanged"))
 	taskUiNode.connect("run_action", Callable(self, "action"))
 	taskUiNode.connect("deactivate_ui", Callable(self, "deactivateUi"))
@@ -78,7 +81,7 @@ func deactivateUi() -> void:
 	taskUiNode.disconnect("state_changed", Callable(self, "stateChanged"))
 	taskUiNode.disconnect("run_action", Callable(self, "action"))
 	taskUiNode.disconnect("deactivate_ui", Callable(self, "deactivateUi"))
-	taskUiNode = null
+	_taskUiNode = null
 	emit_signal("deactivate_ui")
 
 func stateChanged(newState: Dictionary) -> void:

@@ -7,9 +7,12 @@ enum ConnectionTypes {
 	CLIENT				# Client only, remote server
 }
 
-var connectionType: int = ConnectionTypes.LOCAL: get = getConnectionType, set = toss
-var myName: String = "": get = getMyName, set = toss
-var serverName: String = "": get = getServerName, set = toss
+var _connectionType: int = ConnectionTypes.LOCAL
+var connectionType: int: get = getConnectionType, set = toss
+var _myName: String = ""
+var myName: String: get = getMyName, set = toss
+var _serverName: String = ""
+var serverName: String: get = getServerName, set = toss
 const MAX_PLAYERS: int = 20
 var listConnections: Dictionary = {} # Only lists playing connections, dedicated server is not here
 
@@ -23,9 +26,9 @@ var _timeSinceDataSync: float = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	get_tree().connect("connected_to_server", Callable(self, "connectedOK"))
-	get_tree().connect("connection_failed", Callable(self, "connectedFail"))
-	get_tree().connect("server_disconnected", Callable(self, "disconnectedFromServer"))
+	get_tree().get_multiplayer().connect("connected_to_server", connectedOK)
+	get_tree().get_multiplayer().connect("connection_failed", connectedFail)
+	get_tree().get_multiplayer().connect("server_disconnected", disconnectedFromServer)
 
 func _process(delta: float) -> void:
 	if not TransitionHandler.isPlaying():
@@ -59,19 +62,20 @@ func _process(delta: float) -> void:
 		assert(false) #,"Unreachable")
 
 func toss(_newValue) -> void:
+	assert(false)
 	pass
 
 func getConnectionType() -> int:
-	return connectionType
+	return _connectionType
 
 func getMyName() -> String:
-	return myName
+	return _myName
 
 func getServerName() -> String:
-	return serverName
+	return _serverName
 
 func getMyId() -> int:
-	return get_tree().get_unique_id()
+	return get_tree().get_multiplayer().get_unique_id()
 
 func isServer() -> bool:
 	return isDedicatedServer() or isClientServer()
@@ -97,18 +101,18 @@ func joinGame(serverName: String, portNumber: int, playerName: String) -> void:
 	## Initialize Godot networking
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	peer.create_client(serverName, portNumber)
-	get_tree().network_peer = peer
-	var id: int = get_tree().get_multiplayer_peer().get_unique_id()
+	get_tree().get_multiplayer().multiplayer_peer = peer
+	var id: int = get_tree().get_multiplayer().get_unique_id()
 	## Save data in globals
-	connectionType = ConnectionTypes.CLIENT
-	myName = playerName
-	#print_debug("Client_id is ", id)
+	_connectionType = ConnectionTypes.CLIENT
+	_myName = playerName
+	print_debug("Client_id is ", id)
 	listConnections[id] = myName
 
 func connectedOK() -> void:
 	print_debug("Connected")
 	## Send own data to server
-	rpc_id(1, "receiveNewPlayerData", myName)
+	receiveNewPlayerData.rpc_id(1, myName)
 	## Load the game scene
 	TransitionHandler.loadGameScene()
 
@@ -119,7 +123,8 @@ func connectedFail() -> void:
 func disconnectedFromServer() -> void:
 	assert(false) #,"Not implemented yet")
 
-@rpc func receiveBulkPlayerData(connections: Dictionary) -> void:
+@rpc("authority", "call_remote", "reliable", 0)
+func receiveBulkPlayerData(connections: Dictionary) -> void:
 	print_debug("Receiving data from server: ", connections)
 	## Save all received data
 	listConnections = connections
@@ -133,13 +138,15 @@ func disconnectedFromServer() -> void:
 		gameScene.addCharacter(characterRes)
 	TransitionHandler.previouslyConnectedDataReceived()
 
-@rpc func setServerName(serverNewName: String) -> void:
-	serverName = serverNewName
+@rpc("authority", "call_remote", "reliable", 0)
+func setServerName(serverNewName: String) -> void:
+	_serverName = serverNewName
 	#print_debug("Server name: ", serverName)
 
-@rpc func receivePlayerData(id: int, name: String) -> void:
+@rpc("authority", "call_remote", "reliable", 0)
+func receivePlayerData(id: int, name: String) -> void:
 	## If the data is not own data
-	if id != get_tree().get_unique_id():
+	if id != getMyId():
 		## Save the data
 		listConnections[id] = name
 		var gameScene: Node = TransitionHandler.gameScene
@@ -169,7 +176,7 @@ func _sendQueuedDataToServer() -> void:
 @rpc func _receiveAllGameData(positions: Dictionary, gameData: Array) -> void:
 	if not TransitionHandler.isPlaying():
 		return
-	var myId: int = get_tree().get_unique_id()
+	var myId: int = getMyId()
 	## Loop through all characters
 	for characterId in positions:
 		# if this position is for this client's character
@@ -195,14 +202,14 @@ func createGame(portNumber: int, playerName: String) -> void:
 	## Initialize Godot networking
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	peer.create_server(portNumber, MAX_PLAYERS)
-	get_tree().network_peer = peer
-	get_tree().connect("peer_connected", Callable(self, "connectedNewPlayer"))
-	get_tree().connect("peer_disconnected", Callable(self, "disconnectedPlayer"))
-	connectionType = ConnectionTypes.CLIENT_SERVER
+	get_tree().get_multiplayer().multiplayer_peer = peer
+	peer.peer_connected.connect(connectedNewPlayer)
+	peer.peer_disconnected.connect(disconnectedPlayer)
+	_connectionType = ConnectionTypes.CLIENT_SERVER
 	## Save data in globals
 	listConnections[1] = playerName
-	myName = playerName
-	serverName = playerName + "'s Server"
+	_myName = playerName
+	_serverName = playerName + "'s Server"
 	## Load the game scene
 	TransitionHandler.loadGameScene()
 
@@ -210,28 +217,28 @@ func createDedicated(portNumber: int, srvName: String) -> void:
 	## Initialize Godot networking
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	peer.create_server(portNumber, MAX_PLAYERS)
-	get_tree().network_peer = peer
-	get_tree().connect("peer_connected", Callable(self, "connectedNewPlayer"))
-	get_tree().connect("peer_disconnected", Callable(self, "disconnectedPlayer"))
+	get_tree().get_multiplayer().multiplayer_peer = peer
+	peer.peer_connected.connect(connectedNewPlayer)
+	peer.peer_disconnected.connect(disconnectedPlayer)
 	## Save data in globals
-	connectionType = ConnectionTypes.DEDICATED_SERVER
-	serverName = srvName
+	_connectionType = ConnectionTypes.DEDICATED_SERVER
+	_serverName = srvName
 	## Load the game scene
 	TransitionHandler.loadGameScene()
 
 # Once the newly joined player sent us their data, that's when we send them all the data
-# The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
-@rpc func receiveNewPlayerData(newPlayerName: String) -> void:
+@rpc("any_peer", "call_remote", "reliable", 0)
+func receiveNewPlayerData(newPlayerName: String) -> void:
 	print_debug("new player joined ", newPlayerName)
 	## Verify sender and save data
-	var senderId: int = get_tree().get_remote_sender_id()
+	var senderId: int = get_tree().get_multiplayer().get_remote_sender_id()
 	listConnections[senderId] = newPlayerName
 	#print_debug(listConnections)
-	rpc_id(senderId, "setServerName", serverName) ## Send server name
+	setServerName.rpc_id(senderId, serverName) ## Send server name
 	## Send all player data to new player
-	rpc_id(senderId, "receiveBulkPlayerData", listConnections)
+	receiveBulkPlayerData.rpc_id(senderId, listConnections)
 	## Send new player data to all players
-	rpc("receivePlayerData", senderId, newPlayerName)
+	receivePlayerData.rpc(senderId, newPlayerName)
 	## Add a character to the map 
 	var gameScene: Node = TransitionHandler.gameScene
 	var characterRes: CharacterResource
@@ -260,13 +267,16 @@ func handleDisconnect(id:int) -> void:
 	Characters.removeCharacterResource(id)
 
 func allowNewConnections(switch: bool) -> void:
-	get_tree().refuse_new_connections = not switch
+	get_tree().get_multiplayer(
+		).get_multiplayer_peer(
+		).refuse_new_connections = not switch
 
 # receive a client's position
 # master keyword means that this function will only be run on the server when RPCed
 # The master and mastersync rpc behavior is not officially supported anymore. Try using another keyword or making custom logic using get_multiplayer().get_remote_sender_id()
-@rpc func _receiveGameDataFromClient(newPos: Vector2, gameData: Array) -> void:
-	var sender: int = get_tree().get_remote_sender_id()
+@rpc("any_peer", "call_remote", "reliable", 0)
+func _receiveGameDataFromClient(newPos: Vector2, gameData: Array) -> void:
+	var sender: int = get_tree().get_multiplayer().get_remote_sender_id()
 	## Set character position
 	Characters.updateCharacterPosition(sender, newPos)
 	## Handle additional received data

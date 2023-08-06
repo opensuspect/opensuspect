@@ -4,7 +4,7 @@ class_name BackgroundObject
 @onready var sprite: Sprite2D = $Sprite2D
 
 # Array of textures to choose from and set the sprite to
-@export (Array, Texture2D) var textures
+@export var textures: Array[Texture2D]
 
 func _ready() -> void:
 	var random_index : int = 0
