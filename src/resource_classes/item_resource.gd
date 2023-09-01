@@ -139,6 +139,7 @@ func canBePickedUp(characterRes: CharacterResource) -> bool:
 		return false
 	return true
 
+# warning-ignore:unused_argument
 func canBeDropped(characterRes: CharacterResource) -> bool:
 	return true
 
@@ -162,14 +163,19 @@ func itemAbilities() -> Array:
 func abilityActivateIcon(abilityName: String) -> Texture:
 	return _abilityIcons[abilityName]
 
+# warning-ignore:unused_argument
+# warning-ignore:unused_argument
 func canBeActivated(abilityName: String, properties: Dictionary) -> bool:
 	return false
 
+# warning-ignore:unused_argument
 # Placeholder function for inherited items which have abilities
 func attemptActivate(abilityName: String) -> void:
 	pass
 
 # Placeholder function for inherited items which have abilities
+# warning-ignore:unused_argument
+# warning-ignore:unused_argument
 func activate(abilityName: String, properties: Dictionary) -> void:
 	pass
 

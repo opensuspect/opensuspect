@@ -23,8 +23,11 @@ var _timeSinceDataSync: float = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+# warning-ignore:return_value_discarded
 	get_tree().connect("connected_to_server", self, "connectedOK")
+# warning-ignore:return_value_discarded
 	get_tree().connect("connection_failed", self, "connectedFail")
+# warning-ignore:return_value_discarded
 	get_tree().connect("server_disconnected", self, "disconnectedFromServer")
 
 func _process(delta: float) -> void:
@@ -93,9 +96,11 @@ func isConnectionType(type: int) -> bool:
 
 # -------------- Client side code --------------
 
+# warning-ignore:shadowed_variable
 func joinGame(serverName: String, portNumber: int, playerName: String) -> void:
 	## Initialize Godot networking
 	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
+# warning-ignore:return_value_discarded
 	peer.create_client(serverName, portNumber)
 	get_tree().network_peer = peer
 	var id: int = get_tree().get_network_peer().get_unique_id()
@@ -194,9 +199,12 @@ func createGame(portNumber: int, playerName: String) -> void:
 	print_debug("port: ", portNumber)
 	## Initialize Godot networking
 	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
+# warning-ignore:return_value_discarded
 	peer.create_server(portNumber, MAX_PLAYERS)
 	get_tree().network_peer = peer
+# warning-ignore:return_value_discarded
 	get_tree().connect("network_peer_connected", self, "connectedNewPlayer")
+# warning-ignore:return_value_discarded
 	get_tree().connect("network_peer_disconnected", self, "disconnectedPlayer")
 	connectionType = ConnectionTypes.CLIENT_SERVER
 	## Save data in globals
@@ -209,9 +217,12 @@ func createGame(portNumber: int, playerName: String) -> void:
 func createDedicated(portNumber: int, srvName: String) -> void:
 	## Initialize Godot networking
 	var peer: NetworkedMultiplayerENet = NetworkedMultiplayerENet.new()
+# warning-ignore:return_value_discarded
 	peer.create_server(portNumber, MAX_PLAYERS)
 	get_tree().network_peer = peer
+# warning-ignore:return_value_discarded
 	get_tree().connect("network_peer_connected", self, "connectedNewPlayer")
+# warning-ignore:return_value_discarded
 	get_tree().connect("network_peer_disconnected", self, "disconnectedPlayer")
 	## Save data in globals
 	connectionType = ConnectionTypes.DEDICATED_SERVER
@@ -237,6 +248,7 @@ master func receiveNewPlayerData(newPlayerName: String) -> void:
 	characterRes = Characters.createCharacter(senderId, newPlayerName)
 	gameScene.addCharacter(characterRes)
 
+# warning-ignore:unused_argument
 func connectedNewPlayer(id: int) -> void:
 	pass
 
@@ -252,6 +264,7 @@ func disconnectedPlayer(id: int) -> void:
 
 ## this function actually removes the player and stuff
 func handleDisconnect(id:int) -> void:
+# warning-ignore:return_value_discarded
 	listConnections.erase(id)
 	var characterResource: CharacterResource = Characters.getCharacterResource(id)
 	characterResource.disconnected() ## call this function on the player to handle in-game reprocussions

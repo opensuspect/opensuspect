@@ -20,9 +20,11 @@ func createAbilityHudNode() -> Node:
 func activate() -> void:
 	pass
 
+# warning-ignore:unused_argument
 func canExecute(properties: Dictionary) -> bool:
 	return false
 
+# warning-ignore:unused_argument
 func execute(properties: Dictionary) -> void:
 	pass
 
