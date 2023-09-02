@@ -32,6 +32,7 @@ export (Vector2) var initial_spawn_position_max := Vector2.RIGHT * 500
 # The path to the background which will be used to blend objects
 export (NodePath) var background_path
 # The distance that the background is away from the camera
+# warning-ignore:export_hint_type_mistmatch
 export (float) var background_distance := 4096
 
 # The scene of the object that will be spawned
@@ -45,9 +46,11 @@ var scroll_speeds: Array = []
 func _ready() -> void:
 	scroll_target += global_position
 	var temp_instance: IPoolable = object_to_spawn.instance()
+# warning-ignore:return_value_discarded
 	pool_manager.create_pool("MovingObjects", temp_instance, pool_size)
 	temp_instance.queue_free()
 	if initial_spawn:
+# warning-ignore:unused_variable
 		for i in range(num_initial_spawn):
 			var initial_spawn_x: float = rand_range(initial_spawn_position_min.x, initial_spawn_position_max.x)
 			var initial_spawn_y: float = rand_range(initial_spawn_position_min.y, initial_spawn_position_max.y)
@@ -80,11 +83,17 @@ func _spawn_object(global_spawn_position: Vector2) -> void:
 	if instance == null:
 		return
 	instance.global_position = global_spawn_position
+# warning-ignore:integer_division
+# warning-ignore:narrowing_conversion
+# warning-ignore:integer_division
 	instance.z_index = -floor(distance / 10)
+# warning-ignore:incompatible_ternary
 	instance.scale = Vector2.ONE * (100.0 / distance) if distance > 0 else 1.0
 	var texture: Texture = instance.sprite.texture
 	var offset: float = 1.0 / (texture.get_size().y * instance.scale.y * instance.sprite.scale.y)
 	instance.sprite.position += Vector2.UP * offset
+# warning-ignore:incompatible_ternary
+# warning-ignore:incompatible_ternary
 	scroll_speeds.append((50_000.0 / distance) if distance > 0 else 50_000)
 	if not instance.material is ShaderMaterial or not background is ColorRect:
 		return

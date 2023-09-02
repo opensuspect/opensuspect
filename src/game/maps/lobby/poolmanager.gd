@@ -19,6 +19,7 @@ var _spawned_objects: Array = [] setget , get_spawned_objects
 # Objects that are recycled and inactive
 var _recycled_objects: Array = [] setget , get_recycled_objects
 
+# warning-ignore:unused_argument
 func create_pool(pool_name: String, pool_object: IPoolable, size: int = 100, manager: PoolManager = self) -> ObjectPool:
 	"""Creates a pool of objects."""
 	var object_pool := ObjectPool.new(pool_object, size)
@@ -94,6 +95,7 @@ class ObjectPool extends Node:
 	var object: IPoolable
 
 	# Class constructor
+# warning-ignore:shadowed_variable
 	func _init(pool_object: IPoolable, size: int) -> void:
 		self.object = pool_object
 		self.size = size
@@ -117,6 +119,7 @@ class ObjectPool extends Node:
 
 	func _init_pool() -> void:
 		"""Initializes the object pool."""
+# warning-ignore:unused_variable
 		for i in range(self.size):
 			var new_object: IPoolable = self.object.duplicate()
 			self.pool.push_back(new_object)

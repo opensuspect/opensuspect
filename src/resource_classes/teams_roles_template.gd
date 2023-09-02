@@ -18,25 +18,34 @@ func getRoleColor(team: String, role: String) -> Color:
 	return textColor
 
 func assignTeamsRoles(characterList: Array) -> Dictionary:
+# warning-ignore:unassigned_variable
 	var teamsRoles: Dictionary
 	for character in characterList:
 		teamsRoles[character] = {"team": "Agents", "role": "Agent"}
 	return teamsRoles
 
 # This function shows how someone with a certain team and role sees everyone else
+# warning-ignore:unused_argument
+# warning-ignore:unused_argument
 func getVisibleTeamRole(realTeamsRoles: Dictionary, myTeam: String, myRole: String) -> Dictionary:
 	return realTeamsRoles
 
 # This function tells the role announcement scene what teams and roles should be
 # displayed.
+# warning-ignore:unused_argument
+# warning-ignore:unused_argument
+# warning-ignore:unused_argument
 func getTeamsRolesToShow(realTeamsRoles: Dictionary, myTeam: String, myRole: String) -> Array:
 	return [{"team": "Agents", "role": "Agent"}]
 	
+# warning-ignore:unused_argument
 func assignAbilities(characterList: Array, teamsRoles: Dictionary) -> Dictionary:
+# warning-ignore:unassigned_variable
 	var abilities: Dictionary
 	for character in characterList:
 		abilities[character] = []
 	return abilities
 
+# warning-ignore:unused_argument
 func getAbilityByName(name: String) -> Ability:
 	return null
