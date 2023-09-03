@@ -30,6 +30,7 @@ func itemAbilities() -> Array:
 	else:
 		return []
 
+# warning-ignore:unused_argument
 func canBeActivated(abilityName: String, properties: Dictionary) -> bool:
 	if not abilityName in _abilities:
 		return false
@@ -49,6 +50,7 @@ func attemptActivate(abilityName: String) -> void:
 		return
 	TransitionHandler.gameScene.itemActivateAttempt(itemId, abilityName, properties)
 
+# warning-ignore:unused_argument
 func activate(abilityName: String, properties: Dictionary) -> void:
 	if not abilityName in _abilities:
 		return

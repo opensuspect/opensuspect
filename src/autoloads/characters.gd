@@ -87,6 +87,7 @@ func removeCharacterResource(id: int) -> void:
 		assert(false, "Thre should be no use case when we remove a non-existent character id")
 		# if running in release mode, return
 		return
+# warning-ignore:return_value_discarded
 	_characterResources.erase(id)
 
 func getMyCharacterNode() -> Node:

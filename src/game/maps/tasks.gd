@@ -20,10 +20,14 @@ func _ready():
 				tasksWithInput[input] = []
 			tasksWithInput[input].append(taskRes)
 		taskRes.init(taskNode)
+# warning-ignore:return_value_discarded
 		taskRes.connect("stateChanged", self, "taskChanged")
+# warning-ignore:return_value_discarded
 		taskRes.connect("action", self, "taskActionAttempt")
 		if myCharacter != null:
+# warning-ignore:return_value_discarded
 			taskRes.connect("activateUi", myCharacter, "setTaskMode")
+# warning-ignore:return_value_discarded
 			taskRes.connect("deactivateUi", myCharacter, "endTaskMode")
 	for taskName in taskResources:
 		taskRes = taskResources[taskName]
@@ -41,6 +45,8 @@ func taskChanged(taskRes: TaskResource, newState: Dictionary) -> void:
 	taskData["newState"] = newState
 	Connections.queueDataToSend("taskChanged", taskData, -1)
 
+# warning-ignore:unused_argument
+# warning-ignore:unused_argument
 func taskActionAttempt(taskRes: TaskResource, actions: Dictionary) -> void:
 	pass
 

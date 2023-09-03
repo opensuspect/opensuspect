@@ -325,6 +325,7 @@ func getSpeed() -> float:
 	assert(false, "not implemented")
 	return 0.0
 
+# warning-ignore:unused_argument
 func setSpeed(value: float) -> void:
 	assert(false, "not implemented")
 

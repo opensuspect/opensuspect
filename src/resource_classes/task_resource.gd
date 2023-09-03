@@ -36,6 +36,7 @@ func getName() -> String:
 func getTaskPosition() -> Vector2:
 	return taskObjectNode.position
 
+# warning-ignore:unused_argument
 func nothing(anything) -> void:
 	assert(false, "Can't change this on the fly")
 
@@ -66,10 +67,14 @@ func addItem(itemRes: Resource, position: String) -> void:
 func interact() -> void:
 	Scenes.overlay(taskPopUpPath, self)
 
+
+# warning-ignore:return_value_discarded
 func activateUi(uiNode: Node) -> Dictionary:
 	taskUiNode = uiNode
 	taskUiNode.connect("stateChanged", self, "stateChanged")
+	# warning-ignore:return_value_discarded
 	taskUiNode.connect("action", self, "action")
+	# warning-ignore:return_value_discarded
 	taskUiNode.connect("deactivate", self, "deactivateUi")
 	emit_signal("activateUi")
 	return taskState.duplicate()
@@ -99,14 +104,16 @@ func attemptItemPickOut(itemId: int) -> void:
 			## Tell the server to attempt picking the item up
 			TransitionHandler.gameScene.itemPickUpAttempt(itemId)
 			return
-
+# warning-ignore:unused_argument
 func canItemBePickedOut(intemId: int) -> bool:
 	return true
 
+# warning-ignore:unused_argument
 func removeItem(itemRes: Resource, characterRes: Resource) -> void:
 	for itemLoc in items:
 		if items[itemLoc] == itemRes:
 			itemRes.removeFromTask()
+			# warning-ignore:return_value_discarded
 			items.erase(itemLoc)
 			return
 

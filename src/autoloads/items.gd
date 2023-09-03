@@ -81,8 +81,10 @@ func getItemResource(itemId) -> ItemResource:
 	return _items[itemId]
 
 func removeItem(itemId: int) -> void:
+# warning-ignore:unused_variable
 	var itemNode: KinematicBody2D
 	_items[itemId].remove()
+# warning-ignore:return_value_discarded
 	_items.erase(itemId)
 
 func clearItems() -> void:

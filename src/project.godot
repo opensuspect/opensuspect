@@ -147,6 +147,7 @@ window/stretch/aspect="expand"
 [global]
 
 collision=false
+warning=false
 
 [input]
 

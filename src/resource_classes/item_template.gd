@@ -40,6 +40,7 @@ func configureItemResource(itemResource: ItemResource):
 		itemResource.set(property, get(property))
 
 # properties dictionary is not used by default. It is a placeholder for more complex inhereted items.
+# warning-ignore:unused_argument
 func createItemResource(properties: Dictionary) -> ItemResource:
 	# initialize a new ItemResource
 	var itemResource: ItemResource = ItemResource.new()

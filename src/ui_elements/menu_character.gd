@@ -24,5 +24,6 @@ func setAppearance(outfit: Dictionary, colors: Dictionary):
 
 # --Private Functions--
 func _ready():
+# warning-ignore:return_value_discarded
 	Appearance.connect("appearanceChanged", self, "applyFromAppearance") # Signal from appearance to set skeleton config
 	Appearance.randomizeIfUnset()

@@ -25,7 +25,9 @@ func _ready():
 	else:
 		showStartButton(false)
 	TransitionHandler.gameScene.setHudNode(self)
+# warning-ignore:return_value_discarded
 	TransitionHandler.gameScene.connect("abilityAssigned", self, "addAbility")
+# warning-ignore:return_value_discarded
 	TransitionHandler.gameScene.connect("clearAbilities", self, "clearAbilities")
 
 func showStartButton(buttonShow: bool = true) -> void:
@@ -45,6 +47,7 @@ func _on_GameStart_pressed() -> void:
 	else:
 		assert(false, "Unreachable")
 
+# warning-ignore:unused_argument
 func addAbility(buttontext: String, abilityResource: Ability) -> void:
 	var newButton: Node = abilityResource.createAbilityHudNode()
 	abilityBox.add_child(newButton)

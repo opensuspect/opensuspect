@@ -29,6 +29,7 @@ func _ready() -> void:
 	## Game scene loaded
 	TransitionHandler.gameLoaded(self)
 
+# warning-ignore:unused_argument
 func _physics_process(delta: float) -> void:
 	if not TransitionHandler.isPlaying():
 		return
@@ -77,6 +78,7 @@ func _process(delta: float) -> void:
 		return
 	## Get movement vector based on keypress (not normalized)
 	var movementVec: Vector2 = getMovementInput(false)
+# warning-ignore:unused_variable
 	var amountMoved: Vector2
 	amountMoved = myCharacterRes.moveCommand(delta, movementVec)
 
@@ -146,7 +148,9 @@ func addCharacter(characterRes: CharacterResource):
 	var myId: int = Connections.getMyId()
 	## If own character is added
 	if characterRes.getNetworkId() == myId:
+# warning-ignore:return_value_discarded
 		newCharacter.connect("itemInteraction", self, "itemInteract")
+# warning-ignore:return_value_discarded
 		newCharacter.connect("taskInteraction", actualMap, "taskInteract")
 	## Spawn the character
 	spawnCharacter(characterRes)
@@ -221,6 +225,7 @@ func itemActivateAttempt(itemId: int, abilityName: String, properties: Dictionar
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
 
+# warning-ignore:shadowed_variable
 func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
 	var allCharacters: Dictionary = Characters.getCharacterResources()
 	var teamName: String
@@ -384,6 +389,7 @@ mastersync func itemDropServer(itemId: int) -> void:
 		rpc("itemDropClient", playerId, itemId)
 
 mastersync func itemActivateServer(itemId: int, abilityName: String, properties: Dictionary) -> void:
+# warning-ignore:unused_variable
 	var playerId: int = get_tree().get_rpc_sender_id()
 	var itemRes: ItemResource = Items.getItemResource(itemId)
 	if itemRes.canBeActivated(abilityName, properties):

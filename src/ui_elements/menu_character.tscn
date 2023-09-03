@@ -1,13 +1,14 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://ui_elements/menu_character.gd" type="Script" id=1]
-[ext_resource path="res://game/character/assets/shaders/character_outline.shader" type="Shader" id=2]
 [ext_resource path="res://game/character/assets/shaders/skin_color_key.shader" type="Shader" id=3]
 [ext_resource path="res://game/character/skeleton.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui_elements/assets/shaders/character_outline.shader" type="Shader" id=5]
 
 [sub_resource type="ShaderMaterial" id=3]
-shader = ExtResource( 2 )
+shader = ExtResource( 5 )
+shader_param/line_color = Color( 1, 1, 1, 1 )
+shader_param/line_thickness = 1.0
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true

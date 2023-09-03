@@ -106,6 +106,7 @@ func createDedicated() -> void:
 	## Create a dedicated server
 	Connections.createDedicated(port, name)
 
+# warning-ignore:shadowed_variable
 func joinEvent(menu: int) -> void:
 	## Checks menu
 	match menu:

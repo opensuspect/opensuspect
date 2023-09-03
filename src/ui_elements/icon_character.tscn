@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://ui_elements/icon_character.gd" type="Script" id=1]
-[ext_resource path="res://game/character/assets/shaders/character_outline.shader" type="Shader" id=2]
+[ext_resource path="res://ui_elements/assets/shaders/character_outline.shader" type="Shader" id=2]
 [ext_resource path="res://game/character/skeleton.tscn" type="PackedScene" id=4]
 
 [sub_resource type="ShaderMaterial" id=3]
