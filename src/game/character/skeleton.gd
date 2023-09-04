@@ -1,5 +1,4 @@
 extends Node2D
-
 # --Private Variables--
 
 # Set the accepted file extensions to ".png"

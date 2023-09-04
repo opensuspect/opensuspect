@@ -140,7 +140,8 @@ func _on_Random_pressed() -> void:
 
 # Switches back to the previous menu
 func _on_Back_pressed() -> void:
-	Scenes.back()
+	get_parent().setVisibleMenuWithLogo(0)
+	queue_free()
 
 # Open the save popup
 func _on_Save_pressed() -> void:
@@ -148,8 +149,10 @@ func _on_Save_pressed() -> void:
 
 # Switch to closet scene
 func _on_Closet_pressed():
-	Scenes.overlay("res://ui_elements/appearance/closet.tscn")
-
+#	Scenes.overlay("res://ui_elements/appearance/closet.tscn")
+	$MenuMargin.hide()
+	Scenes.addChild(self,"res://ui_elements/appearance/closet.tscn")
+	
 # Hide darkener on save popup close
 func _on_Popup_hide() -> void:
 	$Darken.hide()

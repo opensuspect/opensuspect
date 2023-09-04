@@ -4,9 +4,9 @@ onready var doorOpened: Node = $DoorOpened
 onready var doorClosed: Node = $DoorClosed
 
 func doorClose() -> void:
-	doorClosed.visible = true
-	doorOpened.visible = false
+	doorClosed.show()
+	doorOpened.hide()
 
 func doorOpen() -> void:
-	doorClosed.visible = false
-	doorOpened.visible = true
+	doorClosed.hide()
+	doorOpened.show()

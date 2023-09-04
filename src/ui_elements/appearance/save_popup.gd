@@ -30,6 +30,7 @@ func _appendConfig(configName):
 
 # Write the loaded data to disk
 func _saveData():
+# warning-ignore:return_value_discarded
 	GameData.write(NAMESPACE, configData)
 
 func _on_Save_pressed():
