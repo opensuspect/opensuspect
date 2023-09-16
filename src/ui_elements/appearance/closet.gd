@@ -9,6 +9,7 @@ onready var selectButton: Control = $MenuMargin/HBoxContainer/CharacterBox/Butto
 onready var deleteButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Delete
 onready var nameLabel: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Label
 onready var infoMessage: CenterContainer = $MenuMargin/HBoxContainer/ClosetBox/Panel/CenterContainer
+onready var appearanceMenu = get_node("/root/MenuBase/MainMenu/AppearanceEditor/MenuMargin")
 
 var configData: Dictionary
 var configList: Array
@@ -112,14 +113,14 @@ func _deleteConfig(name: String) -> bool:
 # --Signal Functions--
 
 func _on_Back_pressed() -> void:
-	get_node("/root/MenuBase/MainMenu/AppearanceEditor/MenuMargin").show()
+	appearanceMenu.show()
 	queue_free()
 func _on_Select_pressed() -> void:
 	## Set appearance
 	Appearance.setConfig(selectedOutfit, selectedColors)
 	## Set customOutfit to [TRUE] in appearance.gd
 	Appearance.customOutfit = true
-	$MenuMargin.show()
+	appearanceMenu.show()
 	queue_free()
 
 func _on_item_selected(index) -> void:
