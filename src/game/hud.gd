@@ -18,8 +18,7 @@ var pickedUp: Array = []
 var dropUi: Array = []
 var itemUse: Array = []
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	if Connections.isServer():
 		showStartButton()
 	else:
