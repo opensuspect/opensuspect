@@ -1,0 +1,10 @@
+res://default_env.tres
+res://ui_elements/menu_base.tscn
+res://ui_elements/assets/themes/suspect_font_label.tres
+res://ui_elements/assets/themes/suspect_font_main.tres
+res://ui_elements/assets/themes/suspect_font_label_small.tres
+res://ui_elements/assets/themes/suspect_ui_small.tres
+res://ui_elements/assets/themes/suspect_font_main_small.tres
+res://ui_elements/assets/themes/suspect_ui.tres
+res://game/character/character.tscn
+res://game/character/skeleton.tscn

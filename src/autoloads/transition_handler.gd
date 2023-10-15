@@ -40,7 +40,6 @@ func loadGameScene() -> void:
 	currentState = States.WAITING
 #	Scenes.switchBase("res://game/game.tscn", "res://game/hud.tscn")
 	Scenes.addChild(get_tree().get_root(),"res://game/game.tscn")
-	Scenes.addChild(get_tree().get_root(),"res://game/hud.tscn")
 	
 
 func gameStarted() -> void:
