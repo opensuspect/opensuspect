@@ -2,6 +2,7 @@ extends TaskResource
 class_name GasPressChResource
 
 func stateRemoteChange(newState: Dictionary) -> bool:
+# warning-ignore:return_value_discarded
 	.stateRemoteChange(newState)
 	if taskUiNode != null:
 		var pressure: float

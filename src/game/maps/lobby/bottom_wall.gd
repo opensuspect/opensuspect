@@ -1,7 +1,6 @@
 extends YSort
 
-onready var fade_trigger: Area2D = $FadeTrigger
-onready var players: YSort = get_tree().get_root().get_node("Main/players")
+onready var fade_trigger: Area2D = $FadeTrigger 
 onready var main_player: KinematicBody2D
 
 const fade_speed: float = 5.0

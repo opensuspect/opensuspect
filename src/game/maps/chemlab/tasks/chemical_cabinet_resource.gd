@@ -28,11 +28,13 @@ func init(newNode: YSort) -> void:
 	_doorTimer = Timer.new()
 	_doorTimer.one_shot = true
 	_doorTimer.wait_time = 7
+# warning-ignore:return_value_discarded
 	_doorTimer.connect("timeout", self, "_doorAutoClose")
 	taskObjectNode.add_child(_doorTimer)
 	_handleTimer = Timer.new()
 	_handleTimer.one_shot = true
 	_handleTimer.wait_time = 7
+# warning-ignore:return_value_discarded
 	_handleTimer.connect("timeout", self, "_handleReset")
 	taskObjectNode.add_child(_handleTimer)
 
@@ -44,6 +46,7 @@ func stateChanged(newState: Dictionary) -> void:
 		_handleTimer.start()
 
 func stateRemoteChange(newState: Dictionary) -> bool:
+# warning-ignore:return_value_discarded
 	.stateRemoteChange(newState)
 	if "door" in newState:
 		_setDoor(newState["door"])
@@ -51,6 +54,7 @@ func stateRemoteChange(newState: Dictionary) -> bool:
 		_handleTimer.start()
 	return true
 
+# warning-ignore:unused_argument
 func canItemBePickedOut(intemId: int) -> bool:
 	return taskState["door"]
 

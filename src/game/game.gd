@@ -113,6 +113,7 @@ func loadMap(mapName: String) -> void:
 		corpse.queue_free()
 	## Load map and place it on scene tree
 	var mapPath: String = "res://game/maps/" + mapName + "/" + mapName + ".tscn"
+	
 	actualMap = ResourceLoader.load(mapPath).instance()
 	actualMap.setHudNode(hudNode)
 	actualMapName = mapName

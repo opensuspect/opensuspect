@@ -13,6 +13,7 @@ func stateChanged(newState: Dictionary) -> void:
 	taskUiNode.setLowPressNeedle(getLowPressure())
 
 func stateRemoteChange(newState: Dictionary) -> bool:
+# warning-ignore:return_value_discarded
 	.stateRemoteChange(newState)
 	if taskUiNode != null:
 		taskUiNode.setHighPressNeedle(getHighPressure())
