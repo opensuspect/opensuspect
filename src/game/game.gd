@@ -18,6 +18,7 @@ onready var corpsesNode: Node2D = $Corpses
 onready var itemsNode: Node2D = $Items
 onready var ghostsNode: Node2D = $Ghosts
 onready var roleScreenTimeout: Timer = $RoleScreenTimeout
+onready var hudView: CanvasLayer = $HudView
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 signal teamsRolesAssigned
@@ -28,6 +29,7 @@ signal chatMessageReceived
 func _ready() -> void:
 	## Game scene loaded
 	TransitionHandler.gameLoaded(self)
+	Scenes.addChild(hudView, "res://game/hud.tscn")
 
 # warning-ignore:unused_argument
 func _physics_process(delta: float) -> void:
