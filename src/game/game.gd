@@ -346,7 +346,8 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 			characterResource.addAbility(ability)
 			#print_debug(character, ": ", ability.getName())
 			# TODO: RPC should not be done directly in the game scene
-			rpc_id(character, "receiveAbility", ability.getName())
+			if character != Connections.getMyId():
+				rpc_id(character, "receiveAbility", ability.getName())
 	# TODO: I'm not sure this is the appropriate place to reset the HUD for the abilities.
 	emit_signal("clearAbilities")
 	var rolesToShow: Array = []
