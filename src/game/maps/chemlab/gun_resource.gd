@@ -20,13 +20,18 @@ func registerOwner(newOwner) -> void:
 	.registerOwner(newOwner)
 	gunRangeNode = gunRangeScene.instance()
 	newOwner.getCharacterNode().attachAbility(gunRangeNode)
+# warning-ignore:return_value_discarded
 	gunRangeNode.connect("bodyEntered", self, "characterEnteredZone")
+# warning-ignore:return_value_discarded
 	gunRangeNode.connect("bodyExited", self, "characterExitedZone")
+# warning-ignore:return_value_discarded
 	connect("action", TransitionHandler.gameScene, "abilityActivate")
 
 func createAbilityHudNode() -> Node:
 	_abilityHudNode = gunUiScene.instance()
+# warning-ignore:return_value_discarded
 	_abilityHudNode.connect("killButtonPressed", self, "activate")
+# warning-ignore:return_value_discarded
 	_abilityHudNode.connect("reoladButtonPressed", self, "secondaryActivate")
 	_abilityHudNode.activateKillButton(len(killableCharacters) > 0)
 	return _abilityHudNode

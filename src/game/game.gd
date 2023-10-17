@@ -18,6 +18,7 @@ onready var corpsesNode: Node2D = $Corpses
 onready var itemsNode: Node2D = $Items
 onready var ghostsNode: Node2D = $Ghosts
 onready var roleScreenTimeout: Timer = $RoleScreenTimeout
+onready var hudView: CanvasLayer = $HudView
 onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 signal teamsRolesAssigned
@@ -28,6 +29,7 @@ signal chatMessageReceived
 func _ready() -> void:
 	## Game scene loaded
 	TransitionHandler.gameLoaded(self)
+	Scenes.addChild(hudView, "res://game/hud.tscn")
 
 # warning-ignore:unused_argument
 func _physics_process(delta: float) -> void:
@@ -113,6 +115,7 @@ func loadMap(mapName: String) -> void:
 		corpse.queue_free()
 	## Load map and place it on scene tree
 	var mapPath: String = "res://game/maps/" + mapName + "/" + mapName + ".tscn"
+	
 	actualMap = ResourceLoader.load(mapPath).instance()
 	actualMap.setHudNode(hudNode)
 	actualMapName = mapName
@@ -224,6 +227,7 @@ func itemActivateAttempt(itemId: int, abilityName: String, properties: Dictionar
 
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
+	get_node("HudView/RoleAssignment").queue_free()
 
 # warning-ignore:shadowed_variable
 func setTeamsRolesOnCharacter(roles: Dictionary) -> void:
@@ -343,7 +347,8 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 			characterResource.addAbility(ability)
 			#print_debug(character, ": ", ability.getName())
 			# TODO: RPC should not be done directly in the game scene
-			rpc_id(character, "receiveAbility", ability.getName())
+			if character != Connections.getMyId():
+				rpc_id(character, "receiveAbility", ability.getName())
 	# TODO: I'm not sure this is the appropriate place to reset the HUD for the abilities.
 	emit_signal("clearAbilities")
 	var rolesToShow: Array = []

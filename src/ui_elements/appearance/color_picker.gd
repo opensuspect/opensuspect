@@ -37,7 +37,9 @@ func _showPreview(pos: Vector2) -> void:
 	_setPreview(scaledPos, color)
 
 ## Calculate the correct scale for the color map, based on parent controls
+# warning-ignore:shadowed_variable
 func _getImageScale(colorMapImage) -> Vector2:
+# warning-ignore:unassigned_variable
 	var scale: Vector2
 	var mapWidth: int = colorMapImage.get_width()
 	var mapHeight: int = colorMapImage.get_height()

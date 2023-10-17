@@ -61,14 +61,14 @@ func doorChange(status: bool) -> void:
 		doorClose()
 
 func doorClose() -> void:
-	doorClosed.visible = true
-	doorOpened.visible = false
+	doorClosed.show()
+	doorOpened.hide()
 	changedItemButtons(cabinet.get_children())
 	emit_signal("stateChanged", {"door": false})
 
 func doorOpen() -> void:
-	doorClosed.visible = false
-	doorOpened.visible = true
+	doorClosed.hide()
+	doorOpened.show()
 	var newState: Dictionary =  {}
 	newState["door"] = true
 	newState["left handle pos"] = handle_maxy - leftHandle.position.y

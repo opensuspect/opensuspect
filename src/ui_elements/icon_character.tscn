@@ -1,14 +1,28 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://ui_elements/icon_character.gd" type="Script" id=1]
 [ext_resource path="res://ui_elements/assets/shaders/character_outline.shader" type="Shader" id=2]
+[ext_resource path="res://game/character/assets/shaders/skin_color_key.shader" type="Shader" id=3]
 [ext_resource path="res://game/character/skeleton.tscn" type="PackedScene" id=4]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 2 )
+shader_param/line_color = Color( 1, 1, 1, 1 )
+shader_param/line_thickness = 1.0
 
 [sub_resource type="ViewportTexture" id=4]
 viewport_path = NodePath("Viewport")
+
+[sub_resource type="ShaderMaterial" id=5]
+resource_local_to_scene = true
+shader = ExtResource( 3 )
+shader_param/skin_mask_color = Color( 1, 0, 1, 1 )
+shader_param/skin_color = Color( 0.760784, 0.647059, 0.560784, 1 )
+shader_param/hair_mask_color = Color( 0, 1, 1, 1 )
+shader_param/hair_color = Color( 0.592157, 0.709804, 0.333333, 1 )
+shader_param/fhair_mask_color = Color( 0, 1, 0, 1 )
+shader_param/fhair_color = Color( 0.368627, 0.298039, 0.298039, 1 )
+shader_param/tolerance = 0.1
 
 [node name="IconCharacter" type="Sprite"]
 material = SubResource( 3 )
@@ -21,6 +35,7 @@ transparent_bg = true
 render_target_v_flip = true
 
 [node name="Skeleton" parent="Viewport" instance=ExtResource( 4 )]
+material = SubResource( 5 )
 scale = Vector2( 2, 2 )
 
 [node name="SpriteCamera" type="Camera2D" parent="Viewport"]

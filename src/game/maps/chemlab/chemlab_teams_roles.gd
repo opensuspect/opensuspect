@@ -15,9 +15,11 @@ func init():
 	random.randomize()
 
 func assignTeamsRoles(characterList: Array) -> Dictionary:
+# warning-ignore:unassigned_variable
 	var teamsRoles: Dictionary
 	var chosen: int
 	if len(characterList) < 10:
+# warning-ignore:integer_division
 		var infiltNum: int = int(len(characterList) / 5) + 1
 		var counterNum: int = 0
 		if len(characterList) % 5 < 4 and len(characterList) > 1:
@@ -61,6 +63,7 @@ func getVisibleTeamRole(realTeamsRoles: Dictionary, myTeam: String, myRole: Stri
 					character["role"] = "Agent"
 	return visibleTeamRoles
 
+# warning-ignore:unused_argument
 func getTeamsRolesToShow(realTeamsRoles: Dictionary, myTeam: String, myRole: String) -> Array:
 	match myTeam:
 		"CIA":
@@ -78,6 +81,7 @@ func getTeamsRolesToShow(realTeamsRoles: Dictionary, myTeam: String, myRole: Str
 	return []
 
 func assignAbilities(characterList: Array, teamsRoles: Dictionary) -> Dictionary:
+# warning-ignore:unassigned_variable
 	var abilities: Dictionary
 	for character in characterList:
 		abilities[character] = []

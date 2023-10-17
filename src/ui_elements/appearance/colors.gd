@@ -9,8 +9,10 @@ signal setColor(shader, colorMap, position)
 # --Private Functions--
 
 func _draw():
-	Appearance.connect("appearanceChanged", self, "_setCursorPos") # Signal from appearance to set skeleton config
-	_setCursorPos()
+	if not Appearance.is_connected("appearanceChanged", self, "_setCursorPos"):
+		# warning-ignore:return_value_discarded
+		Appearance.connect("appearanceChanged", self, "_setCursorPos") # Signal from appearance to set skeleton config
+		_setCursorPos()
 
 # Sets the cursor position for all color pickers
 func _setCursorPos():

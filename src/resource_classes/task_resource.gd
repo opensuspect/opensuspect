@@ -67,7 +67,6 @@ func addItem(itemRes: Resource, position: String) -> void:
 func interact() -> void:
 	Scenes.overlay(taskPopUpPath, self)
 
-
 # warning-ignore:return_value_discarded
 func activateUi(uiNode: Node) -> Dictionary:
 	taskUiNode = uiNode

@@ -9,6 +9,7 @@ onready var selectButton: Control = $MenuMargin/HBoxContainer/CharacterBox/Butto
 onready var deleteButton: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Delete
 onready var nameLabel: Control = $MenuMargin/HBoxContainer/CharacterBox/ButtonMargin/Buttons/Label
 onready var infoMessage: CenterContainer = $MenuMargin/HBoxContainer/ClosetBox/Panel/CenterContainer
+onready var appearanceMenu = get_node("/root/MenuBase/MainMenu/AppearanceEditor/MenuMargin")
 
 var configData: Dictionary
 var configList: Array
@@ -84,12 +85,14 @@ func _getIconTexture(namespace) -> Texture:
 	## Creates a character icon
 	var iconInstance = iconCharacter.instance()
 	self.add_child(iconInstance)
+	
 	iconInstance.add_to_group("iconCharacter")
 	iconInstance.hide()
 	## Sets outfit for character icon
 	iconInstance.applyConfig(selectedOutfit, selectedColors)
 	## Generates texture from character icon
 	var texture = iconInstance.texture
+
 	return(texture)
 
 func _selectConfig(namespace: String) -> void:
@@ -101,6 +104,7 @@ func _deleteConfig(name: String) -> bool:
 	if not GameData.exists(NAMESPACE):
 		return false
 	if configData.erase(name):
+# warning-ignore:return_value_discarded
 		GameData.write(NAMESPACE, configData)
 		listItems()
 		return true
@@ -109,14 +113,15 @@ func _deleteConfig(name: String) -> bool:
 # --Signal Functions--
 
 func _on_Back_pressed() -> void:
-	Scenes.back()
-
+	appearanceMenu.show()
+	queue_free()
 func _on_Select_pressed() -> void:
 	## Set appearance
 	Appearance.setConfig(selectedOutfit, selectedColors)
 	## Set customOutfit to [TRUE] in appearance.gd
 	Appearance.customOutfit = true
-	Scenes.back()
+	appearanceMenu.show()
+	queue_free()
 
 func _on_item_selected(index) -> void:
 	## Selects confg with specific name
@@ -139,6 +144,7 @@ func _on_Delete_pressed():
 
 func _on_Confirm_pressed():
 	$DeleteConfirm.hide()
+# warning-ignore:return_value_discarded
 	_deleteConfig(selectionName)
 	selectButton.disabled = true
 	deleteButton.disabled = true

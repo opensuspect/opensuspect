@@ -18,6 +18,7 @@ func isDictInArray(input: Array, what: Dictionary) -> bool:
 	return false
 
 func _ready():
+# warning-ignore:return_value_discarded
 	TransitionHandler.gameScene.connect("teamsRolesAssigned", self, "showTeamsRoles")
 
 func showTeamsRoles(roles: Dictionary, rolesToShow: Array) -> void:

@@ -17,12 +17,12 @@ func activateKillButton(active: bool) -> void:
 		killButton.disabled = not active
 
 func showReloadButton() -> void:
-	reloadButton.visible = true
-	killButton.visible = false
+	reloadButton.show()
+	killButton.hide()
 
 func showKillButton() -> void:
-	reloadButton.visible = false
-	killButton.visible = true
+	reloadButton.hide()
+	killButton.show()
 
 func _on_KillButton_pressed():
 	emit_signal("killButtonPressed")

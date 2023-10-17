@@ -193,6 +193,10 @@ move_down={
 2d_physics/layer_13="MiscMapInteraction"
 2d_physics/layer_16="VisionOccluder"
 
+[mono]
+
+project/assembly_name="OpenSuspect"
+
 [physics]
 
 common/enable_pause_aware_picking=true

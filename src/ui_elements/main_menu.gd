@@ -49,17 +49,17 @@ func _on_AppQuitButton_pressed() -> void:
 func setVisibleMenu(menuType: int) -> void:
 	hideMenus()
 	match menuType:
-		MenuType.MAIN: mainMenu.visible = true
-		MenuType.JOIN: joinMenu.visible = true
-		MenuType.CREATE: createMenu.visible = true
-		MenuType.SERVER: serverMenu.visible = true
+		MenuType.MAIN: mainMenu.show()
+		MenuType.JOIN: joinMenu.show()
+		MenuType.CREATE: createMenu.show()
+		MenuType.SERVER: serverMenu.show()
 		_: assert(false, "Unreachable")
 
 func hideMenus() -> void:
-	mainMenu.visible = false
-	joinMenu.visible = false
-	createMenu.visible = false
-	serverMenu.visible = false
+	mainMenu.hide()
+	joinMenu.hide()
+	createMenu.hide()
+	serverMenu.hide()
 
 # --Backend--
 func joinGame() -> void:
@@ -138,10 +138,29 @@ func _on_Character_mouse_exited():
 	character.setOutline(Color("#E6E2DD"))
 
 func _on_Appearance_pressed():
-	Scenes.overlay("res://ui_elements/appearance/appearance_editor.tscn")
-	
+	hideMainMenuAndBottom()
+	Scenes.addChild(self,"res://ui_elements/appearance/appearance_editor.tscn")
+
+
 func _on_Settings_pressed():
-	Scenes.overlay("res://ui_elements/settings.tscn")
+	hideMainMenuAndBottom()
+	Scenes.addChild(self,"res://ui_elements/settings.tscn")
 
 func _on_Quit_pressed():
-	Scenes.back()
+	hideMainMenu()
+	Scenes.addChild(self, "res://ui_elements/exit_menu.tscn")
+	
+func hideMainMenu():
+	hideMenus()
+	$CenterLogo.hide()
+
+func hideMainMenuAndBottom():
+	hideMainMenu()
+	$Bottom.hide()
+
+func setVisibleMenuWithLogo(menuType: int):
+	setVisibleMenu(menuType)
+	$CenterLogo.hide()
+	$Bottom.show()
+
+
