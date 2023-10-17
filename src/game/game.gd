@@ -227,6 +227,7 @@ func itemActivateAttempt(itemId: int, abilityName: String, properties: Dictionar
 
 func _on_RoleScreenTimeout_timeout():
 	TransitionHandler.gameStarted()
+	get_node("HudView/RoleAssignment").queue_free()
 
 # warning-ignore:shadowed_variable
 func setTeamsRolesOnCharacter(roles: Dictionary) -> void:

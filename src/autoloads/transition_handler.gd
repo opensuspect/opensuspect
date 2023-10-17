@@ -45,6 +45,7 @@ func loadGameScene() -> void:
 func gameStarted() -> void:
 	print_debug("Game started")
 	currentState = States.MAP
+	
 #	Scenes.back()
 
 func previouslyConnectedDataReceived() -> void:
@@ -56,7 +57,7 @@ puppetsync func startGame() -> void:
 	gameScene.loadMap("chemlab")
 	## Overlay role assignment scene
 #	Scenes.overlay("res://game/role_assignment.tscn")
-	Scenes.addChild(self,"res://game/role_assignment.tscn")
+	Scenes.addChild(get_tree().get_root().get_node("/root/Game/HudView"),"res://game/role_assignment.tscn")
 	currentState = States.ASSIGNMENT
 	## If server, assign roles
 	if Connections.isServer():
