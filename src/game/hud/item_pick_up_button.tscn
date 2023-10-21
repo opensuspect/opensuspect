@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://game/hud/item_pick_up_button.gd" type="Script" id=1]
+[ext_resource path="res://game/hud/sprites/pick_up_arrow.png" type="Texture" id=2]
+[ext_resource path="res://game/hud/sprites/pick_up_arrow_click.png" type="Texture" id=3]
+[ext_resource path="res://game/hud/sprites/pick_up_arrow_hover.png" type="Texture" id=4]
+
+[node name="ItemPickUp" type="Control"]
+margin_right = 150.0
+margin_bottom = 150.0
+rect_min_size = Vector2( 150, 150 )
+script = ExtResource( 1 )
+
+[node name="ItemSprite" type="Sprite" parent="."]
+offset = Vector2( 75, 75 )
+
+[node name="Button" type="TextureButton" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 4 )
+expand = true
+
+[connection signal="button_down" from="Button" to="." method="_on_Button_button_down"]

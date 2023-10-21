@@ -4,6 +4,7 @@ enum States {
 	MENU			# Not in game
 	WAITING			# Between states
 	LOBBY			# In the lobby where people can join
+	ASSIGNMENT		# On the assignment screen
 	MAP				# On a game map
 }
 
@@ -22,24 +23,52 @@ func showMainMenu() -> void:
 	currentState = States.MENU
 
 func gameLoaded(newGameScene: Node2D) -> void:
+	## Save reference to game scene
 	gameScene = newGameScene
-	currentState = States.LOBBY
+	## Enter lobby
 	enterLobby()
+	## If client-server
 	if Connections.isClientServer():
-		gameScene.addCharacter(1)
+		## Add own character
+		var characterRes: CharacterResource
+		characterRes = Characters.createCharacter(1, Connections.myName)
+		gameScene.addCharacter(characterRes)
 
 func loadGameScene() -> void:
-	## Switch to the game scene
+	## Switch to game scene and load HUD
 	currentState = States.WAITING
 	Scenes.switchBase("res://game/game.tscn", "res://game/hud.tscn")
 
+func gameStarted() -> void:
+	print_debug("Game started")
+	currentState = States.MAP
+	Scenes.back()
+
+func previouslyConnectedDataReceived() -> void:
+	print_debug("Received data for currently connected all players")
+	currentState = States.LOBBY
+
 puppetsync func startGame() -> void:
 	## Load game map (laboratory)
-	gameScene.loadMap("res://game/maps/chemlab/chemlab.tscn")
+	gameScene.loadMap("chemlab")
+	## Overlay role assignment scene
+	Scenes.overlay("res://game/role_assignment.tscn")
+	currentState = States.ASSIGNMENT
+	## If server, assign roles
+	if Connections.isServer():
+		gameScene.teamRoleAssignment(false)
 
 puppetsync func enterLobby() -> void:
 	## Load lobby map
-	gameScene.loadMap("res://game/maps/lobby/lobby.tscn")
+	gameScene.loadMap("lobby")
+	## If the connections have not been received yet we aren't actually in the
+	## lobby state... unless we are the server.
+	if len(Connections.listConnections) > 1 or Connections.isServer():
+		## Switch to Lobby state
+		currentState = States.LOBBY
+	## If server, assign roles
+	if Connections.isServer():
+		gameScene.teamRoleAssignment(true)
 
 func getCurrentState() -> int:
 	return currentState
@@ -52,13 +81,11 @@ func changeMap() -> void:
 	## Are we in the lobby
 	if currentState == States.LOBBY:
 		rpc("startGame")				## Start the game
-		currentState = States.MAP
 		## No new connections allowed
 		Connections.allowNewConnections(false)
 	## Are we in the game
 	elif currentState == States.MAP:
 		rpc("enterLobby")				## Return to the lobby
-		currentState = States.LOBBY
 		## New connections allowed
 		Connections.allowNewConnections(true)
 	else:

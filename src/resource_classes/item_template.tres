@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://resource_classes/item_template.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+itemName = ""
+textureScale = Vector2( 1, 1 )
+hudTextureScale = Vector2( 1, 1 )
