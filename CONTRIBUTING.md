@@ -4,6 +4,8 @@ Depending on what area of the game you'd like to help with, the guidelines are d
 The requirements of the programming team are very different than that of the art team for example!
 
 ## Programming
+0. Clone the repository. For things to work, you need to have [git LFS installed](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage) and activated. 
+
 1. Find the issue that corresponds to the work you'd like to do
 2. Comment on the issue saying that you're going to try implementing it
 3. If you're part of the Programming Team on GitHub, assign the issue to yourself
