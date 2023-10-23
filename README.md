@@ -5,7 +5,7 @@ OpenSuspect is an open source online social deduction game, like mafia.<br/>
 OpenSuspect aims to be easily modifiable, however, our first maps and themes are going to be focused around the cold war.<br/>
 It uses the [`Godot Engine`](https://godotengine.org/).<br/>
 This project is in *very early stage* development. However, see [this](https://github.com/opensuspect/opensuspect/wiki/Playtesting) guide for early playtesting.<br/>
-Interested to get involved? We'd love to hear from you. Check out the [contributors guide](https://github.com/opensuspect/opensuspect/wiki/Contributors) to get involved.<br/>
+Interested to get involved? We'd love to hear from you. Check out the [contributors guide](CONTRIBUTING.md) to get involved.<br/>
 
 OpenSuspect is licensed under the GNU GPL v3 (see LICENSE.txt)
 
