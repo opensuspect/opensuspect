@@ -123,6 +123,7 @@ func loadMap(mapName: String) -> void:
 	## Save meeting positions from the map
 	var meetingPosNode: Node = actualMap.get_node("MeetingPosition")
 	meetingPosList = []
+	spawnCounter = 0
 	for posNode in meetingPosNode.get_children():
 		meetingPosList.append(posNode.position)
 	## Reset all characters
