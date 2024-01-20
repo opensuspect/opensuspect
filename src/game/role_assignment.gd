@@ -1,8 +1,8 @@
-extends Node2D
+extends Control
 
-onready var teamNameField: Label = $LabelTeamName
-onready var roleNameField: Label = $LabelRoleName
-onready var characterList: HBoxContainer = $CharacterSprites
+onready var teamNameField: Label = $Panel/MissionBriefing/LeftPage/Briefing/Team/LabelTeamName
+onready var roleNameField: Label = $Panel/MissionBriefing/LeftPage/Briefing/Role/LabelRoleName
+onready var characterList: HBoxContainer = $Panel/MissionBriefing/LeftPage2/CharacterSprites
 
 func isDictInArray(input: Array, what: Dictionary) -> bool:
 	for element in input:
