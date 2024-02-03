@@ -1,83 +1,151 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://ui_elements/assets/themes/suspect_ui.tres" type="Theme" id=1]
 [ext_resource path="res://game/role_assignment.gd" type="Script" id=2]
+[ext_resource path="res://game/ui_elements/assets/role-announcement/role-announce.png" type="Texture" id=3]
+[ext_resource path="res://game/ui_elements/assets/role-announcement/role-announce-left.png" type="Texture" id=4]
+[ext_resource path="res://game/ui_elements/assets/role-announcement/role-announce-right.png" type="Texture" id=5]
 
-[node name="RoleAssignment" type="Node2D"]
+[sub_resource type="StyleBoxTexture" id=1]
+texture = ExtResource( 3 )
+region_rect = Rect2( 0, 0, 1800, 1000 )
+
+[node name="RoleAssignment" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 2 )
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
-color = Color( 0.0431373, 0.0352941, 0.0352941, 1 )
-polygon = PoolVector2Array( 10, 10, 10, 1070, 1910, 1070, 1910, 10 )
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 40.0
+margin_top = 40.0
+margin_right = -40.0
+margin_bottom = -40.0
+custom_styles/panel = SubResource( 1 )
 
-[node name="TitleTextLabel" type="Label" parent="."]
-margin_left = 650.0
-margin_top = 100.0
-margin_right = 1270.0
-margin_bottom = 180.0
-theme = ExtResource( 1 )
-text = "Team and role assignment"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="MissionBriefing" type="HBoxContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 40.0
+margin_top = 40.0
+margin_right = -40.0
+margin_bottom = -40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="LabelTeam" type="Label" parent="."]
-margin_left = 100.0
-margin_top = 200.0
-margin_right = 300.0
-margin_bottom = 280.0
+[node name="LeftPage" type="NinePatchRect" parent="Panel/MissionBriefing"]
+margin_right = 878.0
+margin_bottom = 920.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 4 )
+region_rect = Rect2( 0, 0, 860, 920 )
+patch_margin_left = 75
+patch_margin_top = 65
+patch_margin_right = 120
+patch_margin_bottom = 80
+
+[node name="Briefing" type="VBoxContainer" parent="Panel/MissionBriefing/LeftPage"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 75.0
+margin_top = 65.0
+margin_right = -120.0
+margin_bottom = -99.0
+
+[node name="Team" type="HBoxContainer" parent="Panel/MissionBriefing/LeftPage/Briefing"]
+margin_right = 683.0
+margin_bottom = 74.0
+
+[node name="LabelTeam" type="Label" parent="Panel/MissionBriefing/LeftPage/Briefing/Team"]
+margin_right = 208.0
+margin_bottom = 74.0
 theme = ExtResource( 1 )
-text = "Team:"
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
+text = "Your team:"
 align = 2
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="LabelTeamName" type="Label" parent="."]
-margin_left = 320.0
-margin_top = 200.0
-margin_right = 900.0
-margin_bottom = 280.0
+[node name="LabelTeamName" type="Label" parent="Panel/MissionBriefing/LeftPage/Briefing/Team"]
+margin_left = 212.0
+margin_right = 270.0
+margin_bottom = 74.0
 theme = ExtResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
 text = "[...]"
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="LabelRole" type="Label" parent="."]
-margin_left = 1020.0
-margin_top = 200.0
-margin_right = 1220.0
-margin_bottom = 280.0
+[node name="Role" type="HBoxContainer" parent="Panel/MissionBriefing/LeftPage/Briefing"]
+margin_top = 78.0
+margin_right = 683.0
+margin_bottom = 152.0
+
+[node name="LabelRole" type="Label" parent="Panel/MissionBriefing/LeftPage/Briefing/Role"]
+margin_right = 187.0
+margin_bottom = 74.0
 theme = ExtResource( 1 )
-text = "Role:"
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
+text = "Your role:"
 align = 2
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="LabelRoleName" type="Label" parent="."]
-margin_left = 1240.0
-margin_top = 200.0
-margin_right = 1820.0
-margin_bottom = 280.0
+[node name="LabelRoleName" type="Label" parent="Panel/MissionBriefing/LeftPage/Briefing/Role"]
+margin_left = 191.0
+margin_right = 249.0
+margin_bottom = 74.0
 theme = ExtResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
 text = "[...]"
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="CharacterSprites" type="HBoxContainer" parent="."]
-margin_left = 100.0
-margin_top = 400.0
-margin_right = 1820.0
-margin_bottom = 900.0
-grow_horizontal = 0
-grow_vertical = 0
-alignment = 1
+[node name="Mission" type="MarginContainer" parent="Panel/MissionBriefing/LeftPage/Briefing"]
+margin_top = 156.0
+margin_right = 683.0
+margin_bottom = 756.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Description" type="TextEdit" parent="Panel/MissionBriefing/LeftPage/Briefing/Mission"]
+margin_right = 683.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 1 )
+text = "Your mission is to..."
+readonly = true
+context_menu_enabled = false
+shortcut_keys_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+wrap_enabled = true
+
+[node name="RightPage" type="NinePatchRect" parent="Panel/MissionBriefing"]
+margin_left = 882.0
+margin_right = 1760.0
+margin_bottom = 920.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 5 )
+region_rect = Rect2( 0, 0, 860, 920 )
+patch_margin_left = 120
+patch_margin_top = 65
+patch_margin_right = 75
+patch_margin_bottom = 80
+
+[node name="CharacterSprites" type="GridContainer" parent="Panel/MissionBriefing/RightPage"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 120.0
+margin_top = 65.0
+margin_right = -75.0
+margin_bottom = -80.0
+size_flags_horizontal = 3
+size_flags_vertical = 3

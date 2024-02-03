@@ -123,6 +123,7 @@ func loadMap(mapName: String) -> void:
 	## Save meeting positions from the map
 	var meetingPosNode: Node = actualMap.get_node("MeetingPosition")
 	meetingPosList = []
+	spawnCounter = 0
 	for posNode in meetingPosNode.get_children():
 		meetingPosList.append(posNode.position)
 	## Reset all characters
@@ -262,10 +263,11 @@ puppet func receiveTeamsRoles(newRoles: Dictionary, isLobby: bool) -> void:
 	var myRole: String = newRoles[id]["role"]
 	visibleRoles = teamsRolesRes.getVisibleTeamRole(newRoles, myTeam, myRole)
 	var rolesToShow: Array = teamsRolesRes.getTeamsRolesToShow(newRoles, myTeam, myRole)
+	var roleMissions: Dictionary = teamsRolesRes.getRoleMissions()
 	setTeamsRolesOnCharacter(visibleRoles)
 	emit_signal("clearAbilities")
 	if not isLobby:
-		emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
+		emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow, roleMissions)
 		roleScreenTimeout.start()
 
 puppet func receiveAbility(newAbilityName: String) -> void:
@@ -354,8 +356,9 @@ func deferredTeamRoleAssignment(isLobby: bool) -> void:
 	else:
 		visibleRoles = roles
 	setTeamsRolesOnCharacter(visibleRoles)
+	var roleMissions: Dictionary = teamsRolesRes.getRoleMissions()
 	if not isLobby:
-		emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow)
+		emit_signal("teamsRolesAssigned", visibleRoles, rolesToShow, roleMissions)
 		roleScreenTimeout.start()
 
 remotesync func abilityActServer(parameters: Dictionary):

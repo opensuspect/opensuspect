@@ -11,6 +11,24 @@ func init():
 						["Agents", "Counter-intelligence"]: Color.yellow,
 						["CIA", "Infiltrator"]: Color.aqua,
 						["Yugoslavs", "Infiltrator"]: Color.pink}
+	roleMissions = {	["Agents", "Agent"]: (
+							"Make sure all tasks are finished, and be mindful of " +
+							"enemy agents trying to sabotage our experiments."
+						),
+						["Agents", "Counter-intelligence"]: (
+							"Make sure all tasks are finished, and use your knowledge " +
+							"of enemy agents to try to stop their sabotage action."
+						),
+						["CIA", "Infiltrator"]: (
+							"You must stop the experiments of the dirty communists to " +
+							"save America! Sabotage them, or, if you need to, kill them " +
+							"one by one. Make sure you don't get discovered though!"
+						),
+						["Yugoslavs", "Infiltrator"]: (
+							"Steal the chemicals from the Germans! Use your poison " +
+							"injection to eliminate anyone trying to stop you. " +
+							"Make sure you don't get discovered though!"
+						)}
 	random = RandomNumberGenerator.new()
 	random.randomize()
 

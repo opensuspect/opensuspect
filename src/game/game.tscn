@@ -16,7 +16,7 @@ script = ExtResource( 1 )
 [node name="Ghosts" type="YSort" parent="."]
 
 [node name="RoleScreenTimeout" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 10.0
 one_shot = true
 
 [connection signal="timeout" from="RoleScreenTimeout" to="." method="_on_RoleScreenTimeout_timeout"]
