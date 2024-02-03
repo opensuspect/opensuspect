@@ -52,25 +52,25 @@ anchor_bottom = 1.0
 margin_left = 75.0
 margin_top = 65.0
 margin_right = -120.0
-margin_bottom = -80.0
+margin_bottom = -99.0
 
 [node name="Team" type="HBoxContainer" parent="Panel/MissionBriefing/LeftPage/Briefing"]
 margin_right = 683.0
 margin_bottom = 74.0
 
 [node name="LabelTeam" type="Label" parent="Panel/MissionBriefing/LeftPage/Briefing/Team"]
-margin_right = 118.0
+margin_right = 208.0
 margin_bottom = 74.0
 theme = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
-text = "Team:"
+text = "Your team:"
 align = 2
 valign = 1
 
 [node name="LabelTeamName" type="Label" parent="Panel/MissionBriefing/LeftPage/Briefing/Team"]
-margin_left = 122.0
-margin_right = 180.0
+margin_left = 212.0
+margin_right = 270.0
 margin_bottom = 74.0
 theme = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -84,18 +84,18 @@ margin_right = 683.0
 margin_bottom = 152.0
 
 [node name="LabelRole" type="Label" parent="Panel/MissionBriefing/LeftPage/Briefing/Role"]
-margin_right = 99.0
+margin_right = 187.0
 margin_bottom = 74.0
 theme = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
-text = "Role:"
+text = "Your role:"
 align = 2
 valign = 1
 
 [node name="LabelRoleName" type="Label" parent="Panel/MissionBriefing/LeftPage/Briefing/Role"]
-margin_left = 103.0
-margin_right = 161.0
+margin_left = 191.0
+margin_right = 249.0
 margin_bottom = 74.0
 theme = ExtResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -103,14 +103,31 @@ custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
 text = "[...]"
 valign = 1
 
-[node name="Mission" type="CenterContainer" parent="Panel/MissionBriefing/LeftPage/Briefing"]
+[node name="Mission" type="MarginContainer" parent="Panel/MissionBriefing/LeftPage/Briefing"]
 margin_top = 156.0
 margin_right = 683.0
-margin_bottom = 775.0
+margin_bottom = 756.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="LeftPage2" type="NinePatchRect" parent="Panel/MissionBriefing"]
+[node name="Description" type="TextEdit" parent="Panel/MissionBriefing/LeftPage/Briefing/Mission"]
+margin_right = 683.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 1 )
+text = "Your mission is to..."
+readonly = true
+context_menu_enabled = false
+shortcut_keys_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+wrap_enabled = true
+
+[node name="RightPage" type="NinePatchRect" parent="Panel/MissionBriefing"]
 margin_left = 882.0
 margin_right = 1760.0
 margin_bottom = 920.0
@@ -123,13 +140,12 @@ patch_margin_top = 65
 patch_margin_right = 75
 patch_margin_bottom = 80
 
-[node name="CharacterSprites" type="HBoxContainer" parent="Panel/MissionBriefing/LeftPage2"]
+[node name="CharacterSprites" type="GridContainer" parent="Panel/MissionBriefing/RightPage"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 120.0
 margin_top = 65.0
 margin_right = -75.0
 margin_bottom = -80.0
-grow_horizontal = 0
-grow_vertical = 0
-alignment = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3

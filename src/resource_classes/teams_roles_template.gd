@@ -4,11 +4,13 @@ class_name TeamsRolesTemplate
 var teamNames: Array = [] # A list of the teams
 var roleNames: Dictionary = {} # A list of roles for each team
 var teamRoleColors: Dictionary = {} # A list of team, role, color pairings
+var roleMissions: Dictionary = {} # A list of team, role, mission pairings
 
 func init():
 	teamNames = ["Agents"]
 	roleNames = {"Agents": ["Agent"]}
 	teamRoleColors = {["Agents", "Agent"]: Color.white}
+	roleMissions = {["Agents", "Agent"]: "Kill all other agents."}
 
 func getRoleColor(team: String, role: String) -> Color:
 	var textColor: Color = Color.white
@@ -16,6 +18,9 @@ func getRoleColor(team: String, role: String) -> Color:
 	if searchBase in teamRoleColors:
 		textColor = teamRoleColors[searchBase]
 	return textColor
+
+func getRoleMissions() -> Dictionary:
+	return roleMissions.duplicate()
 
 func assignTeamsRoles(characterList: Array) -> Dictionary:
 	var teamsRoles: Dictionary
